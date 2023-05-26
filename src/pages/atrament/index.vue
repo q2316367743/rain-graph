@@ -152,9 +152,11 @@ export default defineComponent({
             }
         },
         saveOption() {
-            this.save(false);
             this.setOption(this.instance.option);
             this.visible = false;
+            if (this.id !== '0') {
+                this.save(false);
+            }
         },
         init(atrament: any, records: AtramentRecord[]) {
             atrament.recordPaused = false;

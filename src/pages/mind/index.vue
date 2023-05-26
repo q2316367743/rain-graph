@@ -4,7 +4,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { computed, onMounted } from "vue";
+import { computed, onMounted, onBeforeUnmount } from "vue";
 import { useWindowSize } from "@vueuse/core";
 import MindElixir from "mind-elixir";
 import { useSaveEvent } from "@/global/BeanFactory";
@@ -57,6 +57,10 @@ onMounted(() => {
         mind.init(MindElixir.new("思维导图"));
     }
 });
+
+onBeforeUnmount(() => {
+    useSaveEvent.reset();
+})
 
 useSaveEvent.reset();
 useSaveEvent.on(() => {

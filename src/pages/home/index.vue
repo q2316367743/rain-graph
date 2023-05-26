@@ -40,6 +40,7 @@ import { defineComponent } from "vue";
 import { useWindowSize } from "@vueuse/core";
 import GraphRecord from "@/entity/GraphRecord";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
+import { useGlobalStore } from "@/store/GlobalStore";
 
 export default defineComponent({
     name: 'home',
@@ -62,8 +63,12 @@ export default defineComponent({
             return [];
         }
     },
+    created() {
+        useGlobalStore().setTitle('');
+    },
     methods: {
         jumpTo(type: GraphTypeEnum, item: GraphRecord) {
+            useGlobalStore().setTitle(item.name);
             this.$router.push(`/${type}/${item.id}`);
         }
     }

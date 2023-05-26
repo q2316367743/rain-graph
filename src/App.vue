@@ -45,6 +45,7 @@
                     </template>
                 </a-dropdown>
             </a-button-group>
+            <div class="title">{{ title }}</div>
         </div>
         <div class="app-container">
             <router-view />
@@ -63,7 +64,8 @@ export default defineComponent({
     data: () => ({
     }),
     computed: {
-        ...mapState(useGlobalStore, ['isDark'])
+        ...mapState(useGlobalStore, ['isDark']),
+        ...mapState(useGlobalStore, ['title']),
     },
     created() {
         if (this.isDark) {

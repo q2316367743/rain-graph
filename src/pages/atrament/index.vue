@@ -8,7 +8,8 @@
                 </template>
             </a-button>
         </div>
-        <a-drawer :width="400" :visible="visible" unmount-on-close title="设置" @cancel="saveOption">
+        <!-- 工具栏 -->
+        <a-drawer :width="400" :visible="visible" unmount-on-close title="设置" @cancel="saveOption" :footer="false">
             <a-form :model="instance.option" layout="vertical">
                 <a-form-item label="线条粗细">
                     <a-input-number v-model="instance.option.weight" :min="0" />
@@ -51,9 +52,9 @@ import { useSaveEvent } from "@/global/BeanFactory";
 import MessageUtil from "@/utils/MessageUtil";
 import { useAtramentStore } from "@/store/AtramentStore";
 import { toRaw } from "vue";
-import Instance from "./Instance";
-import Option from "./Option";
-import AtramentRecord from "./AtramentRecord";
+import Instance from "./domain/Instance";
+import Option from "./domain/Option";
+import AtramentRecord from "./domain/AtramentRecord";
 
 let sketchpad = undefined as any | undefined;
 

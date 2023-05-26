@@ -1,0 +1,43 @@
+{
+    "main": "dist/index.html",
+    "logo": "public/logo.png",
+    "platform": [
+        "win32",
+        "darwin",
+        "linux"
+    ],
+    "development": {
+        "main": "http://localhost:5173/"
+    },
+    "pluginSetting": {
+        "single": true,
+        "height": 0
+    },
+    "features": [
+        {
+            "code": "application",
+            "explain": "听雨图编辑器",
+            "icon": "public/logo.png",
+            "platform": [
+                "win32",
+                "darwin",
+                "linux"
+            ],
+            "cmds": [
+                "听雨图编辑器"
+            ]
+        }, {
+            "code": "flow-chart",
+            "explain": "听雨图编辑器",
+            "icon": "public/logo.png",
+            "platform": [
+                "win32",
+                "darwin",
+                "linux"
+            ],
+            "cmds": [
+                "流程图"
+            ]
+        }
+    ]
+}

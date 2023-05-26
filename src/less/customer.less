@@ -1,0 +1,43 @@
+@font-face {
+    font-family: JetBrainsMono;
+    src: url('./JetBrainsMono-Regular.woff2');
+}
+
+pre {
+    font-family: JetBrainsMono, Console, '微软雅黑', Courier, monospace !important;
+
+    code,
+    span {
+        font-family: JetBrainsMono, Console, '微软雅黑', Courier, monospace !important;
+    }
+}
+
+
+.arco-typography {
+    pre {
+        border: 1px solid var(--color-neutral-6);
+        padding: 7px;
+        border-radius: 7px;
+        overflow: auto;
+        code {
+            color: var(--color-text-1) !important;
+        }
+    }
+
+    code {
+        margin: 0 !important;
+        padding: 0 !important;
+        font-size: 1em !important;
+        border: none !important;
+        border-radius: 0 !important;
+        background-color: var(--color-bg-2) !important;
+        color: #c7254e !important;
+        border-radius: 2px;
+        font-family: JetBrainsMono, Console, '微软雅黑', Courier, monospace !important;
+    
+        ol {
+            margin: 0;
+            padding: 0 20px;
+        }
+    }
+}

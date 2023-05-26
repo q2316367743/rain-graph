@@ -1,0 +1,11 @@
+{
+  "name": "rain-graph",
+  "version": "1.0.0",
+  "description": "听雨图编辑器",
+  "main": "preload.js",
+  "author": "落雨不悔",
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+  }
+}

@@ -70,6 +70,10 @@ export default defineComponent({
     },
     created() {
         useGlobalStore().setTitle('');
+        let name = this.$route.query.name as GraphTypeEnum;
+        if (name) {
+            this.activeKey = name;
+        }
     },
     methods: {
         jumpTo(item: GraphRecord) {

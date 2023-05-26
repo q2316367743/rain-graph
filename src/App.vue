@@ -6,7 +6,7 @@
                 <a-dropdown position="bl">
                     <a-button>图</a-button>
                     <template #content>
-                        <a-doption @click="$router.push('/home')">全部图</a-doption>
+                        <a-doption @click="toHome">全部图</a-doption>
                         <a-dsubmenu>
                             <template #default>新增</template>
                             <template #content>
@@ -85,6 +85,14 @@ export default defineComponent({
     methods: {
         save() {
             useSaveEvent.emit();
+        },
+        toHome() {
+            this.$router.push({
+                path: '/home',
+                query: {
+                    name: this.$route.name as string
+                }
+            })
         }
     }
 });

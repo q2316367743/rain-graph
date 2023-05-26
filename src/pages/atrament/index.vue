@@ -122,10 +122,14 @@ export default defineComponent({
                 ...this.instance.option,
                 stroke: value.stroke
             });
+            if (this.id !== '0') {
+                // 自动保存
+                this.save();
+            }
         });
     },
     methods: {
-        save(show: boolean) {
+        save(show: boolean = false) {
             useAtramentStore().add(this.id).then(_id => {
                 this.id = _id;
                 let res = utools.db.put({
@@ -156,7 +160,7 @@ export default defineComponent({
             this.setOption(this.instance.option);
             this.visible = false;
             if (this.id !== '0') {
-                this.save(false);
+                this.save();
             }
         },
         init(atrament: any, records: AtramentRecord[]) {

@@ -10,11 +10,14 @@ const router = createRouter({
         path: '/home',
         component: () => import('@/pages/home/index.vue')
     }, {
-        path: '/flow-chart/:id',
-        component: () => import('@/pages/flow-chart/index.vue')
-    }, {
         path: '/mind/:id',
         component: () => import('@/pages/mind/index.vue')
+    }, {
+        path: '/atrament/:id',
+        component: () => import('@/pages/atrament/index.vue')
+    }, {
+        path: '/flow-chart/:id',
+        component: () => import('@/pages/flow-chart/index.vue')
     }]
 });
 

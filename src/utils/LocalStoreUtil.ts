@@ -1,6 +1,7 @@
 import GraphRecord from "@/entity/GraphRecord";
 import LocalNameEnum from "@/enumeration/LocalNameEnum";
 import MessageBoxUtil from "./MessageBoxUtil";
+import { useGlobalStore } from "@/store/GlobalStore";
 
 export function getInitList(name: LocalNameEnum): {
     items: Array<GraphRecord>;
@@ -26,6 +27,7 @@ export async function add(id: string, items: Array<GraphRecord>): Promise<string
             "请输入图名称",
             "新增图",
             {});
+        useGlobalStore().setTitle(name);
         items.push({
             id,
             name,

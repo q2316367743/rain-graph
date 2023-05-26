@@ -2,15 +2,15 @@
     <div class="home">
         <div class="header">
             <a-radio-group v-model="activeKey" type="button">
-                <a-radio value="1">思维导图</a-radio>
-                <a-radio value="2">流程图</a-radio>
+                <a-radio :value="GraphTypeEnum.MIND">思维导图</a-radio>
+                <a-radio :value="GraphTypeEnum.ATRAMENT">手绘图</a-radio>
             </a-radio-group>
         </div>
         <div class="content">
             <a-list :virtual-list-props="virtualListProps" :data="items">
                 <template #item="{ item, index }">
                     <a-list-item :key="index">
-                        <a-link @click="jumpTo(GraphTypeEnum.MIND, item)">{{ item.name }}</a-link>
+                        <a-link @click="jumpTo(item)">{{ item.name }}</a-link>
                         <template #actions>
                             <a-button-group type="text">
                                 <a-button>
@@ -18,7 +18,8 @@
                                         <icon-edit />
                                     </template>
                                 </a-button>
-                                <a-popconfirm content="确定删除此图？删除后无法恢复" ok-text="删除" :ok-button-props="{ status: 'danger' }">
+                                <a-popconfirm content="确定删除此图？删除后无法恢复" ok-text="删除" :ok-button-props="{ status: 'danger' }"
+                                    @ok="remove(item)">
                                     <a-button status="danger">
                                         <template #icon>
                                             <icon-delete />
@@ -41,24 +42,28 @@ import { useWindowSize } from "@vueuse/core";
 import GraphRecord from "@/entity/GraphRecord";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import { useGlobalStore } from "@/store/GlobalStore";
+import { useAtramentStore } from "@/store/AtramentStore";
 
 export default defineComponent({
     name: 'home',
     data: () => ({
         GraphTypeEnum,
-        activeKey: '1',
+        activeKey: GraphTypeEnum.MIND as GraphTypeEnum,
         size: useWindowSize()
     }),
     computed: {
         ...mapState(useMindStore, ['minds']),
+        ...mapState(useAtramentStore, ['atraments']),
         virtualListProps() {
             return {
                 height: this.size.height - 33 - 32 - 14 - 7
             }
         },
         items() {
-            if (this.activeKey === '1') {
+            if (this.activeKey === GraphTypeEnum.MIND) {
                 return this.minds;
+            } else if (this.activeKey === GraphTypeEnum.ATRAMENT) {
+                return this.atraments;
             }
             return [];
         }
@@ -67,9 +72,16 @@ export default defineComponent({
         useGlobalStore().setTitle('');
     },
     methods: {
-        jumpTo(type: GraphTypeEnum, item: GraphRecord) {
+        jumpTo(item: GraphRecord) {
             useGlobalStore().setTitle(item.name);
-            this.$router.push(`/${type}/${item.id}`);
+            this.$router.push(`/${this.activeKey}/${item.id}`);
+        },
+        remove(item: GraphRecord) {
+            if (this.activeKey === GraphTypeEnum.MIND) {
+                useMindStore().remove(item);
+            } else if (this.activeKey === GraphTypeEnum.ATRAMENT) {
+                useAtramentStore().remove(item);
+            }
         }
     }
 });

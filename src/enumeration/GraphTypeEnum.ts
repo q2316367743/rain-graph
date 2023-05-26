@@ -1,6 +1,8 @@
 enum GraphTypeEnum {
 
-    MIND = 'mind'
+    MIND = 'mind',
+
+    ATRAMENT = 'atrament'
 
 }
 

@@ -1,6 +1,8 @@
 enum LocalNameEnum {
 
-    MIND = '/local/mind'
+    MIND = '/local/mind',
+
+    ATRAMENT = '/local/atrament',
 
 }
 

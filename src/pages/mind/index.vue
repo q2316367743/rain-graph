@@ -12,6 +12,7 @@ import { useRouter } from "vue-router";
 import { useMindStore } from "@/store/MindStore";
 import MessageUtil from "@/utils/MessageUtil";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
+import { useGlobalStore } from "@/store/GlobalStore";
 
 
 
@@ -53,6 +54,7 @@ onMounted(() => {
     mind = new MindElixir(option);
     if (id !== '0') {
         mind.init(option.data);
+        useGlobalStore().setTitle("新思维导图");
     } else {
         mind.init(MindElixir.new("思维导图"));
     }
@@ -60,7 +62,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
     useSaveEvent.reset();
-})
+});
 
 useSaveEvent.reset();
 useSaveEvent.on(() => {
@@ -77,8 +79,8 @@ useSaveEvent.on(() => {
         }
         _rev = res.rev;
         MessageUtil.success('保存成功');
-    })
-})
+    });
+});
 
 </script>
 <style lang="less">

@@ -1,4 +1,5 @@
 import GraphRecord from "@/entity/GraphRecord";
+import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import LocalNameEnum from "@/enumeration/LocalNameEnum";
 import { getInitList, add } from "@/utils/LocalStoreUtil";
 import MessageUtil from "@/utils/MessageUtil";
@@ -23,6 +24,12 @@ export const useMindStore = defineStore('mind', {
             return Promise.resolve(id);
         },
         updateMind() { },
+        remove(record: GraphRecord) {
+            this.minds.splice(this.minds.findIndex(e => e.id === record.id), 1);
+            // 删除记录
+            utools.db.remove(`/${GraphTypeEnum.MIND}/${record.id}`)
+            this.syncMind();
+        },
         syncMind() {
             let res = utools.db.put({
                 _id: LocalNameEnum.MIND,

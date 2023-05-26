@@ -11,6 +11,7 @@
                             <template #default>新增</template>
                             <template #content>
                                 <a-doption @click="$router.push('/mind/0')">思维导图</a-doption>
+                                <a-doption @click="$router.push('/atrament/0')">手绘图</a-doption>
                                 <a-doption @click="$router.push('/flow-chart/0')">流程图</a-doption>
                             </template>
                         </a-dsubmenu>
@@ -18,6 +19,7 @@
                             <template #default>打开</template>
                             <template #content>
                                 <a-doption>思维导图</a-doption>
+                                <a-doption>手绘图</a-doption>
                                 <a-doption>流程图</a-doption>
                             </template>
                         </a-dsubmenu>
@@ -58,6 +60,7 @@ import { defineComponent } from "vue";
 import { useGlobalStore } from "./store/GlobalStore";
 import { useSaveEvent } from "./global/BeanFactory";
 import { useMindStore } from "./store/MindStore";
+import { useAtramentStore } from "./store/AtramentStore";
 
 export default defineComponent({
     name: '',
@@ -77,6 +80,7 @@ export default defineComponent({
         }
         // 初始化流程图
         useMindStore().init();
+        useAtramentStore().init();
     },
     methods: {
         save() {

@@ -14,7 +14,7 @@
     </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, toRaw } from "vue";
 import LogicFlow, { Definition } from '@logicflow/core';
 import {
     BpmnElement,
@@ -39,6 +39,14 @@ import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import { mapState } from "pinia";
 import { useGlobalStore } from "@/store/GlobalStore";
 
+LogicFlow.use(BpmnElement);
+LogicFlow.use(BpmnXmlAdapter);
+LogicFlow.use(Snapshot);
+LogicFlow.use(Control);
+LogicFlow.use(SelectionSelect);
+LogicFlow.use(MiniMap);
+LogicFlow.use(Menu);
+
 export default defineComponent({
     name: 'bpmn',
     components: { BpmnPattern },
@@ -46,8 +54,6 @@ export default defineComponent({
         id: '0',
         _rev: undefined as string | undefined,
         config: {
-            stopScrollGraph: true,
-            stopZoomGraph: true,
             grid: {
                 size: 10,
                 type: 'dot',
@@ -81,19 +87,10 @@ export default defineComponent({
     },
     mounted() {
         this.render = false
-        LogicFlow.use(BpmnElement);
-        LogicFlow.use(BpmnXmlAdapter);
-        LogicFlow.use(Snapshot);
-        LogicFlow.use(Control);
-        LogicFlow.use(SelectionSelect);
-        LogicFlow.use(MiniMap);
-        LogicFlow.use(Menu);
-        this.lf = new LogicFlow({
+        let lf = new LogicFlow({
             ...this.config,
             container: document.querySelector('#bpmn-view') as HTMLElement
         });
-        this.lf.render();
-        this.render = true;
 
         // 获取取数
         this.id = this.$route.params.id as string;
@@ -103,11 +100,26 @@ export default defineComponent({
                 .then(res => {
                     if (res) {
                         this._rev = res._rev;
-                        this.lf.render(res.value);
-                        console.log(res)
+                        let value = res.value;
+                        this.config = value.config;
+                        lf.render(value.record);
+                        lf.options = {
+                            ...this.config,
+                            container: document.querySelector('#bpmn-view') as HTMLElement
+                        };
+                    } else {
+                        lf.render();
                     }
                 }).catch(e => MessageUtil.error("获取数据失败", e))
-                .finally(() => this.loading = false);
+                .finally(() => {
+                    this.loading = false;
+                    this.render = true;
+                    this.lf = lf;
+                });
+        } else {
+            lf.render();
+            this.render = true;
+            this.lf = lf;
         }
 
         this.showMiniMap();
@@ -121,7 +133,10 @@ export default defineComponent({
                     utools.db.promises.put({
                         _id: this._id,
                         _rev: this._rev,
-                        value: this.lf.getGraphRawData()
+                        value: {
+                            config: toRaw(this.config),
+                            record: this.lf.getGraphData()
+                        }
                     }).then(res => {
                         if (res.error) {
                             MessageUtil.error(res.message || "保存失败");
@@ -208,4 +223,5 @@ export default defineComponent({
 .lf-control-item:hover {
     background-color: var(--color-neutral-4);
 
-}</style>
+}
+</style>

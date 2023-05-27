@@ -115,18 +115,12 @@ export default defineComponent({
         }
     },
     created() {
-        useSaveEvent.reset();
         useSaveEvent.on(() => {
             this.save(true);
         });
-        useClearEvent.reset();
         useClearEvent.on(() => {
             this.clear();
         });
-    },
-    beforeUnmount() {
-        useSaveEvent.reset();
-        useClearEvent.reset();
     },
     mounted() {
         this.id = this.$route.params.id as string;

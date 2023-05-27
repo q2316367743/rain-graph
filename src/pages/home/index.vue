@@ -45,6 +45,7 @@ import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import { useGlobalStore } from "@/store/GlobalStore";
 import { useAtramentStore } from "@/store/AtramentStore";
 import { useBpmnStore } from "@/store/BpmnStore";
+import { useClearEvent, useExportEvent, useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
 
 export default defineComponent({
     name: 'home',
@@ -79,6 +80,11 @@ export default defineComponent({
         if (name) {
             this.activeKey = name;
         }
+        // 清空事件
+        useSaveEvent.reset();
+        useUndoEvent.reset();
+        useClearEvent.reset();
+        useExportEvent.reset();
     },
     methods: {
         jumpTo(item: GraphRecord) {
@@ -90,6 +96,8 @@ export default defineComponent({
                 useMindStore().remove(item);
             } else if (this.activeKey === GraphTypeEnum.ATRAMENT) {
                 useAtramentStore().remove(item);
+            } else if (this.activeKey === GraphTypeEnum.BPMN) {
+                useBpmnStore().remove(item);
             }
         }
     }

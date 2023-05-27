@@ -79,10 +79,8 @@ function save() {
     });
 }
 
-useSaveEvent.reset();
 useSaveEvent.on(() => save());
 
-useClearEvent.reset();
 useClearEvent.on(() => {
     if (mind) {
         mind.init(MindElixir.new("思维导图"));
@@ -91,7 +89,6 @@ useClearEvent.on(() => {
     }
 })
 
-useUndoEvent.reset();
 useUndoEvent.on(() => {
     if (mind) {
         mind.undo();
@@ -99,7 +96,6 @@ useUndoEvent.on(() => {
     }
 });
 
-useExportEvent.reset();
 useExportEvent.on((type: ExportTypeEnum) => {
     if (type === ExportTypeEnum.PNG) {
         MessageUtil.warning("暂不支持导出PNG");

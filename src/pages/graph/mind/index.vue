@@ -55,7 +55,6 @@ onMounted(() => {
     mind = new MindElixir(option);
     if (id !== '0') {
         mind.init(option.data);
-        useGlobalStore().setTitle("新思维导图");
     } else {
         mind.init(MindElixir.new("思维导图"));
     }

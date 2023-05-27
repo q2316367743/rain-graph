@@ -4,6 +4,7 @@ export default {
     export: {
         mind: [ExportTypeEnum.HTML],
         atrament: [],
-        bpmn: [ExportTypeEnum.PNG, ExportTypeEnum.XML]
+        bpmn: [ExportTypeEnum.PNG, ExportTypeEnum.XML],
+        diagram: [ExportTypeEnum.PNG, ExportTypeEnum.XML],
     } as Record<string, ExportTypeEnum[]>
 }

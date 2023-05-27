@@ -4,7 +4,9 @@ enum GraphTypeEnum {
 
     ATRAMENT = 'atrament',
 
-    BPMN = 'bpmn'
+    BPMN = 'bpmn',
+
+    DIAGRAM = 'diagram'
 
 }
 

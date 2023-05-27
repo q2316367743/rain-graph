@@ -1,48 +1,61 @@
 <template>
-    <div class="bpmn">
-        <a-spin :loading="loading" tip="数据获取中">
-            <div id="bpmn-view"></div>
-        </a-spin>
-        <bpmn-pattern :lf="lf" v-if="render" />
-        <div class="show-mini-map">
-            <a-button @click="showMiniMap" type="text">
-                <template #icon>
-                    <icon-location />
-                </template>
-            </a-button>
-        </div>
+    <div class="diagram">
+        <a-layout class="container">
+            <a-layout-sider hide-trigger collapsible :collapsed="collapsed" :collapsed-width="0" :width="200">
+                <diagram-sidebar v-if="render" />
+            </a-layout-sider>
+            <a-layout>
+                <div class="content" id="diagram-view"></div>
+                <div class="toolbar">
+                    <diagram-toolbar v-if="render" :lf="lf" />
+                </div>
+                <div class="collapsed">
+                    <a-button @click="collapsed = !collapsed" type="primary">
+                        <template #icon>
+                            <icon-menu-unfold v-if="collapsed" />
+                            <icon-menu-fold v-else />
+                        </template>
+                    </a-button>
+                    <a-button @click="showMiniMap" style="margin-left: 7px;" type="primary">
+                        <template #icon>
+                            <icon-location />
+                        </template>
+                    </a-button>
+                </div>
+            </a-layout>
+        </a-layout>
     </div>
 </template>
 <script lang="ts">
 import { defineComponent, toRaw } from "vue";
-import LogicFlow from '@logicflow/core';
+import { mapState } from "pinia";
 import {
     BpmnElement,
     BpmnXmlAdapter,
     Snapshot,
-    Control,
     Menu,
     SelectionSelect,
     MiniMap,
 } from '@logicflow/extension';
+import LogicFlow from "@logicflow/core";
 
+import "@logicflow/extension/lib/style/index.css";
 import "@logicflow/core/dist/style/index.css";
-import '@logicflow/extension/lib/style/index.css';
-import './index.less';
 
-import BpmnPattern from './pattern.vue';
+import DiagramToolbar from './components/toolbar.vue';
+import DiagramSidebar from './components/sidebar.vue';
+
 import { useClearEvent, useExportEvent, useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
-import { useBpmnStore } from "@/store/BpmnStore";
-import MessageUtil from "@/utils/MessageUtil";
-import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
-import { mapState } from "pinia";
 import { useGlobalStore } from "@/store/GlobalStore";
+import { useDiagramStore } from "@/store/DiagramStore";
+import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import BrowserUtil from "@/utils/BrowserUtil";
+import MessageUtil from "@/utils/MessageUtil";
 
 export default defineComponent({
-    name: 'bpmn',
-    components: { BpmnPattern },
+    name: 'diagram',
+    components: { DiagramToolbar, DiagramSidebar },
     data: () => ({
         id: '0',
         _rev: undefined as string | undefined,
@@ -61,21 +74,34 @@ export default defineComponent({
         },
         render: false,
         lf: {} as LogicFlow,
-        loading: false
+        loading: false,
+        collapsed: false
     }),
     computed: {
         ...mapState(useGlobalStore, ['size', 'title']),
         _id() {
-            return `/${GraphTypeEnum.BPMN}/${this.id}`;
+            return `/${GraphTypeEnum.DIAGRAM}/${this.id}`;
+        },
+        miniMapLeft() {
+            return this.size.width - 156 - 10 - (this.collapsed ? 0 : 200);
+        },
+        miniMaoTop() {
+            return this.size.height - 242 - 10 - 33;
         }
     },
     watch: {
         size: {
             handler() {
                 this.lf.extension.miniMap.hide();
-                this.lf.extension.miniMap.show(this.size.width - 156 - 10, this.size.height - 242 - 10 - 33);
+                this.lf.extension.miniMap.show(this.miniMapLeft, this.miniMaoTop);
             },
             deep: true
+        },
+        collapsed() {
+            if (this.lf.extension.miniMap.isShow) {
+                this.lf.extension.miniMap.hide();
+                this.lf.extension.miniMap.show(this.miniMapLeft, this.miniMaoTop);
+            }
         }
     },
     mounted() {
@@ -131,8 +157,8 @@ export default defineComponent({
         init(data?: any) {
             let lf = new LogicFlow({
                 ...this.config,
-                container: document.querySelector('#bpmn-view') as HTMLElement,
-                plugins: [BpmnElement, BpmnXmlAdapter, Snapshot, Control, SelectionSelect, MiniMap, Menu]
+                container: document.querySelector('#diagram-view') as HTMLElement,
+                plugins: [BpmnElement, BpmnXmlAdapter, Snapshot, SelectionSelect, MiniMap, Menu]
             });
             lf.render(data);
             this.render = true;
@@ -143,13 +169,13 @@ export default defineComponent({
                 if (this.lf.extension.miniMap.isShow) {
                     this.lf.extension.miniMap.hide();
                 } else {
-                    this.lf.extension.miniMap.show(this.size.width - 156 - 10, this.size.height - 242 - 10 - 33);
+                    this.lf.extension.miniMap.show(this.miniMapLeft, this.miniMaoTop);
                 }
             } catch (_) {
             }
         },
         save() {
-            useBpmnStore().add(this.id)
+            useDiagramStore().add(this.id)
                 .then(id => {
                     this.id = id;
                     // 保存记录
@@ -174,31 +200,39 @@ export default defineComponent({
 });
 </script>
 <style lang="less">
-.bpmn {
+.diagram {
     position: relative;
-    width: 100%;
     height: 100%;
+    width: 100%;
 
-    .show-mini-map {
+    .container {
+        position: relative;
+        height: 100%;
+        width: 100%;
+
+        .content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+    }
+
+    .arco-layout {
+        position: relative;
+    }
+
+    .toolbar {
+        position: absolute;
+        top: 0;
+        left: 10px;
+    }
+
+    .collapsed {
         position: absolute;
         left: 10px;
         bottom: 10px;
     }
-
-    &>.arco-spin {
-        position: absolute !important;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-    }
-}
-
-#bpmn-view {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    position: relative;
 }
 </style>

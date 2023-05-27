@@ -132,9 +132,6 @@ export default defineComponent({
                 this._rev = recordWrap._rev;
             }
         }
-        if (this.id === '0') {
-            useGlobalStore().setTitle("新手绘图");
-        }
         const canvas = document.querySelector('#atrament-view');
         sketchpad = new Atrament(canvas, {
             width: this.size.width - 14,

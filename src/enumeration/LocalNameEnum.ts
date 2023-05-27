@@ -4,7 +4,9 @@ enum LocalNameEnum {
 
     ATRAMENT = '/local/atrament',
 
-    BPMN = '/local/bpmn'
+    BPMN = '/local/bpmn',
+
+    DIAGRAM = '/local/diagram'
 
 }
 

@@ -5,6 +5,7 @@
                 <a-radio :value="GraphTypeEnum.MIND">思维导图</a-radio>
                 <a-radio :value="GraphTypeEnum.ATRAMENT">手绘图</a-radio>
                 <a-radio :value="GraphTypeEnum.BPMN">BPMN</a-radio>
+                <a-radio :value="GraphTypeEnum.DIAGRAM">简图</a-radio>
             </a-radio-group>
         </div>
         <div class="content">
@@ -46,6 +47,7 @@ import { useGlobalStore } from "@/store/GlobalStore";
 import { useAtramentStore } from "@/store/AtramentStore";
 import { useBpmnStore } from "@/store/BpmnStore";
 import { useClearEvent, useExportEvent, useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
+import { useDiagramStore } from "@/store/DiagramStore";
 
 export default defineComponent({
     name: 'home',
@@ -58,6 +60,7 @@ export default defineComponent({
         ...mapState(useMindStore, ['minds']),
         ...mapState(useAtramentStore, ['atraments']),
         ...mapState(useBpmnStore, ['bpmns']),
+        ...mapState(useDiagramStore, ['diagrams']),
         virtualListProps() {
             return {
                 height: this.size.height - 33 - 32 - 14 - 7
@@ -70,12 +73,14 @@ export default defineComponent({
                 return this.atraments;
             } else if (this.activeKey === GraphTypeEnum.BPMN) {
                 return this.bpmns;
+            } else if (this.activeKey === GraphTypeEnum.DIAGRAM) {
+                return this.diagrams;
             }
             return [];
         }
     },
     created() {
-        useGlobalStore().setTitle('');
+        useGlobalStore().setTitle(' ');
         let name = this.$route.query.name as GraphTypeEnum;
         if (name) {
             this.activeKey = name;
@@ -98,6 +103,8 @@ export default defineComponent({
                 useAtramentStore().remove(item);
             } else if (this.activeKey === GraphTypeEnum.BPMN) {
                 useBpmnStore().remove(item);
+            } else if (this.activeKey === GraphTypeEnum.DIAGRAM) {
+                useDiagramStore().remove(item);
             }
         }
     }

@@ -15,6 +15,7 @@
                         <a-doption @click="$router.push('/mind/0')">思维导图</a-doption>
                         <a-doption @click="$router.push('/atrament/0')">手绘图</a-doption>
                         <a-doption @click="$router.push('/bpmn/0')">BPMN</a-doption>
+                        <a-doption @click="$router.push('/diagram/0')">简图</a-doption>
                         <a-doption @click="$router.push('/flow-chart/0')">流程图</a-doption>
                     </template>
                 </a-dropdown>
@@ -29,6 +30,7 @@
                         <a-doption>思维导图</a-doption>
                         <a-doption>手绘图</a-doption>
                         <a-doption>BPMN</a-doption>
+                        <a-doption>简图</a-doption>
                         <a-doption>流程图</a-doption>
                     </template>
                 </a-dropdown>
@@ -48,7 +50,7 @@
                     </template>
                 </a-dropdown>
                 <a-dropdown @select="exportImage">
-                    <a-button :disabled="editDisabled">
+                    <a-button :disabled="editDisabled || exportItems.length === 0">
                         <template #icon>
                             <icon-caret-down />
                         </template>
@@ -87,6 +89,7 @@ import { useAtramentStore } from "./store/AtramentStore";
 import { useBpmnStore } from "./store/BpmnStore";
 import ExportTypeEnum from "./enumeration/ExportTypeEnum";
 import Config from '@/global/Config'
+import { useDiagramStore } from "./store/DiagramStore";
 
 export default defineComponent({
     name: '',
@@ -116,6 +119,7 @@ export default defineComponent({
         useMindStore().init();
         useAtramentStore().init();
         useBpmnStore().init();
+        useDiagramStore().init();
     },
     methods: {
         toHome() {

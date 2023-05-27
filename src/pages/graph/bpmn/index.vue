@@ -23,7 +23,7 @@ import {
     Control,
     Menu,
     SelectionSelect,
-    MiniMap
+    MiniMap,
 } from '@logicflow/extension';
 import "@logicflow/extension/lib/style/index.css";
 
@@ -32,19 +32,27 @@ import '@logicflow/extension/lib/style/index.css';
 import './index.less';
 
 import BpmnPattern from './pattern.vue';
-import { useSaveEvent } from "@/global/BeanFactory";
+import { useClearEvent, useExportEvent, useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
 import { useBpmnStore } from "@/store/BpmnStore";
 import MessageUtil from "@/utils/MessageUtil";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import { mapState } from "pinia";
 import { useGlobalStore } from "@/store/GlobalStore";
+import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
+import BrowserUtil from "@/utils/BrowserUtil";
 
+// Bpmn适配器
 LogicFlow.use(BpmnElement);
 LogicFlow.use(BpmnXmlAdapter);
+// 快照
 LogicFlow.use(Snapshot);
+// 控制器
 LogicFlow.use(Control);
+// 框选
 LogicFlow.use(SelectionSelect);
+// 小地图
 LogicFlow.use(MiniMap);
+// 右键菜单
 LogicFlow.use(Menu);
 
 export default defineComponent({
@@ -72,6 +80,7 @@ export default defineComponent({
     }),
     computed: {
         ...mapState(useGlobalStore, ['size']),
+        ...mapState(useGlobalStore, ['title']),
         _id() {
             return `/${GraphTypeEnum.BPMN}/${this.id}`;
         }
@@ -125,7 +134,33 @@ export default defineComponent({
         this.showMiniMap();
 
         // 事件
-        useSaveEvent.on(() => {
+        useSaveEvent.on(() => this.save());
+        useUndoEvent.on(() => this.lf.undo())
+        useClearEvent.on(() => {
+            this.lf.clearData();
+            this.save();
+        });
+        useExportEvent.on(type => {
+            if (type === ExportTypeEnum.PNG) {
+                this.lf.extension.snapshot.lf.getSnapshot(this.title + '.png');
+            } else if (type === ExportTypeEnum.XML) {
+                const data = lf.getGraphData() as string;
+                BrowserUtil.download(data, this.title + '.xml', 'text/xml');
+            }
+        })
+    },
+    methods: {
+        showMiniMap() {
+            try {
+                if (this.lf.extension.miniMap.isShow) {
+                    this.lf.extension.miniMap.hide();
+                } else {
+                    this.lf.extension.miniMap.show(this.size.width - 156 - 10, this.size.height - 242 - 10 - 33);
+                }
+            } catch (_) {
+            }
+        },
+        save() {
             useBpmnStore().add(this.id)
                 .then(id => {
                     this.id = id;
@@ -143,21 +178,9 @@ export default defineComponent({
                             return;
                         }
                         this._rev = res.rev;
-                    })
-                    MessageUtil.success("新增成功")
-                }).catch(e => MessageUtil.error("新增BPMN失败", e));
-        })
-    },
-    methods: {
-        showMiniMap() {
-            try {
-                if (this.lf.extension.miniMap.isShow) {
-                    this.lf.extension.miniMap.hide();
-                } else {
-                    this.lf.extension.miniMap.show(this.size.width - 156 - 10, this.size.height - 242 - 10 - 33);
-                }
-            } catch (_) {
-            }
+                        MessageUtil.success("保存成功");
+                    }).catch(e => MessageUtil.error("保存失败", e));
+                }).catch(e => MessageUtil.error("保存BPMN失败", e));
         }
     }
 });

@@ -4,7 +4,9 @@ enum ExportTypeEnum {
 
     SVG = 'svg',
 
-    HTML = 'html'
+    HTML = 'html',
+
+    XML = 'xml'
 
 }
 

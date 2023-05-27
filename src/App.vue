@@ -55,9 +55,7 @@
                         导出
                     </a-button>
                     <template #content>
-                        <a-doption :value="ExportTypeEnum.PNG">PNG</a-doption>
-                        <a-doption :value="ExportTypeEnum.SVG">SVG</a-doption>
-                        <a-doption :value="ExportTypeEnum.HTML">HTML</a-doption>
+                        <a-doption v-for="item in exportItems" :value="item">{{ item.toUpperCase() }}</a-doption>
                     </template>
                 </a-dropdown>
                 <a-dropdown>
@@ -88,6 +86,7 @@ import { useMindStore } from "./store/MindStore";
 import { useAtramentStore } from "./store/AtramentStore";
 import { useBpmnStore } from "./store/BpmnStore";
 import ExportTypeEnum from "./enumeration/ExportTypeEnum";
+import Config from '@/global/Config'
 
 export default defineComponent({
     name: '',
@@ -99,6 +98,10 @@ export default defineComponent({
         ...mapState(useGlobalStore, ['title']),
         editDisabled() {
             return this.$route.path === '/home'
+        },
+        exportItems(): ExportTypeEnum[] {
+            let name = this.$route.name as string;
+            return Config.export[name] || []
         }
     },
     created() {

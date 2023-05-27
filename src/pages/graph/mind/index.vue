@@ -97,11 +97,7 @@ useUndoEvent.on(() => {
 });
 
 useExportEvent.on((type: ExportTypeEnum) => {
-    if (type === ExportTypeEnum.PNG) {
-        MessageUtil.warning("暂不支持导出PNG");
-    } else if (type === ExportTypeEnum.SVG) {
-        MessageUtil.warning("暂不支持导出SVG");
-    } else if (type === ExportTypeEnum.HTML) {
+    if (type === ExportTypeEnum.HTML) {
         BrowserUtil.download(
             data2Html(mind.getData()),
             useGlobalStore().title + ".html",

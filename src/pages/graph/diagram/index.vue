@@ -7,7 +7,7 @@
             <a-layout>
                 <div class="content" id="diagram-view"></div>
                 <div class="toolbar">
-                    <diagram-toolbar v-if="render" :lf="lf" />
+                    <diagram-toolbar v-if="render" :lf="lf" :active-edges="activeEdges" />
                 </div>
                 <div class="collapsed">
                     <a-button @click="collapsed = !collapsed" type="primary">
@@ -76,7 +76,9 @@ export default defineComponent({
         render: false,
         lf: {} as LogicFlow,
         loading: false,
-        collapsed: false
+        collapsed: false,
+        activeNodes: [] as any[],
+        activeEdges: [] as any[]
     }),
     computed: {
         ...mapState(useGlobalStore, ['size', 'title']),
@@ -165,6 +167,14 @@ export default defineComponent({
             lf.renderRawData(data);
             this.render = true;
             this.lf = lf;
+            this.lf.on('selection:selected,node:click,blank:click,edge:click', () => {
+                this.$nextTick(() => {
+                    const { nodes, edges } = this.lf.getSelectElements()
+                    this.activeNodes = nodes
+                    this.activeEdges = edges
+                    this.getProperty()
+                })
+            })
         },
         showMiniMap() {
             try {
@@ -203,6 +213,9 @@ export default defineComponent({
                 type
             })
         },
+        getProperty() {
+            // TODO: 获取属性
+        }
     }
 });
 </script>

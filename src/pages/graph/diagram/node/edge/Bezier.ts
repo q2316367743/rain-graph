@@ -5,7 +5,7 @@ import { getShapeStyleFunction, getTextStyleFunction } from '../getShapeStyleUti
 class Model extends BezierEdgeModel {
   constructor(data: EdgeConfig, graphModel: GraphModel) {
     super(data, graphModel)
-    this.strokeWidth = 1
+    this.strokeWidth = 4
   }
   getTextStyle() {
     const style = super.getTextStyle()
@@ -16,7 +16,7 @@ class Model extends BezierEdgeModel {
     const attributes = super.getEdgeStyle()
     const properties = this.properties;
     const style = getShapeStyleFunction(attributes, properties)
-    return { ...style, fill: 'none' }
+    return { ...style, fill: 'none', stroke: 'rgb(24, 125, 255)', strokeWidth: 4 }
   }
 }
 export default {

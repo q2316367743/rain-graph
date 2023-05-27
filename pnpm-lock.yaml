@@ -10,6 +10,9 @@ dependencies:
   '@arco-design/web-vue':
     specifier: ^2.45.0
     version: registry.npmmirror.com/@arco-design/web-vue@2.45.0(vue@3.2.47)
+  '@mind-elixir/export-html':
+    specifier: ^2.0.0
+    version: registry.npmmirror.com/@mind-elixir/export-html@2.0.0(mind-elixir@2.0.2)
   '@vueuse/core':
     specifier: ^9.13.0
     version: registry.npmmirror.com/@vueuse/core@9.13.0(vue@3.2.47)
@@ -458,6 +461,18 @@ packages:
     dependencies:
       '@jridgewell/resolve-uri': registry.npmmirror.com/@jridgewell/resolve-uri@3.1.0
       '@jridgewell/sourcemap-codec': registry.npmmirror.com/@jridgewell/sourcemap-codec@1.4.14
+    dev: false
+
+  registry.npmmirror.com/@mind-elixir/export-html@2.0.0(mind-elixir@2.0.2):
+    resolution: {integrity: sha512-R6yR+/Ze+xlB9aqqDn81PFtwfuZ5eShzlAqNidwaWskQod+ZcWzSJDuoqqN7WDD0nEtTglqnkELzvittsR51cA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@mind-elixir/export-html/-/export-html-2.0.0.tgz}
+    id: registry.npmmirror.com/@mind-elixir/export-html/2.0.0
+    name: '@mind-elixir/export-html'
+    version: 2.0.0
+    peerDependencies:
+      mind-elixir: ^2.0.0
+    dependencies:
+      file-saver: registry.npmmirror.com/file-saver@2.0.5
+      mind-elixir: registry.npmmirror.com/mind-elixir@2.0.2
     dev: false
 
   registry.npmmirror.com/@types/eslint-scope@3.7.4:
@@ -1236,6 +1251,12 @@ packages:
     resolution: {integrity: sha512-lhd/wF+Lk98HZoTCtlVraHtfh5XYijIjalXck7saUtuanSDyLMxnHhSXEDJqHxD7msR8D0uCmqlkwjCV8xvwHw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/fast-json-stable-stringify/-/fast-json-stable-stringify-2.1.0.tgz}
     name: fast-json-stable-stringify
     version: 2.1.0
+    dev: false
+
+  registry.npmmirror.com/file-saver@2.0.5:
+    resolution: {integrity: sha512-P9bmyZ3h/PRG+Nzga+rbdI4OEpNDzAVyy74uVO9ATgzLK6VtAsYybF/+TOCvrc0MO793d6+42lLyZTw7/ArVzA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/file-saver/-/file-saver-2.0.5.tgz}
+    name: file-saver
+    version: 2.0.5
     dev: false
 
   registry.npmmirror.com/fsevents@2.3.2:

@@ -32,9 +32,9 @@ export default {
      * @param fileName 文件名
      * @param mineType 文件类型
      */
-    download(data: string, fileName: string, mineType: string) {
+    download(data: string | ArrayBuffer | Blob, fileName: string, mineType: string) {
         // 创建 blob
-        let blob = new Blob([data], {type: mineType});
+        let blob = data instanceof Blob ? data : new Blob([data], { type: mineType });
         // 创建 href 超链接，点击进行下载
         window.URL = window.URL || window.webkitURL;
         let href = URL.createObjectURL(blob);

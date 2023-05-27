@@ -12,6 +12,7 @@
         "@antv/x6": "^2.11.1",
         "@antv/x6-plugin-stencil": "^2.0.3",
         "@arco-design/web-vue": "^2.45.0",
+        "@mind-elixir/export-html": "^2.0.0",
         "@vueuse/core": "^9.13.0",
         "atrament": "^3.0.0",
         "less": "^4.1.3",

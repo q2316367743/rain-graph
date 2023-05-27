@@ -77,7 +77,7 @@ import { Atrament } from 'atrament';
 import { useWindowSize } from "@vueuse/core";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import { useGlobalStore } from "@/store/GlobalStore";
-import { useSaveEvent } from "@/global/BeanFactory";
+import { useClearEvent, useSaveEvent } from "@/global/BeanFactory";
 import MessageUtil from "@/utils/MessageUtil";
 import { useAtramentStore } from "@/store/AtramentStore";
 import { toRaw } from "vue";
@@ -119,9 +119,14 @@ export default defineComponent({
         useSaveEvent.on(() => {
             this.save(true);
         });
+        useClearEvent.reset();
+        useClearEvent.on(() => {
+            this.clear();
+        });
     },
     beforeUnmount() {
         useSaveEvent.reset();
+        useClearEvent.reset();
     },
     mounted() {
         this.id = this.$route.params.id as string;

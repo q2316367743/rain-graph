@@ -4,6 +4,7 @@
             <a-radio-group v-model="activeKey" type="button">
                 <a-radio :value="GraphTypeEnum.MIND">思维导图</a-radio>
                 <a-radio :value="GraphTypeEnum.ATRAMENT">手绘图</a-radio>
+                <a-radio :value="GraphTypeEnum.BPMN">BPMN</a-radio>
             </a-radio-group>
         </div>
         <div class="content">
@@ -43,6 +44,7 @@ import GraphRecord from "@/entity/GraphRecord";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import { useGlobalStore } from "@/store/GlobalStore";
 import { useAtramentStore } from "@/store/AtramentStore";
+import { useBpmnStore } from "@/store/BpmnStore";
 
 export default defineComponent({
     name: 'home',
@@ -54,6 +56,7 @@ export default defineComponent({
     computed: {
         ...mapState(useMindStore, ['minds']),
         ...mapState(useAtramentStore, ['atraments']),
+        ...mapState(useBpmnStore, ['bpmns']),
         virtualListProps() {
             return {
                 height: this.size.height - 33 - 32 - 14 - 7
@@ -64,6 +67,8 @@ export default defineComponent({
                 return this.minds;
             } else if (this.activeKey === GraphTypeEnum.ATRAMENT) {
                 return this.atraments;
+            } else if (this.activeKey === GraphTypeEnum.BPMN) {
+                return this.bpmns;
             }
             return [];
         }

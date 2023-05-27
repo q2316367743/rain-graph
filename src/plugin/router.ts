@@ -10,18 +10,24 @@ const router = createRouter({
     }, {
         path: '/home',
         component: () => import('@/pages/home/index.vue')
-    }, {
+    }, 
+    // ------ 各种图 ------
+    {
         name: GraphTypeEnum.MIND,
         path: '/mind/:id',
-        component: () => import('@/pages/mind/index.vue')
+        component: () => import('@/pages/graph/mind/index.vue')
     }, {
         name: GraphTypeEnum.ATRAMENT,
         path: '/atrament/:id',
-        component: () => import('@/pages/atrament/index.vue')
+        component: () => import('@/pages/graph/atrament/index.vue')
+    }, {
+        name: GraphTypeEnum.BPMN,
+        path: '/bpmn/:id',
+        component: () => import('@/pages/graph/bpmn/index.vue')
     }, {
         name: 'flow-chart',
         path: '/flow-chart/:id',
-        component: () => import('@/pages/flow-chart/index.vue')
+        component: () => import('@/pages/graph/flow-chart/index.vue')
     }]
 });
 

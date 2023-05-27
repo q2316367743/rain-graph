@@ -17,8 +17,6 @@ import { useGlobalStore } from "@/store/GlobalStore";
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import BrowserUtil from "@/utils/BrowserUtil";
 
-
-
 const size = useWindowSize();
 const viewHeight = computed(() => size.height.value - 33);
 
@@ -66,17 +64,18 @@ onMounted(() => {
 function save() {
     useMindStore().addMind(id).then(_id => {
         id = _id;
-        let res = utools.db.put({
+        utools.db.promises.put({
             _id: `/${GraphTypeEnum.MIND}/${id}`,
             _rev,
             value: mind.getData()
+        }).then(res => {
+            if (res.error) {
+                MessageUtil.error(res.message || "保存失败");
+                return;
+            }
+            _rev = res.rev;
+            MessageUtil.success('保存成功');
         });
-        if (res.error) {
-            MessageUtil.error(res.message || "保存失败");
-            return;
-        }
-        _rev = res.rev;
-        MessageUtil.success('保存成功');
     });
 }
 

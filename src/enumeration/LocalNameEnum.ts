@@ -4,6 +4,8 @@ enum LocalNameEnum {
 
     ATRAMENT = '/local/atrament',
 
+    BPMN = '/local/bpmn'
+
 }
 
 export default LocalNameEnum;

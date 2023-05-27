@@ -14,6 +14,7 @@
                     <template #content>
                         <a-doption @click="$router.push('/mind/0')">思维导图</a-doption>
                         <a-doption @click="$router.push('/atrament/0')">手绘图</a-doption>
+                        <a-doption @click="$router.push('/bpmn/0')">BPMN</a-doption>
                         <a-doption @click="$router.push('/flow-chart/0')">流程图</a-doption>
                     </template>
                 </a-dropdown>
@@ -27,6 +28,7 @@
                     <template #content>
                         <a-doption>思维导图</a-doption>
                         <a-doption>手绘图</a-doption>
+                        <a-doption>BPMN</a-doption>
                         <a-doption>流程图</a-doption>
                     </template>
                 </a-dropdown>
@@ -42,7 +44,7 @@
                         <a-doption>另存为</a-doption>
                         <a-doption @click="undo">撤销</a-doption>
                         <a-doption @click="clear">
-                        <span style="color: rgb(var(--red-6))">清空</span></a-doption>
+                            <span style="color: rgb(var(--red-6))">清空</span></a-doption>
                     </template>
                 </a-dropdown>
                 <a-dropdown @select="exportImage">
@@ -80,10 +82,11 @@
 <script lang="ts">
 import { mapState } from "pinia";
 import { defineComponent } from "vue";
-import { useGlobalStore } from "./store/GlobalStore";
 import { useSaveEvent, useClearEvent, useExportEvent, useUndoEvent } from "./global/BeanFactory";
+import { useGlobalStore } from "./store/GlobalStore";
 import { useMindStore } from "./store/MindStore";
 import { useAtramentStore } from "./store/AtramentStore";
+import { useBpmnStore } from "./store/BpmnStore";
 import ExportTypeEnum from "./enumeration/ExportTypeEnum";
 
 export default defineComponent({
@@ -106,9 +109,10 @@ export default defineComponent({
             // 恢复亮色主题
             document.body.removeAttribute('arco-theme');
         }
-        // 初始化流程图
+        // 初始化图信息
         useMindStore().init();
         useAtramentStore().init();
+        useBpmnStore().init();
     },
     methods: {
         toHome() {

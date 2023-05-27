@@ -1,0 +1,211 @@
+<template>
+    <div class="bpmn">
+        <a-spin :loading="loading" tip="数据获取中">
+            <div id="bpmn-view"></div>
+        </a-spin>
+        <bpmn-pattern :lf="lf" v-if="render" />
+        <div class="show-mini-map">
+            <a-button @click="showMiniMap" type="text">
+                <template #icon>
+                    <icon-location />
+                </template>
+            </a-button>
+        </div>
+    </div>
+</template>
+<script lang="ts">
+import { defineComponent } from "vue";
+import LogicFlow, { Definition } from '@logicflow/core';
+import {
+    BpmnElement,
+    BpmnXmlAdapter,
+    Snapshot,
+    Control,
+    Menu,
+    SelectionSelect,
+    MiniMap
+} from '@logicflow/extension';
+import "@logicflow/extension/lib/style/index.css";
+
+import "@logicflow/core/dist/style/index.css";
+import '@logicflow/extension/lib/style/index.css';
+import './index.less';
+
+import BpmnPattern from './pattern.vue';
+import { useSaveEvent } from "@/global/BeanFactory";
+import { useBpmnStore } from "@/store/BpmnStore";
+import MessageUtil from "@/utils/MessageUtil";
+import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
+import { mapState } from "pinia";
+import { useGlobalStore } from "@/store/GlobalStore";
+
+export default defineComponent({
+    name: 'bpmn',
+    components: { BpmnPattern },
+    data: () => ({
+        id: '0',
+        _rev: undefined as string | undefined,
+        config: {
+            stopScrollGraph: true,
+            stopZoomGraph: true,
+            grid: {
+                size: 10,
+                type: 'dot',
+            },
+            keyboard: {
+                enabled: true,
+            },
+            snapline: true,
+            background: {
+                backgroundImage: 'var(--color-bg-1)'
+            }
+        },
+        render: false,
+        lf: {} as LogicFlow,
+        loading: false
+    }),
+    computed: {
+        ...mapState(useGlobalStore, ['size']),
+        _id() {
+            return `/${GraphTypeEnum.BPMN}/${this.id}`;
+        }
+    },
+    watch: {
+        size: {
+            handler() {
+                this.lf.extension.miniMap.hide();
+                this.lf.extension.miniMap.show(this.size.width - 156 - 10, this.size.height - 242 - 10 - 33);
+            },
+            deep: true
+        }
+    },
+    mounted() {
+        this.render = false
+        LogicFlow.use(BpmnElement);
+        LogicFlow.use(BpmnXmlAdapter);
+        LogicFlow.use(Snapshot);
+        LogicFlow.use(Control);
+        LogicFlow.use(SelectionSelect);
+        LogicFlow.use(MiniMap);
+        LogicFlow.use(Menu);
+        this.lf = new LogicFlow({
+            ...this.config,
+            container: document.querySelector('#bpmn-view') as HTMLElement
+        });
+        this.lf.render();
+        this.render = true;
+
+        // 获取取数
+        this.id = this.$route.params.id as string;
+        if (this.id !== '0') {
+            this.loading = true;
+            utools.db.promises.get(this._id)
+                .then(res => {
+                    if (res) {
+                        this._rev = res._rev;
+                        this.lf.render(res.value);
+                        console.log(res)
+                    }
+                }).catch(e => MessageUtil.error("获取数据失败", e))
+                .finally(() => this.loading = false);
+        }
+
+        this.showMiniMap();
+
+        // 事件
+        useSaveEvent.on(() => {
+            useBpmnStore().add(this.id)
+                .then(id => {
+                    this.id = id;
+                    // 保存记录
+                    utools.db.promises.put({
+                        _id: this._id,
+                        _rev: this._rev,
+                        value: this.lf.getGraphRawData()
+                    }).then(res => {
+                        if (res.error) {
+                            MessageUtil.error(res.message || "保存失败");
+                            return;
+                        }
+                        this._rev = res.rev;
+                    })
+                    MessageUtil.success("新增成功")
+                }).catch(e => MessageUtil.error("新增BPMN失败", e));
+        })
+    },
+    methods: {
+        showMiniMap() {
+            try {
+                if (this.lf.extension.miniMap.isShow) {
+                    this.lf.extension.miniMap.hide();
+                } else {
+                    this.lf.extension.miniMap.show(this.size.width - 156 - 10, this.size.height - 242 - 10 - 33);
+                }
+            } catch (_) {
+            }
+        }
+    }
+});
+</script>
+<style lang="less">
+.bpmn {
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    .show-mini-map {
+        position: absolute;
+        left: 10px;
+        bottom: 10px;
+    }
+
+    >.arco-spin {
+        position: absolute !important;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+}
+
+#bpmn-view {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.lf-graph {
+    background-color: var(--color-bg-1);
+
+    .lf-node-content {
+        circle {
+            fill: var(--color-neutral-2);
+        }
+
+        rect {
+            fill: var(--color-neutral-2);
+        }
+
+        polygon {
+            fill: var(--color-neutral-2);
+
+        }
+    }
+}
+
+.bpmn-pattern {
+    background-color: var(--color-bg-3);
+    color: var(--color-text-1);
+}
+
+.lf-control {
+    background-color: var(--color-bg-3);
+    color: var(--color-text-1);
+}
+
+.lf-control-item:hover {
+    background-color: var(--color-neutral-4);
+
+}</style>

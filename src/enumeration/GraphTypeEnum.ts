@@ -2,7 +2,9 @@ enum GraphTypeEnum {
 
     MIND = 'mind',
 
-    ATRAMENT = 'atrament'
+    ATRAMENT = 'atrament',
+
+    BPMN = 'bpmn'
 
 }
 

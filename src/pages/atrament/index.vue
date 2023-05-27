@@ -2,43 +2,72 @@
     <div class="atrament">
         <canvas id="atrament-view" width="500" height="500"></canvas>
         <div class="setting">
-            <a-button type="text" @click="visible = true">
-                <template #icon>
-                    <icon-settings />
-                </template>
-            </a-button>
+            <a-button-group type="text">
+                <a-trigger position="bottom" trigger="click" show-arrow :popup-offset="5">
+                    <a-button :style="{ color: instance.option.color }">
+                        <template #icon>
+                            <icon-oblique-line />
+                        </template>
+                    </a-button>
+                    <template #content>
+                        <div class="atrament-panel">
+                            <a-slider :default-value="20" v-model="instance.option.weight" :style="{ width: '200px' }" />
+                        </div>
+                    </template>
+                </a-trigger>
+                <!-- 颜色 -->
+                <a-trigger position="bottom" trigger="click" show-arrow :popup-offset="5">
+                    <a-button :style="{ color: instance.option.color }">
+                        <template #icon>
+                            <icon-bg-colors />
+                        </template>
+                    </a-button>
+                    <template #content>
+                        <div class="atrament-panel">
+                            <input type="color" v-model="instance.option.color" />
+                        </div>
+                    </template>
+                </a-trigger>
+                <!-- 模式 -->
+                <a-radio-group type="button" v-model="instance.option.mode" style="margin: 0 7px;">
+                    <a-radio value="draw">
+                        <icon-edit />
+                    </a-radio>
+                    <a-radio value="erase">
+                        <icon-eraser />
+                    </a-radio>
+                    <a-radio value="fill">
+                        <icon-brush />
+                    </a-radio>
+                    <a-radio value="disabled">
+                        <icon-stop />
+                    </a-radio>
+                </a-radio-group>
+                <a-trigger position="bottom" trigger="click" show-arrow :popup-offset="5">
+                    <a-button :style="{ color: instance.option.color }">
+                        <template #icon>
+                            <icon-highlight />
+                        </template>
+                    </a-button>
+                    <template #content>
+                        <div class="atrament-panel">
+                            <a-slider :default-value="0.85" :step="0.1" :min="0" :max="2"
+                                v-model="instance.option.smoothing" :style="{ width: '200px' }" />
+                        </div>
+                    </template>
+                </a-trigger>
+                <a-tooltip content="自适应描边">
+                    <a-switch type="round" style="margin:0 7px;" v-model="instance.option.adaptiveStroke" />
+                </a-tooltip>
+                <a-tooltip content="清空画布">
+                    <a-button status="danger" @click="clear">
+                        <template #icon>
+                            <icon-delete />
+                        </template>
+                    </a-button>
+                </a-tooltip>
+            </a-button-group>
         </div>
-        <!-- 工具栏 -->
-        <a-drawer :width="400" :visible="visible" unmount-on-close title="设置" @cancel="saveOption" :footer="false">
-            <a-form :model="instance.option" layout="vertical">
-                <a-form-item label="线条粗细">
-                    <a-input-number v-model="instance.option.weight" :min="0" />
-                </a-form-item>
-                <a-form-item label="颜色">
-                    <input type="color" v-model="instance.option.color" />
-                </a-form-item>
-                <a-form-item label="模式">
-                    <a-select v-model="instance.option.mode">
-                        <a-option value="draw">笔</a-option>
-                        <a-option value="erase">擦除</a-option>
-                        <a-option value="fill">填充</a-option>
-                        <a-option value="disabled">禁用</a-option>
-                    </a-select>
-                </a-form-item>
-                <a-form-item label="调整平滑">
-                    <a-input-number v-model="instance.option.smoothing" :min="0" :step="0.01" />
-                    <template #help>
-                        较高的值使绘图看起来更好，较低的值使绘图感觉更灵敏。0.85默认设置为。
-                    </template>
-                </a-form-item>
-                <a-form-item label="切换自适应描边">
-                    <a-switch v-model="instance.option.adaptiveStroke"></a-switch>
-                    <template #help>
-                        即根据绘图速度改变线宽以获得更自然的效果。true默认情况下。
-                    </template>
-                </a-form-item>
-            </a-form>
-        </a-drawer>
     </div>
 </template>
 <script lang="ts">
@@ -64,7 +93,6 @@ export default defineComponent({
     name: '',
     data: () => ({
         id: '0',
-        visible: false,
         _rev: undefined as any | undefined,
         size: useWindowSize(),
         instance: {
@@ -78,6 +106,14 @@ export default defineComponent({
             strokes: []
         } as Instance
     }),
+    watch: {
+        'instance.option': {
+            handler() {
+                this.setOption(this.instance.option);
+            },
+            deep: true
+        }
+    },
     created() {
         useSaveEvent.reset();
         useSaveEvent.on(() => {
@@ -158,12 +194,12 @@ export default defineComponent({
         },
         saveOption() {
             this.setOption(this.instance.option);
-            this.visible = false;
             if (this.id !== '0') {
                 this.save();
             }
         },
         init(atrament: any, records: AtramentRecord[]) {
+            atrament.clear(); // 清楚画布上的所有物品。
             atrament.recordPaused = false;
             for (let record of records) {
                 let stroke = record.stroke;
@@ -184,6 +220,12 @@ export default defineComponent({
 
             }
             atrament.recordPaused = true;
+        },
+        clear() {
+            this.instance.strokes = [];
+            if (sketchpad) {
+                sketchpad.clear();
+            }
         }
     }
 });
@@ -199,7 +241,14 @@ export default defineComponent({
     .setting {
         position: absolute;
         top: 10px;
-        right: 26px;
+        left: 10px;
     }
+}
+
+.atrament-panel {
+    padding: 14px;
+    background-color: var(--color-bg-1);
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 </style>

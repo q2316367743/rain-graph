@@ -12,10 +12,10 @@
                         新增
                     </a-button>
                     <template #content>
-                        <a-doption @click="$router.push('/mind/0')">思维导图</a-doption>
-                        <a-doption @click="$router.push('/atrament/0')">手绘图</a-doption>
-                        <a-doption @click="$router.push('/bpmn/0')">BPMN</a-doption>
-                        <a-doption @click="$router.push('/diagram/0')">简图</a-doption>
+                        <a-doption @click="jumpTo(GraphTypeEnum.MIND)">思维导图</a-doption>
+                        <a-doption @click="jumpTo(GraphTypeEnum.ATRAMENT)">手绘图</a-doption>
+                        <a-doption @click="jumpTo(GraphTypeEnum.BPMN)">BPMN</a-doption>
+                        <a-doption @click="jumpTo(GraphTypeEnum.DIAGRAM)">简图</a-doption>
                         <a-doption @click="$router.push('/flow-chart/0')">流程图</a-doption>
                     </template>
                 </a-dropdown>
@@ -83,18 +83,21 @@
 import { mapState } from "pinia";
 import { defineComponent } from "vue";
 import { useSaveEvent, useClearEvent, useExportEvent, useUndoEvent } from "./global/BeanFactory";
+import Config from '@/global/Config'
 import { useGlobalStore } from "./store/GlobalStore";
 import { useMindStore } from "./store/MindStore";
 import { useAtramentStore } from "./store/AtramentStore";
 import { useBpmnStore } from "./store/BpmnStore";
-import ExportTypeEnum from "./enumeration/ExportTypeEnum";
-import Config from '@/global/Config'
 import { useDiagramStore } from "./store/DiagramStore";
+import ExportTypeEnum from "./enumeration/ExportTypeEnum";
+import GraphTypeEnum from '@/enumeration/GraphTypeEnum';
+
 
 export default defineComponent({
     name: '',
     data: () => ({
-        ExportTypeEnum
+        ExportTypeEnum,
+        GraphTypeEnum
     }),
     computed: {
         ...mapState(useGlobalStore, ['isDark']),
@@ -129,6 +132,10 @@ export default defineComponent({
                     name: this.$route.name as string
                 }
             })
+        },
+        jumpTo(type: GraphTypeEnum) {
+            useGlobalStore().setTitle('');
+            this.$router.push(`/${type}/0`);
         },
         // ------ 功能组件 ------
         save() {

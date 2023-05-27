@@ -19,6 +19,7 @@ pre {
         padding: 7px;
         border-radius: 7px;
         overflow: auto;
+
         code {
             color: var(--color-text-1) !important;
         }
@@ -34,7 +35,7 @@ pre {
         color: #c7254e !important;
         border-radius: 2px;
         font-family: JetBrainsMono, Console, '微软雅黑', Courier, monospace !important;
-    
+
         ol {
             margin: 0;
             padding: 0 20px;
@@ -56,8 +57,21 @@ pre {
 
         polygon {
             fill: var(--color-neutral-2);
-
         }
+
+        ellipse {
+            fill: var(--color-neutral-2);
+        }
+
+        .lf-element-text {
+            background-color: var(--color-bg-3);
+            color: var(--color-text-1);
+        }
+    }
+
+    .lf-text-input {
+        background-color: var(--color-bg-1) !important;
+        color: var(--color-text-1);
     }
 }
 
@@ -74,4 +88,13 @@ pre {
 .lf-control-item:hover {
     background-color: var(--color-neutral-4);
 
+}
+
+.lf-menu {
+    background-color: var(--color-bg-1) !important;
+    color: var(--color-text-1);
+}
+
+.lf-menu-item:hover {
+    background-color: var(--color-neutral-4) !important;
 }

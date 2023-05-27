@@ -2,7 +2,7 @@
     <div class="diagram">
         <a-layout class="container">
             <a-layout-sider hide-trigger collapsible :collapsed="collapsed" :collapsed-width="0" :width="200">
-                <diagram-sidebar v-if="render" />
+                <diagram-sidebar v-if="render" @drag-in-node="dragInNode" />
             </a-layout-sider>
             <a-layout>
                 <div class="content" id="diagram-view"></div>
@@ -44,6 +44,7 @@ import "@logicflow/core/dist/style/index.css";
 
 import DiagramToolbar from './components/toolbar.vue';
 import DiagramSidebar from './components/sidebar.vue';
+import { registerCustomElement } from './node';
 
 import { useClearEvent, useExportEvent, useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
 import { useGlobalStore } from "@/store/GlobalStore";
@@ -134,8 +135,6 @@ export default defineComponent({
             this.init();
         }
 
-        this.showMiniMap();
-
         // 事件
         useSaveEvent.on(() => this.save());
         useUndoEvent.on(() => this.lf.undo())
@@ -160,7 +159,10 @@ export default defineComponent({
                 container: document.querySelector('#diagram-view') as HTMLElement,
                 plugins: [BpmnElement, BpmnXmlAdapter, Snapshot, SelectionSelect, MiniMap, Menu]
             });
-            lf.render(data);
+            registerCustomElement(lf);
+            lf.setDefaultEdgeType('pro-polyline');
+            console.log(data)
+            lf.renderRawData(data);
             this.render = true;
             this.lf = lf;
         },
@@ -184,7 +186,7 @@ export default defineComponent({
                         _rev: this._rev,
                         value: {
                             config: toRaw(this.config),
-                            record: this.lf.getGraphData()
+                            record: this.lf.getGraphRawData()
                         }
                     }).then(res => {
                         if (res.error) {
@@ -195,7 +197,12 @@ export default defineComponent({
                         MessageUtil.success("保存成功");
                     }).catch(e => MessageUtil.error("保存失败", e));
                 }).catch(e => MessageUtil.error("保存BPMN失败", e));
-        }
+        },
+        dragInNode(type: string) {
+            this.lf.dnd.startDrag({
+                type
+            })
+        },
     }
 });
 </script>
@@ -221,6 +228,7 @@ export default defineComponent({
 
     .arco-layout {
         position: relative;
+        overflow: hidden;
     }
 
     .toolbar {

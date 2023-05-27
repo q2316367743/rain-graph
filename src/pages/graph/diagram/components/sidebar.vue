@@ -1,7 +1,7 @@
 <template>
     <div class="diagram-sidebar">
         <div>
-            <h1 class="node-category-title">General</h1>
+            <h1 class="node-category-title">基础图形</h1>
             <div class="node-category">
                 <div class="node-item" @mousedown="dragInNode('pro-circle')">
                     <icon-circle class="svg-node" />
@@ -127,6 +127,7 @@ import IconDivide from '../icon/Divide.vue'
 
 export default defineComponent({
     name: 'DiagramSidebar',
+    emits: ['dragInNode'],
     methods: {
         dragInNode(type: any) {
             this.$emit('dragInNode', type)

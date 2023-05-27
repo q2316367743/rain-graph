@@ -1,7 +1,7 @@
 <template>
     <div class="diagram-toolbar">
         <div class="toolbar-item" :class="{ 'selection-active': selectionOpened }" @click="selectionSelect()">
-            <icon-bg-colors :size="18" />
+            <icon-fullscreen :size="18" />
         </div>
         <div class="toolbar-item" @click="zoomIn()">
             <icon-zoom-in :size="18" />

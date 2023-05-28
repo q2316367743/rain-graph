@@ -31,7 +31,7 @@ import '@logicflow/extension/lib/style/index.css';
 import './index.less';
 
 import BpmnPattern from './pattern.vue';
-import { useClearEvent, useExportEvent, useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
+import { useClearEvent, useExportEvent, useSaveAsEvent, useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
 import { useBpmnStore } from "@/store/BpmnStore";
 import MessageUtil from "@/utils/MessageUtil";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
@@ -78,11 +78,50 @@ export default defineComponent({
             deep: true
         }
     },
+    created() {
+        // 事件
+        useSaveEvent.on(() => this.save());
+        useSaveAsEvent.on(() => {
+            BrowserUtil.download(JSON.stringify({
+                config: toRaw(this.config),
+                record: this.lf.getGraphData()
+            }), this.title + '.json', 'text/json');
+        });
+        useUndoEvent.on(() => this.lf.undo())
+        useClearEvent.on(() => {
+            this.lf.clearData();
+            this.save();
+        });
+        useExportEvent.on(type => {
+            if (type === ExportTypeEnum.PNG) {
+                console.log(this.lf.extension)
+                this.lf.extension.snapshot.lf.getSnapshot(this.title + '.png');
+            } else if (type === ExportTypeEnum.XML) {
+                const data = this.lf.getGraphData() as string;
+                BrowserUtil.download(data, this.title + '.xml', 'text/xml');
+            }
+        });
+    },
     mounted() {
         this.render = false
         // 获取取数
         this.id = this.$route.params.id as string;
-        if (this.id !== '0') {
+        if (this.id === '-1') {
+            // 文件打开
+            let path = this.$route.query.path as string;
+            window.preload.openFileToString(path).then(value => {
+                let data = undefined as any | undefined;
+                try {
+                    let val = JSON.parse(value);
+                    this.config = val.config;
+                    data = val.record;
+                } catch (e) {
+                    MessageUtil.error("文件打开失败", e)
+                } finally {
+                    this.init(data);
+                }
+            }).catch(e => MessageUtil.error("文件打开失败", e));
+        } else if (this.id !== '0') {
             this.loading = true;
             utools.db.promises.get(this._id)
                 .then(res => {
@@ -107,25 +146,6 @@ export default defineComponent({
         } else {
             this.init();
         }
-
-        this.showMiniMap();
-
-        // 事件
-        useSaveEvent.on(() => this.save());
-        useUndoEvent.on(() => this.lf.undo())
-        useClearEvent.on(() => {
-            this.lf.clearData();
-            this.save();
-        });
-        useExportEvent.on(type => {
-            if (type === ExportTypeEnum.PNG) {
-                console.log(this.lf.extension)
-                this.lf.extension.snapshot.lf.getSnapshot(this.title + '.png');
-            } else if (type === ExportTypeEnum.XML) {
-                const data = this.lf.getGraphData() as string;
-                BrowserUtil.download(data, this.title + '.xml', 'text/xml');
-            }
-        })
     },
     methods: {
         init(data?: any) {
@@ -137,6 +157,7 @@ export default defineComponent({
             lf.render(data);
             this.render = true;
             this.lf = lf;
+            this.showMiniMap();
         },
         showMiniMap() {
             try {

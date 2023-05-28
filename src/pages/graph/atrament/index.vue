@@ -76,7 +76,6 @@ import { defineComponent } from "vue";
 import { Atrament } from 'atrament';
 import { useWindowSize } from "@vueuse/core";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
-import { useGlobalStore } from "@/store/GlobalStore";
 import { useClearEvent, useSaveEvent } from "@/global/BeanFactory";
 import MessageUtil from "@/utils/MessageUtil";
 import { useAtramentStore } from "@/store/AtramentStore";

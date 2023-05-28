@@ -44,9 +44,10 @@
                     <template #content>
                         <a-doption @click="save">保存</a-doption>
                         <a-doption>另存为</a-doption>
-                        <a-doption @click="undo">撤销</a-doption>
-                        <a-doption @click="clear">
-                            <span style="color: rgb(var(--red-6))">清空</span></a-doption>
+                        <a-doption @click="undo" :disabled="!editItems[0]">撤销</a-doption>
+                        <a-doption @click="clear" :disabled="!editItems[1]">
+                            <span style="color: rgb(var(--red-6))">清空</span>
+                        </a-doption>
                     </template>
                 </a-dropdown>
                 <a-dropdown @select="exportImage">
@@ -106,8 +107,12 @@ export default defineComponent({
             return this.$route.path === '/home'
         },
         exportItems(): ExportTypeEnum[] {
-            let name = this.$route.name as string;
+            let name = this.$route.name as GraphTypeEnum;
             return Config.export[name] || []
+        },
+        editItems(): Array<boolean> {
+            let name = this.$route.name as GraphTypeEnum;
+            return Config.edit[name] || [false, false];
         }
     },
     created() {

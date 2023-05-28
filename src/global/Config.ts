@@ -31,7 +31,7 @@ export default {
             color: '#ebab79'
         },
         diagram: {
-            title: '简图',
+            title: '流程图',
             color: '#a59866'
         }
     } as Record<GraphTypeEnum, {

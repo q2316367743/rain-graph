@@ -2,10 +2,10 @@
     <div class="home">
         <div class="header">
             <a-radio-group v-model="activeKey" type="button">
-                <a-radio :value="GraphTypeEnum.MIND">思维导图</a-radio>
-                <a-radio :value="GraphTypeEnum.ATRAMENT">手绘图</a-radio>
-                <a-radio :value="GraphTypeEnum.BPMN">BPMN</a-radio>
-                <a-radio :value="GraphTypeEnum.DIAGRAM">简图</a-radio>
+                <a-radio :value="GraphTypeEnum.MIND">{{ Config.title[GraphTypeEnum.MIND].title }}</a-radio>
+                <a-radio :value="GraphTypeEnum.ATRAMENT">{{ Config.title[GraphTypeEnum.ATRAMENT].title }}</a-radio>
+                <a-radio :value="GraphTypeEnum.BPMN">{{ Config.title[GraphTypeEnum.BPMN].title }}</a-radio>
+                <a-radio :value="GraphTypeEnum.DIAGRAM">{{ Config.title[GraphTypeEnum.DIAGRAM].title }}</a-radio>
             </a-radio-group>
         </div>
         <div class="content">
@@ -48,11 +48,13 @@ import { useAtramentStore } from "@/store/AtramentStore";
 import { useBpmnStore } from "@/store/BpmnStore";
 import { useClearEvent, useExportEvent, useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
 import { useDiagramStore } from "@/store/DiagramStore";
+import Config from "@/global/Config";
 
 export default defineComponent({
     name: 'home',
     data: () => ({
         GraphTypeEnum,
+        Config,
         activeKey: GraphTypeEnum.MIND as GraphTypeEnum,
         size: useWindowSize()
     }),

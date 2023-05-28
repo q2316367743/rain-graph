@@ -139,6 +139,13 @@ export default defineComponent({
         useAtramentStore().init();
         useBpmnStore().init();
         useDiagramStore().init();
+        utools.onPluginEnter(action => {
+            if (action.code !== 'application') {
+                useGlobalStore().setTitle('');
+                useGlobalStore().setType(action.code as GraphTypeEnum);
+                this.$router.push(`/graph/${action.code}/0`);
+            }
+        })
     },
     methods: {
         toHome() {

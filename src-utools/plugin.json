@@ -16,7 +16,7 @@
     },
     "features": [
         {
-            "code": "/home",
+            "code": "application",
             "explain": "听雨图编辑器",
             "icon": "public/logo.png",
             "platform": [
@@ -29,7 +29,7 @@
             ]
         },
         {
-            "code": "/mind/0",
+            "code": "mind",
             "explain": "听雨图编辑器",
             "icon": "public/logo.png",
             "platform": [
@@ -39,6 +39,45 @@
             ],
             "cmds": [
                 "思维导图"
+            ]
+        },
+        {
+            "code": "atrament",
+            "explain": "听雨图编辑器",
+            "icon": "public/logo.png",
+            "platform": [
+                "win32",
+                "darwin",
+                "linux"
+            ],
+            "cmds": [
+                "手绘图"
+            ]
+        },
+        {
+            "code": "bpmn",
+            "explain": "听雨图编辑器",
+            "icon": "public/logo.png",
+            "platform": [
+                "win32",
+                "darwin",
+                "linux"
+            ],
+            "cmds": [
+                "BPMN"
+            ]
+        },
+        {
+            "code": "diagram",
+            "explain": "听雨图编辑器",
+            "icon": "public/logo.png",
+            "platform": [
+                "win32",
+                "darwin",
+                "linux"
+            ],
+            "cmds": [
+                "流程图"
             ]
         }
     ]

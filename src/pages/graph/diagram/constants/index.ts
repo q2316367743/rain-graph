@@ -53,17 +53,4 @@ export const borderStyles = [
     }
 ]
 
-export const fontFamilies = [
-    {
-        value: 'Arial'
-    },
-    {
-        value: 'Verdana'
-    },
-    {
-        value: 'Georgia'
-    },
-    {
-        value: 'Times New Roman'
-    }
-]
+export const fontFamilies = ['微软雅黑']

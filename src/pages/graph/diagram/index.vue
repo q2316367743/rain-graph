@@ -22,6 +22,10 @@
                         </template>
                     </a-button>
                 </div>
+                <!-- 右侧属性面板 -->
+                <diagram-panel class="panel" v-if="activeNodes.length > 0 || activeEdges.length > 0"
+                    :onlyEdge="activeNodes.length === 0" :elementsStyle="properties" @setStyle="setStyle"
+                    @setZIndex="setZIndex" />
             </a-layout>
         </a-layout>
     </div>
@@ -44,6 +48,7 @@ import "@logicflow/core/dist/style/index.css";
 
 import DiagramToolbar from './components/toolbar.vue';
 import DiagramSidebar from './components/sidebar.vue';
+import DiagramPanel from './components/panel.vue';
 import { registerCustomElement } from './node';
 
 import { useClearEvent, useExportEvent, useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
@@ -56,7 +61,7 @@ import MessageUtil from "@/utils/MessageUtil";
 
 export default defineComponent({
     name: 'diagram',
-    components: { DiagramToolbar, DiagramSidebar },
+    components: { DiagramToolbar, DiagramSidebar, DiagramPanel },
     data: () => ({
         id: '0',
         _rev: undefined as string | undefined,
@@ -78,7 +83,8 @@ export default defineComponent({
         loading: false,
         collapsed: false,
         activeNodes: [] as any[],
-        activeEdges: [] as any[]
+        activeEdges: [] as any[],
+        properties: {}
     }),
     computed: {
         ...mapState(useGlobalStore, ['size', 'title']),
@@ -170,7 +176,7 @@ export default defineComponent({
                     const { nodes, edges } = this.lf.getSelectElements()
                     this.activeNodes = nodes
                     this.activeEdges = edges
-                    this.getProperty()
+                    this.getProperty();
                 })
             })
         },
@@ -213,7 +219,36 @@ export default defineComponent({
         },
         getProperty() {
             // TODO: 获取属性
-        }
+            this.properties = {};
+            let properties = {}
+            const { nodes, edges } = this.lf.getSelectElements()
+            nodes.forEach(node => {
+                properties = { ...properties, ...node.properties }
+            })
+            edges.forEach(edge => {
+                properties = { ...properties, ...edge.properties }
+            })
+            this.properties = properties
+            return properties
+        },
+        setStyle(item: any) {
+            console.log(item)
+            this.activeNodes.forEach(({ id }) => {
+                this.lf.setProperties(id, item)
+            })
+            this.activeEdges.forEach(({ id }) => {
+                this.lf.setProperties(id, item)
+            })
+            this.getProperty()
+        },
+        setZIndex(type: any) {
+            this.activeNodes.forEach(({ id }) => {
+                this.lf.setElementZIndex(id, type)
+            })
+            this.activeEdges.forEach(({ id }) => {
+                this.lf.setElementZIndex(id, type)
+            })
+        },
     }
 });
 </script>
@@ -252,6 +287,17 @@ export default defineComponent({
         position: absolute;
         left: 10px;
         bottom: 10px;
+    }
+
+    .panel {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        bottom: 14px;
+        padding: 7px;
+        background-color: var(--color-bg-1);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        overflow: auto;
     }
 }
 </style>

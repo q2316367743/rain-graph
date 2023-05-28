@@ -10,7 +10,10 @@ const router = createRouter({
     }, {
         path: '/home',
         component: () => import('@/pages/home/index.vue')
-    }, 
+    }, {
+        path: '/about',
+        component: () => import('@/pages/about/index.vue')
+    },
     // ------ 各种图 ------
     {
         name: GraphTypeEnum.MIND,

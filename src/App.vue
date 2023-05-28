@@ -12,11 +12,14 @@
                         新增
                     </a-button>
                     <template #content>
-                        <a-doption @click="jumpTo(GraphTypeEnum.MIND)">思维导图</a-doption>
-                        <a-doption @click="jumpTo(GraphTypeEnum.ATRAMENT)">手绘图</a-doption>
-                        <a-doption @click="jumpTo(GraphTypeEnum.BPMN)">BPMN</a-doption>
-                        <a-doption @click="jumpTo(GraphTypeEnum.DIAGRAM)">简图</a-doption>
-                        <a-doption @click="$router.push('/flow-chart/0')">流程图</a-doption>
+                        <a-doption @click="jumpTo(GraphTypeEnum.MIND)">{{ Config.title[GraphTypeEnum.MIND].title
+                        }}</a-doption>
+                        <a-doption @click="jumpTo(GraphTypeEnum.ATRAMENT)">{{ Config.title[GraphTypeEnum.ATRAMENT].title
+                        }}</a-doption>
+                        <a-doption @click="jumpTo(GraphTypeEnum.BPMN)">{{ Config.title[GraphTypeEnum.BPMN].title
+                        }}</a-doption>
+                        <a-doption @click="jumpTo(GraphTypeEnum.DIAGRAM)">{{ Config.title[GraphTypeEnum.DIAGRAM].title
+                        }}</a-doption>
                     </template>
                 </a-dropdown>
                 <a-dropdown position="bl">
@@ -27,11 +30,14 @@
                         打开
                     </a-button>
                     <template #content>
-                        <a-doption>思维导图</a-doption>
-                        <a-doption>手绘图</a-doption>
-                        <a-doption>BPMN</a-doption>
-                        <a-doption>简图</a-doption>
-                        <a-doption>流程图</a-doption>
+                        <a-doption @click="openTo(GraphTypeEnum.MIND)">{{ Config.title[GraphTypeEnum.MIND].title
+                        }}</a-doption>
+                        <a-doption @click="openTo(GraphTypeEnum.ATRAMENT)">{{ Config.title[GraphTypeEnum.ATRAMENT].title
+                        }}</a-doption>
+                        <a-doption @click="openTo(GraphTypeEnum.BPMN)">{{ Config.title[GraphTypeEnum.BPMN].title
+                        }}</a-doption>
+                        <a-doption @click="openTo(GraphTypeEnum.DIAGRAM)">{{ Config.title[GraphTypeEnum.DIAGRAM].title
+                        }}</a-doption>
                     </template>
                 </a-dropdown>
                 <a-dropdown>
@@ -69,7 +75,7 @@
                         帮助
                     </a-button>
                     <template #content>
-                        <a-doption>关于</a-doption>
+                        <a-doption @click="$router.push('/about')">关于</a-doption>
                     </template>
                 </a-dropdown>
             </a-button-group>
@@ -95,13 +101,15 @@ import { useBpmnStore } from "./store/BpmnStore";
 import { useDiagramStore } from "./store/DiagramStore";
 import ExportTypeEnum from "./enumeration/ExportTypeEnum";
 import GraphTypeEnum from '@/enumeration/GraphTypeEnum';
+import MessageUtil from "./utils/MessageUtil";
 
 
 export default defineComponent({
     name: '',
     data: () => ({
         ExportTypeEnum,
-        GraphTypeEnum
+        GraphTypeEnum,
+        Config
     }),
     computed: {
         ...mapState(useGlobalStore, ['isDark', 'title', 'type']),
@@ -144,6 +152,12 @@ export default defineComponent({
             useGlobalStore().setTitle('');
             useGlobalStore().setType(type);
             this.$router.push(`/${type}/0`);
+        },
+        openTo(type: GraphTypeEnum) {
+            // useGlobalStore().setType(type);
+            // 选择文件
+            // 跳转
+            MessageUtil.warning("暂不支持从文件中打开");
         },
         // ------ 功能组件 ------
         save() {

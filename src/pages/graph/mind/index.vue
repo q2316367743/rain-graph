@@ -9,7 +9,7 @@ import { useRouter } from "vue-router";
 import { useWindowSize } from "@vueuse/core";
 import MindElixir from "mind-elixir";
 import { data2Html } from '@mind-elixir/export-html'
-import { useClearEvent, useExportEvent, useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
+import { useClearEvent, useExportEvent, useSaveAsEvent, useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
 import { useMindStore } from "@/store/MindStore";
 import MessageUtil from "@/utils/MessageUtil";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
@@ -42,22 +42,33 @@ const option = {
     allowUndo: true,
     data: {} as any
 };
-if (id !== '0') {
-    let recordWrap = utools.db.get(`/${GraphTypeEnum.MIND}/${id}`);
-    if (recordWrap) {
-        // 存在
-        option.data = recordWrap.value;
-        _rev = recordWrap._rev;
+
+async function initData() {
+    if (id === '-1') {
+        let path = useRouter().currentRoute.value.query.path as string;
+        let value = await window.preload.openFileToString(path);
+        option.data = JSON.parse(value);
+    } if (id !== '0') {
+        let recordWrap = await utools.db.promises.get(`/${GraphTypeEnum.MIND}/${id}`);
+        if (recordWrap) {
+            // 存在
+            option.data = recordWrap.value;
+            _rev = recordWrap._rev;
+        }
     }
+    return Promise.resolve();
 }
 
 onMounted(() => {
-    mind = new MindElixir(option);
-    if (id !== '0') {
-        mind.init(option.data);
-    } else {
-        mind.init(MindElixir.new("思维导图"));
-    }
+    initData().catch(e => MessageUtil.error("获取数据失败", e))
+        .finally(() => {
+            mind = new MindElixir(option);
+            if (id !== '0') {
+                mind.init(option.data);
+            } else {
+                mind.init(MindElixir.new("思维导图"));
+            }
+        });
 });
 
 function save() {
@@ -79,7 +90,11 @@ function save() {
 }
 
 useSaveEvent.on(() => save());
-
+useSaveAsEvent.on(() => {
+    BrowserUtil.download(JSON.stringify(mind.getData()),
+        useGlobalStore().title + '.json',
+        'text/json')
+});
 useClearEvent.on(() => {
     if (mind) {
         mind.init(MindElixir.new("思维导图"));
@@ -87,14 +102,12 @@ useClearEvent.on(() => {
         save();
     }
 })
-
 useUndoEvent.on(() => {
     if (mind) {
         mind.undo();
         save();
     }
 });
-
 useExportEvent.on((type: ExportTypeEnum) => {
     if (type === ExportTypeEnum.HTML) {
         BrowserUtil.download(

@@ -1,6 +1,6 @@
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import Config from "@/global/Config";
-import { useWindowSize } from "@vueuse/core";
+import { useTitle, useWindowSize } from "@vueuse/core";
 import { defineStore } from "pinia";
 
 export const useGlobalStore = defineStore('global', {
@@ -19,6 +19,11 @@ export const useGlobalStore = defineStore('global', {
     actions: {
         setTitle(title: string) {
             this.titleWrap = title;
+            if (title.trim() !== '') {
+                useTitle().value = title;
+            }else {
+                useTitle().value = '听雨图编辑器';
+            }
         },
         setType(type: GraphTypeEnum | undefined) {
             this.typeWrap = type;

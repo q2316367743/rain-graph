@@ -73,7 +73,10 @@
                     </template>
                 </a-dropdown>
             </a-button-group>
-            <div class="title">{{ title }}</div>
+            <div class="title">
+                <a-tag v-if="type" :color="type.color"> {{ type.title }}</a-tag>
+                <a-tag v-if="title.trim() !== ''" color="arcoblue" style="margin-left: 7px;">{{ title }}</a-tag>
+            </div>
         </div>
         <div class="app-container">
             <router-view />
@@ -101,8 +104,7 @@ export default defineComponent({
         GraphTypeEnum
     }),
     computed: {
-        ...mapState(useGlobalStore, ['isDark']),
-        ...mapState(useGlobalStore, ['title']),
+        ...mapState(useGlobalStore, ['isDark', 'title', 'type']),
         editDisabled() {
             return this.$route.path === '/home'
         },
@@ -140,6 +142,7 @@ export default defineComponent({
         },
         jumpTo(type: GraphTypeEnum) {
             useGlobalStore().setTitle('');
+            useGlobalStore().setType(type);
             this.$router.push(`/${type}/0`);
         },
         // ------ 功能组件 ------

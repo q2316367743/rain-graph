@@ -15,5 +15,27 @@ export default {
         atrament: [false, true],
         bpmn: [true, true],
         diagram: [true, true]
-    } as Record<GraphTypeEnum, Array<boolean>>
+    } as Record<GraphTypeEnum, Array<boolean>>,
+    // 标题配置
+    title: {
+        mind: {
+            title: '思维导图',
+            color: '#c88077'
+        },
+        atrament: {
+            title: '手绘图',
+            color: '#a07c6a'
+        },
+        bpmn: {
+            title: 'BPMN',
+            color: '#ebab79'
+        },
+        diagram: {
+            title: '简图',
+            color: '#a59866'
+        }
+    } as Record<GraphTypeEnum, {
+        title: string;
+        color: string;
+    }>
 }

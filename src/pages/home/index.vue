@@ -81,6 +81,7 @@ export default defineComponent({
     },
     created() {
         useGlobalStore().setTitle(' ');
+        useGlobalStore().setType(undefined);
         let name = this.$route.query.name as GraphTypeEnum;
         if (name) {
             this.activeKey = name;
@@ -95,6 +96,7 @@ export default defineComponent({
         jumpTo(item: GraphRecord) {
             useGlobalStore().setTitle(item.name);
             this.$router.push(`/${this.activeKey}/${item.id}`);
+            useGlobalStore().setType(this.activeKey);
         },
         remove(item: GraphRecord) {
             if (this.activeKey === GraphTypeEnum.MIND) {

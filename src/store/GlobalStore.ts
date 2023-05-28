@@ -1,20 +1,27 @@
+import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
+import Config from "@/global/Config";
 import { useWindowSize } from "@vueuse/core";
 import { defineStore } from "pinia";
 
 export const useGlobalStore = defineStore('global', {
     state: () => ({
         isDark: utools.isDarkColors(),
+        size: useWindowSize(),
         titleWrap: '',
-        size: useWindowSize()
+        typeWrap: undefined as GraphTypeEnum | undefined
     }),
     getters: {
         height: state => state.size.height - 23,
         width: state => state.size.width,
-        title: state => state.titleWrap || '临时图'
+        title: state => state.titleWrap || '临时图',
+        type: state => state.typeWrap ? Config.title[state.typeWrap] : undefined
     },
     actions: {
         setTitle(title: string) {
             this.titleWrap = title;
+        },
+        setType(type: GraphTypeEnum | undefined) {
+            this.typeWrap = type;
         }
     }
 })

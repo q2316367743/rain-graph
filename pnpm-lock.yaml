@@ -1,12 +1,6 @@
 lockfileVersion: '6.0'
 
 dependencies:
-  '@antv/x6':
-    specifier: ^2.11.1
-    version: registry.npmmirror.com/@antv/x6@2.11.1
-  '@antv/x6-plugin-stencil':
-    specifier: ^2.0.3
-    version: registry.npmmirror.com/@antv/x6-plugin-stencil@2.0.3(@antv/x6-plugin-dnd@2.0.5)(@antv/x6@2.11.1)
   '@arco-design/web-vue':
     specifier: ^2.45.0
     version: registry.npmmirror.com/@arco-design/web-vue@2.45.0(vue@3.2.47)
@@ -74,55 +68,6 @@ packages:
     dependencies:
       '@jridgewell/gen-mapping': registry.npmmirror.com/@jridgewell/gen-mapping@0.3.3
       '@jridgewell/trace-mapping': registry.npmmirror.com/@jridgewell/trace-mapping@0.3.18
-    dev: false
-
-  registry.npmmirror.com/@antv/x6-common@2.0.12:
-    resolution: {integrity: sha512-7PcvHGJ2UhrBEtsLI6MaHw6BCMhy22leCH8vCaMvmF32EEQ/491v6DKVPhcpp0dYZNERpfqvAB1w407Aw+bwLA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@antv/x6-common/-/x6-common-2.0.12.tgz}
-    name: '@antv/x6-common'
-    version: 2.0.12
-    dependencies:
-      lodash-es: registry.npmmirror.com/lodash-es@4.17.21
-      utility-types: registry.npmmirror.com/utility-types@3.10.0
-    dev: false
-
-  registry.npmmirror.com/@antv/x6-geometry@2.0.5:
-    resolution: {integrity: sha512-MId6riEQkxphBpVeTcL4ZNXL4lScyvDEPLyIafvWMcWNTGK0jgkK7N20XSzqt8ltJb0mGUso5s56mrk8ysHu2A==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@antv/x6-geometry/-/x6-geometry-2.0.5.tgz}
-    name: '@antv/x6-geometry'
-    version: 2.0.5
-    dev: false
-
-  registry.npmmirror.com/@antv/x6-plugin-dnd@2.0.5(@antv/x6@2.11.1):
-    resolution: {integrity: sha512-g8GGJS2XmM8C59juOBiFqaR/f8i8y8tqw9sJNwta7s1Phh3hwDd7o4kk36Kk5eTKkfZfnjEyWHMOqp/h+EDibQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@antv/x6-plugin-dnd/-/x6-plugin-dnd-2.0.5.tgz}
-    id: registry.npmmirror.com/@antv/x6-plugin-dnd/2.0.5
-    name: '@antv/x6-plugin-dnd'
-    version: 2.0.5
-    peerDependencies:
-      '@antv/x6': ^2.x
-    dependencies:
-      '@antv/x6': registry.npmmirror.com/@antv/x6@2.11.1
-    dev: false
-
-  registry.npmmirror.com/@antv/x6-plugin-stencil@2.0.3(@antv/x6-plugin-dnd@2.0.5)(@antv/x6@2.11.1):
-    resolution: {integrity: sha512-pQkTIbMCezTqo38fofuFGnI30Rk0j5gHc/+Ndml1RHVEV0p8i1HGRAR5we7SVTcT56AHlP46H+oRFReQmVgvKA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@antv/x6-plugin-stencil/-/x6-plugin-stencil-2.0.3.tgz}
-    id: registry.npmmirror.com/@antv/x6-plugin-stencil/2.0.3
-    name: '@antv/x6-plugin-stencil'
-    version: 2.0.3
-    peerDependencies:
-      '@antv/x6': ^2.x
-      '@antv/x6-plugin-dnd': ^2.x
-    dependencies:
-      '@antv/x6': registry.npmmirror.com/@antv/x6@2.11.1
-      '@antv/x6-plugin-dnd': registry.npmmirror.com/@antv/x6-plugin-dnd@2.0.5(@antv/x6@2.11.1)
-    dev: false
-
-  registry.npmmirror.com/@antv/x6@2.11.1:
-    resolution: {integrity: sha512-DwyuT/zuTEhwsnKwCj67cadwLeEbB5jfdCxrkTnEm6pg0+vT3FinbF71IK7SHoY8d4HOHl+sJt7ikJfr61JqLw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@antv/x6/-/x6-2.11.1.tgz}
-    name: '@antv/x6'
-    version: 2.11.1
-    dependencies:
-      '@antv/x6-common': registry.npmmirror.com/@antv/x6-common@2.0.12
-      '@antv/x6-geometry': registry.npmmirror.com/@antv/x6-geometry@2.0.5
-      utility-types: registry.npmmirror.com/utility-types@3.10.0
     dev: false
 
   registry.npmmirror.com/@arco-design/color@0.4.0:
@@ -4720,13 +4665,6 @@ packages:
     dependencies:
       querystringify: registry.npmmirror.com/querystringify@2.2.0
       requires-port: registry.npmmirror.com/requires-port@1.0.0
-    dev: false
-
-  registry.npmmirror.com/utility-types@3.10.0:
-    resolution: {integrity: sha512-O11mqxmi7wMKCo6HKFt5AhO4BwY3VV68YU07tgxfz8zJTIxr4BpsezN49Ffwy9j3ZpwwJp4fkRwjRzq3uWE6Rg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/utility-types/-/utility-types-3.10.0.tgz}
-    name: utility-types
-    version: 3.10.0
-    engines: {node: '>= 4'}
     dev: false
 
   registry.npmmirror.com/utools-api-types@3.0.0:

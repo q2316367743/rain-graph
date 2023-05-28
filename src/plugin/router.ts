@@ -31,10 +31,6 @@ const router = createRouter({
         name: GraphTypeEnum.DIAGRAM,
         path: '/diagram/:id',
         component: () => import('@/pages/graph/diagram/index.vue')
-    }, {
-        name: 'flow-chart',
-        path: '/flow-chart/:id',
-        component: () => import('@/pages/graph/flow-chart/index.vue')
     }]
 });
 

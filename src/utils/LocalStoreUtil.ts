@@ -20,7 +20,7 @@ export function getInitList(name: LocalNameEnum): {
 
 export async function add(id: string, items: Array<GraphRecord>): Promise<string> {
     let now = new Date();
-    if (id === '0') {
+    if (id === '0' || id === '-1') {
         // 新的ID
         id = now.getTime() + '';
         let name = await MessageBoxUtil.prompt(

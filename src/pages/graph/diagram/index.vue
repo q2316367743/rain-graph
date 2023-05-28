@@ -51,7 +51,7 @@ import DiagramSidebar from './components/sidebar.vue';
 import DiagramPanel from './components/panel.vue';
 import { registerCustomElement } from './node';
 
-import { useClearEvent, useExportEvent, useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
+import { useClearEvent, useExportEvent, useSaveAsEvent, useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
 import { useGlobalStore } from "@/store/GlobalStore";
 import { useDiagramStore } from "@/store/DiagramStore";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
@@ -113,11 +113,49 @@ export default defineComponent({
             }
         }
     },
+    created() {
+        // 事件
+        useSaveEvent.on(() => this.save());
+        useSaveAsEvent.on(() => {
+            BrowserUtil.download(JSON.stringify({
+                config: toRaw(this.config),
+                record: this.lf.getGraphRawData()
+            }), this.title + '.json', 'text/json');
+        });
+        useUndoEvent.on(() => this.lf.undo())
+        useClearEvent.on(() => {
+            this.lf.clearData();
+            this.save();
+        });
+        useExportEvent.on(type => {
+            if (type === ExportTypeEnum.PNG) {
+                this.lf.extension.snapshot.lf.getSnapshot(this.title + '.png');
+            } else if (type === ExportTypeEnum.XML) {
+                const data = this.lf.getGraphData() as string;
+                BrowserUtil.download(data, this.title + '.xml', 'text/xml');
+            }
+        });
+    },
     mounted() {
         this.render = false
         // 获取取数
         this.id = this.$route.params.id as string;
-        if (this.id !== '0') {
+        if (this.id === '-1') {
+            // 文件打开
+            let path = this.$route.query.path as string;
+            window.preload.openFileToString(path).then(value => {
+                let data = undefined as any | undefined;
+                try {
+                    let val = JSON.parse(value);
+                    this.config = val.config;
+                    data = val.record;
+                } catch (e) {
+                    MessageUtil.error("文件打开失败", e)
+                } finally {
+                    this.init(data);
+                }
+            }).catch(e => MessageUtil.error("文件打开失败", e));
+        } if (this.id !== '0') {
             this.loading = true;
             utools.db.promises.get(this._id)
                 .then(res => {
@@ -142,22 +180,6 @@ export default defineComponent({
         } else {
             this.init();
         }
-
-        // 事件
-        useSaveEvent.on(() => this.save());
-        useUndoEvent.on(() => this.lf.undo())
-        useClearEvent.on(() => {
-            this.lf.clearData();
-            this.save();
-        });
-        useExportEvent.on(type => {
-            if (type === ExportTypeEnum.PNG) {
-                this.lf.extension.snapshot.lf.getSnapshot(this.title + '.png');
-            } else if (type === ExportTypeEnum.XML) {
-                const data = this.lf.getGraphData() as string;
-                BrowserUtil.download(data, this.title + '.xml', 'text/xml');
-            }
-        })
     },
     methods: {
         init(data?: any) {
@@ -210,7 +232,7 @@ export default defineComponent({
                         this._rev = res.rev;
                         MessageUtil.success("保存成功");
                     }).catch(e => MessageUtil.error("保存失败", e));
-                }).catch(e => MessageUtil.error("保存BPMN失败", e));
+                }).catch(e => MessageUtil.error("保存失败", e));
         },
         dragInNode(type: string) {
             this.lf.dnd.startDrag({

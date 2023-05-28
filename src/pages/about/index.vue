@@ -10,8 +10,8 @@
             </a-link>
         </div>
         <div class="desc">
-            支持思维导图、手绘图、BPMN、流程图。<br />
-            开通utools会员，数据支持同步。
+            <p>支持思维导图、手绘图、BPMN、流程图。</p>
+            <p>开通utools会员，数据可同步。</p>
         </div>
         <div class="action">
             <a-button @click="openUrl(Constant.homepage)">插件主页</a-button>
@@ -62,7 +62,7 @@ export default defineComponent({
 
 
     .desc {
-        margin-top: 14px;
+        margin-top: 28px;
         user-select: none;
     }
 

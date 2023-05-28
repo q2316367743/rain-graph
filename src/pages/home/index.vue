@@ -98,8 +98,8 @@ export default defineComponent({
     methods: {
         jumpTo(item: GraphRecord) {
             useGlobalStore().setTitle(item.name);
-            this.$router.push(`/${this.activeKey}/${item.id}`);
             useGlobalStore().setType(this.activeKey);
+            this.$router.push(`/graph/${this.activeKey}/${item.id}`);
         },
         remove(item: GraphRecord) {
             if (this.activeKey === GraphTypeEnum.MIND) {

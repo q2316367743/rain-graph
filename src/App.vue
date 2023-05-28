@@ -75,7 +75,7 @@
                         帮助
                     </a-button>
                     <template #content>
-                        <a-doption @click="$router.push('/about')">关于</a-doption>
+                        <a-doption @click="jumpToAbout">关于</a-doption>
                     </template>
                 </a-dropdown>
             </a-button-group>
@@ -114,7 +114,7 @@ export default defineComponent({
     computed: {
         ...mapState(useGlobalStore, ['isDark', 'title', 'type']),
         editDisabled() {
-            return this.$route.path === '/home'
+            return !this.$route.path.startsWith('/graph')
         },
         exportItems(): ExportTypeEnum[] {
             let name = this.$route.name as GraphTypeEnum;
@@ -151,7 +151,7 @@ export default defineComponent({
         jumpTo(type: GraphTypeEnum) {
             useGlobalStore().setTitle('');
             useGlobalStore().setType(type);
-            this.$router.push(`/${type}/0`);
+            this.$router.push(`/graph/${type}/0`);
         },
         openTo(type: GraphTypeEnum) {
             let paths = utools.showOpenDialog({
@@ -174,11 +174,16 @@ export default defineComponent({
             useGlobalStore().setType(type);
             // 跳转
             this.$router.push({
-                path: `/${type}/-1`,
+                path: `/graph/${type}/-1`,
                 query: {
                     path: paths[0]
                 }
             });
+        },
+        jumpToAbout() {
+            useGlobalStore().setTitle(' ');
+            useGlobalStore().setType(undefined);
+            this.$router.push('/about');
         },
         // ------ 功能组件 ------
         save() {

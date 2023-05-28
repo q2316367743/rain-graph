@@ -17,19 +17,19 @@ const router = createRouter({
     // ------ 各种图 ------
     {
         name: GraphTypeEnum.MIND,
-        path: '/mind/:id',
+        path: '/graph/mind/:id',
         component: () => import('@/pages/graph/mind/index.vue')
     }, {
         name: GraphTypeEnum.ATRAMENT,
-        path: '/atrament/:id',
+        path: '/graph/atrament/:id',
         component: () => import('@/pages/graph/atrament/index.vue')
     }, {
         name: GraphTypeEnum.BPMN,
-        path: '/bpmn/:id',
+        path: '/graph/bpmn/:id',
         component: () => import('@/pages/graph/bpmn/index.vue')
     }, {
         name: GraphTypeEnum.DIAGRAM,
-        path: '/diagram/:id',
+        path: '/graph/diagram/:id',
         component: () => import('@/pages/graph/diagram/index.vue')
     }]
 });

@@ -240,7 +240,6 @@ export default defineComponent({
             })
         },
         getProperty() {
-            // TODO: 获取属性
             this.properties = {};
             let properties = {}
             const { nodes, edges } = this.lf.getSelectElements()
@@ -254,7 +253,6 @@ export default defineComponent({
             return properties
         },
         setStyle(item: any) {
-            console.log(item)
             this.activeNodes.forEach(({ id }) => {
                 this.lf.setProperties(id, item)
             })

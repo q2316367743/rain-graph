@@ -1,5 +1,6 @@
 import { h } from '@logicflow/core'
 import { RectNode, RectNodeModel } from "@logicflow/core";
+import { getShapeStyleFunction, getTextStyleFunction } from '../getShapeStyleUtil';
 
 // 竖直箭头
 class VerticalArrowModel extends RectNodeModel {
@@ -7,6 +8,17 @@ class VerticalArrowModel extends RectNodeModel {
     super.initNodeData(data)
     this.width = 40
     this.height = 80
+  }
+  getNodeStyle() {
+    const style = super.getNodeStyle()
+    const properties = this.getProperties()
+    return getShapeStyleFunction(style, properties)
+  }
+
+  getTextStyle() {
+    const style = super.getTextStyle()
+    const properties = this.getProperties()
+    return getTextStyleFunction(style, properties)
   }
 }
 

@@ -15,7 +15,7 @@
                         <a-link @click="jumpTo(item)">{{ item.name }}</a-link>
                         <template #actions>
                             <a-button-group type="text">
-                                <a-button>
+                                <a-button @click="updateBy(item)">
                                     <template #icon>
                                         <icon-edit />
                                     </template>
@@ -100,6 +100,17 @@ export default defineComponent({
             useGlobalStore().setTitle(item.name);
             useGlobalStore().setType(this.activeKey);
             this.$router.push(`/graph/${this.activeKey}/${item.id}`);
+        },
+        updateBy(item: GraphRecord) {
+            if (this.activeKey === GraphTypeEnum.MIND) {
+                useMindStore().update(item);
+            } else if (this.activeKey === GraphTypeEnum.ATRAMENT) {
+                useAtramentStore().update(item);
+            } else if (this.activeKey === GraphTypeEnum.BPMN) {
+                useBpmnStore().update(item);
+            } else if (this.activeKey === GraphTypeEnum.DIAGRAM) {
+                useDiagramStore().update(item);
+            }
         },
         remove(item: GraphRecord) {
             if (this.activeKey === GraphTypeEnum.MIND) {

@@ -1,5 +1,25 @@
 import { h } from '@logicflow/core'
 import { RectNode, RectNodeModel } from "@logicflow/core";
+import { getShapeStyleFunction, getTextStyleFunction } from '../getShapeStyleUtil';
+
+
+// 水平双箭头
+class IconModel extends RectNodeModel {
+  initNodeData(data: any) {
+    super.initNodeData(data)
+  }
+  getNodeStyle() {
+    const style = super.getNodeStyle()
+    const properties = this.getProperties()
+    return getShapeStyleFunction(style, properties)
+  }
+
+  getTextStyle() {
+    const style = super.getTextStyle()
+    const properties = this.getProperties()
+    return getTextStyleFunction(style, properties)
+  }
+}
 
 // 左上角带ICON的节点
 class IconNode extends RectNode {
@@ -43,5 +63,5 @@ class IconNode extends RectNode {
 export default {
   type: 'image-node',
   view: IconNode,
-  model: RectNodeModel
+  model: IconModel
 }

@@ -2,15 +2,14 @@
     <div class="app">
         <!-- 头部 -->
         <div class="app-header">
-            <a-button-group type="text" style="margin-left: 7px;">
-                <a-button @click="toHome">全部图</a-button>
+            <a-button-group type="text">
+                <a-button @click="toHome">
+                    <template #icon>
+                        <icon-home />
+                    </template>
+                </a-button>
                 <a-dropdown position="bl">
-                    <a-button :disabled="!editDisabled">
-                        <template #icon>
-                            <icon-caret-down />
-                        </template>
-                        新增
-                    </a-button>
+                    <a-button :disabled="!editDisabled">新增</a-button>
                     <template #content>
                         <a-doption @click="jumpTo(GraphTypeEnum.MIND)">{{ Config.title[GraphTypeEnum.MIND].title
                         }}</a-doption>
@@ -23,12 +22,7 @@
                     </template>
                 </a-dropdown>
                 <a-dropdown position="bl">
-                    <a-button :disabled="!editDisabled">
-                        <template #icon>
-                            <icon-caret-down />
-                        </template>
-                        打开
-                    </a-button>
+                    <a-button :disabled="!editDisabled">打开</a-button>
                     <template #content>
                         <a-doption @click="openTo(GraphTypeEnum.MIND)">{{ Config.title[GraphTypeEnum.MIND].title
                         }}</a-doption>
@@ -41,12 +35,7 @@
                     </template>
                 </a-dropdown>
                 <a-dropdown>
-                    <a-button :disabled="editDisabled">
-                        <template #icon>
-                            <icon-caret-down />
-                        </template>
-                        编辑
-                    </a-button>
+                    <a-button :disabled="editDisabled">编辑</a-button>
                     <template #content>
                         <a-doption @click="save">保存</a-doption>
                         <a-doption @click="saveAs">另存为</a-doption>
@@ -57,23 +46,13 @@
                     </template>
                 </a-dropdown>
                 <a-dropdown @select="exportImage">
-                    <a-button :disabled="editDisabled || exportItems.length === 0">
-                        <template #icon>
-                            <icon-caret-down />
-                        </template>
-                        导出
-                    </a-button>
+                    <a-button :disabled="editDisabled || exportItems.length === 0">导出</a-button>
                     <template #content>
                         <a-doption v-for="item in exportItems" :value="item">{{ item.toUpperCase() }}</a-doption>
                     </template>
                 </a-dropdown>
                 <a-dropdown>
-                    <a-button>
-                        <template #icon>
-                            <icon-caret-down />
-                        </template>
-                        帮助
-                    </a-button>
+                    <a-button>帮助</a-button>
                     <template #content>
                         <a-doption @click="jumpToRecommend">推荐</a-doption>
                         <a-doption @click="jumpToAbout">关于</a-doption>
@@ -102,7 +81,6 @@ import { useBpmnStore } from "./store/BpmnStore";
 import { useDiagramStore } from "./store/DiagramStore";
 import ExportTypeEnum from "./enumeration/ExportTypeEnum";
 import GraphTypeEnum from '@/enumeration/GraphTypeEnum';
-import MessageUtil from "./utils/MessageUtil";
 
 
 export default defineComponent({
@@ -144,6 +122,8 @@ export default defineComponent({
                 useGlobalStore().setTitle('');
                 useGlobalStore().setType(action.code as GraphTypeEnum);
                 this.$router.push(`/graph/${action.code}/0`);
+            } else {
+                this.$router.push('/home');
             }
         })
     },

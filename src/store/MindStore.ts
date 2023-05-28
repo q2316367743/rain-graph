@@ -23,7 +23,7 @@ export const useMindStore = defineStore('mind', {
             this.syncMind();
             return Promise.resolve(id);
         },
-        updateMind() { },
+        update(record: GraphRecord) { },
         remove(record: GraphRecord) {
             this.minds.splice(this.minds.findIndex(e => e.id === record.id), 1);
             // 删除记录

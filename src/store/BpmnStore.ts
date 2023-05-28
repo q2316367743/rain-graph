@@ -22,7 +22,7 @@ export const useBpmnStore = defineStore('bpmn', {
             this.sync();
             return Promise.resolve(id);
         },
-        update() { },
+        update(record: GraphRecord) { },
         remove(record: GraphRecord) {
             this.bpmns.splice(this.bpmns.findIndex(e => e.id === record.id), 1);
             // 删除记录

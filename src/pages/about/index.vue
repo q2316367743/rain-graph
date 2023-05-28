@@ -44,6 +44,7 @@ export default defineComponent({
 
     .logo {
         margin-top: 28px;
+        height: 200px;
     }
 
     .title {

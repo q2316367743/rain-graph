@@ -1,5 +1,6 @@
 import { h } from '@logicflow/core'
 import { RectNode, RectNodeModel } from "@logicflow/core";
+import { getShapeStyleFunction, getTextStyleFunction } from '../getShapeStyleUtil';
 
 // 上箭头
 class UpArrowModel extends RectNodeModel {
@@ -7,6 +8,17 @@ class UpArrowModel extends RectNodeModel {
     super.initNodeData(data)
     this.width = 50
     this.height = 80
+  }
+  getNodeStyle() {
+    const style = super.getNodeStyle()
+    const properties = this.getProperties()
+    return getShapeStyleFunction(style, properties)
+  }
+
+  getTextStyle() {
+    const style = super.getTextStyle()
+    const properties = this.getProperties()
+    return getTextStyleFunction(style, properties)
   }
 }
 

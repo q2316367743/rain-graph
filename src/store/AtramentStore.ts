@@ -1,6 +1,6 @@
 import GraphRecord from "@/entity/GraphRecord";
 import { defineStore } from "pinia";
-import { getInitList, add } from "@/utils/LocalStoreUtil";
+import { getInitList, add, update } from "@/utils/LocalStoreUtil";
 import LocalNameEnum from "@/enumeration/LocalNameEnum";
 import MessageUtil from "@/utils/MessageUtil";
 import { toRaw } from "vue";
@@ -22,7 +22,12 @@ export const useAtramentStore = defineStore('atrament', {
             this.sync();
             return Promise.resolve(id);
         },
-        updateMind() { },
+        update(record: GraphRecord) {
+            update(record.id, this.atraments)
+                .then(() => {
+                    this.sync();
+                });
+        },
         remove(record: GraphRecord) {
             this.atraments.splice(this.atraments.findIndex(e => e.id === record.id), 1);
             // 删除记录

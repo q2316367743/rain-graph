@@ -75,6 +75,7 @@
                         帮助
                     </a-button>
                     <template #content>
+                        <a-doption @click="jumpToRecommend">推荐</a-doption>
                         <a-doption @click="jumpToAbout">关于</a-doption>
                     </template>
                 </a-dropdown>
@@ -184,6 +185,11 @@ export default defineComponent({
             useGlobalStore().setTitle(' ');
             useGlobalStore().setType(undefined);
             this.$router.push('/about');
+        },
+        jumpToRecommend() {
+            useGlobalStore().setTitle(' ');
+            useGlobalStore().setType(undefined);
+            this.$router.push('/recommend');
         },
         // ------ 功能组件 ------
         save() {

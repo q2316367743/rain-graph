@@ -124,6 +124,11 @@ useExportEvent.on((type: ExportTypeEnum) => {
     position: relative;
     height: 100%;
     width: 100%;
+    .mind-elixir-toolbar {
+        svg {
+            color: #000;
+        }
+    }
 }
 
 #mind-view {

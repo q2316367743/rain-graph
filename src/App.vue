@@ -54,6 +54,7 @@
                 <a-dropdown>
                     <a-button>帮助</a-button>
                     <template #content>
+                        <a-doption @click="switchDark">切换主题</a-doption>
                         <a-doption @click="jumpToSetting">设置</a-doption>
                         <a-doption @click="jumpToRecommend">推荐</a-doption>
                         <a-doption @click="jumpToAbout">关于</a-doption>
@@ -129,14 +130,6 @@ export default defineComponent({
         })
     },
     methods: {
-        toHome() {
-            this.$router.push({
-                path: '/home',
-                query: {
-                    name: this.$route.name as string
-                }
-            })
-        },
         jumpTo(type: GraphTypeEnum) {
             useGlobalStore().setTitle('');
             useGlobalStore().setType(type);
@@ -169,6 +162,15 @@ export default defineComponent({
                 }
             });
         },
+        // 路径
+        toHome() {
+            this.$router.push({
+                path: '/home',
+                query: {
+                    name: this.$route.name as string
+                }
+            })
+        },
         jumpToSetting() {
             useGlobalStore().setTitle(' ');
             useGlobalStore().setType(undefined);
@@ -199,6 +201,9 @@ export default defineComponent({
         },
         exportImage(type: any) {
             useExportEvent.emit(type);
+        },
+        switchDark() {
+            useGlobalStore().switchDarkColors();
         }
     }
 });

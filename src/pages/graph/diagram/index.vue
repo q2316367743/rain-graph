@@ -146,7 +146,6 @@ export default defineComponent({
         });
         useExportEvent.on(type => {
             if (type === ExportTypeEnum.PNG) {
-                console.log(this.lf.extension)
                 this.lf.extension.snapshot.lf.getSnapshot(this.title + '.png');
             } else if (type === ExportTypeEnum.XML) {
                 const data = this.lf.getGraphData() as string;
@@ -163,7 +162,6 @@ export default defineComponent({
             });
             registerCustomElement(lf);
             lf.setDefaultEdgeType('pro-polyline');
-            console.log(data)
             lf.renderRawData(data);
             this.render = true;
             this.lf = lf;

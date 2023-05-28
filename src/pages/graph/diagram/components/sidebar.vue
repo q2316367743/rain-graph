@@ -163,70 +163,71 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
+<style scoped lang="less">
 .diagram-sidebar {
     user-select: none;
-}
 
-.node-category-title {
-    margin: 0;
-    font-size: 14px;
-    display: block;
-    border-bottom: 1px solid #e5e5e5;
-    line-height: 30px;
-    margin-bottom: 10px;
-}
+    .node-category-title {
+        margin: 0;
+        font-size: 14px;
+        display: block;
+        border-bottom: 1px solid #e5e5e5;
+        line-height: 30px;
+        margin-bottom: 10px;
+        padding: 0 14px;
+    }
 
-.node-item {
-    width: 35px;
-    height: 35px;
-    margin-right: 5px;
-    display: inline-block;
-}
+    .node-item {
+        width: 35px;
+        height: 35px;
+        margin-right: 5px;
+        display: inline-block;
+    }
 
-.node-category {
-    border-bottom: 1px solid #e5e5e5;
-}
+    .node-category {
+        border-bottom: 1px solid #e5e5e5;
+    }
 
-.svg-node {
-    left: 1px;
-    top: 1px;
-    width: 32px;
-    height: 30px;
-    display: block;
-    position: relative;
-    overflow: hidden;
-}
+    .svg-node {
+        left: 1px;
+        top: 1px;
+        width: 32px;
+        height: 30px;
+        display: block;
+        position: relative;
+        overflow: hidden;
+    }
 
-.image-node,
-.icon-node {
-    display: inline-block;
-    width: 30px;
-    height: 30px;
-    margin: 10px;
-    cursor: pointer;
-}
+    .image-node,
+    .icon-node {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        margin: 10px;
+        cursor: pointer;
+    }
 
-.image-setting {
-    background: url('https://dpubstatic.udache.com/static/dpubimg/UzI4AFUcfO/setting.png');
-    background-size: cover;
-}
+    .image-setting {
+        background: url('/image/setting.png');
+        background-size: cover;
+    }
 
-.image-user {
-    width: 40px;
-    background: url('https://dpubstatic.udache.com/static/dpubimg/-6Fd2uIoJ-/user.png');
-    background-size: cover;
-}
+    .image-user {
+        width: 40px;
+        background: url('https://dpubstatic.udache.com/static/dpubimg/-6Fd2uIoJ-/user.png');
+        background-size: cover;
+    }
 
-.image-cloud {
-    width: 40px;
-    background: url('https://dpubstatic.udache.com/static/dpubimg/0oqFX1nvbD/cloud.png');
-    background-size: cover;
-}
+    .image-cloud {
+        width: 40px;
+        background: url('/image/cloud.png');
+        background-size: cover;
+    }
 
-.icon-message {
-    height: 20px;
-    background: url('https://dpubstatic.udache.com/static/dpubimg/1TZgBoaq8G/message.png');
-    background-size: cover;
+    .icon-message {
+        height: 20px;
+        background: url('/image/message.png');
+        background-size: cover;
+    }
 }
 </style>

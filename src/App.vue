@@ -54,6 +54,7 @@
                 <a-dropdown>
                     <a-button>帮助</a-button>
                     <template #content>
+                        <a-doption @click="jumpToSetting">设置</a-doption>
                         <a-doption @click="jumpToRecommend">推荐</a-doption>
                         <a-doption @click="jumpToAbout">关于</a-doption>
                     </template>
@@ -167,6 +168,11 @@ export default defineComponent({
                     path: paths[0]
                 }
             });
+        },
+        jumpToSetting() {
+            useGlobalStore().setTitle(' ');
+            useGlobalStore().setType(undefined);
+            this.$router.push('/setting');
         },
         jumpToAbout() {
             useGlobalStore().setTitle(' ');

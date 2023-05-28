@@ -1,4 +1,5 @@
 <template>
+    <!-- 手绘图 -->
     <div class="atrament">
         <canvas id="atrament-view" width="500" height="500"></canvas>
         <div class="setting">
@@ -76,13 +77,16 @@ import { defineComponent } from "vue";
 import { Atrament } from 'atrament';
 import { useWindowSize } from "@vueuse/core";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
-import { useClearEvent, useSaveEvent } from "@/global/BeanFactory";
+import { useClearEvent, useSaveAsEvent, useSaveEvent } from "@/global/BeanFactory";
 import MessageUtil from "@/utils/MessageUtil";
 import { useAtramentStore } from "@/store/AtramentStore";
 import { toRaw } from "vue";
 import Instance from "./domain/Instance";
 import Option from "./domain/Option";
 import AtramentRecord from "./domain/AtramentRecord";
+import BrowserUtil from "@/utils/BrowserUtil";
+import { mapState } from "pinia";
+import { useGlobalStore } from "@/store/GlobalStore";
 
 let sketchpad = undefined as any | undefined;
 
@@ -105,6 +109,9 @@ export default defineComponent({
             strokes: []
         } as Instance
     }),
+    computed: {
+        ...mapState(useGlobalStore, ['title'])
+    },
     watch: {
         'instance.option': {
             handler() {
@@ -120,46 +127,61 @@ export default defineComponent({
         useClearEvent.on(() => {
             this.clear();
         });
+        useSaveAsEvent.on(() => {
+            // 获取数据
+            BrowserUtil.download(JSON.stringify(toRaw(this.instance)),
+                this.title + '.json', 'text/json')
+        })
     },
     mounted() {
-        this.id = this.$route.params.id as string;
-        if (this.id !== '0') {
-            let recordWrap = utools.db.get(`/${GraphTypeEnum.ATRAMENT}/${this.id}`);
-            if (recordWrap) {
-                // 存在
-                this.instance = recordWrap.value;
-                this._rev = recordWrap._rev;
-            }
-        }
-        const canvas = document.querySelector('#atrament-view');
-        sketchpad = new Atrament(canvas, {
-            width: this.size.width - 14,
-            height: this.size.height - 33 - 14,
-            color: 'orange',
-        });
-
-        this.setOption(this.instance.option);
-
-        if (this.instance.strokes.length > 0) {
-            this.init(sketchpad, this.instance.strokes);
-        }
-
-        // 配置
-        sketchpad.recordStrokes = true;
-
-        // 事件
-        sketchpad.addEventListener('strokerecorded', (value: { stroke: any }) => {
-            this.instance.strokes.push({
-                ...this.instance.option,
-                stroke: value.stroke
-            });
-            if (this.id !== '0') {
-                // 自动保存
-                this.save();
-            }
-        });
+        this.getDate().catch(e => MessageUtil.error("获取数据失败", e)).finally(() => this.create());
     },
     methods: {
+        async getDate() {
+            this.id = this.$route.params.id as string;
+            if (this.id === '-1') {
+                // 读取文件内容
+                let path = this.$route.query.path as string;
+                this.instance = JSON.parse(await window.preload.openFileToString(path));
+            } else if (this.id !== '0') {
+                let recordWrap = await utools.db.promises.get(`/${GraphTypeEnum.ATRAMENT}/${this.id}`);
+                if (recordWrap) {
+                    // 存在
+                    this.instance = recordWrap.value;
+                    this._rev = recordWrap._rev;
+                }
+            }
+            return Promise.resolve();
+        },
+        create() {
+            const canvas = document.querySelector('#atrament-view');
+            sketchpad = new Atrament(canvas, {
+                width: this.size.width - 14,
+                height: this.size.height - 33 - 14,
+                color: 'orange',
+            });
+
+            this.setOption(this.instance.option);
+
+            if (this.instance.strokes.length > 0) {
+                this.init(sketchpad, this.instance.strokes);
+            }
+
+            // 配置
+            sketchpad.recordStrokes = true;
+
+            // 事件
+            sketchpad.addEventListener('strokerecorded', (value: { stroke: any }) => {
+                this.instance.strokes.push({
+                    ...this.instance.option,
+                    stroke: value.stroke
+                });
+                if (this.id !== '0' && this.id !== '-1') {
+                    // 自动保存
+                    this.save();
+                }
+            });
+        },
         save(show: boolean = false) {
             useAtramentStore().add(this.id).then(_id => {
                 this.id = _id;
@@ -189,7 +211,7 @@ export default defineComponent({
         },
         saveOption() {
             this.setOption(this.instance.option);
-            if (this.id !== '0') {
+            if (this.id !== '0' && this.id !== '-1') {
                 this.save();
             }
         },

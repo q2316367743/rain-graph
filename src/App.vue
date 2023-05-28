@@ -49,7 +49,7 @@
                     </a-button>
                     <template #content>
                         <a-doption @click="save">保存</a-doption>
-                        <a-doption>另存为</a-doption>
+                        <a-doption @click="saveAs">另存为</a-doption>
                         <a-doption @click="undo" :disabled="!editItems[0]">撤销</a-doption>
                         <a-doption @click="clear" :disabled="!editItems[1]">
                             <span style="color: rgb(var(--red-6))">清空</span>
@@ -92,7 +92,7 @@
 <script lang="ts">
 import { mapState } from "pinia";
 import { defineComponent } from "vue";
-import { useSaveEvent, useClearEvent, useExportEvent, useUndoEvent } from "./global/BeanFactory";
+import { useSaveEvent, useClearEvent, useExportEvent, useUndoEvent, useSaveAsEvent } from "./global/BeanFactory";
 import Config from '@/global/Config'
 import { useGlobalStore } from "./store/GlobalStore";
 import { useMindStore } from "./store/MindStore";
@@ -154,14 +154,38 @@ export default defineComponent({
             this.$router.push(`/${type}/0`);
         },
         openTo(type: GraphTypeEnum) {
-            // useGlobalStore().setType(type);
-            // 选择文件
+            let paths = utools.showOpenDialog({
+                title: '选择图文件',
+                defaultPath: utools.getPath('documents'),
+                buttonLabel: '打开',
+                filters: [{
+                    name: '图文件',
+                    extensions: ['json', 'xml']
+                }, {
+                    name: '全部文件',
+                    extensions: ['*']
+                }],
+                properties: ['openFile']
+            });
+            if (!paths || paths.length === 0) {
+                return;
+            }
+            useGlobalStore().setTitle('从文件打开');
+            useGlobalStore().setType(type);
             // 跳转
-            MessageUtil.warning("暂不支持从文件中打开");
+            this.$router.push({
+                path: `/${type}/-1`,
+                query: {
+                    path: paths[0]
+                }
+            });
         },
         // ------ 功能组件 ------
         save() {
             useSaveEvent.emit();
+        },
+        saveAs() {
+            useSaveAsEvent.emit();
         },
         clear() {
             useClearEvent.emit();

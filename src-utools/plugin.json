@@ -1,6 +1,7 @@
 {
     "main": "dist/index.html",
     "logo": "public/logo.png",
+    "preload": "./preload.js",
     "platform": [
         "win32",
         "darwin",
@@ -15,7 +16,7 @@
     },
     "features": [
         {
-            "code": "application",
+            "code": "/home",
             "explain": "听雨图编辑器",
             "icon": "public/logo.png",
             "platform": [
@@ -26,8 +27,9 @@
             "cmds": [
                 "听雨图编辑器"
             ]
-        }, {
-            "code": "flow-chart",
+        },
+        {
+            "code": "/mind/0",
             "explain": "听雨图编辑器",
             "icon": "public/logo.png",
             "platform": [
@@ -36,7 +38,7 @@
                 "linux"
             ],
             "cmds": [
-                "流程图"
+                "思维导图"
             ]
         }
     ]

@@ -46,7 +46,7 @@ import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import { useGlobalStore } from "@/store/GlobalStore";
 import { useAtramentStore } from "@/store/AtramentStore";
 import { useBpmnStore } from "@/store/BpmnStore";
-import { useClearEvent, useExportEvent, useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
+import { useClearEvent, useExportEvent, useSaveAsEvent, useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
 import { useDiagramStore } from "@/store/DiagramStore";
 import Config from "@/global/Config";
 
@@ -90,6 +90,7 @@ export default defineComponent({
         }
         // 清空事件
         useSaveEvent.reset();
+        useSaveAsEvent.reset();
         useUndoEvent.reset();
         useClearEvent.reset();
         useExportEvent.reset();

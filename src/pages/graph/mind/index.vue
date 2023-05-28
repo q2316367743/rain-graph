@@ -47,12 +47,14 @@ async function initData() {
     if (id === '-1') {
         let path = useRouter().currentRoute.value.query.path as string;
         let value = await window.preload.openFileToString(path);
-        option.data = JSON.parse(value);
+        let val = JSON.parse(value);
+        option.data = val.record;
     } if (id !== '0') {
         let recordWrap = await utools.db.promises.get(`/${GraphTypeEnum.MIND}/${id}`);
         if (recordWrap) {
+            let val = recordWrap.value;
             // 存在
-            option.data = recordWrap.value;
+            option.data = val.record;
             _rev = recordWrap._rev;
         }
     }
@@ -77,7 +79,9 @@ function save() {
         utools.db.promises.put({
             _id: `/${GraphTypeEnum.MIND}/${id}`,
             _rev,
-            value: mind.getData()
+            value: {
+                record: mind.getData()
+            }
         }).then(res => {
             if (res.error) {
                 MessageUtil.error(res.message || "保存失败");
@@ -91,7 +95,9 @@ function save() {
 
 useSaveEvent.on(() => save());
 useSaveAsEvent.on(() => {
-    BrowserUtil.download(JSON.stringify(mind.getData()),
+    BrowserUtil.download(JSON.stringify({
+        record: mind.getData()
+    }),
         useGlobalStore().title + '.json',
         'text/json')
 });
@@ -124,6 +130,7 @@ useExportEvent.on((type: ExportTypeEnum) => {
     position: relative;
     height: 100%;
     width: 100%;
+
     .mind-elixir-toolbar {
         svg {
             color: #000;

@@ -83,6 +83,7 @@ import { useBpmnStore } from "./store/BpmnStore";
 import { useDiagramStore } from "./store/DiagramStore";
 import ExportTypeEnum from "./enumeration/ExportTypeEnum";
 import GraphTypeEnum from '@/enumeration/GraphTypeEnum';
+import { useSettingStore } from "./store/SettingStore";
 
 
 export default defineComponent({
@@ -119,6 +120,7 @@ export default defineComponent({
         useAtramentStore().init();
         useBpmnStore().init();
         useDiagramStore().init();
+        useSettingStore().init();
         utools.onPluginEnter(action => {
             if (action.code !== 'application') {
                 useGlobalStore().setTitle('');

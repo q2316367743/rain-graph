@@ -6,7 +6,9 @@ enum LocalNameEnum {
 
     BPMN = '/local/bpmn',
 
-    DIAGRAM = '/local/diagram'
+    DIAGRAM = '/local/diagram',
+
+    SETTING_MIND = '/setting/mind'
 
 }
 

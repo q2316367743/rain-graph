@@ -1,5 +1,5 @@
 <template>
-        <div id="mind-elixir-view" :style="{ height: viewHeight + 'px' }"></div>
+    <div id="mind-elixir-view" :style="{ height: viewHeight + 'px' }"></div>
 </template>
 <script lang="ts" setup>
 import { computed, onMounted } from "vue";
@@ -14,6 +14,7 @@ import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import { useGlobalStore } from "@/store/GlobalStore";
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import BrowserUtil from "@/utils/BrowserUtil";
+import MindEngineEnum from "@/enumeration/MindEngineEnum";
 
 const size = useWindowSize();
 const viewHeight = computed(() => size.height.value - 33);
@@ -52,14 +53,14 @@ const option = {
     mainLinkStyle: 2, // [1,2] default 1
     mainNodeVerticalGap: 15, // default 25
     mainNodeHorizontalGap: 15, // default 65
-    allowUndo: true,
-    data: {} as any
+    allowUndo: true
 };
+let data = {} as any;
 
 async function initData() {
     id = props.sourceId;
     _rev = props.source_rev; // for undo/redo actions, it is a revision number. it is a string. it is not a number
-    option.data = props.value.record
+    data = props.value.record
     return Promise.resolve();
 }
 
@@ -68,7 +69,7 @@ onMounted(() => {
         .finally(() => {
             mind = new MindElixir(option);
             if (id !== '0') {
-                mind.init(option.data);
+                mind.init(data);
             } else {
                 mind.init(MindElixir.new("思维导图"));
             }
@@ -82,7 +83,9 @@ function save() {
             _id: `/${GraphTypeEnum.MIND}/${id}`,
             _rev,
             value: {
-                record: mind.getData()
+                record: mind.getData(),
+                engine: MindEngineEnum.MIND_ELIXIR,
+                option: option
             }
         }).then(res => {
             if (res.error) {
@@ -98,7 +101,9 @@ function save() {
 useSaveEvent.on(() => save());
 useSaveAsEvent.on(() => {
     BrowserUtil.download(JSON.stringify({
-        record: mind.getData()
+        record: mind.getData(),
+        engine: MindEngineEnum.MIND_ELIXIR,
+        option: option
     }),
         useGlobalStore().title + '.json',
         'text/json')

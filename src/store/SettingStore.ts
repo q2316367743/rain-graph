@@ -2,6 +2,7 @@ import MindSetting from "@/entity/setting/MindSetting";
 import LocalNameEnum from "@/enumeration/LocalNameEnum";
 import MindEngineEnum from "@/enumeration/MindEngineEnum";
 import { defineStore } from "pinia";
+import { toRaw } from "vue";
 
 export function getDefaultMindSetting(): MindSetting {
     return {
@@ -26,6 +27,19 @@ export const useSettingStore = defineStore('setting', {
                         this.mind_rev = res._rev;
                     }
                 })
+        },
+        async saveMind(setting: MindSetting): Promise<void> {
+            this.mind = Object.assign(this.mind, setting);
+            const res = await utools.db.promises.put({
+                _id: LocalNameEnum.SETTING_MIND,
+                _rev: this.mind_rev,
+                value: toRaw(this.mind)
+            });
+            if (res.error) {
+                return Promise.reject("保存设置失败");
+            }
+            this.mind_rev = res.rev;
+            return await Promise.resolve();
         }
     }
 })

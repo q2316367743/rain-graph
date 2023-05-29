@@ -1,6 +1,7 @@
 <template>
     <div class="mind">
-        <mind-elixir :source-id="id" :source_rev="_rev" :value="value" v-if="engine === MindEngineEnum.MIND_ELIXIR" />
+        <mind-elixir :source-id="id" :source_rev="_rev" :value="value"
+            v-if="engine === MindEngineEnum.MIND_ELIXIR && show" />
     </div>
 </template>
 <script lang="ts">
@@ -21,7 +22,8 @@ export default defineComponent({
         id: '0',
         _rev: undefined as string | undefined,
         value: {} as any,
-        engine: MindEngineEnum.MIND_ELIXIR as MindEngineEnum
+        engine: MindEngineEnum.MIND_ELIXIR as MindEngineEnum,
+        show: false
     }),
     computed: {
         ...mapState(useSettingStore, ['mindEngine'])
@@ -30,11 +32,13 @@ export default defineComponent({
         this.initData().catch(e => {
             MessageUtil.error("初始化数据失败", e);
             this.engine = this.mindEngine;
-        })
+            this.id = '0';
+        }).finally(() => this.show = true);
     },
     methods: {
         async initData() {
             let id = this.$route.params.id as string;
+            this.id = id;
             let temp = undefined as any | undefined;
             if (id === '-1') {
                 let path = this.$route.query.path as string;
@@ -49,10 +53,11 @@ export default defineComponent({
                 }
             }
             if (temp) {
+                this.engine = temp.engine;
                 if (!this.engine) {
                     return Promise.reject("思维导图引擎未知");
                 }
-                this.value = temp.record;
+                this.value = temp;
             }
         }
     }

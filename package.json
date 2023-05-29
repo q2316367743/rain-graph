@@ -19,6 +19,7 @@
         "less-loader": "^11.1.0",
         "mind-elixir": "^2.0.2",
         "pinia": "^2.0.34",
+        "simple-mind-map": "^0.5.11",
         "utools-api-types": "^3.0.0",
         "vue": "^3.2.47",
         "vue-router": "^4.0.13",

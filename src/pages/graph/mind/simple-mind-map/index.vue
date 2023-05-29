@@ -16,7 +16,7 @@ import { useGlobalStore } from "@/store/GlobalStore";
 // 组件
 import SimpleMindMapOption from './components/option.vue';
 import SimpleMindMapAction from './components/action.vue';
-import { useSaveAsEvent, useSaveEvent } from "@/global/BeanFactory";
+import { useExportEvent, useSaveAsEvent, useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
 import MessageUtil from "@/utils/MessageUtil";
 import { toRaw } from "vue";
 
@@ -49,6 +49,20 @@ export default defineComponent({
                 .catch(e => MessageUtil.error("保存失败", e));
         });
         useSaveAsEvent.on(() => simpleMindMapWrap.saveAs(this.title));
+        useUndoEvent.on(() => {
+            if (this.index > 0){
+                simpleMindMapWrap.back();
+            }
+        });
+        useExportEvent.on(type => {
+            // json特殊处理
+            if (type === 'json') {
+                simpleMindMapWrap.saveAs(this.title)
+            }else {
+                simpleMindMapWrap.export(type, true, this.title, true)
+            }
+        })
+
     },
     mounted() {
         simpleMindMapWrap = new SimpleMindMapWrap(

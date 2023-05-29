@@ -4,6 +4,7 @@ import MindMap from "simple-mind-map";
 import MindEngineEnum from "@/enumeration/MindEngineEnum";
 import BrowserUtil from "@/utils/BrowserUtil";
 import { getDefaultConfig, getDefaultData } from "./data/config";
+import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 
 //  思维导图
 export default class SimpleMindMapWrap {
@@ -92,6 +93,10 @@ export default class SimpleMindMapWrap {
             config: this.config,
             record: this.mindMap.getData(false)
         }), title + '.json', 'text/json');
+    }
+
+    export(type: ExportTypeEnum, download: boolean, fileName: string, withConfig: boolean) {
+        this.mindMap.export(type, download, fileName, withConfig);
     }
 
     // ------ 节点操作 ------

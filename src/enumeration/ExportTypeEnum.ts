@@ -6,7 +6,13 @@ enum ExportTypeEnum {
 
     HTML = 'html',
 
-    XML = 'xml'
+    XML = 'xml',
+
+    JSON = 'json',
+
+    PDF = 'pdf',
+
+    MD = 'md',
 
 }
 

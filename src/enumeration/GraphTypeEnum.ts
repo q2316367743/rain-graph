@@ -6,7 +6,9 @@ enum GraphTypeEnum {
 
     BPMN = 'bpmn',
 
-    DIAGRAM = 'diagram'
+    DIAGRAM = 'diagram',
+
+    SIMPLE_MIND_MAP = 'simple-mind-map'
 
 }
 

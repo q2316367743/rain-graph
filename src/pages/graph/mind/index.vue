@@ -8,7 +8,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
-import { mapState } from "pinia";
+import { mapActions, mapState } from "pinia";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import MindEngineEnum from "@/enumeration/MindEngineEnum";
 
@@ -17,6 +17,7 @@ import { useSettingStore } from "@/store/SettingStore";
 
 import SimpleMindMap from "./simple-mind-map/index.vue";
 import MindElixir from './mind-elixir/index.vue';
+import { useGlobalStore } from "@/store/GlobalStore";
 
 export default defineComponent({
     name: 'mind',
@@ -37,9 +38,15 @@ export default defineComponent({
             MessageUtil.error("初始化数据失败", e);
             this.engine = this.mindEngine;
             this.id = '0';
-        }).finally(() => this.show = true);
+        }).finally(() => {
+            this.show = true;
+            if(this.engine === MindEngineEnum.SIMPLE_MIND_MAP) {
+                this.setType(GraphTypeEnum.SIMPLE_MIND_MAP);
+            }
+        });
     },
     methods: {
+        ...mapActions(useGlobalStore, ['setType']),
         async initData() {
             let id = this.$route.params.id as string;
             this.id = id;

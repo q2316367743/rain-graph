@@ -94,17 +94,15 @@ export default defineComponent({
         Config
     }),
     computed: {
-        ...mapState(useGlobalStore, ['isDark', 'title', 'type']),
+        ...mapState(useGlobalStore, ['isDark', 'title', 'type', 'typeWrap']),
         editDisabled() {
             return !this.$route.path.startsWith('/graph')
         },
         exportItems(): ExportTypeEnum[] {
-            let name = this.$route.name as GraphTypeEnum;
-            return Config.export[name] || []
+            return this.typeWrap ? (Config.export[this.typeWrap] || []) : [];
         },
         editItems(): Array<boolean> {
-            let name = this.$route.name as GraphTypeEnum;
-            return Config.edit[name] || [false, false];
+            return this.typeWrap ? (Config.edit[this.typeWrap] || [false, false]) : [false, false];
         }
     },
     created() {

@@ -60,7 +60,9 @@ let data = {} as any;
 async function initData() {
     id = props.sourceId;
     _rev = props.source_rev; // for undo/redo actions, it is a revision number. it is a string. it is not a number
-    data = props.value.record
+    if (props.value) {
+        data = props.value.record
+    }
     return Promise.resolve();
 }
 

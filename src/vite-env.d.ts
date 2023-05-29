@@ -3,6 +3,14 @@
 declare module 'mind-elixir';
 declare module 'atrament';
 declare module '@mind-elixir/export-html';
+declare module 'simple-mind-map';
+declare module 'simple-mind-map/src/MiniMap.js';
+declare module 'simple-mind-map/src/Watermark.js';
+declare module 'simple-mind-map/src/Drag.js';
+declare module 'simple-mind-map/src/KeyboardNavigation.js';
+declare module 'simple-mind-map/src/Export.js';
+declare module 'simple-mind-map/src/Select.js';
+declare module 'simple-mind-map/src/AssociativeLine.js';
 
 interface Window {
     preload: {

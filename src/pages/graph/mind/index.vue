@@ -2,26 +2,30 @@
     <div class="mind">
         <mind-elixir :source-id="id" :source_rev="_rev" :value="value"
             v-if="engine === MindEngineEnum.MIND_ELIXIR && show" />
+        <simple-mind-map :source-id="id" :source_rev="_rev" :value="value"
+            v-if="engine === MindEngineEnum.SIMPLE_MIND_MAP && show" />
     </div>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
+import { mapState } from "pinia";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import MindEngineEnum from "@/enumeration/MindEngineEnum";
 
-import MindElixir from './mind-elixir/index.vue';
 import MessageUtil from "@/utils/MessageUtil";
-import { mapState } from "pinia";
 import { useSettingStore } from "@/store/SettingStore";
+
+import SimpleMindMap from "./simple-mind-map/index.vue";
+import MindElixir from './mind-elixir/index.vue';
 
 export default defineComponent({
     name: 'mind',
-    components: { MindElixir },
+    components: { MindElixir, SimpleMindMap },
     data: () => ({
         MindEngineEnum,
         id: '0',
         _rev: undefined as string | undefined,
-        value: {} as any,
+        value: undefined as any,
         engine: MindEngineEnum.MIND_ELIXIR as MindEngineEnum,
         show: false
     }),

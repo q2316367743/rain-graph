@@ -12,6 +12,7 @@ export default class SimpleMindMapWrap {
 
     private id = '0';
     private _rev = undefined as string | undefined;
+    private dataChange?: (data: any) => void;
 
     /**
      * 初始化
@@ -27,9 +28,24 @@ export default class SimpleMindMapWrap {
     }
 
     init(id: string, _rev?: string) {
-        this.id = id,
+        this.id = id;
         this._rev = _rev;
+        this.mindMap.on('data_change', (data: any) => {
+            // data数据是不带节点对象的纯数据
+            // 如果你需要操作节点对象，可以使用mindMap.renderer.renderTree
+            if (this.dataChange) {
+                this.dataChange(this.mindMap.renderer.renderTree);
+            }
+        })
     }
+
+    // ------ 事件 ------
+
+    onDataChange(callback: (data: any) => void) {
+        this.dataChange = callback;
+    }
+
+    // ------ 操作 ------
 
 
     setTheme(theme: string) {
@@ -38,6 +54,10 @@ export default class SimpleMindMapWrap {
 
     setLayout(layout: string) {
         this.mindMap.setLayout(layout);
+    }
+
+    setNode(node: any) {
+        this.mindMap.renderer.moveNodeToCenter(node);
     }
 
     async save() {

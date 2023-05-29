@@ -1,13 +1,13 @@
 <template>
-    <a-button-group class="simple-mind-map-action" type="text" size="mini">
-        <a-button @click="show = !show">
-            <div class="icon">
-                <icon-menu-fold v-if="show"/>
-                <icon-menu-unfold v-else/>
-            </div>
-            <div class="name">操作</div>
-        </a-button>
-        <div v-show="show">
+    <div class="simple-mind-map-action"  :class="show ? 'show' : 'hidden'">
+        <div class="op">
+            <a-button @click="show = !show" type="text">
+                <template #icon>
+                    <icon-pen-fill />
+                </template>
+            </a-button>
+        </div>
+        <a-button-group type="text" size="mini" v-show="show" class="container">
             <a-button>
                 <div class="icon">
                     <icon-undo />
@@ -80,8 +80,8 @@
                 </div>
                 <div class="name">关联线</div>
             </a-button>
-        </div>
-    </a-button-group>
+        </a-button-group>
+    </div>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";

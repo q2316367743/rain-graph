@@ -1,7 +1,8 @@
 <template>
     <div class="simple-mind-map-wrap" :style="{ height: height + 'px' }">
         <div id="simple-mind-map"></div>
-        <simple-mind-map-option class="option" @switch-theme="setTheme" @switch-layout="setLayout" />
+        <simple-mind-map-option class="option" @switch-theme="setTheme" @switch-layout="setLayout" @set-node="setNode"
+            :render-tree="renderTree" />
         <simple-mind-map-action class="action" />
     </div>
 </template>
@@ -32,7 +33,7 @@ export default defineComponent({
         value: Object
     },
     data: () => ({
-
+        renderTree: undefined as any | undefined
     }),
     computed: {
         ...mapState(useGlobalStore, ['height', 'title'])
@@ -55,6 +56,10 @@ export default defineComponent({
             "children": []
         });
         simpleMindMapWrap.init(this.sourceId, this.source_rev);
+        simpleMindMapWrap.onDataChange(renderTree => {
+            this.renderTree = renderTree;
+            console.log(this.renderTree)
+        })
     },
     methods: {
         setTheme(theme: string) {
@@ -62,6 +67,10 @@ export default defineComponent({
         },
         setLayout(layout: string) {
             simpleMindMapWrap.setLayout(layout);
+        },
+        setNode(node: any) {
+            simpleMindMapWrap.setNode(node);
+            node.active();
         }
     }
 });
@@ -74,23 +83,56 @@ export default defineComponent({
     .option {
         position: absolute;
         top: 10px;
-        right: 10px;
         padding: 7px;
-        background-color: var(--color-bg-2);
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         display: flex;
-        flex-direction: column;
-        width: 88px;
+        transition: 0.2s;
+
+        &.show {
+            right: 0px;
+        }
+
+        &.hidden {
+            right: -95px;
+        }
+
+        .container {
+            width: 88px;
+            text-align: center;
+            background-color: var(--color-bg-2);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+            .arco-btn {
+                width: 88px;
+            }
+        }
     }
 
     .action {
         position: absolute;
-        bottom: 20px;
         left: 10px;
         padding: 7px;
-        background-color: var(--color-bg-2);
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        display: flex;
+        transition: 0.2s;
+
+        &.show {
+            bottom: 10px;
+        }
+
+        &.hidden {
+            bottom: 5px;
+        }
+
+        .op {
+            .arco-btn {
+                height: 32px;
+            }
+        }
+
+        .container {
+            text-align: center;
+            background-color: var(--color-bg-2);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            height: 50px;
+        }
     }
 }
 

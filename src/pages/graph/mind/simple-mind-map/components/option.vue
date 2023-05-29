@@ -1,27 +1,31 @@
 <template>
-    <div>
-        <a-button type="text" @click="show = !show">
-            <template #icon>
-                <icon-settings />
-            </template>
-            设置
-        </a-button>
-        <a-button-group type="text" style="flex-direction: column;" v-if="show">
-            <a-button>节点样式</a-button>
-            <a-button>基础样式</a-button>
-            <a-button @click="themeDrawer = true">主题</a-button>
-            <a-button @click="layoutDrawer = true">布局</a-button>
-            <a-button>大纲</a-button>
-            <a-button @click="keyboardShortcut = true;">快捷键</a-button>
-        </a-button-group>
-        <a-drawer title="布局" v-model:visible="layoutDrawer" mask-closable :footer="false" width="372px">
-            <a-list :bordered="false">
-                <a-list-item v-for="layout of layoutList">
-                    <a-image :src="`/simple-mind-map/layout/${layout.value}.jpg`" fit="cover" width="300px"
-                        :title="layout.name" :preview="false" style="cursor: pointer;" @click="switchLayout(layout.value)" />
-                </a-list-item>
-            </a-list>
-        </a-drawer>
+    <div :class="show ? 'show' : 'hidden'">
+        <div class="op">
+            <a-button type="text" @click="show = !show">
+                <template #icon>
+                    <icon-settings/>
+                </template>
+            </a-button>
+        </div>
+        <div class="container">
+            <a-button-group type="text" style="flex-direction: column;">
+                <a-button>节点样式</a-button>
+                <a-button>基础样式</a-button>
+                <a-button @click="themeDrawer = true">主题</a-button>
+                <a-button @click="layoutDrawer = true">布局</a-button>
+                <a-button @click="tocDrawer = true">大纲</a-button>
+                <a-button @click="keyboardShortcut = true;">快捷键</a-button>
+            </a-button-group>
+            <a-drawer title="布局" v-model:visible="layoutDrawer" mask-closable :footer="false" width="372px">
+                <a-list :bordered="false">
+                    <a-list-item v-for="layout of layoutList">
+                        <a-image :src="`/simple-mind-map/layout/${layout.value}.jpg`" fit="cover" width="300px"
+                            :title="layout.name" :preview="false" style="cursor: pointer;"
+                            @click="switchLayout(layout.value)" />
+                    </a-list-item>
+                </a-list>
+            </a-drawer>
+        </div>
         <a-drawer title="主题" v-model:visible="themeDrawer" mask-closable :footer="false" width="372px">
             <a-list :bordered="false">
                 <a-list-item v-for="theme of themeList">
@@ -29,6 +33,13 @@
                         :title="theme.name" :preview="false" style="cursor: pointer;" @click="switchTheme(theme.value)" />
                 </a-list-item>
             </a-list>
+        </a-drawer>
+        <a-drawer title="大纲" v-model:visible="tocDrawer" mask-closable :footer="false" width="372px" unmount-on-close>
+            <a-tree :data="[renderTree || {}]" block-node>
+                <template #title="nodeData">
+                    <a-link @click="setNode(nodeData._node)">{{ nodeData.data.text }}</a-link>
+                </template>
+            </a-tree>
         </a-drawer>
         <a-drawer title="快捷键" v-model:visible="keyboardShortcut" mask-closable :footer="false" width="300px">
             <a-descriptions align="right" title="节点操作" :column="1">
@@ -64,7 +75,10 @@ import { themeList, layoutList } from "../data/contants";
 
 export default defineComponent({
     name: 'simple-mind-map-option',
-    emits: ['switch-theme', 'switch-layout'],
+    props: {
+        renderTree: Object
+    },
+    emits: ['switch-theme', 'switch-layout', 'set-node'],
     data: () => ({
         themeList,
         layoutList,
@@ -72,6 +86,11 @@ export default defineComponent({
         keyboardShortcut: false,
         themeDrawer: false,
         layoutDrawer: false,
+        tocDrawer: false,
+        fieldNames: {
+            key: 'value',
+            title: 'data.text',
+        }
     }),
     methods: {
         switchTheme(theme: string) {
@@ -81,6 +100,9 @@ export default defineComponent({
         switchLayout(layout: string) {
             this.$emit('switch-layout', layout);
             this.layoutDrawer = false;
+        },
+        setNode(node: any) {
+            this.$emit('set-node', node);
         }
     }
 });

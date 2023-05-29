@@ -130,7 +130,7 @@ export default class SimpleMindMapWrap {
 
     // ------ 节点附加操作 ------
 
-    setLink(name: string, href: string) {
+    addLink(name: string, href: string) {
         this.activeNodeList.forEach(node => {
             node.setHyperlink(href, name);
         });

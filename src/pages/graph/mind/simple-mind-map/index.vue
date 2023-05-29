@@ -4,7 +4,7 @@
         <simple-mind-map-option class="option" @switch-theme="setTheme" @switch-layout="setLayout" @set-node="setNode"
             :render-tree="renderTree" />
         <simple-mind-map-action class="action" :index="index" :len="len" :has-node="hasNode" @add-node="addBothNode"
-            @add-child-node="addChildNode" @remove-node="removeNode" @back="back" @forward="forward" />
+            @add-child-node="addChildNode" @remove-node="removeNode" @back="back" @forward="forward" @add-link="addLink" />
     </div>
 </template>
 <script lang="ts">
@@ -106,6 +106,9 @@ export default defineComponent({
         },
         forward() {
             simpleMindMapWrap.forward();
+        },
+        addLink(name: string, href: string) {
+            simpleMindMapWrap.addLink(name, href);
         }
     }
 });

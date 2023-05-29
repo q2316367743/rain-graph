@@ -50,7 +50,7 @@
                 </div>
                 <div class="name">图标</div>
             </a-button>
-            <a-button :disabled="!hasNode">
+            <a-button :disabled="!hasNode" @click="openLink">
                 <div class="icon">
                     <icon-link />
                 </div>
@@ -82,6 +82,16 @@
             </a-button>
         </a-button-group>
         <!-- 超链接 -->
+        <a-modal v-model:visible="link.dialog" title="添加超链接" ok-text="添加" @ok="addLink">
+            <a-form :model="link.record">
+                <a-form-item label="名称">
+                    <a-input v-model="link.record.name" />
+                </a-form-item>
+                <a-form-item label="链接地址">
+                    <a-input v-model="link.record.href" />
+                </a-form-item>
+            </a-form>
+        </a-modal>
     </div>
 </template>
 <script lang="ts">
@@ -106,10 +116,33 @@ export default defineComponent({
             default: false
         }
     },
-    emits: ['add-child-node', 'add-node', 'remove-node', 'back', 'forward'],
+    emits: ['add-child-node', 'add-node', 'remove-node', 'back', 'forward', 'add-link'],
     data: () => ({
-        show: false
+        show: false,
+        link: {
+            dialog: false,
+            record: {
+                name: '',
+                href: ''
+            }
+        }
+
     }),
+    methods: {
+        openLink() {
+            this.link = {
+                dialog: true,
+                record: {
+                    name: '',
+                    href: ''
+                }
+            };
+        },
+        addLink() {
+            this.$emit('add-link', this.link.record.name, this.link.record.href);
+            this.link.dialog = false;
+        }
+    }
 });
 </script>
 <style scoped lang="less">

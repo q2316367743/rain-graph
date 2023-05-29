@@ -20,67 +20,68 @@
                 </div>
                 <div class="name">前进</div>
             </a-button>
-            <a-button @click="$emit('add-node')">
+            <a-button :disabled="!hasNode" @click="$emit('add-node')">
                 <div class="icon">
                     <icon-unordered-list />
                 </div>
                 <div class="name">插入同级节点</div>
             </a-button>
-            <a-button @click="$emit('add-child-node')">
+            <a-button :disabled="!hasNode" @click="$emit('add-child-node')">
                 <div class="icon">
                     <icon-mind-mapping />
                 </div>
                 <div class="name">插入子节点</div>
             </a-button>
-            <a-button @click="$emit('remove-node')">
+            <a-button :disabled="!hasNode" @click="$emit('remove-node')">
                 <div class="icon">
                     <icon-delete />
                 </div>
                 <div class="name">删除节点</div>
             </a-button>
-            <a-button>
+            <a-button :disabled="!hasNode">
                 <div class="icon">
                     <icon-image />
                 </div>
                 <div class="name">图片</div>
             </a-button>
-            <a-button>
+            <a-button :disabled="!hasNode">
                 <div class="icon">
                     <icon-robot />
                 </div>
                 <div class="name">图标</div>
             </a-button>
-            <a-button>
+            <a-button :disabled="!hasNode">
                 <div class="icon">
                     <icon-link />
                 </div>
                 <div class="name">超链接</div>
             </a-button>
-            <a-button>
+            <a-button :disabled="!hasNode">
                 <div class="icon">
                     <icon-edit />
                 </div>
                 <div class="name">备注</div>
             </a-button>
-            <a-button>
+            <a-button :disabled="!hasNode">
                 <div class="icon">
                     <icon-tag />
                 </div>
                 <div class="name">标签</div>
             </a-button>
-            <a-button>
+            <a-button :disabled="!hasNode">
                 <div class="icon">
                     <icon-apps />
                 </div>
                 <div class="name">概要</div>
             </a-button>
-            <a-button>
+            <a-button :disabled="!hasNode">
                 <div class="icon">
                     <icon-oblique-line />
                 </div>
                 <div class="name">关联线</div>
             </a-button>
         </a-button-group>
+        <!-- 超链接 -->
     </div>
 </template>
 <script lang="ts">
@@ -98,6 +99,11 @@ export default defineComponent({
             type: Number,
             required: false,
             default: 0
+        },
+        hasNode: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
     emits: ['add-child-node', 'add-node', 'remove-node', 'back', 'forward'],

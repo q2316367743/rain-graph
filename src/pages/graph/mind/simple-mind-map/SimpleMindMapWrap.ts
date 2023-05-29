@@ -15,6 +15,9 @@ export default class SimpleMindMapWrap {
     private id = '0';
     private _rev = undefined as string | undefined;
 
+    private node = undefined as any;
+    private activeNodeList = [] as any[];
+
     /**
      * 初始化
      * @param config 配置
@@ -47,6 +50,14 @@ export default class SimpleMindMapWrap {
 
     onBackForward(callback: (index: number, len: number) => void) {
         this.mindMap.on('back_forward', callback);
+    }
+
+    onNodeActive(callback: (has: boolean) => void) {
+        this.mindMap.on('node_active', (node: any, activeNodeList: any[]) => {
+            this.node = node;
+            this.activeNodeList = activeNodeList;
+            callback(activeNodeList.length > 0);
+        });
     }
 
     // ------ 操作 ------
@@ -115,6 +126,14 @@ export default class SimpleMindMapWrap {
 
     removeNode() {
         this.mindMap.execCommand('REMOVE_NODE')
+    }
+
+    // ------ 节点附加操作 ------
+
+    setLink(name: string, href: string) {
+        this.activeNodeList.forEach(node => {
+            node.setHyperlink(href, name);
+        });
     }
 
 }

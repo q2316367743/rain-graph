@@ -3,7 +3,7 @@
         <div id="simple-mind-map"></div>
         <simple-mind-map-option class="option" @switch-theme="setTheme" @switch-layout="setLayout" @set-node="setNode"
             :render-tree="renderTree" />
-        <simple-mind-map-action class="action" :index="index" :len="len" @add-node="addBothNode"
+        <simple-mind-map-action class="action" :index="index" :len="len" :has-node="hasNode" @add-node="addBothNode"
             @add-child-node="addChildNode" @remove-node="removeNode" @back="back" @forward="forward" />
     </div>
 </template>
@@ -37,7 +37,8 @@ export default defineComponent({
     data: () => ({
         renderTree: undefined as any | undefined,
         index: 0,
-        len: 0
+        len: 0,
+        hasNode: false
     }),
     computed: {
         ...mapState(useGlobalStore, ['height', 'title'])
@@ -50,7 +51,7 @@ export default defineComponent({
         });
         useSaveAsEvent.on(() => simpleMindMapWrap.saveAs(this.title));
         useUndoEvent.on(() => {
-            if (this.index > 0){
+            if (this.index > 0) {
                 simpleMindMapWrap.back();
             }
         });
@@ -58,7 +59,7 @@ export default defineComponent({
             // json特殊处理
             if (type === 'json') {
                 simpleMindMapWrap.saveAs(this.title)
-            }else {
+            } else {
                 simpleMindMapWrap.export(type, true, this.title, true)
             }
         })
@@ -75,7 +76,10 @@ export default defineComponent({
         simpleMindMapWrap.onBackForward((index, len) => {
             this.index = index;
             this.len = len;
-        })
+        });
+        simpleMindMapWrap.onNodeActive((hasNode) => {
+            this.hasNode = hasNode;
+        });
     },
     methods: {
         setTheme(theme: string) {

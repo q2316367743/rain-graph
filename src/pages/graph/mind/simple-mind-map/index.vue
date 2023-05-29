@@ -8,7 +8,7 @@
     </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, toRaw } from "vue";
 import SimpleMindMapWrap from "./SimpleMindMapWrap";
 import { mapState } from "pinia";
 import { useGlobalStore } from "@/store/GlobalStore";
@@ -18,7 +18,6 @@ import SimpleMindMapOption from './components/option.vue';
 import SimpleMindMapAction from './components/action.vue';
 import { useExportEvent, useSaveAsEvent, useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
 import MessageUtil from "@/utils/MessageUtil";
-import { toRaw } from "vue";
 
 let simpleMindMapWrap = {} as SimpleMindMapWrap;
 

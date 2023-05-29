@@ -51,14 +51,18 @@ export default defineComponent({
                     // 存在
                     this._rev = recordWrap._rev;
                 }
+            } else {
+                this.engine = this.mindEngine;
+                return Promise.resolve();
             }
-            if (temp) {
-                this.engine = temp.engine;
-                if (!this.engine) {
-                    return Promise.reject("思维导图引擎未知");
-                }
-                this.value = temp;
+            if (!temp) {
+                return Promise.reject("获取数据失败")
             }
+            this.engine = temp.engine;
+            if (!this.engine) {
+                return Promise.reject("思维导图引擎未知");
+            }
+            this.value = temp;
         }
     }
 });

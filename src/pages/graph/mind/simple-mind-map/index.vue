@@ -3,8 +3,8 @@
         <div id="simple-mind-map"></div>
         <simple-mind-map-option class="option" @switch-theme="setTheme" @switch-layout="setLayout" @set-node="setNode"
             :render-tree="renderTree" />
-        <simple-mind-map-action class="action" @add-node="addBothNode" @add-child-node="addChildNode"
-            @remove-node="removeNode" />
+        <simple-mind-map-action class="action" :index="index" :len="len" @add-node="addBothNode"
+            @add-child-node="addChildNode" @remove-node="removeNode" @back="back" @forward="forward" />
     </div>
 </template>
 <script lang="ts">
@@ -35,7 +35,9 @@ export default defineComponent({
         value: Object
     },
     data: () => ({
-        renderTree: undefined as any | undefined
+        renderTree: undefined as any | undefined,
+        index: 0,
+        len: 0
     }),
     computed: {
         ...mapState(useGlobalStore, ['height', 'title'])
@@ -54,7 +56,12 @@ export default defineComponent({
             this.value ? toRaw(this.value.config) : undefined,
             this.value ? this.value.record : undefined);
         simpleMindMapWrap.init(this.sourceId, this.source_rev);
-        simpleMindMapWrap.onDataChange(renderTree => this.renderTree = renderTree)
+        // 事件
+        simpleMindMapWrap.onDataChange(renderTree => this.renderTree = renderTree);
+        simpleMindMapWrap.onBackForward((index, len) => {
+            this.index = index;
+            this.len = len;
+        })
     },
     methods: {
         setTheme(theme: string) {
@@ -70,12 +77,17 @@ export default defineComponent({
         addChildNode() {
             simpleMindMapWrap.addChildNode();
         },
-
         addBothNode() {
             simpleMindMapWrap.addBothNode();
         },
         removeNode() {
             simpleMindMapWrap.removeNode();
+        },
+        back() {
+            simpleMindMapWrap.back();
+        },
+        forward() {
+            simpleMindMapWrap.forward();
         }
     }
 });

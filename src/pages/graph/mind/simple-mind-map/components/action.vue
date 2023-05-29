@@ -1,5 +1,5 @@
 <template>
-    <div class="simple-mind-map-action"  :class="show ? 'show' : 'hidden'">
+    <div class="simple-mind-map-action" :class="show ? 'show' : 'hidden'">
         <div class="op">
             <a-button @click="show = !show" type="text">
                 <template #icon>
@@ -8,13 +8,13 @@
             </a-button>
         </div>
         <a-button-group type="text" size="mini" v-show="show" class="container">
-            <a-button>
+            <a-button :disabled="index === 0" @click="$emit('back')">
                 <div class="icon">
                     <icon-undo />
                 </div>
                 <div class="name">后退</div>
             </a-button>
-            <a-button>
+            <a-button :disabled="index === len - 1" @click="$emit('forward')">
                 <div class="icon">
                     <icon-redo />
                 </div>
@@ -88,7 +88,19 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
     name: 'simple-mind-map-action',
-    emits: ['add-child-node', 'add-node', 'remove-node'],
+    props: {
+        index: {
+            type: Number,
+            required: false,
+            default: 0
+        },
+        len: {
+            type: Number,
+            required: false,
+            default: 0
+        }
+    },
+    emits: ['add-child-node', 'add-node', 'remove-node', 'back', 'forward'],
     data: () => ({
         show: false
     }),

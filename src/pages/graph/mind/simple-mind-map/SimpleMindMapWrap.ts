@@ -13,7 +13,6 @@ export default class SimpleMindMapWrap {
 
     private id = '0';
     private _rev = undefined as string | undefined;
-    private dataChange?: (data: any) => void;
 
     /**
      * 初始化
@@ -32,23 +31,24 @@ export default class SimpleMindMapWrap {
     init(id: string, _rev?: string) {
         this.id = id;
         this._rev = _rev;
-        this.mindMap.on('data_change', (data: any) => {
-            // data数据是不带节点对象的纯数据
-            // 如果你需要操作节点对象，可以使用mindMap.renderer.renderTree
-            if (this.dataChange) {
-                this.dataChange(this.mindMap.renderer.renderTree);
-            }
-        })
     }
 
     // ------ 事件 ------
 
+    /**
+     * 数据变更
+     * @param event 事件名
+     * @param callback 回调函数
+     */
     onDataChange(callback: (data: any) => void) {
-        this.dataChange = callback;
+        this.mindMap.on('data_change', callback);
+    }
+
+    onBackForward(callback: (index: number, len: number) => void) {
+        this.mindMap.on('back_forward', callback);
     }
 
     // ------ 操作 ------
-
 
     setTheme(theme: string) {
         this.mindMap.setTheme(theme);
@@ -58,6 +58,14 @@ export default class SimpleMindMapWrap {
     setLayout(layout: string) {
         this.mindMap.setLayout(layout);
         this.config.layout = layout;
+    }
+
+    back() {
+        this.mindMap.execCommand('BACK')
+    }
+
+    forward() {
+        this.mindMap.execCommand('FORWARD')
     }
 
     async save() {

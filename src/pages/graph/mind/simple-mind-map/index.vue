@@ -3,7 +3,8 @@
         <div id="simple-mind-map"></div>
         <simple-mind-map-option class="option" @switch-theme="setTheme" @switch-layout="setLayout" @set-node="setNode"
             :render-tree="renderTree" />
-        <simple-mind-map-action class="action" />
+        <simple-mind-map-action class="action" @add-node="addBothNode" @add-child-node="addChildNode"
+            @remove-node="removeNode" />
     </div>
 </template>
 <script lang="ts">
@@ -17,6 +18,7 @@ import SimpleMindMapOption from './components/option.vue';
 import SimpleMindMapAction from './components/action.vue';
 import { useSaveAsEvent, useSaveEvent } from "@/global/BeanFactory";
 import MessageUtil from "@/utils/MessageUtil";
+import { toRaw } from "vue";
 
 let simpleMindMapWrap = {} as SimpleMindMapWrap;
 
@@ -48,18 +50,11 @@ export default defineComponent({
     },
     mounted() {
         simpleMindMapWrap = new SimpleMindMapWrap(
-            "#simple-mind-map", {
-        }, this.value ? this.value.record : {
-            "data": {
-                "text": "思维导图"
-            },
-            "children": []
-        });
+            "#simple-mind-map",
+            this.value ? toRaw(this.value.config) : undefined,
+            this.value ? this.value.record : undefined);
         simpleMindMapWrap.init(this.sourceId, this.source_rev);
-        simpleMindMapWrap.onDataChange(renderTree => {
-            this.renderTree = renderTree;
-            console.log(this.renderTree)
-        })
+        simpleMindMapWrap.onDataChange(renderTree => this.renderTree = renderTree)
     },
     methods: {
         setTheme(theme: string) {
@@ -71,6 +66,16 @@ export default defineComponent({
         setNode(node: any) {
             simpleMindMapWrap.setNode(node);
             node.active();
+        },
+        addChildNode() {
+            simpleMindMapWrap.addChildNode();
+        },
+
+        addBothNode() {
+            simpleMindMapWrap.addBothNode();
+        },
+        removeNode() {
+            simpleMindMapWrap.removeNode();
         }
     }
 });

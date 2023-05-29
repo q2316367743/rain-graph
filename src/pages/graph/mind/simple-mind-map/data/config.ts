@@ -2,7 +2,7 @@ import { SimpleMindMapConfig } from "../domain/SimpleMindMapConfig";
 import { MOUSE_WHEEL_ACTION, LAYOUT } from "./contants";
 
 // 默认选项配置
-export default function getDefaultConfig(): SimpleMindMapConfig {
+export function getDefaultConfig(): SimpleMindMapConfig {
     return {
         // 是否只读
         readonly: false,
@@ -113,5 +113,14 @@ export default function getDefaultConfig(): SimpleMindMapConfig {
         maxNodeCacheCount: 1000,
         // 关联线默认文字
         defaultAssociativeLineText: '关联'
+    }
+}
+
+export function getDefaultData() {
+    return {
+        "data": {
+            "text": "思维导图"
+        },
+        "children": []
     }
 }

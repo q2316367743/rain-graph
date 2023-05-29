@@ -20,19 +20,19 @@
                 </div>
                 <div class="name">前进</div>
             </a-button>
-            <a-button>
+            <a-button @click="$emit('add-node')">
                 <div class="icon">
                     <icon-unordered-list />
                 </div>
                 <div class="name">插入同级节点</div>
             </a-button>
-            <a-button>
+            <a-button @click="$emit('add-child-node')">
                 <div class="icon">
                     <icon-mind-mapping />
                 </div>
                 <div class="name">插入子节点</div>
             </a-button>
-            <a-button>
+            <a-button @click="$emit('remove-node')">
                 <div class="icon">
                     <icon-delete />
                 </div>
@@ -88,6 +88,7 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
     name: 'simple-mind-map-action',
+    emits: ['add-child-node', 'add-node', 'remove-node'],
     data: () => ({
         show: false
     }),

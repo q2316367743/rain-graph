@@ -3,6 +3,7 @@ import { SimpleMindMapConfig } from "./domain/SimpleMindMapConfig";
 import MindMap from "simple-mind-map";
 import MindEngineEnum from "@/enumeration/MindEngineEnum";
 import BrowserUtil from "@/utils/BrowserUtil";
+import { getDefaultConfig, getDefaultData } from "./data/config";
 
 //  思维导图
 export default class SimpleMindMapWrap {
@@ -19,11 +20,12 @@ export default class SimpleMindMapWrap {
      * @param config 配置
      * @param data 数据
      */
-    constructor(el: string, config: Partial<SimpleMindMapConfig>, data: any) {
-        this.config = config;
+    constructor(el: string, config: Partial<SimpleMindMapConfig>, data?: any) {
+        this.config = Object.assign(getDefaultConfig(), config);
         this.mindMap = new MindMap({
             el: document.querySelector(el),
-            data
+            data: data ? data : getDefaultData(),
+            ...this.config
         });
     }
 
@@ -50,14 +52,12 @@ export default class SimpleMindMapWrap {
 
     setTheme(theme: string) {
         this.mindMap.setTheme(theme);
+        this.config.theme = theme;
     }
 
     setLayout(layout: string) {
         this.mindMap.setLayout(layout);
-    }
-
-    setNode(node: any) {
-        this.mindMap.renderer.moveNodeToCenter(node);
+        this.config.layout = layout;
     }
 
     async save() {
@@ -84,6 +84,24 @@ export default class SimpleMindMapWrap {
             config: this.config,
             record: this.mindMap.getData(false)
         }), title + '.json', 'text/json');
+    }
+
+    // ------ 节点操作 ------
+
+    setNode(node: any) {
+        this.mindMap.renderer.moveNodeToCenter(node);
+    }
+
+    addChildNode() {
+        this.mindMap.execCommand('INSERT_CHILD_NODE')
+    }
+
+    addBothNode() {
+        this.mindMap.execCommand('INSERT_NODE')
+    }
+
+    removeNode() {
+        this.mindMap.execCommand('REMOVE_NODE')
     }
 
 }

@@ -4,7 +4,7 @@ export interface SimpleMindMapConfig {
     // 是否只读
     readonly:                              boolean;
     // 布局
-    layout:                                LAYOUT;
+    layout:                                string;
     // 如果结构为鱼骨图，那么可以通过该选项控制倾斜角度
     fishboneDeg:                           number;
     // 主题

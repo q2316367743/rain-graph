@@ -1,12 +1,5 @@
 <template>
     <div class="simple-mind-map-action" :class="show ? 'show' : 'hidden'">
-        <div class="op">
-            <a-button @click="show = !show" type="text">
-                <template #icon>
-                    <icon-pen-fill />
-                </template>
-            </a-button>
-        </div>
         <a-button-group type="text" size="mini" v-show="show" class="container">
             <a-button :disabled="index === 0" @click="$emit('back')">
                 <div class="icon">
@@ -81,6 +74,13 @@
                 <div class="name">关联线</div>
             </a-button>
         </a-button-group>
+        <div class="op">
+            <a-button @click="show = !show" type="text">
+                <template #icon>
+                    <icon-pen-fill />
+                </template>
+            </a-button>
+        </div>
         <!-- 超链接 -->
         <a-modal v-model:visible="link.dialog" title="添加超链接" ok-text="添加" @ok="addLink">
             <a-form :model="link.record">

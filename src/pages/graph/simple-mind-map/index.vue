@@ -72,7 +72,7 @@ export default defineComponent({
         useExportEvent.on(type => {
             // json特殊处理
             if (type === 'json') {
-                simpleMindMapWrap.saveAs(this.title)
+                simpleMindMapWrap.saveAs(this.title);
             } else {
                 simpleMindMapWrap.export(type, true, this.title, true)
             }
@@ -179,7 +179,7 @@ export default defineComponent({
 
     .option {
         position: absolute;
-        top: 10px;
+        top: 96px;
         padding: 7px;
         display: flex;
         transition: 0.2s;
@@ -211,11 +211,11 @@ export default defineComponent({
         transition: 0.2s;
 
         &.show {
-            bottom: 10px;
+            top: 5px;
         }
 
         &.hidden {
-            bottom: 5px;
+            top: -8px;
         }
 
         .op {

@@ -16,6 +16,7 @@ export const useSettingStore = defineStore('setting', {
         base_rev: undefined as string | undefined
     }),
     getters: {
+        defaultView: state => state.base.defaultView,
     },
     actions: {
         init() {

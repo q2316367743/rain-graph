@@ -48,6 +48,7 @@ import { useClearEvent, useExportEvent, useSaveAsEvent, useSaveEvent, useUndoEve
 import { useDiagramStore } from "@/store/DiagramStore";
 import Config from "@/global/Config";
 import { useSimpleMindMapStore } from "@/store/SimpleMindMapStore";
+import { useSettingStore } from "@/store/SettingStore";
 
 export default defineComponent({
     name: 'home',
@@ -61,6 +62,7 @@ export default defineComponent({
         ...mapState(useMindStore, ['minds']),
         ...mapState(useSimpleMindMapStore, ['simpleMindMaps']),
         ...mapState(useDiagramStore, ['diagrams']),
+        ...mapState(useSettingStore, ['defaultView']),
         virtualListProps() {
             return {
                 height: this.size.height - 33 - 32 - 14 - 7
@@ -83,6 +85,8 @@ export default defineComponent({
         let name = this.$route.query.name as GraphTypeEnum;
         if (name) {
             this.activeKey = name;
+        } else {
+            this.activeKey = this.defaultView;
         }
         // 清空事件
         useSaveEvent.reset();

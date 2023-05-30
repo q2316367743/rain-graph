@@ -1,5 +1,5 @@
 <template>
-    <a-form :model="setting" class="setting-base">
+    <a-form :model="setting" class="setting-base" layout="vertical">
         <a-form-item label="默认视图">
             <a-select v-model="setting.defaultView" style="width: 250px;">
                 <a-option :value="GraphTypeEnum.MIND">简易思维导图</a-option>
@@ -7,6 +7,9 @@
                 <a-option :value="GraphTypeEnum.DIAGRAM">流程图</a-option>
             </a-select>
         </a-form-item>
+        <el-form-item>
+            <a-button type="primary" @click="save">保存</a-button>
+        </el-form-item>
     </a-form>
 </template>
 <script lang="ts">

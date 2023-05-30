@@ -38,11 +38,11 @@
                 "linux"
             ],
             "cmds": [
-                "思维导图"
+                "简易思维导图"
             ]
         },
         {
-            "code": "atrament",
+            "code": "simple-mind-map",
             "explain": "听雨图编辑器",
             "icon": "public/logo.png",
             "platform": [
@@ -51,20 +51,7 @@
                 "linux"
             ],
             "cmds": [
-                "手绘图"
-            ]
-        },
-        {
-            "code": "bpmn",
-            "explain": "听雨图编辑器",
-            "icon": "public/logo.png",
-            "platform": [
-                "win32",
-                "darwin",
-                "linux"
-            ],
-            "cmds": [
-                "BPMN"
+                "完整流程图"
             ]
         },
         {

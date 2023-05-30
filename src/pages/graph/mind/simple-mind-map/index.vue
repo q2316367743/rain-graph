@@ -40,7 +40,15 @@ export default defineComponent({
         hasNode: false
     }),
     computed: {
-        ...mapState(useGlobalStore, ['height', 'title'])
+        ...mapState(useGlobalStore, ['height', 'width', 'title'])
+    },
+    watch: {
+        height() {
+            simpleMindMapWrap.setSize(this.width, this.height);
+        },
+        width() {
+            simpleMindMapWrap.setSize(this.width, this.height);
+        }
     },
     created() {
         useSaveEvent.on(() => {

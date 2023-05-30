@@ -11,6 +11,7 @@ export default class SimpleMindMapWrap {
 
     private readonly config;
     private readonly mindMap: any;
+    private readonly el;
 
     private id = '0';
     private _rev = undefined as string | undefined;
@@ -24,6 +25,7 @@ export default class SimpleMindMapWrap {
      * @param data 数据
      */
     constructor(el: string, config: Partial<SimpleMindMapConfig>, data?: any) {
+        this.el = el;
         this.config = Object.assign(getDefaultConfig(), config);
         this.mindMap = new MindMap({
             el: document.querySelector(el),
@@ -35,6 +37,14 @@ export default class SimpleMindMapWrap {
     init(id: string, _rev?: string) {
         this.id = id;
         this._rev = _rev;
+    }
+
+    setSize(width: number, height: number) {
+        let el = this.mindMap.opt.el as HTMLDivElement;
+        let svg = el.querySelector(this.el + '>svg') as SVGElement;
+        console.log(svg)
+        svg.setAttribute('width', width + 'px');
+        svg.setAttribute('height', height + 'px');
     }
 
     // ------ 事件 ------

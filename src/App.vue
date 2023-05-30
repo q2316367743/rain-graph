@@ -11,27 +11,29 @@
                 <a-dropdown position="bl">
                     <a-button :disabled="!editDisabled">新增</a-button>
                     <template #content>
-                        <a-doption @click="jumpTo(GraphTypeEnum.MIND)">{{ Config.title[GraphTypeEnum.MIND].title
-                        }}</a-doption>
-                        <a-doption @click="jumpTo(GraphTypeEnum.ATRAMENT)">{{ Config.title[GraphTypeEnum.ATRAMENT].title
-                        }}</a-doption>
-                        <a-doption @click="jumpTo(GraphTypeEnum.BPMN)">{{ Config.title[GraphTypeEnum.BPMN].title
-                        }}</a-doption>
-                        <a-doption @click="jumpTo(GraphTypeEnum.DIAGRAM)">{{ Config.title[GraphTypeEnum.DIAGRAM].title
-                        }}</a-doption>
+                        <a-doption @click="jumpTo(GraphTypeEnum.MIND)">
+                            {{ Config.title[GraphTypeEnum.MIND].title }}
+                        </a-doption>
+                        <a-doption @click="jumpTo(GraphTypeEnum.SIMPLE_MIND_MAP)">
+                            {{ Config.title[GraphTypeEnum.SIMPLE_MIND_MAP].title }}
+                        </a-doption>
+                        <a-doption @click="jumpTo(GraphTypeEnum.DIAGRAM)">
+                            {{ Config.title[GraphTypeEnum.DIAGRAM].title }}
+                        </a-doption>
                     </template>
                 </a-dropdown>
                 <a-dropdown position="bl">
                     <a-button :disabled="!editDisabled">打开</a-button>
                     <template #content>
-                        <a-doption @click="openTo(GraphTypeEnum.MIND)">{{ Config.title[GraphTypeEnum.MIND].title
-                        }}</a-doption>
-                        <a-doption @click="openTo(GraphTypeEnum.ATRAMENT)">{{ Config.title[GraphTypeEnum.ATRAMENT].title
-                        }}</a-doption>
-                        <a-doption @click="openTo(GraphTypeEnum.BPMN)">{{ Config.title[GraphTypeEnum.BPMN].title
-                        }}</a-doption>
-                        <a-doption @click="openTo(GraphTypeEnum.DIAGRAM)">{{ Config.title[GraphTypeEnum.DIAGRAM].title
-                        }}</a-doption>
+                        <a-doption @click="openTo(GraphTypeEnum.MIND)">
+                            {{ Config.title[GraphTypeEnum.MIND].title }}
+                        </a-doption>
+                        <a-doption @click="openTo(GraphTypeEnum.SIMPLE_MIND_MAP)">
+                            {{ Config.title[GraphTypeEnum.SIMPLE_MIND_MAP].title }}
+                        </a-doption>
+                        <a-doption @click="openTo(GraphTypeEnum.DIAGRAM)">
+                            {{ Config.title[GraphTypeEnum.DIAGRAM].title }}
+                        </a-doption>
                     </template>
                 </a-dropdown>
                 <a-dropdown>
@@ -74,16 +76,18 @@
 <script lang="ts">
 import { mapState } from "pinia";
 import { defineComponent } from "vue";
-import { useSaveEvent, useClearEvent, useExportEvent, useUndoEvent, useSaveAsEvent } from "./global/BeanFactory";
+
+import { useSaveEvent, useClearEvent, useExportEvent, useUndoEvent, useSaveAsEvent } from "@/global/BeanFactory";
 import Config from '@/global/Config'
-import { useGlobalStore } from "./store/GlobalStore";
-import { useMindStore } from "./store/MindStore";
-import { useAtramentStore } from "./store/AtramentStore";
-import { useBpmnStore } from "./store/BpmnStore";
-import { useDiagramStore } from "./store/DiagramStore";
-import ExportTypeEnum from "./enumeration/ExportTypeEnum";
+
+import { useGlobalStore } from "@/store/GlobalStore";
+import { useMindStore } from "@/store/MindStore";
+import { useDiagramStore } from "@/store/DiagramStore";
+import { useSettingStore } from "@/store/SettingStore";
+import { useSimpleMindMapStore } from "@/store/SimpleMindMapStore";
+
+import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import GraphTypeEnum from '@/enumeration/GraphTypeEnum';
-import { useSettingStore } from "./store/SettingStore";
 
 
 export default defineComponent({
@@ -115,8 +119,7 @@ export default defineComponent({
         }
         // 初始化图信息
         useMindStore().init();
-        useAtramentStore().init();
-        useBpmnStore().init();
+        useSimpleMindMapStore().init();
         useDiagramStore().init();
         useSettingStore().init();
         utools.onPluginEnter(action => {

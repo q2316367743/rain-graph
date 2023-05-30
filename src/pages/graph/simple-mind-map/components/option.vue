@@ -3,7 +3,7 @@
         <div class="op">
             <a-button type="text" @click="show = !show">
                 <template #icon>
-                    <icon-settings/>
+                    <icon-settings />
                 </template>
             </a-button>
         </div>
@@ -26,7 +26,14 @@
                 </a-list>
             </a-drawer>
         </div>
-        <a-drawer title="主题" v-model:visible="themeDrawer" mask-closable :footer="false" width="372px">
+        <a-drawer v-model:visible="themeDrawer" mask-closable :footer="false" width="372px">
+            <template #title>
+                <span>主题</span>
+                <a-radio-group v-model="themeType" type="button" style="margin-left: 14px;">
+                    <a-radio value="light">白天</a-radio>
+                    <a-radio value="dark">黑夜</a-radio>
+                </a-radio-group>
+            </template>
             <a-list :bordered="false">
                 <a-list-item v-for="theme of themeList">
                     <a-image :src="`/simple-mind-map/theme/${theme.value}.jpg`" fit="cover" width="300px"
@@ -71,7 +78,9 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
-import { themeList, layoutList } from "../data/contants";
+import { themeByLightList, themeByDarkList, layoutList } from "../data/contants";
+import { mapState } from "pinia";
+import { useGlobalStore } from "@/store/GlobalStore";
 
 export default defineComponent({
     name: 'simple-mind-map-option',
@@ -80,11 +89,11 @@ export default defineComponent({
     },
     emits: ['switch-theme', 'switch-layout', 'set-node'],
     data: () => ({
-        themeList,
-        layoutList,
+        themeByLightList, themeByDarkList, layoutList,
         show: false,
         keyboardShortcut: false,
         themeDrawer: false,
+        themeType: 'light',
         layoutDrawer: false,
         tocDrawer: false,
         fieldNames: {
@@ -92,6 +101,21 @@ export default defineComponent({
             title: 'data.text',
         }
     }),
+    created() {
+        this.themeType = this.isDark ? 'dark' : 'light';
+    },
+    computed: {
+        ...mapState(useGlobalStore, ['isDark']),
+        themeList() {
+            if (this.themeType === 'light') {
+                return themeByLightList;
+            } else if (this.themeType === 'dark') {
+                return themeByDarkList;
+            } else {
+                return [];
+            }
+        }
+    },
     methods: {
         switchTheme(theme: string) {
             this.$emit('switch-theme', theme);

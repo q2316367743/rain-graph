@@ -1,44 +1,43 @@
-import MindSetting from "@/entity/setting/MindSetting";
+import Setting from "@/entity/setting";
+import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import LocalNameEnum from "@/enumeration/LocalNameEnum";
-import MindEngineEnum from "@/enumeration/MindEngineEnum";
 import { defineStore } from "pinia";
 import { toRaw } from "vue";
 
-export function getDefaultMindSetting(): MindSetting {
+export function getDefaultSetting(): Setting {
     return {
-        engine: MindEngineEnum.MIND_ELIXIR
+        defaultView: GraphTypeEnum.MIND
     }
 }
 
 export const useSettingStore = defineStore('setting', {
     state: () => ({
-        mind: getDefaultMindSetting(),
-        mind_rev: undefined as string | undefined
+        base: getDefaultSetting(),
+        base_rev: undefined as string | undefined
     }),
     getters: {
-        mindEngine: state => state.mind.engine || MindEngineEnum.MIND_ELIXIR,
     },
     actions: {
         init() {
             utools.db.promises.get(LocalNameEnum.SETTING_MIND)
                 .then(res => {
                     if (res) {
-                        this.mind = Object.assign(this.mind, res.value);
-                        this.mind_rev = res._rev;
+                        this.base = Object.assign(this.base, res.value);
+                        this.base_rev = res._rev;
                     }
                 })
         },
-        async saveMind(setting: MindSetting): Promise<void> {
-            this.mind = Object.assign(this.mind, setting);
+        async saveBase(setting: Setting): Promise<void> {
+            this.base = Object.assign(this.base, setting);
             const res = await utools.db.promises.put({
                 _id: LocalNameEnum.SETTING_MIND,
-                _rev: this.mind_rev,
-                value: toRaw(this.mind)
+                _rev: this.base_rev,
+                value: toRaw(this.base)
             });
             if (res.error) {
                 return Promise.reject("保存设置失败");
             }
-            this.mind_rev = res.rev;
+            this.base_rev = res.rev;
             return await Promise.resolve();
         }
     }

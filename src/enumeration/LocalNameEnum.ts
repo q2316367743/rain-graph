@@ -2,9 +2,7 @@ enum LocalNameEnum {
 
     MIND = '/local/mind',
 
-    ATRAMENT = '/local/atrament',
-
-    BPMN = '/local/bpmn',
+    SIMPLE_MIND_MAP = '/local/simple-mind-map',
 
     DIAGRAM = '/local/diagram',
 

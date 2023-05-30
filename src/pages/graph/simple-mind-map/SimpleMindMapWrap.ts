@@ -1,10 +1,10 @@
-import { useMindStore } from "@/store/MindStore";
 import { SimpleMindMapConfig } from "./domain/SimpleMindMapConfig";
 import MindMap from "simple-mind-map";
-import MindEngineEnum from "@/enumeration/MindEngineEnum";
 import BrowserUtil from "@/utils/BrowserUtil";
 import { getDefaultConfig, getDefaultData } from "./data/config";
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
+import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
+import { useSimpleMindMapStore } from "@/store/SimpleMindMapStore";
 
 //  思维导图
 export default class SimpleMindMapWrap {
@@ -91,13 +91,12 @@ export default class SimpleMindMapWrap {
     }
 
     async save() {
-        let id = await useMindStore().addMind(this.id);
+        let id = await useSimpleMindMapStore().addMind(this.id);
         this.id = id;
         let res = await utools.db.promises.put({
-            _id: '/mind/' + id,
+            _id: `/${GraphTypeEnum.SIMPLE_MIND_MAP}/${id}`,
             _rev: this._rev,
             value: {
-                engine: MindEngineEnum.SIMPLE_MIND_MAP,
                 config: this.config,
                 record: this.mindMap.getData(false)
             }
@@ -110,7 +109,6 @@ export default class SimpleMindMapWrap {
 
     saveAs(title: string) {
         BrowserUtil.download(JSON.stringify({
-            engine: MindEngineEnum.SIMPLE_MIND_MAP,
             config: this.config,
             record: this.mindMap.getData(false)
         }), title + '.json', 'text/json');

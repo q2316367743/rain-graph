@@ -23,14 +23,10 @@ export const tagColorList = [
 ]
 
 //  主题列表
-export const themeList = [
+export const themeByLightList = [
     {
         name: '默认',
         value: 'default',
-    },
-    {
-        name: '暗色2',
-        value: 'dark2',
     },
     {
         name: '天清绿',
@@ -59,10 +55,6 @@ export const themeList = [
     {
         name: '脑残粉',
         value: 'brainImpairedPink',
-    },
-    {
-        name: '暗色',
-        value: 'dark',
     },
     {
         name: '泥土黄',
@@ -101,10 +93,6 @@ export const themeList = [
         value: 'greenLeaf',
     },
     {
-        name: '脑图经典',
-        value: 'classic',
-    },
-    {
         name: '脑图经典4',
         value: 'classic4',
     },
@@ -129,6 +117,30 @@ export const themeList = [
         value: 'redSpirit',
     },
     {
+        name: '牛油果',
+        value: 'avocado',
+    },
+    {
+        name: '秋天',
+        value: 'autumn',
+    }
+]
+
+export const themeByDarkList = [
+    
+    {
+        name: '暗色',
+        value: 'dark',
+    },
+    {
+        name: '暗色2',
+        value: 'dark2',
+    },
+    {
+        name: '脑图经典',
+        value: 'classic',
+    },
+    {
         name: '黑色幽默',
         value: 'blackHumour',
     },
@@ -139,14 +151,6 @@ export const themeList = [
     {
         name: '黑金',
         value: 'blackGold',
-    },
-    {
-        name: '牛油果',
-        value: 'avocado',
-    },
-    {
-        name: '秋天',
-        value: 'autumn',
     },
     {
         name: '橙汁',

@@ -18,29 +18,36 @@ import SimpleMindMapOption from './components/option.vue';
 import SimpleMindMapAction from './components/action.vue';
 import { useExportEvent, useSaveAsEvent, useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
 import MessageUtil from "@/utils/MessageUtil";
+import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
+import { SimpleMindMapConfig } from "./domain/SimpleMindMapConfig";
+
+interface Wrap {
+
+    config: Partial<SimpleMindMapConfig>;
+
+    record?: any;
+
+    id: string;
+
+    _rev?: string;
+
+}
 
 let simpleMindMapWrap = {} as SimpleMindMapWrap;
 
 export default defineComponent({
     name: '',
     components: { SimpleMindMapOption, SimpleMindMapAction },
-    props: {
-        sourceId: {
-            type: String,
-            required: false,
-            default: '0'
-        },
-        source_rev: String,
-        value: Object
-    },
     data: () => ({
         renderTree: undefined as any | undefined,
         index: 0,
         len: 0,
-        hasNode: false
+        hasNode: false,
+
+        // 本身数据
     }),
     computed: {
-        ...mapState(useGlobalStore, ['height', 'width', 'title'])
+        ...mapState(useGlobalStore, ['height', 'width', 'title', 'isDark'])
     },
     watch: {
         height() {
@@ -73,22 +80,67 @@ export default defineComponent({
 
     },
     mounted() {
-        simpleMindMapWrap = new SimpleMindMapWrap(
-            "#simple-mind-map",
-            this.value ? toRaw(this.value.config) : undefined,
-            this.value ? this.value.record : undefined);
-        simpleMindMapWrap.init(this.sourceId, this.source_rev);
-        // 事件
-        simpleMindMapWrap.onDataChange(renderTree => this.renderTree = renderTree);
-        simpleMindMapWrap.onBackForward((index, len) => {
-            this.index = index;
-            this.len = len;
-        });
-        simpleMindMapWrap.onNodeActive((hasNode) => {
-            this.hasNode = hasNode;
-        });
+        this.initData().then(value => {
+            simpleMindMapWrap = new SimpleMindMapWrap(
+                "#simple-mind-map",
+                value.config,
+                value.record);
+            simpleMindMapWrap.init(value.id, value._rev);
+            this.initAfter();
+        }).catch(e => {
+            MessageUtil.error("初始化数据出错", e);
+            simpleMindMapWrap = new SimpleMindMapWrap(
+                "#simple-mind-map",
+                {});
+            simpleMindMapWrap.init("0");
+            this.initAfter();
+        })
     },
     methods: {
+        async initData(): Promise<Wrap> {
+            let id = this.$route.params.id as string;
+            let path = this.$route.query.path as string;
+            if (id === '-1') {
+                // 文件打开
+                let value = await window.preload.openFileToString(path)
+                let val = JSON.parse(value);
+                return Promise.resolve({
+                    config: val.config,
+                    record: val.record,
+                    id,
+                })
+            } if (id !== '0') {
+                let res = await utools.db.promises.get(`/${GraphTypeEnum.SIMPLE_MIND_MAP}/${id}`);
+                console.log(res)
+                if (res) {
+                    let val = res.value;
+                    return Promise.resolve({
+                        config: val.config,
+                        record: val.record,
+                        id,
+                    });
+                }
+                return Promise.reject("数据不存在");
+            } else {
+                return Promise.resolve({
+                    config: {
+                        theme: this.isDark ? 'dark' : 'default'
+                    },
+                    id
+                });
+            }
+        },
+        initAfter() {
+            // 事件
+            simpleMindMapWrap.onDataChange(renderTree => this.renderTree = renderTree);
+            simpleMindMapWrap.onBackForward((index, len) => {
+                this.index = index;
+                this.len = len;
+            });
+            simpleMindMapWrap.onNodeActive((hasNode) => {
+                this.hasNode = hasNode;
+            });
+        },
         setTheme(theme: string) {
             simpleMindMapWrap.setTheme(theme);
         },

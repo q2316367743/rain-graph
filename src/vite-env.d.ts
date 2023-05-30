@@ -1,7 +1,6 @@
 /// <reference types="vite/client" />
 
 declare module 'mind-elixir';
-declare module 'atrament';
 declare module '@mind-elixir/export-html';
 declare module 'simple-mind-map';
 declare module 'simple-mind-map/src/MiniMap.js';

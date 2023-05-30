@@ -3,8 +3,8 @@
         <div class="header">
             <a-radio-group v-model="activeKey" type="button">
                 <a-radio :value="GraphTypeEnum.MIND">{{ Config.title[GraphTypeEnum.MIND].title }}</a-radio>
-                <a-radio :value="GraphTypeEnum.ATRAMENT">{{ Config.title[GraphTypeEnum.ATRAMENT].title }}</a-radio>
-                <a-radio :value="GraphTypeEnum.BPMN">{{ Config.title[GraphTypeEnum.BPMN].title }}</a-radio>
+                <a-radio :value="GraphTypeEnum.SIMPLE_MIND_MAP">{{ Config.title[GraphTypeEnum.SIMPLE_MIND_MAP].title
+                }}</a-radio>
                 <a-radio :value="GraphTypeEnum.DIAGRAM">{{ Config.title[GraphTypeEnum.DIAGRAM].title }}</a-radio>
             </a-radio-group>
         </div>
@@ -44,11 +44,10 @@ import { useWindowSize } from "@vueuse/core";
 import GraphRecord from "@/entity/GraphRecord";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import { useGlobalStore } from "@/store/GlobalStore";
-import { useAtramentStore } from "@/store/AtramentStore";
-import { useBpmnStore } from "@/store/BpmnStore";
 import { useClearEvent, useExportEvent, useSaveAsEvent, useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
 import { useDiagramStore } from "@/store/DiagramStore";
 import Config from "@/global/Config";
+import { useSimpleMindMapStore } from "@/store/SimpleMindMapStore";
 
 export default defineComponent({
     name: 'home',
@@ -60,8 +59,7 @@ export default defineComponent({
     }),
     computed: {
         ...mapState(useMindStore, ['minds']),
-        ...mapState(useAtramentStore, ['atraments']),
-        ...mapState(useBpmnStore, ['bpmns']),
+        ...mapState(useSimpleMindMapStore, ['simpleMindMaps']),
         ...mapState(useDiagramStore, ['diagrams']),
         virtualListProps() {
             return {
@@ -71,10 +69,8 @@ export default defineComponent({
         items() {
             if (this.activeKey === GraphTypeEnum.MIND) {
                 return this.minds;
-            } else if (this.activeKey === GraphTypeEnum.ATRAMENT) {
-                return this.atraments;
-            } else if (this.activeKey === GraphTypeEnum.BPMN) {
-                return this.bpmns;
+            } else if (this.activeKey === GraphTypeEnum.SIMPLE_MIND_MAP) {
+                return this.simpleMindMaps;
             } else if (this.activeKey === GraphTypeEnum.DIAGRAM) {
                 return this.diagrams;
             }
@@ -104,10 +100,8 @@ export default defineComponent({
         updateBy(item: GraphRecord) {
             if (this.activeKey === GraphTypeEnum.MIND) {
                 useMindStore().update(item);
-            } else if (this.activeKey === GraphTypeEnum.ATRAMENT) {
-                useAtramentStore().update(item);
-            } else if (this.activeKey === GraphTypeEnum.BPMN) {
-                useBpmnStore().update(item);
+            } else if (this.activeKey === GraphTypeEnum.SIMPLE_MIND_MAP) {
+                useSimpleMindMapStore().update(item);
             } else if (this.activeKey === GraphTypeEnum.DIAGRAM) {
                 useDiagramStore().update(item);
             }
@@ -115,10 +109,8 @@ export default defineComponent({
         remove(item: GraphRecord) {
             if (this.activeKey === GraphTypeEnum.MIND) {
                 useMindStore().remove(item);
-            } else if (this.activeKey === GraphTypeEnum.ATRAMENT) {
-                useAtramentStore().remove(item);
-            } else if (this.activeKey === GraphTypeEnum.BPMN) {
-                useBpmnStore().remove(item);
+            } else if (this.activeKey === GraphTypeEnum.SIMPLE_MIND_MAP) {
+                useSimpleMindMapStore().remove(item);
             } else if (this.activeKey === GraphTypeEnum.DIAGRAM) {
                 useDiagramStore().remove(item);
             }

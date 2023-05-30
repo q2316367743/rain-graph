@@ -26,13 +26,9 @@ const router = createRouter({
         path: '/graph/mind/:id',
         component: () => import('@/pages/graph/mind/index.vue')
     }, {
-        name: GraphTypeEnum.ATRAMENT,
-        path: '/graph/atrament/:id',
-        component: () => import('@/pages/graph/atrament/index.vue')
-    }, {
-        name: GraphTypeEnum.BPMN,
-        path: '/graph/bpmn/:id',
-        component: () => import('@/pages/graph/bpmn/index.vue')
+        name: GraphTypeEnum.SIMPLE_MIND_MAP,
+        path: '/graph/simple-mind-map/:id',
+        component: () => import('@/pages/graph/simple-mind-map/index.vue')
     }, {
         name: GraphTypeEnum.DIAGRAM,
         path: '/graph/diagram/:id',

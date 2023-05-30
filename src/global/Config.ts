@@ -5,8 +5,6 @@ export default {
     // 导出
     export: {
         mind: [ExportTypeEnum.HTML],
-        atrament: [],
-        bpmn: [ExportTypeEnum.PNG, ExportTypeEnum.XML],
         diagram: [ExportTypeEnum.PNG, ExportTypeEnum.XML],
         "simple-mind-map": [ExportTypeEnum.JSON, ExportTypeEnum.SVG, ExportTypeEnum.PNG, ExportTypeEnum.PDF, ExportTypeEnum.MD]
     } as Record<GraphTypeEnum, ExportTypeEnum[]>,
@@ -14,27 +12,17 @@ export default {
     edit: {
         mind: [true, true],
         "simple-mind-map": [true, true],
-        atrament: [false, true],
-        bpmn: [true, true],
         diagram: [true, true]
     } as Record<GraphTypeEnum, Array<boolean>>,
     // 标题配置
     title: {
         mind: {
-            title: '思维导图',
+            title: '简易思维导图',
             color: '#c88077'
         },
         "simple-mind-map": {
-            title: '思维导图',
+            title: '完整思维导图',
             color: '#c88077'
-        },
-        atrament: {
-            title: '手绘图',
-            color: '#a07c6a'
-        },
-        bpmn: {
-            title: 'BPMN',
-            color: '#ebab79'
         },
         diagram: {
             title: '流程图',

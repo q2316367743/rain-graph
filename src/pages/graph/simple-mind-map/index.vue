@@ -1,14 +1,18 @@
 <template>
     <div class="simple-mind-map-wrap" :style="{ height: height + 'px' }">
         <div id="simple-mind-map"></div>
-        <simple-mind-map-option class="option" @switch-theme="setTheme" @switch-layout="setLayout" @set-node="setNode"
-            :render-tree="renderTree" />
-        <simple-mind-map-action class="action" :index="index" :len="len" :has-node="hasNode" @add-node="addBothNode"
-            @add-child-node="addChildNode" @remove-node="removeNode" @back="back" @forward="forward" @add-link="addLink" />
+        <simple-mind-map-option class="option simple-mind-map-extra" @switch-theme="setTheme" @switch-layout="setLayout"
+            @set-node="setNode" :render-tree="renderTree" />
+        <simple-mind-map-action class="action simple-mind-map-extra" :style="{ left: (width / 2 - 180 - 7) + 'px' }"
+            :index="index" :len="len" :has-node="hasNode" @add-link="addLink" />
+        <simple-mind-map-node class="node simple-mind-map-extra" :index="index" :len="len" :has-node="hasNode"
+            @add-node="addBothNode" @add-child-node="addChildNode" @remove-node="removeNode" @back="back"
+            @forward="forward" />
+        <simple-mind-map-menu class="menu simple-mind-map-extra" :title="name" @save="save" @save-as="saveAs" @export="exportFile" />
     </div>
 </template>
 <script lang="ts">
-import { defineComponent, toRaw } from "vue";
+import { defineComponent } from "vue";
 import SimpleMindMapWrap from "./SimpleMindMapWrap";
 import { mapState } from "pinia";
 import { useGlobalStore } from "@/store/GlobalStore";
@@ -16,10 +20,14 @@ import { useGlobalStore } from "@/store/GlobalStore";
 // 组件
 import SimpleMindMapOption from './components/option.vue';
 import SimpleMindMapAction from './components/action.vue';
-import { useExportEvent, useSaveAsEvent, useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
+import SimpleMindMapMenu from './components/menu.vue';
+import SimpleMindMapNode from './components/node.vue';
+
 import MessageUtil from "@/utils/MessageUtil";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import { SimpleMindMapConfig } from "./domain/SimpleMindMapConfig";
+import { useSimpleMindMapStore } from "@/store/SimpleMindMapStore";
+import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 
 interface Wrap {
 
@@ -37,13 +45,13 @@ let simpleMindMapWrap = {} as SimpleMindMapWrap;
 
 export default defineComponent({
     name: '',
-    components: { SimpleMindMapOption, SimpleMindMapAction },
+    components: { SimpleMindMapOption, SimpleMindMapAction, SimpleMindMapMenu, SimpleMindMapNode },
     data: () => ({
         renderTree: undefined as any | undefined,
         index: 0,
         len: 0,
         hasNode: false,
-
+        name: ''
         // 本身数据
     }),
     computed: {
@@ -58,26 +66,9 @@ export default defineComponent({
         }
     },
     created() {
-        useSaveEvent.on(() => {
-            simpleMindMapWrap.save()
-                .then(() => MessageUtil.success("保存成功"))
-                .catch(e => MessageUtil.error("保存失败", e));
-        });
-        useSaveAsEvent.on(() => simpleMindMapWrap.saveAs(this.title));
-        useUndoEvent.on(() => {
-            if (this.index > 0) {
-                simpleMindMapWrap.back();
-            }
-        });
-        useExportEvent.on(type => {
-            // json特殊处理
-            if (type === 'json') {
-                simpleMindMapWrap.saveAs(this.title);
-            } else {
-                simpleMindMapWrap.export(type, true, this.title, true)
-            }
-        })
-
+        let id = this.$route.params.id as string;
+        let record = useSimpleMindMapStore().info(id);
+        this.name = record.name;
     },
     mounted() {
         this.initData().then(value => {
@@ -111,7 +102,6 @@ export default defineComponent({
                 })
             } if (id !== '0') {
                 let res = await utools.db.promises.get(`/${GraphTypeEnum.SIMPLE_MIND_MAP}/${id}`);
-                console.log(res)
                 if (res) {
                     let val = res.value;
                     return Promise.resolve({
@@ -141,6 +131,24 @@ export default defineComponent({
                 this.hasNode = hasNode;
             });
         },
+
+        save() {
+            simpleMindMapWrap.save()
+                .then(() => MessageUtil.success("保存成功"))
+                .catch(e => MessageUtil.error("保存失败", e));
+        },
+        saveAs() {
+            simpleMindMapWrap.saveAs(this.title)
+        },
+        exportFile(type: ExportTypeEnum) {
+            // json特殊处理
+            if (type === 'json') {
+                simpleMindMapWrap.saveAs(this.title);
+            } else {
+                simpleMindMapWrap.export(type, true, this.title, true)
+            }
+        },
+
         setTheme(theme: string) {
             simpleMindMapWrap.setTheme(theme);
         },
@@ -194,9 +202,6 @@ export default defineComponent({
 
         .container {
             width: 88px;
-            text-align: center;
-            background-color: var(--color-bg-2);
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
             .arco-btn {
                 width: 88px;
@@ -206,7 +211,6 @@ export default defineComponent({
 
     .action {
         position: absolute;
-        left: 10px;
         padding: 7px;
         transition: 0.2s;
 
@@ -215,7 +219,7 @@ export default defineComponent({
         }
 
         &.hidden {
-            top: -8px;
+            top: -60px;
         }
 
         .op {
@@ -225,11 +229,30 @@ export default defineComponent({
         }
 
         .container {
+            height: 50px;
+        }
+    }
+
+    .menu {
+        position: absolute;
+        top: 14px;
+        left: 14px;
+    }
+
+    .node {
+        position: absolute;
+        bottom: 14px;
+        left: 14px;
+    }
+
+    .simple-mind-map-extra {
+
+        .container {
             text-align: center;
             background-color: var(--color-bg-2);
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            height: 50px;
         }
+
     }
 }
 

@@ -49,6 +49,34 @@ export const useSimpleMindMapStore = defineStore(GraphTypeEnum.SIMPLE_MIND_MAP, 
                 this.mindRev = res.rev;
 
             });
+        },
+        info(id: string): GraphRecord {
+            if (id === '0') {
+                return {
+                    id,
+                    name: '新思维导图',
+                    createTime: new Date(),
+                    updateTime: new Date()
+                };
+            }else if (id === '-1') {
+                return {
+                    id,
+                    name: '从文件打开',
+                    createTime: new Date(),
+                    updateTime: new Date()
+                }
+            }else {
+                let record = this.simpleMindMaps.find(e => e.id === id);
+                if (record) {
+                    return record;
+                }
+                return {
+                    id: '0',
+                    name: '未知思维导图',
+                    createTime: new Date(),
+                    updateTime: new Date()
+                }
+            }
         }
     }
 })

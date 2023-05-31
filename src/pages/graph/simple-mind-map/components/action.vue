@@ -1,36 +1,6 @@
 <template>
     <div class="simple-mind-map-action" :class="show ? 'show' : 'hidden'">
-        <a-button-group type="text" size="mini" v-show="show" class="container">
-            <a-button :disabled="index === 0" @click="$emit('back')">
-                <div class="icon">
-                    <icon-undo />
-                </div>
-                <div class="name">后退</div>
-            </a-button>
-            <a-button :disabled="index === len - 1" @click="$emit('forward')">
-                <div class="icon">
-                    <icon-redo />
-                </div>
-                <div class="name">前进</div>
-            </a-button>
-            <a-button :disabled="!hasNode" @click="$emit('add-node')">
-                <div class="icon">
-                    <icon-unordered-list />
-                </div>
-                <div class="name">插入同级节点</div>
-            </a-button>
-            <a-button :disabled="!hasNode" @click="$emit('add-child-node')">
-                <div class="icon">
-                    <icon-mind-mapping />
-                </div>
-                <div class="name">插入子节点</div>
-            </a-button>
-            <a-button :disabled="!hasNode" @click="$emit('remove-node')">
-                <div class="icon">
-                    <icon-delete />
-                </div>
-                <div class="name">删除节点</div>
-            </a-button>
+        <a-button-group type="text" size="mini" class="container">
             <a-button :disabled="!hasNode">
                 <div class="icon">
                     <icon-image />
@@ -116,7 +86,7 @@ export default defineComponent({
             default: false
         }
     },
-    emits: ['add-child-node', 'add-node', 'remove-node', 'back', 'forward', 'add-link'],
+    emits: ['add-link'],
     data: () => ({
         show: false,
         link: {
@@ -150,6 +120,10 @@ export default defineComponent({
     .arco-btn {
         flex-direction: column;
         height: 50px;
+    }
+    .op {
+        text-align: center;
+        align-items: center;
     }
 }
 </style>

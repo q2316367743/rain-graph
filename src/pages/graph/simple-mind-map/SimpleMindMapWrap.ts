@@ -42,7 +42,6 @@ export default class SimpleMindMapWrap {
     setSize(width: number, height: number) {
         let el = this.mindMap.opt.el as HTMLDivElement;
         let svg = el.querySelector(this.el + '>svg') as SVGElement;
-        console.log(svg)
         svg.setAttribute('width', width + 'px');
         svg.setAttribute('height', height + 'px');
     }

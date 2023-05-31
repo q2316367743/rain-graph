@@ -103,6 +103,7 @@ export default class SimpleMindMapWrap {
         if (res.error) {
             return Promise.reject(res.message || "新增失败");
         }
+        this._rev = res.rev;
         return Promise.resolve();
     }
 

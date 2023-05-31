@@ -1,14 +1,20 @@
 <template>
     <div class="home">
         <div class="header">
-            <a-input-search style="width: 250px;" placeholder="请输入项目名" allow-clear v-model="keyword"
-                @search="search"></a-input-search>
-            <a-radio-group v-model="activeKey" type="button" style="margin-left: 14px;">
-                <a-radio :value="GraphTypeEnum.MIND">{{ Config.title[GraphTypeEnum.MIND].title }}</a-radio>
-                <a-radio :value="GraphTypeEnum.SIMPLE_MIND_MAP">{{ Config.title[GraphTypeEnum.SIMPLE_MIND_MAP].title
-                }}</a-radio>
-                <a-radio :value="GraphTypeEnum.DIAGRAM">{{ Config.title[GraphTypeEnum.DIAGRAM].title }}</a-radio>
-            </a-radio-group>
+            <div>
+                <a-input-search style="width: 250px;" placeholder="请输入项目名" allow-clear v-model="keyword"
+                    @search="search"></a-input-search>
+                <a-radio-group v-model="activeKey" type="button" style="margin-left: 14px;">
+                    <a-radio :value="GraphTypeEnum.MIND">{{ Config.title[GraphTypeEnum.MIND].title }}</a-radio>
+                    <a-radio :value="GraphTypeEnum.SIMPLE_MIND_MAP">{{ Config.title[GraphTypeEnum.SIMPLE_MIND_MAP].title
+                    }}</a-radio>
+                    <a-radio :value="GraphTypeEnum.DIAGRAM">{{ Config.title[GraphTypeEnum.DIAGRAM].title }}</a-radio>
+                </a-radio-group>
+            </div>
+            <a-switch :default-checked="!isDark" type="round" style="margin: 4px;" @change="switchDarkColors">
+                <template #checked>白天</template>
+                <template #unchecked>黑夜</template>
+            </a-switch>
         </div>
         <div class="content">
             <a-list :virtual-list-props="virtualListProps" :data="showItems">
@@ -40,7 +46,7 @@
 </template>
 <script lang="ts">
 import { useMindStore } from "@/store/MindStore";
-import { mapState } from "pinia";
+import { mapActions, mapState } from "pinia";
 import { defineComponent } from "vue";
 import { useWindowSize } from "@vueuse/core";
 import GraphRecord from "@/entity/GraphRecord";
@@ -51,6 +57,7 @@ import { useDiagramStore } from "@/store/DiagramStore";
 import Config from "@/global/Config";
 import { useSimpleMindMapStore } from "@/store/SimpleMindMapStore";
 import { useSettingStore } from "@/store/SettingStore";
+import { map } from "xe-utils";
 
 export default defineComponent({
     name: 'home',
@@ -63,13 +70,14 @@ export default defineComponent({
         keyword: ''
     }),
     computed: {
+        ...mapState(useGlobalStore, ['isDark']),
         ...mapState(useMindStore, ['minds']),
         ...mapState(useSimpleMindMapStore, ['simpleMindMaps']),
         ...mapState(useDiagramStore, ['diagrams']),
         ...mapState(useSettingStore, ['defaultView']),
         virtualListProps() {
             return {
-                height: this.size.height - 33 - 32 - 14 - 7
+                height: this.size.height - 33 - 14 - 7
             }
         },
         items() {
@@ -106,6 +114,7 @@ export default defineComponent({
         this.search();
     },
     methods: {
+        ...mapActions(useGlobalStore, ['switchDarkColors']),
         search() {
             this.showItems = this.items.filter(e => e.name.indexOf(this.keyword) > -1)
         },
@@ -150,6 +159,7 @@ export default defineComponent({
         right: 7px;
         height: 32px;
         display: flex;
+        justify-content: space-between;
     }
 
     .content {

@@ -111,6 +111,7 @@ export default defineComponent({
                         config: val.config,
                         record: val.record,
                         id,
+                        _rev: res._rev
                     });
                 }
                 return Promise.reject("数据不存在");

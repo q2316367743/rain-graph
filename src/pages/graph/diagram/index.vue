@@ -58,8 +58,8 @@ import { registerCustomElement } from './node';
 import { useGlobalStore } from "@/store/GlobalStore";
 import { useDiagramStore } from "@/store/DiagramStore";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
-import BrowserUtil from "@/utils/BrowserUtil";
 import MessageUtil from "@/utils/MessageUtil";
+import { useClearEvent, useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
 
 export default defineComponent({
     name: 'diagram',
@@ -114,6 +114,10 @@ export default defineComponent({
                 this.lf.extension.miniMap.show(this.miniMapLeft, this.miniMapTop);
             }
         }
+    },
+    created() {
+        useSaveEvent.on(() => this.save());
+        useUndoEvent.on(() => this.lf.undo());
     },
     mounted() {
         this.render = false

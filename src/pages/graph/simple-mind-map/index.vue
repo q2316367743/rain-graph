@@ -28,6 +28,7 @@ import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import { SimpleMindMapConfig } from "./domain/SimpleMindMapConfig";
 import { useSimpleMindMapStore } from "@/store/SimpleMindMapStore";
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
+import { useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
 
 interface Wrap {
 
@@ -69,6 +70,8 @@ export default defineComponent({
         let id = this.$route.params.id as string;
         let record = useSimpleMindMapStore().info(id);
         this.name = record.name;
+        useSaveEvent.on(() => this.save());
+        useUndoEvent.on(() => this.back());
     },
     mounted() {
         this.initData().then(value => {

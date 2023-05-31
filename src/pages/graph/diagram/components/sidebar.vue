@@ -166,6 +166,7 @@ export default defineComponent({
 <style scoped lang="less">
 .diagram-sidebar {
     user-select: none;
+    width: 200px;
 
     .node-category-title {
         margin: 0;

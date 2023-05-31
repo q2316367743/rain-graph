@@ -106,7 +106,21 @@ export default defineComponent({
             } else {
                 this.$router.push('/home');
             }
-        })
+        });
+
+        window.addEventListener("keydown", function (e) {
+            //可以判断是不是mac，如果是mac,ctrl变为花键
+            //event.preventDefault() 方法阻止元素发生默认的行为。
+            if (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey) {
+                if (e.key === 's') {
+                    e.preventDefault();
+                    useSaveEvent.emit();
+                } else if (e.key === 'z') {
+                    useUndoEvent.emit();
+                }
+            }
+
+        }, false);
     },
     methods: {
         jumpTo(type: GraphTypeEnum) {
@@ -163,21 +177,6 @@ export default defineComponent({
             this.$router.push('/recommend');
         },
         // ------ 功能组件 ------
-        save() {
-            useSaveEvent.emit();
-        },
-        saveAs() {
-            useSaveAsEvent.emit();
-        },
-        clear() {
-            useClearEvent.emit();
-        },
-        undo() {
-            useUndoEvent.emit();
-        },
-        exportImage(type: any) {
-            useExportEvent.emit(type);
-        },
         switchDark() {
             useGlobalStore().switchDarkColors();
         }

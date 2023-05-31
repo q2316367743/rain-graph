@@ -113,21 +113,6 @@ function save() {
 }
 
 useSaveEvent.on(() => save());
-useSaveAsEvent.on(() => {
-    BrowserUtil.download(JSON.stringify({
-        record: mind.getData(),
-        option: option
-    }),
-        useGlobalStore().title + '.json',
-        'text/json')
-});
-useClearEvent.on(() => {
-    if (mind) {
-        mind.init(MindElixir.new("思维导图"));
-        // 保存
-        save();
-    }
-})
 useUndoEvent.on(() => {
     if (mind) {
         mind.undo();

@@ -1,33 +1,36 @@
 <template>
     <div class="diagram">
-        <a-layout class="container">
-            <a-layout-sider hide-trigger collapsible :collapsed="collapsed" :collapsed-width="0" :width="200">
-                <diagram-sidebar v-if="render" @drag-in-node="dragInNode" />
-            </a-layout-sider>
+        <diagram-menu class="header" :lf="lf" @save="save" />
+        <div class="container">
             <a-layout>
-                <div class="content" id="diagram-view"></div>
-                <div class="toolbar">
-                    <diagram-toolbar v-if="render" :lf="lf" :active-edges="activeEdges" />
-                </div>
-                <div class="collapsed">
-                    <a-button @click="collapsed = !collapsed" type="primary">
-                        <template #icon>
-                            <icon-menu-unfold v-if="collapsed" />
-                            <icon-menu-fold v-else />
-                        </template>
-                    </a-button>
-                    <a-button @click="showMiniMap" style="margin-left: 7px;" type="primary">
-                        <template #icon>
-                            <icon-location />
-                        </template>
-                    </a-button>
-                </div>
-                <!-- 右侧属性面板 -->
-                <diagram-panel class="panel" v-if="activeNodes.length > 0 || activeEdges.length > 0"
-                    :onlyEdge="activeNodes.length === 0" :elementsStyle="properties" @setStyle="setStyle"
-                    @setZIndex="setZIndex" />
+                <a-layout-sider hide-trigger collapsible :collapsed="collapsed" :collapsed-width="0" :width="200">
+                    <diagram-sidebar v-if="render" @drag-in-node="dragInNode" />
+                </a-layout-sider>
+                <a-layout>
+                    <div class="content" id="diagram-view"></div>
+                    <div class="toolbar">
+                        <diagram-toolbar v-if="render" :lf="lf" :active-edges="activeEdges" />
+                    </div>
+                    <div class="collapsed">
+                        <a-button @click="collapsed = !collapsed" type="primary">
+                            <template #icon>
+                                <icon-menu-unfold v-if="collapsed" />
+                                <icon-menu-fold v-else />
+                            </template>
+                        </a-button>
+                        <a-button @click="showMiniMap" style="margin-left: 7px;" type="primary">
+                            <template #icon>
+                                <icon-location />
+                            </template>
+                        </a-button>
+                    </div>
+                    <!-- 右侧属性面板 -->
+                    <diagram-panel class="panel" v-if="activeNodes.length > 0 || activeEdges.length > 0"
+                        :onlyEdge="activeNodes.length === 0" :elementsStyle="properties" @setStyle="setStyle"
+                        @setZIndex="setZIndex" />
+                </a-layout>
             </a-layout>
-        </a-layout>
+        </div>
     </div>
 </template>
 <script lang="ts">
@@ -49,19 +52,18 @@ import "@logicflow/core/dist/style/index.css";
 import DiagramToolbar from './components/toolbar.vue';
 import DiagramSidebar from './components/sidebar.vue';
 import DiagramPanel from './components/panel.vue';
+import DiagramMenu from './components/menu.vue';
 import { registerCustomElement } from './node';
 
-import { useClearEvent, useExportEvent, useSaveAsEvent, useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
 import { useGlobalStore } from "@/store/GlobalStore";
 import { useDiagramStore } from "@/store/DiagramStore";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
-import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import BrowserUtil from "@/utils/BrowserUtil";
 import MessageUtil from "@/utils/MessageUtil";
 
 export default defineComponent({
     name: 'diagram',
-    components: { DiagramToolbar, DiagramSidebar, DiagramPanel },
+    components: { DiagramToolbar, DiagramSidebar, DiagramPanel, DiagramMenu },
     data: () => ({
         id: '0',
         _rev: undefined as string | undefined,
@@ -94,7 +96,7 @@ export default defineComponent({
         miniMapLeft() {
             return this.size.width - 156 - 10 - (this.collapsed ? 0 : 200);
         },
-        miniMaoTop() {
+        miniMapTop() {
             return this.size.height - 242 - 10 - 33;
         }
     },
@@ -102,39 +104,16 @@ export default defineComponent({
         size: {
             handler() {
                 this.lf.extension.miniMap.hide();
-                this.lf.extension.miniMap.show(this.miniMapLeft, this.miniMaoTop);
+                this.lf.extension.miniMap.show(this.miniMapLeft, this.miniMapTop);
             },
             deep: true
         },
         collapsed() {
             if (this.lf.extension.miniMap.isShow) {
                 this.lf.extension.miniMap.hide();
-                this.lf.extension.miniMap.show(this.miniMapLeft, this.miniMaoTop);
+                this.lf.extension.miniMap.show(this.miniMapLeft, this.miniMapTop);
             }
         }
-    },
-    created() {
-        // 事件
-        useSaveEvent.on(() => this.save());
-        useSaveAsEvent.on(() => {
-            BrowserUtil.download(JSON.stringify({
-                config: toRaw(this.config),
-                record: this.lf.getGraphRawData()
-            }), this.title + '.json', 'text/json');
-        });
-        useUndoEvent.on(() => this.lf.undo())
-        useClearEvent.on(() => {
-            this.lf.clearData();
-            this.save();
-        });
-        useExportEvent.on(type => {
-            if (type === ExportTypeEnum.PNG) {
-                this.lf.extension.snapshot.lf.getSnapshot(this.title + '.png');
-            } else if (type === ExportTypeEnum.XML) {
-                const data = this.lf.getGraphData() as string;
-                BrowserUtil.download(data, this.title + '.xml', 'text/xml');
-            }
-        });
     },
     mounted() {
         this.render = false
@@ -207,7 +186,7 @@ export default defineComponent({
                 if (this.lf.extension.miniMap.isShow) {
                     this.lf.extension.miniMap.hide();
                 } else {
-                    this.lf.extension.miniMap.show(this.miniMapLeft, this.miniMaoTop);
+                    this.lf.extension.miniMap.show(this.miniMapLeft, this.miniMapTop);
                 }
             } catch (_) {
             }
@@ -278,10 +257,21 @@ export default defineComponent({
     height: 100%;
     width: 100%;
 
+    .header {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 32px;
+        border-bottom: 1px solid var(--color-neutral-3);
+    }
+
     .container {
-        position: relative;
-        height: 100%;
-        width: 100%;
+        position: absolute;
+        top: 33px;
+        left: 0;
+        right: 0;
+        bottom: 0;
 
         .content {
             position: absolute;

@@ -7,9 +7,9 @@
                 <a-option :value="GraphTypeEnum.DIAGRAM">流程图</a-option>
             </a-select>
         </a-form-item>
-        <el-form-item>
+        <a-form-item>
             <a-button type="primary" @click="save">保存</a-button>
-        </el-form-item>
+        </a-form-item>
     </a-form>
 </template>
 <script lang="ts">

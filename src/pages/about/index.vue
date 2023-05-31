@@ -1,21 +1,23 @@
 <template>
     <div class="about">
-        <div class="logo">
-            <a-image src="/logo.png" :preview="false" />
-        </div>
-        <div class="title">{{ Constant.name }}</div>
-        <div class="author">
-            <a-link :link="Constant.website" target="_blank" @click="openUrl(Constant.website)">
-                {{ Constant.author }}
-            </a-link>
-        </div>
-        <div class="desc">
-            <p>支持思维导图、手绘图、BPMN、流程图。</p>
-            <p>开通utools会员，数据可同步。</p>
-        </div>
-        <div class="action">
-            <a-button @click="openUrl(Constant.homepage)">插件主页</a-button>
-            <a-button @click="openUrl(Constant.repo)">开源地址</a-button>
+        <div class="container">
+            <div class="logo">
+                <a-image src="/logo.png" :preview="false" />
+            </div>
+            <div class="title">{{ Constant.name }}</div>
+            <div class="author">
+                <a-link :link="Constant.website" target="_blank" @click="openUrl(Constant.website)">
+                    {{ Constant.author }}
+                </a-link>
+            </div>
+            <div class="desc">
+                <p>支持思维导图、手绘图、BPMN、流程图。</p>
+                <p>开通utools会员，数据可同步。</p>
+            </div>
+            <div class="action">
+                <a-button @click="openUrl(Constant.homepage)">插件主页</a-button>
+                <a-button @click="openUrl(Constant.repo)">开源地址</a-button>
+            </div>
         </div>
     </div>
 </template>
@@ -41,9 +43,11 @@ export default defineComponent({
     height: 100%;
     width: 100%;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
 
     .logo {
-        margin-top: 28px;
         height: 200px;
     }
 

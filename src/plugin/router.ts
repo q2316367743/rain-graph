@@ -22,17 +22,21 @@ const router = createRouter({
     },
     // ------ 各种图 ------
     {
-        name: GraphTypeEnum.MIND,
-        path: '/graph/mind/:id',
-        component: () => import('@/pages/graph/mind/index.vue')
-    }, {
-        name: GraphTypeEnum.SIMPLE_MIND_MAP,
-        path: '/graph/simple-mind-map/:id',
-        component: () => import('@/pages/graph/simple-mind-map/index.vue')
-    }, {
-        name: GraphTypeEnum.DIAGRAM,
-        path: '/graph/diagram/:id',
-        component: () => import('@/pages/graph/diagram/index.vue')
+        path: '/graph',
+        component: () => import('@/pages/graph/index.vue'),
+        children: [{
+            name: GraphTypeEnum.MIND,
+            path: '/graph/mind/:id',
+            component: () => import('@/pages/graph/mind/index.vue')
+        }, {
+            name: GraphTypeEnum.SIMPLE_MIND_MAP,
+            path: '/graph/simple-mind-map/:id',
+            component: () => import('@/pages/graph/simple-mind-map/index.vue')
+        }, {
+            name: GraphTypeEnum.DIAGRAM,
+            path: '/graph/diagram/:id',
+            component: () => import('@/pages/graph/diagram/index.vue')
+        }]
     }]
 });
 

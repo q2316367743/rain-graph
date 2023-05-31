@@ -17,3 +17,7 @@ interface Window {
         openFileToString: (path: string) => Promise<string>
     }
 }
+
+declare var rain = {
+    env: string
+}

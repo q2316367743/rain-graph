@@ -32,33 +32,12 @@ body {
     background-color: var(--color-bg-1);
     color: var(--color-text-1);
 
-    .app-header {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 32px;
-        border-bottom: 1px solid var(--color-neutral-3);
-        display: grid;
-        grid-template-columns: 332px 1fr;
-        padding-left: 7px;
-
-        .title {
-            text-align: center;
-            line-height: 32px;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
+    .arco-layout {
+        height: 100%;
+        width: 100%;
+        .arco-layout-content {
+            position: relative;
         }
-    }
-
-    .app-container {
-        position: absolute;
-        top: 33px;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        overflow: hidden;
     }
 
 }

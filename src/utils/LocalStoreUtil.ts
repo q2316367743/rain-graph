@@ -52,14 +52,21 @@ export async function update(id: string, items: Array<GraphRecord>): Promise<voi
         return Promise.reject();
     }
     let item = items[index];
-    let name = await MessageBoxUtil.prompt(
-        "请输入图名称",
-        "新增图",
-        {
-            inputValue: item.name,
-            confirmButtonText: '修改'
-        });
-    item.name = name;
-    return Promise.resolve();
+    try {
+        let name = await MessageBoxUtil.prompt(
+            "请输入图名称",
+            "新增图",
+            {
+                inputValue: item.name,
+                confirmButtonText: '修改'
+            });
+        item.name = name;
+        return Promise.resolve();
+    } catch (e) {
+        if (e === 'cancel') {
+            return Promise.resolve();
+        }
+        return Promise.reject(e);
+    }
 
 }

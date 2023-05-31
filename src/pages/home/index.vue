@@ -1,7 +1,8 @@
 <template>
     <div class="home">
         <div class="header">
-            <a-radio-group v-model="activeKey" type="button">
+            <a-input-search style="width: 250px;" placeholder="请输入项目名" allow-clear></a-input-search>
+            <a-radio-group v-model="activeKey" type="button" style="margin-left: 14px;">
                 <a-radio :value="GraphTypeEnum.MIND">{{ Config.title[GraphTypeEnum.MIND].title }}</a-radio>
                 <a-radio :value="GraphTypeEnum.SIMPLE_MIND_MAP">{{ Config.title[GraphTypeEnum.SIMPLE_MIND_MAP].title
                 }}</a-radio>
@@ -134,7 +135,7 @@ export default defineComponent({
         left: 7px;
         right: 7px;
         height: 32px;
-        text-align: center;
+        display: flex;
     }
 
     .content {

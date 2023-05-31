@@ -24,6 +24,10 @@ import AssociativeLine from 'simple-mind-map/src/AssociativeLine.js'
 
 import { utools } from './plugin/utools';
 
+window.rain = {
+    env: window.utools ? 'utools' : 'web'
+}
+
 // 非utools环境，需要注入utools对象
 if (!window.utools) {
     // @ts-ignore

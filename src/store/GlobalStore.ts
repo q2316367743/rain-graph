@@ -8,10 +8,11 @@ export const useGlobalStore = defineStore('global', {
         isDark: utools.isDarkColors(),
         size: useWindowSize(),
         titleWrap: '',
-        typeWrap: undefined as GraphTypeEnum | undefined
+        typeWrap: undefined as GraphTypeEnum | undefined,
+        env: window.rain.env
     }),
     getters: {
-        height: state => state.size.height - 23,
+        height: state => state.size.height,
         width: state => state.size.width,
         title: state => state.titleWrap || '临时图',
         type: state => state.typeWrap ? Config.title[state.typeWrap] : undefined

@@ -125,5 +125,30 @@ export const utools = {
     },
     onPluginEnter(callback: (action: { code: string, type: string, payload: any }) => void): void {
         document.addEventListener('load', () => callback({ code: 'application', type: '', payload: {} }));
+    },
+    showOpenDialog(options: {
+        title?: string,
+        defaultPath?: string,
+        buttonLabel?: string,
+        filters?: { name: string, extensions: string[] }[],
+        properties?: Array<'openFile' | 'openDirectory' | 'multiSelections' | 'showHiddenFiles' | 'createDirectory' | 'promptToCreate' | 'noResolveAliases' | 'treatPackageAsDirectory' | 'dontAddToRecent'>,
+        message?: string,
+        securityScopedBookmarks?: boolean
+    }): (string[]) | (undefined) {
+        MessageUtil.warning("web环境不支持打开文件操作，请使用utools版本");
+        return [];
+        // @ts-ignore
+        // return window.showOpenFilePicker({
+        //     types: options.filters ? options.filters.map(f => {
+        //         let accept = {} as Record<string, string[]>;
+        //         accept[f.name] = f.extensions.map(e => ('.' + e));
+        //         return {
+        //             description: f.name,
+        //             accept
+        //         }
+        //     }) : [],
+        //     excludeAcceptAllOption: options.filters && options.filters.length > 0,
+        //     multiple: options.properties && options.properties.indexOf("multiSelections") > 0,
+        // });
     }
 }

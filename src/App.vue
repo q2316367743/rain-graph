@@ -1,76 +1,43 @@
 <template>
     <div class="app">
-        <!-- 头部 -->
-        <div class="app-header">
-            <a-button-group type="text">
-                <a-button @click="toHome">
-                    <template #icon>
-                        <icon-home />
-                    </template>
-                </a-button>
-                <a-dropdown position="bl">
-                    <a-button :disabled="!editDisabled">新增</a-button>
-                    <template #content>
-                        <a-doption @click="jumpTo(GraphTypeEnum.MIND)">
-                            {{ Config.title[GraphTypeEnum.MIND].title }}
-                        </a-doption>
-                        <a-doption @click="jumpTo(GraphTypeEnum.SIMPLE_MIND_MAP)">
-                            {{ Config.title[GraphTypeEnum.SIMPLE_MIND_MAP].title }}
-                        </a-doption>
-                        <a-doption @click="jumpTo(GraphTypeEnum.DIAGRAM)">
-                            {{ Config.title[GraphTypeEnum.DIAGRAM].title }}
-                        </a-doption>
-                    </template>
-                </a-dropdown>
-                <a-dropdown position="bl">
-                    <a-button :disabled="!editDisabled">打开</a-button>
-                    <template #content>
-                        <a-doption @click="openTo(GraphTypeEnum.MIND)">
-                            {{ Config.title[GraphTypeEnum.MIND].title }}
-                        </a-doption>
-                        <a-doption @click="openTo(GraphTypeEnum.SIMPLE_MIND_MAP)">
-                            {{ Config.title[GraphTypeEnum.SIMPLE_MIND_MAP].title }}
-                        </a-doption>
-                        <a-doption @click="openTo(GraphTypeEnum.DIAGRAM)">
-                            {{ Config.title[GraphTypeEnum.DIAGRAM].title }}
-                        </a-doption>
-                    </template>
-                </a-dropdown>
-                <a-dropdown>
-                    <a-button :disabled="editDisabled">编辑</a-button>
-                    <template #content>
-                        <a-doption @click="save">保存</a-doption>
-                        <a-doption @click="saveAs">另存为</a-doption>
-                        <a-doption @click="undo" :disabled="!editItems[0]">撤销</a-doption>
-                        <a-doption @click="clear" :disabled="!editItems[1]">
-                            <span style="color: rgb(var(--red-6))">清空</span>
-                        </a-doption>
-                    </template>
-                </a-dropdown>
-                <a-dropdown @select="exportImage">
-                    <a-button :disabled="editDisabled || exportItems.length === 0">导出</a-button>
-                    <template #content>
-                        <a-doption v-for="item in exportItems" :value="item">{{ item.toUpperCase() }}</a-doption>
-                    </template>
-                </a-dropdown>
-                <a-dropdown>
-                    <a-button>帮助</a-button>
-                    <template #content>
-                        <a-doption @click="switchDark">切换主题</a-doption>
-                        <a-doption @click="jumpToSetting">设置</a-doption>
-                        <a-doption @click="jumpToRecommend">推荐</a-doption>
-                        <a-doption @click="jumpToAbout">关于</a-doption>
-                    </template>
-                </a-dropdown>
-            </a-button-group>
-            <div class="title">
-                <a-tag v-if="type" :color="type.color"> {{ type.title }}</a-tag>
-                <a-tag v-if="title.trim() !== ''" color="arcoblue" style="margin-left: 7px;">{{ title }}</a-tag>
-            </div>
-        </div>
-        <div class="app-container">
-            <router-view />
-        </div>
+        <a-layout>
+            <a-layout-sider :collapsed="collapsed">
+                <a-menu style="width: 200px;height: 100%;" show-collapse-button breakpoint="xl"
+                    v-model:selected-keys="selectedKeys" @collapse="(isColl) => collapsed = isColl">
+                    <a-menu-item key="/home" @click="toHome">
+                        <template #icon><icon-list /></template>
+                        列表
+                    </a-menu-item>
+                    <a-sub-menu key="1">
+                        <template #icon><icon-plus /></template>
+                        <template #title>新建</template>
+                        <a-menu-item :key="`/$gragh/${GraphTypeEnum.MIND}/0`"
+                            @click="jumpTo(GraphTypeEnum.MIND)">简易流程图</a-menu-item>
+                        <a-menu-item :key="`/$gragh/${GraphTypeEnum.SIMPLE_MIND_MAP}/0`"
+                            @click="jumpTo(GraphTypeEnum.SIMPLE_MIND_MAP)">完整流程图</a-menu-item>
+                        <a-menu-item :key="`/$gragh/${GraphTypeEnum.DIAGRAM}/0`"
+                            @click="jumpTo(GraphTypeEnum.DIAGRAM)">思维导图</a-menu-item>
+                    </a-sub-menu>
+                    <a-menu-item key="/setting" @click="jumpToSetting">
+                        <template #icon>
+                            <icon-settings />
+                        </template>
+                        设置
+                    </a-menu-item>
+                    <a-menu-item key="/recommend" @click="jumpToRecommend">
+                        <template #icon><icon-thumb-up /></template>
+                        推荐
+                    </a-menu-item>
+                    <a-menu-item key="/about" @click="jumpToAbout">
+                        <template #icon>
+                            <icon-exclamation-circle />
+                        </template>
+                        关于
+                    </a-menu-item>
+                </a-menu>
+            </a-layout-sider>
+            <a-layout-content><router-view /></a-layout-content>
+        </a-layout>
     </div>
 </template>
 <script lang="ts">
@@ -95,10 +62,12 @@ export default defineComponent({
     data: () => ({
         ExportTypeEnum,
         GraphTypeEnum,
-        Config
+        Config,
+        collapsed: false,
+        selectedKeys: ['/home']
     }),
     computed: {
-        ...mapState(useGlobalStore, ['isDark', 'title', 'type', 'typeWrap']),
+        ...mapState(useGlobalStore, ['isDark', 'title', 'type', 'typeWrap', 'env']),
         editDisabled() {
             return !this.$route.path.startsWith('/graph')
         },
@@ -107,6 +76,13 @@ export default defineComponent({
         },
         editItems(): Array<boolean> {
             return this.typeWrap ? (Config.edit[this.typeWrap] || [false, false]) : [false, false];
+        }
+    },
+    watch: {
+        '$route.path': {
+            handler(newValue) {
+                this.selectedKeys = [newValue];
+            }
         }
     },
     created() {
@@ -138,17 +114,14 @@ export default defineComponent({
             useGlobalStore().setType(type);
             this.$router.push(`/graph/${type}/0`);
         },
-        openTo(type: GraphTypeEnum) {
-            let paths = utools.showOpenDialog({
+        async openTo(type: GraphTypeEnum) {
+            let paths = await utools.showOpenDialog({
                 title: '选择图文件',
                 defaultPath: utools.getPath('documents'),
                 buttonLabel: '打开',
                 filters: [{
-                    name: '图文件',
-                    extensions: ['json', 'xml']
-                }, {
-                    name: '全部文件',
-                    extensions: ['*']
+                    name: 'application/json',
+                    extensions: ['json']
                 }],
                 properties: ['openFile']
             });

@@ -103,6 +103,7 @@ export default defineComponent({
         useUndoEvent.reset();
         useClearEvent.reset();
         useExportEvent.reset();
+        this.search();
     },
     methods: {
         search() {
@@ -121,6 +122,7 @@ export default defineComponent({
             } else if (this.activeKey === GraphTypeEnum.DIAGRAM) {
                 useDiagramStore().update(item);
             }
+            this.search();
         },
         remove(item: GraphRecord) {
             if (this.activeKey === GraphTypeEnum.MIND) {
@@ -130,6 +132,7 @@ export default defineComponent({
             } else if (this.activeKey === GraphTypeEnum.DIAGRAM) {
                 useDiagramStore().remove(item);
             }
+            this.search();
         }
     }
 });

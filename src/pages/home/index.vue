@@ -1,7 +1,8 @@
 <template>
     <div class="home">
         <div class="header">
-            <a-input-search style="width: 250px;" placeholder="请输入项目名" allow-clear></a-input-search>
+            <a-input-search style="width: 250px;" placeholder="请输入项目名" allow-clear v-model="keyword"
+                @search="search"></a-input-search>
             <a-radio-group v-model="activeKey" type="button" style="margin-left: 14px;">
                 <a-radio :value="GraphTypeEnum.MIND">{{ Config.title[GraphTypeEnum.MIND].title }}</a-radio>
                 <a-radio :value="GraphTypeEnum.SIMPLE_MIND_MAP">{{ Config.title[GraphTypeEnum.SIMPLE_MIND_MAP].title
@@ -10,7 +11,7 @@
             </a-radio-group>
         </div>
         <div class="content">
-            <a-list :virtual-list-props="virtualListProps" :data="items">
+            <a-list :virtual-list-props="virtualListProps" :data="showItems">
                 <template #item="{ item, index }">
                     <a-list-item :key="index">
                         <a-link @click="jumpTo(item)">{{ item.name }}</a-link>
@@ -57,7 +58,9 @@ export default defineComponent({
         GraphTypeEnum,
         Config,
         activeKey: GraphTypeEnum.MIND as GraphTypeEnum,
-        size: useWindowSize()
+        size: useWindowSize(),
+        showItems: new Array<GraphRecord>(),
+        keyword: ''
     }),
     computed: {
         ...mapState(useMindStore, ['minds']),
@@ -80,6 +83,11 @@ export default defineComponent({
             return [];
         }
     },
+    watch: {
+        items() {
+            this.search();
+        }
+    },
     created() {
         useGlobalStore().setTitle(' ');
         useGlobalStore().setType(undefined);
@@ -97,6 +105,9 @@ export default defineComponent({
         useExportEvent.reset();
     },
     methods: {
+        search() {
+            this.showItems = this.items.filter(e => e.name.indexOf(this.keyword) > -1)
+        },
         jumpTo(item: GraphRecord) {
             useGlobalStore().setTitle(item.name);
             useGlobalStore().setType(this.activeKey);

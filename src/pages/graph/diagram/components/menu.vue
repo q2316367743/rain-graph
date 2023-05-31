@@ -5,14 +5,14 @@
                 <a-button>文件</a-button>
                 <template #content>
                     <a-doption @click="toHome">返回文件列表</a-doption>
-                    <a-doption @click="$emit('new')">新建</a-doption>
-                    <a-doption @click="$emit('open')">打开</a-doption>
+                    <a-doption @click="$emit('new')" disabled>新建</a-doption>
+                    <a-doption @click="$emit('open')" disabled>打开</a-doption>
                     <a-doption @click="$emit('save')">保存</a-doption>
                     <a-doption @click="saveAs">另存为</a-doption>
                 </template>
             </a-dropdown>
             <a-dropdown>
-                <a-button>编辑</a-button>
+                <a-button disabled>编辑</a-button>
                 <template #content>
                     <a-doption @click="lf.undo()">后退</a-doption>
                     <a-doption @click="lf.redo()">前进</a-doption>

@@ -16,17 +16,21 @@
                 <a-button @click="tocDrawer = true">大纲</a-button>
                 <a-button @click="keyboardShortcut = true;">快捷键</a-button>
             </a-button-group>
-            <a-drawer title="布局" v-model:visible="layoutDrawer" mask-closable :footer="false" width="372px">
+            <a-drawer title="布局" v-model:visible="layoutDrawer" mask-closable :footer="false" width="372px"
+                class="simple-mind-map-layout">
                 <a-list :bordered="false">
                     <a-list-item v-for="layout of layoutList">
-                        <a-image :src="`/simple-mind-map/layout/${layout.value}.jpg`" fit="cover" width="300px"
-                            :title="layout.name" :preview="false" style="cursor: pointer;"
-                            @click="switchLayout(layout.value)" />
+                        <div class="image-wrap">
+                            <img :src="`/simple-mind-map/layout/${layout.value}.jpg`" fit="cover" :title="layout.name"
+                                :alt="layout.name" :preview="false" style="cursor: pointer;width: 300px;"
+                                @click="switchLayout(layout.value)" />
+                            <div class="name">{{ layout.name }}</div>
+                        </div>
                     </a-list-item>
                 </a-list>
             </a-drawer>
         </div>
-        <a-drawer v-model:visible="themeDrawer" mask-closable :footer="false" width="372px">
+        <a-drawer v-model:visible="themeDrawer" mask-closable :footer="false" width="372px" class="simple-mind-map-theme">
             <template #title>
                 <span>主题</span>
                 <a-radio-group v-model="themeType" type="button" style="margin-left: 14px;">
@@ -36,8 +40,11 @@
             </template>
             <a-list :bordered="false">
                 <a-list-item v-for="theme of themeList">
-                    <a-image :src="`/simple-mind-map/theme/${theme.value}.jpg`" fit="cover" width="300px"
-                        :title="theme.name" :preview="false" style="cursor: pointer;" @click="switchTheme(theme.value)" />
+                    <div class="image-wrap">
+                        <img :src="`/simple-mind-map/theme/${theme.value}.jpg`" fit="cover" :title="theme.name"
+                            :preview="false" style="cursor: pointer;width: 300px;" @click="switchTheme(theme.value)" />
+                        <div class="name">{{ theme.name }}</div>
+                    </div>
                 </a-list-item>
             </a-list>
         </a-drawer>
@@ -131,4 +138,15 @@ export default defineComponent({
     }
 });
 </script>
-<style scoped></style>
+<style lang="less">
+.simple-mind-map-layout {
+    .name {
+        text-align: center;
+    }
+}
+.simple-mind-map-theme {
+    .name {
+        text-align: center;
+    }
+}
+</style>

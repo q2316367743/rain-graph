@@ -2,7 +2,7 @@
     <div class="about">
         <div class="container">
             <div class="logo">
-                <a-image src="/logo.png" :preview="false" />
+                <img src="/logo.png" />
             </div>
             <div class="title">{{ Constant.name }}</div>
             <div class="author">

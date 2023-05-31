@@ -21,6 +21,15 @@ import KeyboardNavigation from 'simple-mind-map/src/KeyboardNavigation.js'
 import Export from 'simple-mind-map/src/Export.js'
 import Select from 'simple-mind-map/src/Select.js'
 import AssociativeLine from 'simple-mind-map/src/AssociativeLine.js'
+
+import { utools } from './plugin/utools';
+
+// 非utools环境，需要注入utools对象
+if (!window.utools) {
+    // @ts-ignore
+    window.utools = utools;
+}
+
 // 注册插件
 MindMap.usePlugin(MiniMap)
     .usePlugin(Watermark)

@@ -4,19 +4,19 @@ import MessageBoxUtil from "./MessageBoxUtil";
 import { useGlobalStore } from "@/store/GlobalStore";
 import MessageUtil from "./MessageUtil";
 
-export function getInitList(name: LocalNameEnum): {
+export async function getInitList(name: LocalNameEnum): Promise<{
     items: Array<GraphRecord>;
     _rev?: string
-} {
+}> {
 
-    let mindsWrap = utools.db.get(name);
+    let mindsWrap = await utools.db.promises.get(name);
     if (mindsWrap) {
-        return {
+        return Promise.resolve({
             items: mindsWrap.value,
             _rev: mindsWrap._rev
-        }
+        })
     }
-    return { items: [] }
+    return Promise.resolve({ items: [] });
 }
 
 export async function add(id: string, items: Array<GraphRecord>): Promise<string> {

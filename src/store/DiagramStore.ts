@@ -1,45 +1,52 @@
 import GraphRecord from "@/entity/GraphRecord";
 import { defineStore } from "pinia";
-import { getInitList, add } from "@/utils/LocalStoreUtil";
+import { getInitList, add, update } from "@/utils/LocalStoreUtil";
 import LocalNameEnum from "@/enumeration/LocalNameEnum";
 import MessageUtil from "@/utils/MessageUtil";
 import { toRaw } from "vue";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 
-export const useDiagramStore = defineStore('diagram', {
+export const useDiagramStore = defineStore(LocalNameEnum.DIAGRAM, {
     state: () => ({
         diagrams: new Array<GraphRecord>(),
         diagramRev: undefined as string | undefined
     }),
     actions: {
         init() {
-            let diagramsWrap = getInitList(LocalNameEnum.DIAGRAM);
-            this.diagrams = diagramsWrap.items;
-            this.diagramRev = diagramsWrap._rev;
+            getInitList(LocalNameEnum.DIAGRAM).then(diagramsWrap => {
+                this.diagrams = diagramsWrap.items;
+                this.diagramRev = diagramsWrap._rev;
+            });
         },
         async add(id: string): Promise<string> {
             id = await add(id, this.diagrams);
             this.sync();
             return Promise.resolve(id);
         },
-        update(record: GraphRecord) { },
+        update(record: GraphRecord) {
+            update(record.id, this.diagrams)
+                .then(() => this.sync())
+                .catch(e => MessageUtil.error("修改失败", e));
+        },
         remove(record: GraphRecord) {
             this.diagrams.splice(this.diagrams.findIndex(e => e.id === record.id), 1);
             // 删除记录
-            utools.db.remove(`/${GraphTypeEnum.DIAGRAM}/${record.id}`)
-            this.sync();
+            utools.db.promises.remove(`/${GraphTypeEnum.DIAGRAM}/${record.id}`)
+                .catch(e => MessageUtil.error("删除失败", e))
+                .finally(() => this.sync());
         },
         sync() {
-            let res = utools.db.put({
+            utools.db.promises.put({
                 _id: LocalNameEnum.DIAGRAM,
                 _rev: this.diagramRev,
                 value: toRaw(this.diagrams)
+            }).then(res => {
+                if (res.error) {
+                    MessageUtil.error(res.message || '新增失败');
+                    return;
+                }
+                this.diagramRev = res.rev;
             });
-            if (res.error) {
-                MessageUtil.error(res.message || '新增失败');
-                return;
-            }
-            this.diagramRev = res.rev;
         }
     }
 })

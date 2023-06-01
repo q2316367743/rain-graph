@@ -17,20 +17,21 @@
                     <a-button>编辑</a-button>
                     <template #content>
                         <a-doption @click="openJsonDialog">JSON</a-doption>
-                        <a-doption>表格</a-doption>
+                        <a-doption>可视化</a-doption>
                     </template>
                 </a-dropdown>
                 <a-dropdown>
                     <a-button>操作</a-button>
                     <template #content>
                         <a-doption @click="drawEcharts">刷新</a-doption>
+                        <a-doption>设置</a-doption>
                     </template>
                 </a-dropdown>
                 <a-dropdown>
                     <a-button>导出</a-button>
                     <template #content>
-                        <a-doption>JSON</a-doption>
-                        <a-doption>PNG</a-doption>
+                        <a-doption @click="exportForJson">JSON</a-doption>
+                        <a-doption @click="exportForPng">PNG</a-doption>
                     </template>
                 </a-dropdown>
             </a-button-group>
@@ -53,7 +54,7 @@ import { Codemirror } from 'vue-codemirror';
 import { json } from '@codemirror/lang-json';
 import { useGlobalStore } from "@/store/GlobalStore";
 import MessageUtil from "@/utils/MessageUtil";
-import { getExample } from "./algorithm";
+import { getExample, exportForJson, exportForPng } from "./algorithm";
 import EchartsTypeEnum from "./enumeration/EchartsTypeEnum";
 
 export default defineComponent({
@@ -130,6 +131,12 @@ export default defineComponent({
             } finally {
                 this.json.dialog = false;
             }
+        },
+        exportForJson() {
+            exportForJson(this.option);
+        },
+        exportForPng() {
+            exportForPng(this.myChart as EChartsType);
         }
     }
 });

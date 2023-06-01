@@ -1,6 +1,8 @@
 import * as example from './example';
 import EchartsTypeEnum from "../enumeration/EchartsTypeEnum";
 
+export * from './exportFor';
+
 export function getExample(type: EchartsTypeEnum): any {
     switch (type) {
         case 'line':

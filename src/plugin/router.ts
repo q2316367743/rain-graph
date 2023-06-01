@@ -11,6 +11,10 @@ const router = createRouter({
         path: '/home',
         component: () => import('@/pages/home/index.vue')
     }, {
+        name: GraphTypeEnum.ECHARTS,
+        path: '/echarts',
+        component: () => import('@/pages/echarts/index.vue')
+    }, {
         path: '/setting',
         component: () => import('@/pages/setting/index.vue')
     }, {
@@ -36,10 +40,6 @@ const router = createRouter({
             name: GraphTypeEnum.DIAGRAM,
             path: '/graph/diagram/:id',
             component: () => import('@/pages/graph/diagram/index.vue')
-        }, {
-            name: GraphTypeEnum.ECHARTS,
-            path: '/graph/echarts/:id',
-            component: () => import('@/pages/graph/echarts/index.vue')
         }]
     }]
 });

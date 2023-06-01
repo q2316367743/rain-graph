@@ -5,7 +5,6 @@
                 <a-dropdown>
                     <a-button>文件</a-button>
                     <template #content>
-                        <a-doption @click="toHome">返回文件列表</a-doption>
                         <a-doption @click="$emit('new')" disabled>新建</a-doption>
                         <a-doption @click="$emit('open')" disabled>打开</a-doption>
                         <a-doption @click="$emit('save')">保存</a-doption>
@@ -58,7 +57,6 @@
     </div>
 </template>
 <script lang="ts">
-import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import { defineComponent } from "vue";
 import EchartsTypeEnum from "./enumeration/EchartsTypeEnum";
 import { init, EChartsType } from 'echarts';
@@ -108,14 +106,6 @@ export default defineComponent({
         this.myChart.clear();
     },
     methods: {
-        toHome() {
-            this.$router.push({
-                path: '/home',
-                query: {
-                    name: GraphTypeEnum.ECHARTS
-                }
-            });
-        },
         saveAs() {
 
         },

@@ -21,10 +21,13 @@
                         <a-menu-item :key="`/$gragh/${GraphTypeEnum.DIAGRAM}/0`" @click="jumpTo(GraphTypeEnum.DIAGRAM)">
                             {{ Config.title[GraphTypeEnum.DIAGRAM].title }}
                         </a-menu-item>
-                        <a-menu-item :key="`/$gragh/${GraphTypeEnum.ECHARTS}/0`" @click="jumpTo(GraphTypeEnum.ECHARTS)">
-                            {{ Config.title[GraphTypeEnum.ECHARTS].title }}
-                        </a-menu-item>
                     </a-sub-menu>
+                    <a-menu-item key="/echarts" @click="jumpToEcharts">
+                        <template #icon>
+                            <icon-dashboard />
+                        </template>
+                        可视化图表
+                    </a-menu-item>
                     <a-menu-item key="/setting" @click="jumpToSetting">
                         <template #icon>
                             <icon-settings />
@@ -176,6 +179,11 @@ export default defineComponent({
             useGlobalStore().setTitle(' ');
             useGlobalStore().setType(undefined);
             this.$router.push('/setting');
+        },
+        jumpToEcharts() {
+            useGlobalStore().setTitle(' ');
+            useGlobalStore().setType(undefined);
+            this.$router.push('/echarts');
         },
         jumpToAbout() {
             useGlobalStore().setTitle(' ');

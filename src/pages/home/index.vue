@@ -7,7 +7,6 @@
                     <a-radio :value="GraphTypeEnum.SIMPLE_MIND_MAP">{{ Config.title[GraphTypeEnum.SIMPLE_MIND_MAP].title
                     }}</a-radio>
                     <a-radio :value="GraphTypeEnum.DIAGRAM">{{ Config.title[GraphTypeEnum.DIAGRAM].title }}</a-radio>
-                    <a-radio :value="GraphTypeEnum.ECHARTS">{{ Config.title[GraphTypeEnum.ECHARTS].title }}</a-radio>
                 </a-radio-group>
                 <a-input-search style="width: 150px;margin-left: 14px;" placeholder="请输入项目名" allow-clear v-model="keyword"
                     @search="search"></a-input-search>
@@ -58,7 +57,6 @@ import { useDiagramStore } from "@/store/DiagramStore";
 import Config from "@/global/Config";
 import { useSimpleMindMapStore } from "@/store/SimpleMindMapStore";
 import { useSettingStore } from "@/store/SettingStore";
-import { useEchartStore } from "@/store/EchartsStore";
 
 export default defineComponent({
     name: 'home',
@@ -75,7 +73,6 @@ export default defineComponent({
         ...mapState(useMindStore, ['minds']),
         ...mapState(useSimpleMindMapStore, ['simpleMindMaps']),
         ...mapState(useDiagramStore, ['diagrams']),
-        ...mapState(useEchartStore, ['echarts']),
         ...mapState(useSettingStore, ['defaultView']),
         virtualListProps() {
             return {
@@ -89,8 +86,6 @@ export default defineComponent({
                 return this.simpleMindMaps;
             } else if (this.activeKey === GraphTypeEnum.DIAGRAM) {
                 return this.diagrams;
-            } else if (this.activeKey === GraphTypeEnum.ECHARTS) {
-                return this.echarts;
             }
             return [];
         }

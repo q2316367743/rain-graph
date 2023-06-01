@@ -168,10 +168,12 @@ export default defineComponent({
         },
         // 路径
         toHome() {
+            let path = this.$route.path as string;
+            let name = this.$route.name as string;
             this.$router.push({
                 path: '/home',
                 query: {
-                    name: this.$route.name as string
+                    name: path.startsWith('/gragh') ? name : undefined
                 }
             })
         },

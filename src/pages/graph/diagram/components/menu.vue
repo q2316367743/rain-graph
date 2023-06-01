@@ -34,7 +34,24 @@
                     <a-doption @click="onExport(ExportTypeEnum.PNG)">PNG</a-doption>
                 </template>
             </a-dropdown>
+            <a-dropdown>
+                <a-button>更多</a-button>
+                <template #content>
+                    <a-doption>设置</a-doption>
+                    <a-doption @click="keyboardShortcut = true;">快捷键</a-doption>
+                </template>
+            </a-dropdown>
         </a-button-group>
+        <a-drawer title="快捷键" v-model:visible="keyboardShortcut" mask-closable :footer="false" width="300px">
+            <a-descriptions align="right" title="节点操作" :column="1">
+                <a-descriptions-item label="保存">Ctrl + s</a-descriptions-item>
+                <a-descriptions-item label="回退">Ctrl + Z</a-descriptions-item>
+                <a-descriptions-item label="侧边栏">Ctrl + b</a-descriptions-item>
+                <a-descriptions-item label="小地图">Ctrl + m</a-descriptions-item>
+                <a-descriptions-item label="选中">按住Ctrl + 鼠标左键拖动</a-descriptions-item>
+                <a-descriptions-item label="放大/缩小">按住Ctrl + 滚轮</a-descriptions-item>
+            </a-descriptions>
+        </a-drawer>
     </div>
 </template>
 <script lang="ts">
@@ -61,7 +78,8 @@ export default defineComponent({
         }
     },
     data: () => ({
-        ExportTypeEnum
+        ExportTypeEnum,
+        keyboardShortcut: false
     }),
     computed: {
         ...mapState(useGlobalStore, ['title']),

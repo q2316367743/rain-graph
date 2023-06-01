@@ -3,21 +3,26 @@
         <diagram-menu class="header" :lf="lf" @save="save" />
         <div class="container">
             <a-layout>
+                <!-- 侧边工具栏 -->
                 <a-layout-sider hide-trigger collapsible :collapsed="collapsed" :collapsed-width="0" :width="200">
                     <diagram-sidebar v-if="render" @drag-in-node="dragInNode" />
                 </a-layout-sider>
                 <a-layout>
+                    <!-- 试剂内容 -->
                     <div class="content" id="diagram-view"></div>
+                    <!-- 右侧工具栏、属性栏 -->
                     <div class="toolbar">
                         <diagram-toolbar v-if="render" :lf="lf" :active-edges="activeEdges" />
                     </div>
                     <div class="collapsed">
+                        <!-- 折叠按钮 -->
                         <a-button @click="collapsed = !collapsed" type="primary">
                             <template #icon>
                                 <icon-menu-unfold v-if="collapsed" />
                                 <icon-menu-fold v-else />
                             </template>
                         </a-button>
+                        <!-- 小地图按钮 -->
                         <a-button @click="showMiniMap" style="margin-left: 7px;" type="primary">
                             <template #icon>
                                 <icon-location />
@@ -59,7 +64,7 @@ import { useGlobalStore } from "@/store/GlobalStore";
 import { useDiagramStore } from "@/store/DiagramStore";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import MessageUtil from "@/utils/MessageUtil";
-import { useClearEvent, useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
+import { useMapEvent, useSaveEvent, useSideEvent, useUndoEvent } from "@/global/BeanFactory";
 
 export default defineComponent({
     name: 'diagram',
@@ -118,10 +123,12 @@ export default defineComponent({
     created() {
         useSaveEvent.on(() => this.save());
         useUndoEvent.on(() => this.lf.undo());
+        useSideEvent.on(() => this.collapsed = !this.collapsed);
+        useMapEvent.on(() => this.showMiniMap());
     },
     mounted() {
         this.render = false
-        // 获取取数
+        // 获取数据
         this.id = this.$route.params.id as string;
         if (this.id === '-1') {
             // 文件打开
@@ -233,7 +240,6 @@ export default defineComponent({
                 properties = { ...properties, ...edge.properties }
             })
             this.properties = properties
-            return properties
         },
         setStyle(item: any) {
             this.activeNodes.forEach(({ id }) => {

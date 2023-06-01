@@ -52,12 +52,11 @@ import { useWindowSize } from "@vueuse/core";
 import GraphRecord from "@/entity/GraphRecord";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import { useGlobalStore } from "@/store/GlobalStore";
-import { useClearEvent, useExportEvent, useSaveAsEvent, useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
+import { useMapEvent, useSaveEvent, useSideEvent, useUndoEvent } from "@/global/BeanFactory";
 import { useDiagramStore } from "@/store/DiagramStore";
 import Config from "@/global/Config";
 import { useSimpleMindMapStore } from "@/store/SimpleMindMapStore";
 import { useSettingStore } from "@/store/SettingStore";
-import { map } from "xe-utils";
 
 export default defineComponent({
     name: 'home',
@@ -107,10 +106,9 @@ export default defineComponent({
         }
         // 清空事件
         useSaveEvent.reset();
-        useSaveAsEvent.reset();
         useUndoEvent.reset();
-        useClearEvent.reset();
-        useExportEvent.reset();
+        useSideEvent.reset();
+        useMapEvent.reset();
         this.search();
     },
     methods: {

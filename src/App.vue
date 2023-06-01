@@ -44,7 +44,7 @@
 import { mapState } from "pinia";
 import { defineComponent } from "vue";
 
-import { useSaveEvent, useClearEvent, useExportEvent, useUndoEvent, useSaveAsEvent } from "@/global/BeanFactory";
+import { useMapEvent, useSaveEvent, useSideEvent, useUndoEvent } from "@/global/BeanFactory";
 import Config from '@/global/Config'
 
 import { useGlobalStore } from "@/store/GlobalStore";
@@ -117,6 +117,10 @@ export default defineComponent({
                     useSaveEvent.emit();
                 } else if (e.key === 'z') {
                     useUndoEvent.emit();
+                } else if (e.key === 'b') {
+                    useSideEvent.emit();
+                } else if (e.key === 'm') {
+                    useMapEvent.emit();
                 }
             }
 

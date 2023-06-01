@@ -24,6 +24,7 @@
 </template>
 
 <script lang="ts">
+import { useKeyModifier } from '@vueuse/core'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
@@ -31,27 +32,32 @@ export default defineComponent({
         lf: Object,
         activeEdges: Array<any>
     },
-    data() {
-        return {
-            selectionOpened: false,
-            undoAble: false,
-            redoAble: false,
-            colors: '#345678',
-            linetype: 'pro-polyline',
-            lineOptions: [
-                {
-                    value: 'pro-polyline',
-                    label: '折线'
-                },
-                {
-                    value: 'pro-line',
-                    label: '直线'
-                },
-                {
-                    value: 'pro-bezier',
-                    label: '曲线'
-                }
-            ]
+    data: () => ({
+        selectionOpened: false,
+        undoAble: false,
+        redoAble: false,
+        colors: '#345678',
+        linetype: 'pro-polyline',
+        lineOptions: [
+            {
+                value: 'pro-polyline',
+                label: '折线'
+            },
+            {
+                value: 'pro-line',
+                label: '直线'
+            },
+            {
+                value: 'pro-bezier',
+                label: '曲线'
+            }
+        ],
+        control: useKeyModifier('Control')
+    }),
+    watch: {
+        control() {
+            this.selectionOpened = !(this.control || false);
+            this.selectionSelect();
         }
     },
     methods: {
@@ -77,7 +83,6 @@ export default defineComponent({
             }
         },
         redo() {
-
             if (this.lf) {
 
                 this.lf.redo()

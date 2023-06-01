@@ -1,14 +1,14 @@
 <template>
-    <div class="simple-mind-map-wrap" :style="{ height: height + 'px' }">
-        <div id="simple-mind-map"></div>
-        <simple-mind-map-option class="option simple-mind-map-extra" @switch-theme="setTheme" @switch-layout="setLayout"
-            @set-node="setNode" :render-tree="renderTree" />
-        <simple-mind-map-action class="action simple-mind-map-extra" :style="{ left: (width / 2 - 180 - 7) + 'px' }"
-            :index="index" :len="len" :has-node="hasNode" @add-link="addLink" />
-        <simple-mind-map-node class="node simple-mind-map-extra" :index="index" :len="len" :has-node="hasNode"
-            @add-node="addBothNode" @add-child-node="addChildNode" @remove-node="removeNode" @back="back"
-            @forward="forward" />
-        <simple-mind-map-menu class="menu simple-mind-map-extra" :title="name" @save="save" @save-as="saveAs" @export="exportFile" />
+    <div class="simple-mind-map">
+        <div class="header">
+            <simple-mind-map-menu :index="index" :len="len" :has-node="hasNode" :render-tree="renderTree" @save="save"
+                @save-as="saveAs" @export="exportFile" @add-link="addLink" @switch-theme="setTheme"
+                @switch-layout="setLayout" @set-node="setNode" @add-node="addBothNode" @add-child-node="addChildNode"
+                @remove-node="removeNode" @back="back" @forward="forward" />
+        </div>
+        <div class="container">
+            <div id="simple-mind-map"></div>
+        </div>
     </div>
 </template>
 <script lang="ts">
@@ -18,10 +18,7 @@ import { mapState } from "pinia";
 import { useGlobalStore } from "@/store/GlobalStore";
 
 // 组件
-import SimpleMindMapOption from './components/option.vue';
-import SimpleMindMapAction from './components/action.vue';
 import SimpleMindMapMenu from './components/menu.vue';
-import SimpleMindMapNode from './components/node.vue';
 
 import MessageUtil from "@/utils/MessageUtil";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
@@ -46,7 +43,7 @@ let simpleMindMapWrap = {} as SimpleMindMapWrap;
 
 export default defineComponent({
     name: '',
-    components: { SimpleMindMapOption, SimpleMindMapAction, SimpleMindMapMenu, SimpleMindMapNode },
+    components: { SimpleMindMapMenu },
     data: () => ({
         renderTree: undefined as any | undefined,
         index: 0,
@@ -185,78 +182,92 @@ export default defineComponent({
 });
 </script>
 <style lang="less">
-.simple-mind-map-wrap {
-    position: relative;
-    width: 100%;
+.simple-mind-map {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 
-    .option {
+    .header {
         position: absolute;
-        top: 96px;
-        padding: 7px;
-        display: flex;
-        transition: 0.2s;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 32px;
+        border-bottom: 1px solid var(--color-neutral-3);
+    }
 
-        &.show {
-            right: 0px;
-        }
+    .container {
+        position: absolute;
+        top: 33px;
+        left: 0;
+        right: 0;
+        bottom: 0;
 
-        &.hidden {
-            right: -95px;
-        }
+        .option {
+            position: absolute;
+            top: 96px;
+            padding: 7px;
+            display: flex;
+            transition: 0.2s;
 
-        .container {
-            width: 88px;
+            &.show {
+                right: 0px;
+            }
 
-            .arco-btn {
+            &.hidden {
+                right: -95px;
+            }
+
+            .container {
                 width: 88px;
-            }
-        }
-    }
 
-    .action {
-        position: absolute;
-        padding: 7px;
-        transition: 0.2s;
-
-        &.show {
-            top: 5px;
-        }
-
-        &.hidden {
-            top: -60px;
-        }
-
-        .op {
-            .arco-btn {
-                height: 32px;
+                .arco-btn {
+                    width: 88px;
+                }
             }
         }
 
-        .container {
-            height: 50px;
+        .action {
+            position: absolute;
+            padding: 7px;
+            transition: 0.2s;
+
+            &.show {
+                top: 5px;
+            }
+
+            &.hidden {
+                top: -60px;
+            }
+
+            .op {
+                .arco-btn {
+                    height: 32px;
+                }
+            }
+
+            .container {
+                height: 50px;
+            }
         }
-    }
 
-    .menu {
-        position: absolute;
-        top: 14px;
-        left: 14px;
-    }
-
-    .node {
-        position: absolute;
-        bottom: 14px;
-        left: 14px;
-    }
-
-    .simple-mind-map-extra {
-
-        .container {
-            text-align: center;
-            background-color: var(--color-bg-2);
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        .node {
+            position: absolute;
+            bottom: 14px;
+            left: 14px;
         }
 
+        .simple-mind-map-extra {
+
+            .container {
+                text-align: center;
+                background-color: var(--color-bg-2);
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+
+        }
     }
 }
 

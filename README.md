@@ -18,10 +18,6 @@
 - [kityminder-editor](https://github.com/fex-team/kityminder-editor)：KityMinder Editor 是一款强大、简洁、体验优秀的脑图编辑工具，适合用于编辑树/图/网等结构的数据。
 - [Simple mind map](https://github.com/wanglin2/mind-map)：一个简单&强大的Web思维导图
 
-### 文章
-
-- [[Web思维导图实现的技术点分析]]
-
 ### 相关参考
 
 - [知犀思维导图](https://www.zhixi.com/space?page=owner)
@@ -31,26 +27,21 @@
 - [antv x6](https://antv-x6.gitee.io/zh)：阿里开源的图编辑器
 - [LogicFlow](https://docs.logic-flow.cn/docs/#/)：滴滴开源的图编辑器
 
-
 ## 可视化图表
 
-- 表格：[handsontable](https://handsontable.com/)
 - 可视化：[echarts](https://echarts.apache.org/zh/index.html)
 
 ## 手绘图、白板
-
-使用的库：
 
 - [rough.js](https://github.com/rough-stuff/rough)：生成手绘风格的图片
 - [tldraw](https://github.com/tldraw/tldraw)：画图库（React库）
 - [atrament.js](https://github.com/jakubfiala/atrament.js)：一个小的JS库，用于在HTML画布上进行漂亮的绘图和手写。
 - [excalidraw](https://excalidraw.com/)：画图库，貌似也是react的
+- [tiny_whiteboard](https://github.com/wanglin2/tiny_whiteboard)：白板
 
-可以参考的库：
+## 拓展库
 
 - [qier-progress](https://github.com/vortesnail/qier-progress)：顶部进度条
 - [dom-to-image](https://github.com/tsayen/dom-to-image)：将dom转为图片
 - [draft-flow](https://github.com/towersxu/draft-flow)：LogicFlow插件，手绘风格
-
-
-流程图编辑器，最简单的功能，直接使用模板做
+- 表格：[handsontable](https://handsontable.com/)

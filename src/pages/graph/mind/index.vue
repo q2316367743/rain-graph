@@ -1,27 +1,35 @@
 <template>
     <div class="mind-elixir">
-        <div id="mind-elixir-view" :style="{ height: viewHeight + 'px' }"></div>
         <div class="header">
             <a-button-group type="text">
-                <a-tooltip content="返回列表">
-                    <a-button @click="toHome">
-                        <template #icon><icon-menu /></template>
-                    </a-button>
-                </a-tooltip>
-                <a-tooltip content="保存">
-                    <a-button @click="save">
-                        <template #icon><icon-save /></template>
-                    </a-button>
-                </a-tooltip>
+                <a-dropdown>
+                    <a-button>文件</a-button>
+                    <template #content>
+                        <a-doption @click="toHome">返回列表</a-doption>
+                        <a-doption disabled>新建</a-doption>
+                        <a-doption disabled>打开</a-doption>
+                        <a-doption @click="save(true)">保存</a-doption>
+                        <a-doption @click="saveAs">另存为</a-doption>
+                    </template>
+                </a-dropdown>
+                <a-dropdown trigger="click">
+                    <a-button>编辑</a-button>
+                    <template #content>
+                        <a-doption @click="toUndo">后退</a-doption>
+                    </template>
+                </a-dropdown>
                 <a-dropdown trigger="click" @select="exportData">
                     <a-button>
-                        <template #icon><icon-export /></template>
+                        导出
                     </a-button>
                     <template #content>
                         <a-doption :value="ExportTypeEnum.HTML">HTML</a-doption>
                     </template>
                 </a-dropdown>
             </a-button-group>
+        </div>
+        <div class="container">
+            <div id="mind-elixir-view" :style="{ height: viewHeight + 'px' }"></div>
         </div>
     </div>
 </template>
@@ -40,7 +48,7 @@ import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import BrowserUtil from "@/utils/BrowserUtil";
 
 const size = useWindowSize();
-const viewHeight = computed(() => size.height.value);
+const viewHeight = computed(() => size.height.value - 33);
 const router = useRouter()
 
 // 参数
@@ -116,7 +124,7 @@ onMounted(() => {
         });
 });
 
-function save() {
+function save(show: boolean = true) {
     useMindStore().addMind(id).then(_id => {
         id = _id;
         utools.db.promises.put({
@@ -132,9 +140,25 @@ function save() {
                 return;
             }
             _rev = res.rev;
-            MessageUtil.success('保存成功');
+            if (show) {
+                MessageUtil.success('保存成功');
+            }
         });
     });
+}
+
+function saveAs() {
+    BrowserUtil.download(JSON.stringify({
+        record: mind.getData(),
+        option: option
+    }, null, 4), useGlobalStore().title + '.json', 'application/json');
+}
+
+function toUndo() {
+    if (mind) {
+        mind.undo();
+        save(false);
+    }
 }
 
 function toHome() {
@@ -146,13 +170,6 @@ function toHome() {
     })
 }
 
-useSaveEvent.on(() => save());
-useUndoEvent.on(() => {
-    if (mind) {
-        mind.undo();
-        save();
-    }
-});
 function exportData(type: any) {
     if (type === ExportTypeEnum.HTML) {
         BrowserUtil.download(
@@ -161,6 +178,9 @@ function exportData(type: any) {
             'text/html')
     }
 }
+
+useSaveEvent.on(() => save());
+useUndoEvent.on(() => toUndo());
 
 </script>
 <style lang="less">
@@ -171,11 +191,18 @@ function exportData(type: any) {
 
     .header {
         position: absolute;
-        top: 14px;
-        left: 14px;
-        text-align: center;
-        background-color: var(--color-bg-2);
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        top: 0;
+        left: 0;
+        right: 0;
+        border-bottom: 1px solid var(--color-neutral-3);
+    }
+
+    .container {
+        position: absolute;
+        top: 33px;
+        left: 0;
+        right: 0;
+        bottom: 0;
     }
 }
 
@@ -190,10 +217,6 @@ function exportData(type: any) {
         }
     }
 
-    .mind-elixir-toolbar.lt {
-        top: 56px !important;
-        left: 14px;
-    }
 }
 
 #mind-view {

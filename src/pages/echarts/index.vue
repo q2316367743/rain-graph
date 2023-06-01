@@ -7,6 +7,10 @@
                     <template #content>
                         <a-dgroup title="折线图">
                             <a-doption @click="drawInitEcharts('line')">基础折线图</a-doption>
+                            <a-doption @click="drawInitEcharts('line-smooth')">平滑折线图</a-doption>
+                            <a-doption @click="drawInitEcharts('line-area')">面积图</a-doption>
+                            <a-doption @click="drawInitEcharts('line-stock')">折线图堆叠</a-doption>
+                            <a-doption @click="drawInitEcharts('line-style')">自定义样式</a-doption>
                         </a-dgroup>
                         <a-dgroup title="柱状图">
                             <a-doption @click="drawInitEcharts('bar')">基础柱状图</a-doption>
@@ -17,14 +21,14 @@
                     <a-button>编辑</a-button>
                     <template #content>
                         <a-doption @click="openJsonDialog">JSON</a-doption>
-                        <a-doption>可视化</a-doption>
+                        <a-doption disable>可视化</a-doption>
                     </template>
                 </a-dropdown>
                 <a-dropdown>
                     <a-button>操作</a-button>
                     <template #content>
                         <a-doption @click="drawEcharts">刷新</a-doption>
-                        <a-doption>设置</a-doption>
+                        <a-doption disable>设置</a-doption>
                     </template>
                 </a-dropdown>
                 <a-dropdown>

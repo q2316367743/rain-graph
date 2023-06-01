@@ -1,0 +1,56 @@
+{
+	"name": "听雨图编辑器",
+	"options": null,
+	"author": "落雨不悔",
+	"open_source": 1,
+	"csv_url": "https://rain-graph.netlify.app",
+	"os_summary": "Apache-2.0",
+	"site": "https://blog.esion.xyz",
+	"package": "xyz.esion.rain-graph",
+	"preload": "",
+	"debug_url": "http://localhost:5173",
+	"url": "https://rain-graph.netlify.app/index.html#/home",
+	"logo": "file://D:\\Documents\\workspace\\rain-graph\\src-ts\\logo.png?t=1685587570554",
+	"summary": "听雨图编辑器，支持思维导图、流程图",
+	"type": "web",
+	"auth": {
+		"base": {},
+		"api": {},
+		"ability": {}
+	},
+	"window": {
+		"defaultType": "frameWindow",
+		"frameWindow": {
+			"enable": true,
+			"width": 1000,
+			"height": 800,
+			"controllers": {
+				"goBack": true,
+				"goForward": true,
+				"refresh": true,
+				"home": true
+			}
+		},
+		"window": {
+			"enable": false,
+			"width": 400,
+			"minWidth": 300,
+			"maxWidth": 600,
+			"canResize": true,
+			"height": 400,
+			"minHeight": 300,
+			"maxHeight": 600,
+			"top": false,
+			"blurAction": "none"
+		},
+		"attach": {
+			"enable": false,
+			"width": 320,
+			"minWidth": 320,
+			"maxWidth": 320,
+			"canResize": true
+		}
+	},
+	"theme_color": "#1F7BCC",
+	"file_assign": ""
+}

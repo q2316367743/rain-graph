@@ -1,6 +1,8 @@
 <template>
     <div class="diagram">
-        <diagram-menu class="header" :lf="lf" @save="save" />
+        <!-- 顶部菜单栏 -->
+        <diagram-menu class="header" v-if="render" v-model:panel-show="panelShow" :lf="lf" :collapsed="collapsed"
+            @save="save" />
         <div class="container">
             <a-layout>
                 <!-- 侧边工具栏 -->
@@ -8,7 +10,7 @@
                     <diagram-sidebar v-if="render" @drag-in-node="dragInNode" />
                 </a-layout-sider>
                 <a-layout>
-                    <!-- 试剂内容 -->
+                    <!-- 内容 -->
                     <div class="content" id="diagram-view"></div>
                     <!-- 右侧工具栏、属性栏 -->
                     <div class="toolbar">
@@ -22,17 +24,11 @@
                                 <icon-menu-fold v-else />
                             </template>
                         </a-button>
-                        <!-- 小地图按钮 -->
-                        <a-button @click="showMiniMap" style="margin-left: 7px;" type="primary">
-                            <template #icon>
-                                <icon-location />
-                            </template>
-                        </a-button>
                     </div>
                     <!-- 右侧属性面板 -->
-                    <diagram-panel class="panel" v-if="activeNodes.length > 0 || activeEdges.length > 0"
-                        :onlyEdge="activeNodes.length === 0" :elementsStyle="properties" @setStyle="setStyle"
-                        @setZIndex="setZIndex" />
+                    <diagram-panel class="panel" v-if="activeNodes.length > 0 || activeEdges.length > 0" v-show="panelShow"
+                        :onlyEdge="activeNodes.length === 0" :elementsStyle="properties" @set-style="setStyle"
+                        @@set-level="setZIndex" />
                 </a-layout>
             </a-layout>
         </div>
@@ -64,7 +60,7 @@ import { useGlobalStore } from "@/store/GlobalStore";
 import { useDiagramStore } from "@/store/DiagramStore";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import MessageUtil from "@/utils/MessageUtil";
-import { useMapEvent, useSaveEvent, useSideEvent, useUndoEvent } from "@/global/BeanFactory";
+import { useSaveEvent, useSideEvent, useUndoEvent } from "@/global/BeanFactory";
 
 export default defineComponent({
     name: 'diagram',
@@ -91,7 +87,8 @@ export default defineComponent({
         collapsed: false,
         activeNodes: [] as any[],
         activeEdges: [] as any[],
-        properties: {}
+        properties: {},
+        panelShow: true
     }),
     computed: {
         ...mapState(useGlobalStore, ['size', 'title']),
@@ -124,7 +121,6 @@ export default defineComponent({
         useSaveEvent.on(() => this.save());
         useUndoEvent.on(() => this.lf.undo());
         useSideEvent.on(() => this.collapsed = !this.collapsed);
-        useMapEvent.on(() => this.showMiniMap());
     },
     mounted() {
         this.render = false
@@ -191,16 +187,6 @@ export default defineComponent({
                     this.getProperty();
                 })
             })
-        },
-        showMiniMap() {
-            try {
-                if (this.lf.extension.miniMap.isShow) {
-                    this.lf.extension.miniMap.hide();
-                } else {
-                    this.lf.extension.miniMap.show(this.miniMapLeft, this.miniMapTop);
-                }
-            } catch (_) {
-            }
         },
         save() {
             useDiagramStore().add(this.id)
@@ -311,9 +297,9 @@ export default defineComponent({
 
     .panel {
         position: absolute;
-        top: 14px;
-        right: 14px;
-        bottom: 14px;
+        top: 0;
+        right: 0;
+        bottom: 0;
         padding: 7px;
         background-color: var(--color-bg-1);
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);

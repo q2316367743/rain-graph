@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="diagram-panel">
         <div class="setting-block">
             <div>快捷样式</div>
             <div class="short-styles">
@@ -86,15 +86,15 @@
             <div class="setting-item">
                 <span>文本样式</span>
                 <a-checkbox-group v-model="fontStyle" @change="syncFontStyle">
-                    <a-checkbox value="underline">下划线</a-checkbox>
-                    <a-checkbox value="bold">加粗</a-checkbox>
-                    <a-checkbox value="italic">斜体</a-checkbox>
+                    <a-checkbox value="underline">U</a-checkbox>
+                    <a-checkbox value="bold">B</a-checkbox>
+                    <a-checkbox value="italic">I</a-checkbox>
                 </a-checkbox-group>
             </div>
             <div style="margin-top: 14px;">
                 <a-button-group>
-                    <a-button @click="$emit('setZIndex', 'top')">置为顶部</a-button>
-                    <a-button @click="$emit('setZIndex', 'bottom')">置为底部</a-button>
+                    <a-button @click="$emit('set-level', 'top')">置为顶部</a-button>
+                    <a-button @click="$emit('set-level', 'bottom')">置为底部</a-button>
                 </a-button-group>
             </div>
         </div>
@@ -109,6 +109,7 @@ export default defineComponent({
         elementsStyle: Object,
         onlyEdge: Boolean // 是否是只设置边的属性，当只设置边的属性时，隐藏快捷样式和背景色设置
     },
+    emits: ['set-level', 'set-style'],
     data() {
         return {
             // 选项
@@ -174,7 +175,7 @@ export default defineComponent({
         },
         setStyle(item: any) {
             this.style = item;
-            this.$emit('setStyle', item)
+            this.$emit('set-style', item)
         },
         syncFontStyle() {
             if (this.fontStyle.indexOf('underline') > -1) {
@@ -196,7 +197,7 @@ export default defineComponent({
         },
 
         changeTextAlign(val: any) {
-            this.$emit('setStyle', {
+            this.$emit('set-style', {
                 textAlign: val
             })
         }
@@ -206,7 +207,7 @@ export default defineComponent({
 
 <style scoped lang="less">
 .diagram-panel {
-    padding: 20px;
+    width: 236px;
 }
 
 .short-styles {

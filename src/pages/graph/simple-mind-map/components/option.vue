@@ -16,19 +16,6 @@
                 <a-button @click="tocDrawer = true">大纲</a-button>
                 <a-button @click="keyboardShortcut = true;">快捷键</a-button>
             </a-button-group>
-            <a-drawer title="布局" v-model:visible="layoutDrawer" mask-closable :footer="false" width="372px"
-                class="simple-mind-map-layout">
-                <a-list :bordered="false">
-                    <a-list-item v-for="layout of layoutList">
-                        <div class="image-wrap">
-                            <img :src="`/simple-mind-map/layout/${layout.value}.jpg`" fit="cover" :title="layout.name"
-                                :alt="layout.name" :preview="false" style="cursor: pointer;width: 300px;"
-                                @click="switchLayout(layout.value)" />
-                            <div class="name">{{ layout.name }}</div>
-                        </div>
-                    </a-list-item>
-                </a-list>
-            </a-drawer>
         </div>
         <a-drawer v-model:visible="themeDrawer" mask-closable :footer="false" width="372px" class="simple-mind-map-theme">
             <template #title>
@@ -40,11 +27,18 @@
             </template>
             <a-list :bordered="false">
                 <a-list-item v-for="theme of themeList">
-                    <div class="image-wrap">
-                        <img :src="`/simple-mind-map/theme/${theme.value}.jpg`" fit="cover" :title="theme.name"
-                            :preview="false" style="cursor: pointer;width: 300px;" @click="switchTheme(theme.value)" />
-                        <div class="name">{{ theme.name }}</div>
-                    </div>
+                    <a-image :src="`./simple-mind-map/theme/${theme.value}.jpg`" fit="cover" :title="theme.name"
+                        width="300px" :preview="false" style="cursor: pointer;" @click="switchTheme(theme.value)" />
+                </a-list-item>
+            </a-list>
+        </a-drawer>
+        <a-drawer title="布局" v-model:visible="layoutDrawer" mask-closable :footer="false" width="372px"
+            class="simple-mind-map-layout">
+            <a-list :bordered="false">
+                <a-list-item v-for="layout of layoutList">
+                    <a-image :src="`./simple-mind-map/layout/${layout.value}.jpg`" fit="cover" :title="layout.name"
+                        width="300px" :alt="layout.name" :preview="false" style="cursor: pointer;"
+                        @click="switchLayout(layout.value)" />
                 </a-list-item>
             </a-list>
         </a-drawer>
@@ -61,7 +55,7 @@
                 <a-descriptions-item label="插入同级节点">Enter</a-descriptions-item>
                 <a-descriptions-item label="上移节点">Ctrl + ↑</a-descriptions-item>
                 <a-descriptions-item label="下移节点">Ctrl + ↓</a-descriptions-item>
-                <a-descriptions-item label="插入概要">Ctrl + S</a-descriptions-item>
+                <a-descriptions-item label="保存">Ctrl + S</a-descriptions-item>
                 <a-descriptions-item label="展开/收起节点">/</a-descriptions-item>
                 <a-descriptions-item label="删除节点">Delete | Backspace</a-descriptions-item>
                 <a-descriptions-item label="复制节点">Ctrl + C</a-descriptions-item>
@@ -144,6 +138,7 @@ export default defineComponent({
         text-align: center;
     }
 }
+
 .simple-mind-map-theme {
     .name {
         text-align: center;

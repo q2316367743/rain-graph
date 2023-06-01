@@ -27,6 +27,10 @@ export default {
         diagram: {
             title: '流程图',
             color: '#a59866'
+        },
+        echarts: {
+            title: '可视化图表',
+            color: '#e43a62'
         }
     } as Record<GraphTypeEnum, {
         title: string;

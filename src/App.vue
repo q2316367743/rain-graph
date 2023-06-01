@@ -11,12 +11,19 @@
                     <a-sub-menu key="1">
                         <template #icon><icon-plus /></template>
                         <template #title>新建</template>
-                        <a-menu-item :key="`/$gragh/${GraphTypeEnum.MIND}/0`"
-                            @click="jumpTo(GraphTypeEnum.MIND)">简易流程图</a-menu-item>
+                        <a-menu-item :key="`/$gragh/${GraphTypeEnum.MIND}/0`" @click="jumpTo(GraphTypeEnum.MIND)">
+                            {{ Config.title[GraphTypeEnum.MIND].title }}
+                        </a-menu-item>
                         <a-menu-item :key="`/$gragh/${GraphTypeEnum.SIMPLE_MIND_MAP}/0`"
-                            @click="jumpTo(GraphTypeEnum.SIMPLE_MIND_MAP)">完整流程图</a-menu-item>
-                        <a-menu-item :key="`/$gragh/${GraphTypeEnum.DIAGRAM}/0`"
-                            @click="jumpTo(GraphTypeEnum.DIAGRAM)">思维导图</a-menu-item>
+                            @click="jumpTo(GraphTypeEnum.SIMPLE_MIND_MAP)">
+                            {{ Config.title[GraphTypeEnum.SIMPLE_MIND_MAP].title }}
+                        </a-menu-item>
+                        <a-menu-item :key="`/$gragh/${GraphTypeEnum.DIAGRAM}/0`" @click="jumpTo(GraphTypeEnum.DIAGRAM)">
+                            {{ Config.title[GraphTypeEnum.DIAGRAM].title }}
+                        </a-menu-item>
+                        <a-menu-item :key="`/$gragh/${GraphTypeEnum.ECHARTS}/0`" @click="jumpTo(GraphTypeEnum.ECHARTS)">
+                            {{ Config.title[GraphTypeEnum.ECHARTS].title }}
+                        </a-menu-item>
                     </a-sub-menu>
                     <a-menu-item key="/setting" @click="jumpToSetting">
                         <template #icon>

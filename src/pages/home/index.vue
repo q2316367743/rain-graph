@@ -2,14 +2,15 @@
     <div class="home">
         <div class="header">
             <div>
-                <a-input-search style="width: 250px;" placeholder="请输入项目名" allow-clear v-model="keyword"
-                    @search="search"></a-input-search>
-                <a-radio-group v-model="activeKey" type="button" style="margin-left: 14px;">
+                <a-radio-group v-model="activeKey" type="button">
                     <a-radio :value="GraphTypeEnum.MIND">{{ Config.title[GraphTypeEnum.MIND].title }}</a-radio>
                     <a-radio :value="GraphTypeEnum.SIMPLE_MIND_MAP">{{ Config.title[GraphTypeEnum.SIMPLE_MIND_MAP].title
                     }}</a-radio>
                     <a-radio :value="GraphTypeEnum.DIAGRAM">{{ Config.title[GraphTypeEnum.DIAGRAM].title }}</a-radio>
+                    <a-radio :value="GraphTypeEnum.ECHARTS">{{ Config.title[GraphTypeEnum.ECHARTS].title }}</a-radio>
                 </a-radio-group>
+                <a-input-search style="width: 150px;margin-left: 14px;" placeholder="请输入项目名" allow-clear v-model="keyword"
+                    @search="search"></a-input-search>
             </div>
             <a-switch :default-checked="!isDark" type="round" style="margin: 4px;" @change="switchDarkColors">
                 <template #checked>白天</template>
@@ -57,6 +58,7 @@ import { useDiagramStore } from "@/store/DiagramStore";
 import Config from "@/global/Config";
 import { useSimpleMindMapStore } from "@/store/SimpleMindMapStore";
 import { useSettingStore } from "@/store/SettingStore";
+import { useEchartStore } from "@/store/EchartsStore";
 
 export default defineComponent({
     name: 'home',
@@ -73,6 +75,7 @@ export default defineComponent({
         ...mapState(useMindStore, ['minds']),
         ...mapState(useSimpleMindMapStore, ['simpleMindMaps']),
         ...mapState(useDiagramStore, ['diagrams']),
+        ...mapState(useEchartStore, ['echarts']),
         ...mapState(useSettingStore, ['defaultView']),
         virtualListProps() {
             return {
@@ -86,6 +89,8 @@ export default defineComponent({
                 return this.simpleMindMaps;
             } else if (this.activeKey === GraphTypeEnum.DIAGRAM) {
                 return this.diagrams;
+            } else if (this.activeKey === GraphTypeEnum.ECHARTS) {
+                return this.echarts;
             }
             return [];
         }
@@ -158,6 +163,7 @@ export default defineComponent({
         height: 32px;
         display: flex;
         justify-content: space-between;
+        overflow: hidden;
     }
 
     .content {

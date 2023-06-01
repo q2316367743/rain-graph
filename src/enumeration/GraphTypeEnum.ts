@@ -2,9 +2,11 @@ enum GraphTypeEnum {
 
     MIND = 'mind',
 
+    SIMPLE_MIND_MAP = 'simple-mind-map',
+
     DIAGRAM = 'diagram',
 
-    SIMPLE_MIND_MAP = 'simple-mind-map'
+    ECHARTS = 'echarts',
 
 }
 

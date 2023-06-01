@@ -14,6 +14,7 @@
         "@logicflow/extension": "^1.2.7",
         "@mind-elixir/export-html": "^2.0.0",
         "@vueuse/core": "^9.13.0",
+        "echarts": "^5.4.2",
         "idb-keyval": "^6.2.1",
         "less": "^4.1.3",
         "less-loader": "^11.1.0",

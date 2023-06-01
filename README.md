@@ -5,8 +5,10 @@
 - [![Netlify Status](https://api.netlify.com/api/v1/badges/4c3864ea-d13e-4344-a270-9c48712e02fe/deploy-status)](https://app.netlify.com/sites/rain-graph/deploys)
 - [utools](https://u.tools/)
 
-## 数据存储
 
-### 思维导图
+## 使用的库
 
-- `/local/mind`：存储思维导图索引
+### 可视化图表
+
+- 表格：[handsontable](https://handsontable.com/)
+- 可视化：[echarts](https://echarts.apache.org/zh/index.html)

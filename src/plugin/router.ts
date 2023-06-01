@@ -36,6 +36,10 @@ const router = createRouter({
             name: GraphTypeEnum.DIAGRAM,
             path: '/graph/diagram/:id',
             component: () => import('@/pages/graph/diagram/index.vue')
+        }, {
+            name: GraphTypeEnum.ECHARTS,
+            path: '/graph/echarts/:id',
+            component: () => import('@/pages/graph/echarts/index.vue')
         }]
     }]
 });

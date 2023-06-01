@@ -9,8 +9,8 @@
         </div>
         <div class="container">
             <a-button-group type="text" style="flex-direction: column;">
-                <a-button>节点样式</a-button>
-                <a-button>基础样式</a-button>
+                <a-button>样式</a-button>
+                <a-button>画布</a-button>
                 <a-button @click="themeDrawer = true">主题</a-button>
                 <a-button @click="layoutDrawer = true">布局</a-button>
                 <a-button @click="tocDrawer = true">大纲</a-button>

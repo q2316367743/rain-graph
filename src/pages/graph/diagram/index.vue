@@ -95,6 +95,12 @@ export default defineComponent({
         _id() {
             return `/${GraphTypeEnum.DIAGRAM}/${this.id}`;
         },
+        width() {
+            return this.size.width - (this.collapsed ? 0 : 200);
+        },
+        height() {
+            return this.size.height - 33;
+        },
         miniMapLeft() {
             return this.size.width - 156 - 10 - (this.collapsed ? 0 : 200);
         },
@@ -105,8 +111,11 @@ export default defineComponent({
     watch: {
         size: {
             handler() {
-                this.lf.extension.miniMap.hide();
-                this.lf.extension.miniMap.show(this.miniMapLeft, this.miniMapTop);
+                if (this.lf.extension.miniMap.isShow) {
+                    this.lf.extension.miniMap.hide();
+                    this.lf.extension.miniMap.show(this.miniMapLeft, this.miniMapTop);
+                }
+                this.lf.resize(this.width, this.height);
             },
             deep: true
         },
@@ -115,6 +124,7 @@ export default defineComponent({
                 this.lf.extension.miniMap.hide();
                 this.lf.extension.miniMap.show(this.miniMapLeft, this.miniMapTop);
             }
+            this.lf.resize(this.width, this.height);
         }
     },
     created() {
@@ -172,7 +182,9 @@ export default defineComponent({
             let lf = new LogicFlow({
                 ...this.config,
                 container: document.querySelector('#diagram-view') as HTMLElement,
-                plugins: [BpmnElement, BpmnXmlAdapter, Snapshot, SelectionSelect, MiniMap, Menu]
+                plugins: [BpmnElement, BpmnXmlAdapter, Snapshot, SelectionSelect, MiniMap, Menu],
+                width: this.width,
+                height: this.height
             });
             registerCustomElement(lf);
             lf.setDefaultEdgeType('pro-polyline');

@@ -16,23 +16,24 @@
                 <template #content>
                     <a-doption @click="lf.undo()">后退</a-doption>
                     <a-doption @click="lf.redo()">前进</a-doption>
-                    <a-doption>剪切</a-doption>
-                    <a-doption>复制</a-doption>
-                    <a-doption>复制为图像</a-doption>
-                    <a-doption>粘贴</a-doption>
-                    <a-doption>删除</a-doption>
-                    <a-doption>复制并粘贴</a-doption>
-                    <a-doption>全选</a-doption>
-                    <a-doption>全不选</a-doption>
+                    <a-doption @click="selectAll">全选</a-doption>
+                    <a-doption @click="unSelectAll">全不选</a-doption>
                 </template>
             </a-dropdown>
             <a-dropdown>
                 <a-button>查看</a-button>
                 <template #content>
-                    <a-doption @click="showMiniMap">
-                        <template #icon v-if="display.miniMap"><icon-check /></template>
-                        小地图
-                    </a-doption>
+                    <a-dgroup title="">
+                        <a-doption @click="showMiniMap">
+                            <template #icon v-if="display.miniMap"><icon-check /></template>
+                            小地图
+                        </a-doption>
+                    </a-dgroup>
+                    <a-dgroup title="视图设置">
+                        <a-doption @click="reset">重置大小</a-doption>
+                        <a-doption @click="plus">放大</a-doption>
+                        <a-doption @click="reduce">缩小</a-doption>
+                    </a-dgroup>
                 </template>
             </a-dropdown>
             <a-dropdown>
@@ -46,7 +47,7 @@
             <a-dropdown>
                 <a-button>更多</a-button>
                 <template #content>
-                    <a-doption>设置</a-doption>
+                    <a-doption disabled>主题</a-doption>
                     <a-doption @click="keyboardShortcut = true;">快捷键</a-doption>
                 </template>
             </a-dropdown>
@@ -133,7 +134,7 @@ export default defineComponent({
     },
     created() {
         useMapEvent.on(() => this.showMiniMap());
-                this.display.miniMap = this.lf.extension.miniMap.isShow;
+        this.display.miniMap = this.lf.extension.miniMap.isShow;
     },
     methods: {
         toHome() {
@@ -173,6 +174,28 @@ export default defineComponent({
                 this.display.miniMap = this.lf.extension.miniMap.isShow;
             } catch (_) {
             }
+        },
+        reset() {
+            this.lf.resetZoom();
+        },
+        plus() {
+            this.lf.zoom(true);
+        },
+        reduce() {
+            this.lf.zoom(false);
+        },
+        selectAll() {
+            let nodes = this.lf.getGraphRawData().nodes as any[];
+            let first = true;
+            for (let node of nodes) {
+                if (node.id) {
+                    this.lf.selectElementById(node.id, !first);
+                    first = false;
+                }
+            }
+        },
+        unSelectAll() {
+            this.lf.clearSelectElements();
         },
     }
 });

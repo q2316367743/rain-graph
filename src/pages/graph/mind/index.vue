@@ -40,7 +40,7 @@ import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import BrowserUtil from "@/utils/BrowserUtil";
 
 const size = useWindowSize();
-const viewHeight = computed(() => size.height.value - 33);
+const viewHeight = computed(() => size.height.value);
 const router = useRouter()
 
 // 参数

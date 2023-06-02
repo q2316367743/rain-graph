@@ -66,6 +66,8 @@
         <div class="container">
             <div id="white-board-view"></div>
         </div>
+        <!-- 菜单 -->
+        <white-board-context-menu :app="app" v-if="render" />
         <a-drawer v-model:visible="helpDrawer" title="帮助" width="300px" :footer="false">
             <white-board-help />
         </a-drawer>
@@ -87,6 +89,7 @@ import IconRect from './icon/IconRect.vue';
 import IconTriangle from './icon/IconTriangle.vue';
 
 import WhiteBoardHelp from './components/help.vue';
+import WhiteBoardContextMenu from './components/contextmenu.vue';
 
 import { useGlobalStore } from "@/store/GlobalStore";
 import { useWhiteBoardStore } from "@/store/graph/WhiteBoardStore";
@@ -98,7 +101,7 @@ let first = true;
 
 export default defineComponent({
     name: 'white-board',
-    components: { IconChoose, IconCircle, IconDiamond, IconLine, IconRect, IconTriangle, WhiteBoardHelp },
+    components: { IconChoose, IconCircle, IconDiamond, IconLine, IconRect, IconTriangle, WhiteBoardHelp, WhiteBoardContextMenu },
     data: () => ({
         ExportTypeEnum,
         // 数据
@@ -112,6 +115,8 @@ export default defineComponent({
             readonly: false
         },
         element: {},
+        render: false,
+        lock: false
     }),
     computed: {
         ...mapState(useGlobalStore, ['size']),
@@ -161,6 +166,9 @@ export default defineComponent({
                 this.init();
             })
     },
+    beforeUnmount() {
+        this.save();
+    },
     methods: {
         init() {
             // 初始化数据
@@ -194,6 +202,7 @@ export default defineComponent({
             this.app.on('activeElementChange', (element: any) => {
                 this.element = element;
             });
+            this.render = true;
         },
         toHome() {
             this.$router.push({
@@ -224,28 +233,32 @@ export default defineComponent({
             }
         },
         save(show: boolean = false) {
-            useWhiteBoardStore().add(this.id)
-                .then(id => {
-                    this.id = id;
-                    // 保存记录
-                    utools.db.promises.put({
-                        _id: this._id,
-                        _rev: this._rev,
-                        value: {
-                            config: toRaw(this.config),
-                            record: this.app.getData()
-                        }
-                    }).then(res => {
-                        if (res.error) {
-                            MessageUtil.error(res.message || "保存失败");
-                            return;
-                        }
-                        this._rev = res.rev;
-                        if (show) {
-                            MessageUtil.success("保存成功");
-                        }
+            if (!this.lock) {
+                this.lock = true;
+                useWhiteBoardStore().add(this.id)
+                    .then(id => {
+                        this.id = id;
+                        // 保存记录
+                        utools.db.promises.put({
+                            _id: this._id,
+                            _rev: this._rev,
+                            value: {
+                                config: toRaw(this.config),
+                                record: this.app.getData()
+                            }
+                        }).then(res => {
+                            if (res.error) {
+                                MessageUtil.error(res.message || "保存失败");
+                                return;
+                            }
+                            this._rev = res.rev;
+                            this.lock = false;
+                            if (show) {
+                                MessageUtil.success("保存成功");
+                            }
+                        }).catch(e => MessageUtil.error("保存失败", e));
                     }).catch(e => MessageUtil.error("保存失败", e));
-                }).catch(e => MessageUtil.error("保存失败", e));
+            }
         },
         saveAs() { },
         exportData(type: any) {

@@ -5,7 +5,7 @@ export interface StoreRecord {
     /**
      * 记录
      */
-    record: any;
+    record?: any;
 
     /**
      * 本身设置
@@ -42,7 +42,6 @@ export interface StoreRecord {
 export async function getRecord(type: GraphTypeEnum, id: string, path: string = ""): Promise<StoreRecord> {
     if (id === '0') {
         return Promise.resolve({
-            record: {},
             config: {},
             id: '0',
             error: false,
@@ -51,7 +50,6 @@ export async function getRecord(type: GraphTypeEnum, id: string, path: string = 
     } else if (id === '-1') {
         if (path === '') {
             return Promise.resolve({
-                record: {},
                 config: {},
                 id: '0',
                 error: true,
@@ -70,7 +68,6 @@ export async function getRecord(type: GraphTypeEnum, id: string, path: string = 
             });
         } catch (e: any) {
             return Promise.resolve({
-                record: {},
                 config: {},
                 id: '0',
                 error: true,
@@ -81,7 +78,6 @@ export async function getRecord(type: GraphTypeEnum, id: string, path: string = 
         let res = await utools.db.promises.get(`/${type}/${id}`);
         if (!res) {
             return Promise.resolve({
-                record: {},
                 config: {},
                 id: '0',
                 error: true,

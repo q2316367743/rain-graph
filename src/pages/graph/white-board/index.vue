@@ -152,7 +152,9 @@ export default defineComponent({
                 // 初始化
                 this.init();
                 // 设置数据
-                this.app.setData(data);
+                if (data) {
+                    this.app.setData(data);
+                }
                 first = false;
             }).catch(e => {
                 MessageUtil.error("初始化数据错误", e);

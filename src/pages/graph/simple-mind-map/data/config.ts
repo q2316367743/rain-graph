@@ -1,5 +1,5 @@
 import { SimpleMindMapConfig } from "../domain/SimpleMindMapConfig";
-import { MOUSE_WHEEL_ACTION, LAYOUT } from "./contants";
+import { MOUSE_WHEEL_ACTION, LAYOUT } from "./constants";
 
 // 默认选项配置
 export function getDefaultConfig(): SimpleMindMapConfig {

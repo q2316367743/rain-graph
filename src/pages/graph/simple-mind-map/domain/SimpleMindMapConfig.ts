@@ -1,4 +1,4 @@
-import { LAYOUT, MOUSE_WHEEL_ACTION } from "../data/contants";
+import { LAYOUT, MOUSE_WHEEL_ACTION } from "../data/constants";
 
 export interface SimpleMindMapConfig {
     // 是否只读

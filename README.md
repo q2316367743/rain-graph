@@ -44,4 +44,4 @@
 - [qier-progress](https://github.com/vortesnail/qier-progress)：顶部进度条
 - [dom-to-image](https://github.com/tsayen/dom-to-image)：将dom转为图片
 - [draft-flow](https://github.com/towersxu/draft-flow)：LogicFlow插件，手绘风格
-- 表格：[handsontable](https://handsontable.com/)
+- [handsontable](https://handsontable.com/)：可实现web的excel

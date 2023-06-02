@@ -23,6 +23,7 @@
         "mind-elixir": "^2.0.2",
         "pinia": "^2.0.34",
         "simple-mind-map": "^0.5.11",
+        "tiny-whiteboard": "^0.1.12",
         "utools-api-types": "^3.0.0",
         "vue": "^3.2.47",
         "vue-codemirror": "^6.1.1",

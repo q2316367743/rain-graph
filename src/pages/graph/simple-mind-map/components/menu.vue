@@ -163,7 +163,7 @@ import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import { useGlobalStore } from "@/store/GlobalStore";
 import { mapState } from "pinia";
 import { defineComponent } from "vue";
-import { themeByLightList, themeByDarkList, layoutList } from "../data/contants";
+import { themeByLightList, themeByDarkList, layoutList } from "../data/constants";
 
 export default defineComponent({
     name: '',

@@ -31,6 +31,10 @@ export default {
         echarts: {
             title: '可视化图表',
             color: '#e43a62'
+        },
+        "white-board": {
+            title: '白板',
+            color: '#409eff'
         }
     } as Record<GraphTypeEnum, {
         title: string;

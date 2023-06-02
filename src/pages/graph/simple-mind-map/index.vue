@@ -23,7 +23,7 @@ import SimpleMindMapMenu from './components/menu.vue';
 import MessageUtil from "@/utils/MessageUtil";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import { SimpleMindMapConfig } from "./domain/SimpleMindMapConfig";
-import { useSimpleMindMapStore } from "@/store/SimpleMindMapStore";
+import { useSimpleMindMapStore } from "@/store/graph/SimpleMindMapStore";
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import { useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
 

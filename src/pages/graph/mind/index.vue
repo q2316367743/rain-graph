@@ -40,7 +40,7 @@ import { useWindowSize } from "@vueuse/core";
 import MindElixir from "mind-elixir";
 import { data2Html } from '@mind-elixir/export-html'
 import { useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
-import { useMindStore } from "@/store/MindStore";
+import { useMindStore } from "@/store/graph/MindStore";
 import MessageUtil from "@/utils/MessageUtil";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import { useGlobalStore } from "@/store/GlobalStore";

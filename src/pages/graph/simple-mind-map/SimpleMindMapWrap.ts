@@ -4,7 +4,7 @@ import BrowserUtil from "@/utils/BrowserUtil";
 import { getDefaultConfig, getDefaultData } from "./data/config";
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
-import { useSimpleMindMapStore } from "@/store/SimpleMindMapStore";
+import { useSimpleMindMapStore } from "@/store/graph/SimpleMindMapStore";
 
 //  思维导图
 export default class SimpleMindMapWrap {

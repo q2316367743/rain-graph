@@ -40,6 +40,10 @@ const router = createRouter({
             name: GraphTypeEnum.DIAGRAM,
             path: '/graph/diagram/:id',
             component: () => import('@/pages/graph/diagram/index.vue')
+        }, {
+            name: GraphTypeEnum.WHITE_BOARD,
+            path: '/graph/white-board/:id',
+            component: () => import('@/pages/graph/white-board/index.vue')
         }]
     }]
 });

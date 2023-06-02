@@ -6,6 +6,11 @@ enum LocalNameEnum {
 
     DIAGRAM = '/local/diagram',
 
+    /**
+     * 白板
+     */
+    WHITE_BOARD = '/local/white-board',
+
     SETTING_MIND = '/setting/mind',
 
 }

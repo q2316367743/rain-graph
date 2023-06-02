@@ -1,0 +1,19 @@
+<template>
+    <svg t="1685674174286" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7143"
+        width="14" height="14">
+        <path
+            d="M848 432a80.064 80.064 0 0 0-73.216 48H217.216A80.096 80.096 0 0 0 144 432 80.096 80.096 0 0 0 64 512c0 44.128 35.904 80 80 80A80 80 0 0 0 217.216 544h557.536a80 80 0 0 0 73.216 48c44.128 0 80-35.872 80-80a80.032 80.032 0 0 0-79.968-80z"
+            p-id="7144"></path>
+    </svg>
+</template>
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
+    name: 'icon-line',
+    data: () => ({
+
+    }),
+});
+</script>
+<style scoped></style>

@@ -10,6 +10,7 @@ declare module 'simple-mind-map/src/KeyboardNavigation.js';
 declare module 'simple-mind-map/src/Export.js';
 declare module 'simple-mind-map/src/Select.js';
 declare module 'simple-mind-map/src/AssociativeLine.js';
+declare module 'tiny-whiteboard';
 
 interface Window {
     preload: {

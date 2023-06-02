@@ -7,6 +7,7 @@
                     <a-radio :value="GraphTypeEnum.SIMPLE_MIND_MAP">{{ Config.title[GraphTypeEnum.SIMPLE_MIND_MAP].title
                     }}</a-radio>
                     <a-radio :value="GraphTypeEnum.DIAGRAM">{{ Config.title[GraphTypeEnum.DIAGRAM].title }}</a-radio>
+                    <a-radio :value="GraphTypeEnum.WHITE_BOARD">{{ Config.title[GraphTypeEnum.WHITE_BOARD].title }}</a-radio>
                 </a-radio-group>
                 <a-input-search style="width: 150px;margin-left: 14px;" placeholder="请输入项目名" allow-clear v-model="keyword"
                     @search="search"></a-input-search>
@@ -45,18 +46,19 @@
     </div>
 </template>
 <script lang="ts">
-import { useMindStore } from "@/store/MindStore";
 import { mapActions, mapState } from "pinia";
 import { defineComponent } from "vue";
 import { useWindowSize } from "@vueuse/core";
+import Config from "@/global/Config";
+import { useMapEvent, useSaveEvent, useSideEvent, useUndoEvent } from "@/global/BeanFactory";
 import GraphRecord from "@/entity/GraphRecord";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import { useGlobalStore } from "@/store/GlobalStore";
-import { useMapEvent, useSaveEvent, useSideEvent, useUndoEvent } from "@/global/BeanFactory";
-import { useDiagramStore } from "@/store/DiagramStore";
-import Config from "@/global/Config";
-import { useSimpleMindMapStore } from "@/store/SimpleMindMapStore";
 import { useSettingStore } from "@/store/SettingStore";
+import { useMindStore } from "@/store/graph/MindStore";
+import { useDiagramStore } from "@/store/graph/DiagramStore";
+import { useWhiteBoardStore } from "@/store/graph/WhiteBoardStore";
+import { useSimpleMindMapStore } from "@/store/graph/SimpleMindMapStore";
 
 export default defineComponent({
     name: 'home',
@@ -70,10 +72,11 @@ export default defineComponent({
     }),
     computed: {
         ...mapState(useGlobalStore, ['isDark']),
-        ...mapState(useMindStore, ['minds']),
-        ...mapState(useSimpleMindMapStore, ['simpleMindMaps']),
-        ...mapState(useDiagramStore, ['diagrams']),
         ...mapState(useSettingStore, ['defaultView']),
+        ...mapState(useMindStore, ['minds']),
+        ...mapState(useDiagramStore, ['diagrams']),
+        ...mapState(useWhiteBoardStore, ['whiteBoards']),
+        ...mapState(useSimpleMindMapStore, ['simpleMindMaps']),
         virtualListProps() {
             return {
                 height: this.size.height - 33 - 14 - 7
@@ -86,6 +89,8 @@ export default defineComponent({
                 return this.simpleMindMaps;
             } else if (this.activeKey === GraphTypeEnum.DIAGRAM) {
                 return this.diagrams;
+            } else if (this.activeKey === GraphTypeEnum.WHITE_BOARD) {
+                return this.whiteBoards;
             }
             return [];
         }

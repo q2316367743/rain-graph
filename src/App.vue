@@ -21,6 +21,9 @@
                         <a-menu-item :key="`/$gragh/${GraphTypeEnum.DIAGRAM}/0`" @click="jumpTo(GraphTypeEnum.DIAGRAM)">
                             {{ Config.title[GraphTypeEnum.DIAGRAM].title }}
                         </a-menu-item>
+                        <a-menu-item :key="`/$gragh/${GraphTypeEnum.WHITE_BOARD}/0`" @click="jumpTo(GraphTypeEnum.WHITE_BOARD)">
+                            {{ Config.title[GraphTypeEnum.WHITE_BOARD].title }}
+                        </a-menu-item>
                     </a-sub-menu>
                     <a-menu-item key="/echarts" @click="jumpToEcharts">
                         <template #icon>
@@ -58,10 +61,10 @@ import { useMapEvent, useSaveEvent, useSideEvent, useUndoEvent } from "@/global/
 import Config from '@/global/Config'
 
 import { useGlobalStore } from "@/store/GlobalStore";
-import { useMindStore } from "@/store/MindStore";
-import { useDiagramStore } from "@/store/DiagramStore";
+import { useMindStore } from "@/store/graph/MindStore";
+import { useDiagramStore } from "@/store/graph/DiagramStore";
 import { useSettingStore } from "@/store/SettingStore";
-import { useSimpleMindMapStore } from "@/store/SimpleMindMapStore";
+import { useSimpleMindMapStore } from "@/store/graph/SimpleMindMapStore";
 
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import GraphTypeEnum from '@/enumeration/GraphTypeEnum';

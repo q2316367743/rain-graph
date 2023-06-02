@@ -57,7 +57,7 @@ import DiagramMenu from './components/menu.vue';
 import { registerCustomElement } from './node';
 
 import { useGlobalStore } from "@/store/GlobalStore";
-import { useDiagramStore } from "@/store/DiagramStore";
+import { useDiagramStore } from "@/store/graph/DiagramStore";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import MessageUtil from "@/utils/MessageUtil";
 import { useSaveEvent, useSideEvent, useUndoEvent } from "@/global/BeanFactory";

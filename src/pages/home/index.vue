@@ -7,12 +7,13 @@
                     <a-radio :value="GraphTypeEnum.SIMPLE_MIND_MAP">{{ Config.title[GraphTypeEnum.SIMPLE_MIND_MAP].title
                     }}</a-radio>
                     <a-radio :value="GraphTypeEnum.DIAGRAM">{{ Config.title[GraphTypeEnum.DIAGRAM].title }}</a-radio>
-                    <a-radio :value="GraphTypeEnum.WHITE_BOARD">{{ Config.title[GraphTypeEnum.WHITE_BOARD].title }}</a-radio>
+                    <a-radio :value="GraphTypeEnum.WHITE_BOARD">{{ Config.title[GraphTypeEnum.WHITE_BOARD].title
+                    }}</a-radio>
                 </a-radio-group>
                 <a-input-search style="width: 150px;margin-left: 14px;" placeholder="请输入项目名" allow-clear v-model="keyword"
                     @search="search"></a-input-search>
             </div>
-            <a-switch :default-checked="!isDark" type="round" style="margin: 4px;" @change="switchDarkColors">
+            <a-switch :default-checked="!isDark" type="round" style="margin: 4px;width: 58px;" @change="switchDarkColors">
                 <template #checked>白天</template>
                 <template #unchecked>黑夜</template>
             </a-switch>

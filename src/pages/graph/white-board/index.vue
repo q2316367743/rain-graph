@@ -22,12 +22,12 @@
                         <a-doption @click="selectAll">全选</a-doption>
                     </template>
                 </a-dropdown>
-                <a-dropdown trigger="click" @select="exportData">
+                <a-dropdown trigger="click">
                     <a-button>
                         导出
                     </a-button>
                     <template #content>
-                        <a-doption :value="ExportTypeEnum.HTML">HTML</a-doption>
+                        <a-doption @click="exportPngDialog = true">图片</a-doption>
                     </template>
                 </a-dropdown>
                 <a-dropdown trigger="click">
@@ -68,6 +68,8 @@
         </div>
         <!-- 菜单 -->
         <white-board-context-menu :app="app" v-if="render" />
+        <!-- 图片导出 -->
+        <white-board-export-png v-model:show="exportPngDialog" :app="app" />
         <a-drawer v-model:visible="helpDrawer" title="帮助" width="300px" :footer="false">
             <white-board-help />
         </a-drawer>
@@ -90,6 +92,7 @@ import IconTriangle from './icon/IconTriangle.vue';
 
 import WhiteBoardHelp from './components/help.vue';
 import WhiteBoardContextMenu from './components/contextmenu.vue';
+import WhiteBoardExportPng from './components/exportPng.vue';
 
 import { useGlobalStore } from "@/store/GlobalStore";
 import { useWhiteBoardStore } from "@/store/graph/WhiteBoardStore";
@@ -101,7 +104,10 @@ let first = true;
 
 export default defineComponent({
     name: 'white-board',
-    components: { IconChoose, IconCircle, IconDiamond, IconLine, IconRect, IconTriangle, WhiteBoardHelp, WhiteBoardContextMenu },
+    components: {
+        IconChoose, IconCircle, IconDiamond, IconLine, IconRect,
+        IconTriangle, WhiteBoardHelp, WhiteBoardContextMenu, WhiteBoardExportPng
+    },
     data: () => ({
         ExportTypeEnum,
         // 数据
@@ -114,6 +120,7 @@ export default defineComponent({
             grid: false,
             readonly: false
         },
+        exportPngDialog: false,
         element: {},
         render: false,
         lock: false
@@ -261,9 +268,6 @@ export default defineComponent({
             }
         },
         saveAs() { },
-        exportData(type: any) {
-
-        }
     }
 });
 </script>

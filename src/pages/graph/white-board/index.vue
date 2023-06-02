@@ -326,8 +326,10 @@ export default defineComponent({
             if (this.lock) {
                 return;
             }
-            if (this.id === '0' || this.id === '-1') {
-                return;
+            if (!show) {
+                if (this.id === '0' || this.id === '-1') {
+                    return;
+                }
             }
             this.lock = true;
             useWhiteBoardStore().add(this.id)

@@ -130,7 +130,7 @@ export default defineComponent({
             scrollY: 0,
             showGrid: false,
             readonly: false,
-            backgroundColor: '#fff',
+            backgroundColor: 'var(--color-bg-1)',
             fontFamily: '微软雅黑',
             fontSize: 18,
             // 	默认线条颜色
@@ -323,32 +323,36 @@ export default defineComponent({
             }
         },
         save(show: boolean = false) {
-            if (!this.lock) {
-                this.lock = true;
-                useWhiteBoardStore().add(this.id)
-                    .then(id => {
-                        this.id = id;
-                        // 保存记录
-                        utools.db.promises.put({
-                            _id: this._id,
-                            _rev: this._rev,
-                            value: {
-                                config: toRaw(this.config),
-                                record: this.app.getData()
-                            }
-                        }).then(res => {
-                            if (res.error) {
-                                MessageUtil.error(res.message || "保存失败");
-                                return;
-                            }
-                            this._rev = res.rev;
-                            this.lock = false;
-                            if (show) {
-                                MessageUtil.success("保存成功");
-                            }
-                        }).catch(e => MessageUtil.error("保存失败", e));
-                    }).catch(e => MessageUtil.error("保存失败", e));
+            if (this.lock) {
+                return;
             }
+            if (this.id === '0' || this.id === '-1') {
+                return;
+            }
+            this.lock = true;
+            useWhiteBoardStore().add(this.id)
+                .then(id => {
+                    this.id = id;
+                    // 保存记录
+                    utools.db.promises.put({
+                        _id: this._id,
+                        _rev: this._rev,
+                        value: {
+                            config: toRaw(this.config),
+                            record: this.app.getData()
+                        }
+                    }).then(res => {
+                        if (res.error) {
+                            MessageUtil.error(res.message || "保存失败");
+                            return;
+                        }
+                        this._rev = res.rev;
+                        this.lock = false;
+                        if (show) {
+                            MessageUtil.success("保存成功");
+                        }
+                    }).catch(e => MessageUtil.error("保存失败", e));
+                }).catch(e => MessageUtil.error("保存失败", e));
         },
         saveAs() { },
     }
@@ -389,7 +393,7 @@ export default defineComponent({
     }
 
     .draw-type {
-        svg{
+        svg {
             fill: var(--color-text-1);
         }
     }

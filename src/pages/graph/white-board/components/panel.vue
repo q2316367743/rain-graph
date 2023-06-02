@@ -210,12 +210,13 @@ export default defineComponent({
     border-radius: 4px;
     height: 100%;
     background-color: var(--color-bg-1);
+    color: var(--color-text-1);
 
     .styleBlock {
         margin-bottom: 10px;
 
         .styleBlockTitle {
-            color: #343a40;
+            color: var(--color-text-1);
             font-size: 14px;
             margin-bottom: 10px;
         }

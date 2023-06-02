@@ -51,17 +51,6 @@
 Headless SVG-based drawboard in browser
 https://github.com/antfu/drauu
 </pre>
-        <pre class="help">
-           d / draw
-           s / stylus
-           l / line
-           r / rectangle
-           e / ellipse
-           c / clear
-           + / increase size
-           - / decrease size
-      ctrl+z / undo
-shift+ctrl+z / redo</pre>
     </div>
 </template>
 <script lang="ts">
@@ -211,19 +200,12 @@ export default defineComponent({
 
     .about {
         position: absolute;
-        left: 4rem;
-        bottom: 1.5rem;
+        right: 4rem;
+        bottom: 1rem;
         pointer-events: none;
         opacity: 0.35;
     }
 
-    .help {
-        position: absolute;
-        right: 2rem;
-        bottom: 1.5rem;
-        pointer-events: none;
-        opacity: 0.35;
-    }
 }
 
 #drauu-view {

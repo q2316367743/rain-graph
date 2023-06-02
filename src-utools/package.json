@@ -1,6 +1,6 @@
 {
   "name": "rain-graph",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "听雨图编辑器",
   "main": "preload.js",
   "author": "落雨不悔",

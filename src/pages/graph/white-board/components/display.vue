@@ -29,7 +29,7 @@
         <a-input :model-value="backgroundColor" style="width: 250px;margin-left: 7px;">
             <template #prepend>背景颜色</template>
             <template #append>
-                <input type="color" :value="backgroundColor" @change="changeCustomerColor" />
+                <input type="color" :value="backgroundColor" @input="changeCustomerColor" />
             </template>
         </a-input>
     </div>
@@ -76,6 +76,8 @@ export default defineComponent({
     left: 14px;
     bottom: 7px;
     display: flex;
+    background-color: var(--color-bg-1);
+    padding: 4px;
 
     .number {
         height: 32px;

@@ -2,27 +2,27 @@
     <div class="drauu w-screen h-screen flex flex-col select-none">
         <!-- 顶部 -->
         <div class="header">
-            <a-radio-group type="button" style="background: none;" v-model="color">
-                <a-radio value="#f2f2f2" title="black">​⚪</a-radio>
-                <a-radio value="#000000" title="black">​⚫️​</a-radio>
-                <a-radio value="#ed153d" title="Red">​🔴​</a-radio>
-                <a-radio value="#ed9a26" title="Orange">​🟠​​</a-radio>
-                <a-radio value="#ede215" title="Yellow">​​🟡​​</a-radio>
-                <a-radio value="#30bd20" title="Green">​🟢​​</a-radio>
-                <a-radio value="#2656bf" title="Blue">​​🔵​​</a-radio>
-                <a-radio value="#c24aed" title="Purple">​🟣​​</a-radio>
-                <a-radio value="#bf6b26" title="Brown">​​🟤​</a-radio>
-            </a-radio-group>
+            <div class="color-group">
+                <div class="color-item" :class="color === '#f2f2f2' ? 'active' : ''" @click="color = '#f2f2f2'">​⚪</div>
+                <div class="color-item" :class="color === '#000000' ? 'active' : ''" @click="color = '#000000'">⚫️</div>
+                <div class="color-item" :class="color === '#ed153d' ? 'active' : ''" @click="color = '#ed153d'">​🔴</div>
+                <div class="color-item" :class="color === '#ed9a26' ? 'active' : ''" @click="color = '#ed9a26'">🟠</div>
+                <div class="color-item" :class="color === '#ede215' ? 'active' : ''" @click="color = '#ede215'">🟡</div>
+                <div class="color-item" :class="color === '#30bd20' ? 'active' : ''" @click="color = '#30bd20'">🟢</div>
+                <div class="color-item" :class="color === '#2656bf' ? 'active' : ''" @click="color = '#2656bf'">🔵​</div>
+                <div class="color-item" :class="color === '#c24aed' ? 'active' : ''" @click="color = '#c24aed'">🟣​</div>
+                <div class="color-item" :class="color === '#bf6b26' ? 'active' : ''" @click="color = '#bf6b26'">🟤</div>
+            </div>
             <div style="text-align: center;">
                 <a-slider v-model="size" :min="1" :max="10" :step="0.5" style="width: 150px;margin-top: 10px;"
                     show-tooltip />
             </div>
             <div style="text-align: right;">
                 <a-button-group type="text">
-                    <a-button title="后退" @click="undo">↩️</a-button>
-                    <a-button title="前进" @click="redo">↪️</a-button>
-                    <a-button title="清空" @click="clear">🗑</a-button>
-                    <a-button title="导出" @click="download">📥</a-button>
+                    <a-button title="后退" @click="undo" style="width: 32px;">↩️</a-button>
+                    <a-button title="前进" @click="redo" style="width: 32px;">↪️</a-button>
+                    <a-button title="清空" @click="clear" style="width: 32px;">🗑</a-button>
+                    <a-button title="导出" @click="download" style="width: 32px;">📥</a-button>
                 </a-button-group>
             </div>
         </div>
@@ -71,8 +71,6 @@ import { mapState } from "pinia";
 import { useGlobalStore } from "@/store/GlobalStore";
 
 let drauu: Drauu;
-
-type modeType = 'draw' | 'stylus' | 'line' | 'rectangle' | 'ellipse' | 'eraseLine' | 'arrow';
 
 export default defineComponent({
     name: 'drauu',
@@ -138,22 +136,43 @@ export default defineComponent({
 });
 </script>
 <style lang="less">
-@import url(./index.less);
-
 .drauu {
     position: relative;
     width: 100%;
     height: 100%;
+    overflow: hidden;
 
     .header {
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
-        padding: 3px 6px;
+        padding: 3px;
         border-bottom: 1px solid var(--color-neutral-3);
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
+
+        .color-group {
+            display: flex;
+
+            .color-item {
+                height: 32px;
+                width: 32px;
+                cursor: pointer;
+                text-align: center;
+                line-height: 32px;
+                border-radius: 2px;
+
+                &:hover {
+                    background-color: var(--color-neutral-3);
+                }
+
+                &.active {
+                    background-color: var(--color-neutral-4);
+                }
+            }
+        }
+
     }
 
     .side {
@@ -170,14 +189,14 @@ export default defineComponent({
             text-align: center;
             line-height: 32px;
             cursor: pointer;
-            border-radius: 50%;
+            border-radius: 2px;
 
             &:hover {
-                background-color: #059669;
+                background-color: var(--color-neutral-3);
             }
 
             &.active {
-                background-color: #167f3d;
+                background-color: var(--color-neutral-4);
             }
         }
     }

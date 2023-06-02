@@ -70,6 +70,10 @@
         <white-board-context-menu :app="app" v-if="render" />
         <!-- 图片导出 -->
         <white-board-export-png v-model:show="exportPngDialog" :app="app" />
+        <!-- 显示设置 -->
+        <white-board-display :background-color="config.backgroundColor" :scale="config.scale" :scroll-x="config.scrollX"
+            :scroll-y="config.scrollY" @change-color="changeBackgroundColor" @scale-plus="scalePlus"
+            @scale-minus="scaleMinus" @scale-reset="scaleReset" @scroll-to-center="scrollToCenter"/>
         <a-drawer v-model:visible="helpDrawer" title="帮助" width="300px" :footer="false">
             <white-board-help />
         </a-drawer>
@@ -93,6 +97,7 @@ import IconTriangle from './icon/IconTriangle.vue';
 import WhiteBoardHelp from './components/help.vue';
 import WhiteBoardContextMenu from './components/contextmenu.vue';
 import WhiteBoardExportPng from './components/exportPng.vue';
+import WhiteBoardDisplay from './components/display.vue';
 
 import { useGlobalStore } from "@/store/GlobalStore";
 import { useWhiteBoardStore } from "@/store/graph/WhiteBoardStore";
@@ -105,8 +110,8 @@ let first = true;
 export default defineComponent({
     name: 'white-board',
     components: {
-        IconChoose, IconCircle, IconDiamond, IconLine, IconRect,
-        IconTriangle, WhiteBoardHelp, WhiteBoardContextMenu, WhiteBoardExportPng
+        IconChoose, IconCircle, IconDiamond, IconLine, IconRect, IconTriangle,
+        WhiteBoardHelp, WhiteBoardContextMenu, WhiteBoardExportPng, WhiteBoardDisplay
     },
     data: () => ({
         ExportTypeEnum,
@@ -117,8 +122,21 @@ export default defineComponent({
         helpDrawer: false,
         app: markRaw({} as any),
         config: {
-            grid: false,
-            readonly: false
+            scrollX: 0,
+            scrollY: 0,
+            showGrid: false,
+            readonly: false,
+            backgroundColor: '#fff',
+            fontFamily: '微软雅黑, Microsoft YaHei',
+            fontSize: 18,
+            // 	默认线条颜色
+            strokeStyle: '#000000',
+            // 默认填充颜色
+            fillStyle: 'transparent',
+            // 选中元素的拖拽元素的默认线条颜色
+            dragStrokeStyle: '#666',
+            // 缩放
+            scale: 1
         },
         exportPngDialog: false,
         element: {},
@@ -143,6 +161,12 @@ export default defineComponent({
             if (this.activeKey !== 'selection') {
                 this.app.cancelActiveElement();
             }
+        },
+        config: {
+            handler() {
+                this.save();
+            },
+            deep: true
         }
     },
     created() {
@@ -180,19 +204,9 @@ export default defineComponent({
         init() {
             // 初始化数据
             this.app = markRaw(new TinyWhiteboard({
-                container: document.getElementById('white-board-view')
+                container: document.getElementById('white-board-view'),
+                state: this.config
             }));
-            // 初始化设置
-            if (this.config.grid) {
-                this.app.showGrid();
-            } else {
-                this.app.hideGrid();
-            }
-            if (this.config.readonly) {
-                this.app.setReadonlyMode();
-            } else {
-                this.app.setEditMode();
-            }
             // 事件监听
             this.app.on('currentTypeChange', (drawType: string) => {
                 if (drawType === 'selection') {
@@ -209,6 +223,13 @@ export default defineComponent({
             this.app.on('activeElementChange', (element: any) => {
                 this.element = element;
             });
+            this.app.on('zoomChange', (scale: number) => {
+                this.config.scale = scale;
+            });
+            this.app.on('scrollChange', (x: number, y: number) => {
+                this.config.scrollX = x;
+                this.config.scrollY = y;
+            })
             this.render = true;
         },
         toHome() {
@@ -224,8 +245,8 @@ export default defineComponent({
         empty() { this.app.empty() },
         selectAll() { this.app.selectAll() },
         changeGrid() {
-            this.config.grid = !this.config.grid;
-            if (this.config.grid) {
+            this.config.showGrid = !this.config.showGrid;
+            if (this.config.showGrid) {
                 this.app.showGrid();
             } else {
                 this.app.hideGrid();
@@ -237,6 +258,32 @@ export default defineComponent({
                 this.app.setReadonlyMode();
             } else {
                 this.app.setEditMode();
+            }
+        },
+        changeBackgroundColor(color: string) {
+            this.config.backgroundColor = color;
+            this.app.setBackgroundColor(color);
+        },
+        scalePlus() {
+            this.app.zoomIn(0.1);
+        },
+        scaleMinus() {
+            this.app.zoomOut(0.1);
+        },
+        scaleReset() {
+            this.app.setZoom(1);
+        },
+        scrollToCenter() {
+            this.app.scrollToCenter();
+        },
+        changeScale(scale: number) {
+            this.config.scale = scale;
+            if (scale > 1) {
+                this.app.zoomIn(scale - 1);
+            } else if (scale < 1) {
+                this.app.zoomOut(1 - scale);
+            } else {
+                this.app.setZoom(scale)
             }
         },
         save(show: boolean = false) {

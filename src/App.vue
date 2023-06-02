@@ -21,7 +21,8 @@
                         <a-menu-item :key="`/$gragh/${GraphTypeEnum.DIAGRAM}/0`" @click="jumpTo(GraphTypeEnum.DIAGRAM)">
                             {{ Config.title[GraphTypeEnum.DIAGRAM].title }}
                         </a-menu-item>
-                        <a-menu-item :key="`/$gragh/${GraphTypeEnum.WHITE_BOARD}/0`" @click="jumpTo(GraphTypeEnum.WHITE_BOARD)">
+                        <a-menu-item :key="`/$gragh/${GraphTypeEnum.WHITE_BOARD}/0`"
+                            @click="jumpTo(GraphTypeEnum.WHITE_BOARD)">
                             {{ Config.title[GraphTypeEnum.WHITE_BOARD].title }}
                         </a-menu-item>
                     </a-sub-menu>
@@ -63,6 +64,7 @@ import Config from '@/global/Config'
 import { useGlobalStore } from "@/store/GlobalStore";
 import { useMindStore } from "@/store/graph/MindStore";
 import { useDiagramStore } from "@/store/graph/DiagramStore";
+import { useWhiteBoardStore } from "@/store/graph/WhiteBoardStore";
 import { useSettingStore } from "@/store/SettingStore";
 import { useSimpleMindMapStore } from "@/store/graph/SimpleMindMapStore";
 
@@ -108,6 +110,7 @@ export default defineComponent({
         }
         // 初始化图信息
         useMindStore().init();
+        useWhiteBoardStore().init();
         useSimpleMindMapStore().init();
         useDiagramStore().init();
         useSettingStore().init();

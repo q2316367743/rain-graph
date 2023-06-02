@@ -61,6 +61,7 @@ import { useDiagramStore } from "@/store/graph/DiagramStore";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import MessageUtil from "@/utils/MessageUtil";
 import { useSaveEvent, useSideEvent, useUndoEvent } from "@/global/BeanFactory";
+import { getRecord } from "@/utils/utools/DbUtil";
 
 export default defineComponent({
     name: 'diagram',
@@ -135,47 +136,17 @@ export default defineComponent({
     mounted() {
         this.render = false
         // 获取数据
-        this.id = this.$route.params.id as string;
-        if (this.id === '-1') {
-            // 文件打开
-            let path = this.$route.query.path as string;
-            window.preload.openFileToString(path).then(value => {
-                let data = undefined as any | undefined;
-                try {
-                    let val = JSON.parse(value);
-                    this.config = val.config;
-                    data = val.record;
-                } catch (e) {
-                    MessageUtil.error("文件打开失败", e)
-                } finally {
-                    this.init(data);
-                }
-            }).catch(e => MessageUtil.error("文件打开失败", e));
-        } if (this.id !== '0') {
-            this.loading = true;
-            utools.db.promises.get(this._id)
-                .then(res => {
-                    let data = undefined as any | undefined;
-                    if (res) {
-                        this._rev = res._rev;
-                        let value = res.value;
-                        this.config = value.config;
-                        data = value.record;
-                    }
-                    this.init(data);
-                    this.render = true;
-                })
-                .catch(e => {
-                    MessageUtil.error("获取数据失败", e);
-                    this.id = '0';
-                    this.init();
-                })
-                .finally(() => {
-                    this.loading = false;
-                });
-        } else {
+        let id = this.$route.params.id as string;
+        let path = this.$route.query.path as string;
+        getRecord(GraphTypeEnum.DIAGRAM, id, path).then(data => {
+            this.id = data.id;
+            this._rev = data._rev;
+            this.config = Object.assign(this.config, data.config);
+            this.init(data.record);
+        }).catch(e => {
+            MessageUtil.error("初始化失败", e);
             this.init();
-        }
+        })
     },
     methods: {
         init(data?: any) {

@@ -72,8 +72,9 @@
     </div>
 </template>
 <script lang="ts">
-import { defineComponent, toRaw } from "vue";
+import { defineComponent, toRaw, markRaw } from "vue";
 import TinyWhiteboard from "tiny-whiteboard";
+import { mapState } from "pinia";
 
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
@@ -86,12 +87,14 @@ import IconRect from './icon/IconRect.vue';
 import IconTriangle from './icon/IconTriangle.vue';
 
 import WhiteBoardHelp from './components/help.vue';
-import { markRaw } from "vue";
-import { mapState } from "pinia";
+
 import { useGlobalStore } from "@/store/GlobalStore";
 import { useWhiteBoardStore } from "@/store/graph/WhiteBoardStore";
-import MessageUtil from "@/utils/MessageUtil";
 import { useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
+import MessageUtil from "@/utils/MessageUtil";
+import { getRecord } from '@/utils/utools/DbUtil';
+
+let first = true;
 
 export default defineComponent({
     name: 'white-board',
@@ -108,7 +111,7 @@ export default defineComponent({
             grid: false,
             readonly: false
         },
-        element: {}
+        element: {},
     }),
     computed: {
         ...mapState(useGlobalStore, ['size']),
@@ -131,40 +134,65 @@ export default defineComponent({
         }
     },
     created() {
-        useSaveEvent.on(() => this.save());
+        useSaveEvent.on(() => this.save(true));
         useUndoEvent.on(() => this.undo());
     },
     mounted() {
-        this.app = markRaw(new TinyWhiteboard({
-            container: document.getElementById('white-board-view')
-        }));
-        // 初始化设置
-        if (this.config.grid) {
-            this.app.showGrid();
-        } else {
-            this.app.hideGrid();
-        }
-        if (this.config.readonly) {
-            this.app.setReadonlyMode();
-        } else {
-            this.app.setEditMode();
-        }
-        // 事件监听
-        this.app.on('currentTypeChange', (drawType: string) => {
-            if (drawType === 'selection') {
-                this.activeKey = 'selection';
-            }
-        });
-        this.app.on('change', () => {
-            if (this.id !== '0' && this.id !== '-1') {
-                this.save()
-            }
-        });
-        this.app.on('activeElementChange', (element: any) => {
-            this.element = element;
-        })
+        this.id = this.$route.params.id as string;
+        let path = this.$route.query.path as string;
+        getRecord(GraphTypeEnum.WHITE_BOARD, this.id, path)
+            .then(record => {
+                if (record.error) {
+                    MessageUtil.warning(record.message);
+                }
+                this.id = record.id;
+                this._rev = record._rev;
+                this.config = Object.assign(this.config, record.config);
+                let data = record.record;
+                // 初始化
+                this.init();
+                // 设置数据
+                this.app.setData(data);
+                first = false;
+            }).catch(e => {
+                MessageUtil.error("初始化数据错误", e);
+                this.init();
+            })
     },
     methods: {
+        init() {
+            // 初始化数据
+            this.app = markRaw(new TinyWhiteboard({
+                container: document.getElementById('white-board-view')
+            }));
+            // 初始化设置
+            if (this.config.grid) {
+                this.app.showGrid();
+            } else {
+                this.app.hideGrid();
+            }
+            if (this.config.readonly) {
+                this.app.setReadonlyMode();
+            } else {
+                this.app.setEditMode();
+            }
+            // 事件监听
+            this.app.on('currentTypeChange', (drawType: string) => {
+                if (drawType === 'selection') {
+                    this.activeKey = 'selection';
+                }
+            });
+            this.app.on('change', () => {
+                if (this.id !== '0' && this.id !== '-1') {
+                    if (!first) {
+                        this.save();
+                    }
+                }
+            });
+            this.app.on('activeElementChange', (element: any) => {
+                this.element = element;
+            });
+        },
         toHome() {
             this.$router.push({
                 path: '/home',

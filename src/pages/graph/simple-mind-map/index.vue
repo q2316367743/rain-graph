@@ -26,18 +26,7 @@ import { SimpleMindMapConfig } from "./domain/SimpleMindMapConfig";
 import { useSimpleMindMapStore } from "@/store/graph/SimpleMindMapStore";
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import { useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
-
-interface Wrap {
-
-    config: Partial<SimpleMindMapConfig>;
-
-    record?: any;
-
-    id: string;
-
-    _rev?: string;
-
-}
+import { getRecord } from "@/utils/utools/DbUtil";
 
 let simpleMindMapWrap = {} as SimpleMindMapWrap;
 
@@ -71,7 +60,9 @@ export default defineComponent({
         useUndoEvent.on(() => this.back());
     },
     mounted() {
-        this.initData().then(value => {
+        let id = this.$route.params.id as string;
+        let path = this.$route.query.path as string;
+        getRecord(GraphTypeEnum.SIMPLE_MIND_MAP, id, path).then(value => {
             simpleMindMapWrap = new SimpleMindMapWrap(
                 "#simple-mind-map",
                 value.config,
@@ -88,39 +79,6 @@ export default defineComponent({
         })
     },
     methods: {
-        async initData(): Promise<Wrap> {
-            let id = this.$route.params.id as string;
-            let path = this.$route.query.path as string;
-            if (id === '-1') {
-                // 文件打开
-                let value = await window.preload.openFileToString(path)
-                let val = JSON.parse(value);
-                return Promise.resolve({
-                    config: val.config,
-                    record: val.record,
-                    id,
-                })
-            } if (id !== '0') {
-                let res = await utools.db.promises.get(`/${GraphTypeEnum.SIMPLE_MIND_MAP}/${id}`);
-                if (res) {
-                    let val = res.value;
-                    return Promise.resolve({
-                        config: val.config,
-                        record: val.record,
-                        id,
-                        _rev: res._rev
-                    });
-                }
-                return Promise.reject("数据不存在");
-            } else {
-                return Promise.resolve({
-                    config: {
-                        theme: this.isDark ? 'dark' : 'default'
-                    },
-                    id
-                });
-            }
-        },
         initAfter() {
             // 事件
             simpleMindMapWrap.onDataChange(renderTree => this.renderTree = renderTree);

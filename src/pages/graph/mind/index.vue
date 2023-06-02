@@ -46,6 +46,7 @@ import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import { useGlobalStore } from "@/store/GlobalStore";
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import BrowserUtil from "@/utils/BrowserUtil";
+import { getRecord } from "@/utils/utools/DbUtil";
 
 const size = useWindowSize();
 const viewHeight = computed(() => size.height.value - 33);
@@ -54,7 +55,7 @@ const router = useRouter()
 // 参数
 let mind: any | undefined;
 let id = useRoute().params.id as string;
-let _id = `/mind/${id}`;
+let _id = computed(() => `/mind/${id}`);
 let path = useRoute().query.path as string;
 let _rev = undefined as string | undefined;
 
@@ -78,38 +79,13 @@ let option = {
 let data = {} as any;
 
 async function initData() {
-    return new Promise<void>((resolve, reject) => {
-        if (id === '-1') {
-            // 文件打开
-            window.preload.openFileToString(path).then(value => {
-                try {
-                    let val = JSON.parse(value);
-                    option = Object.assign(option, val.option);
-                    data = val.record;
-                } catch (e) {
-                    MessageUtil.error("文件打开失败", e)
-                } finally {
-                    resolve();
-                }
-            }).catch(e => MessageUtil.error("文件打开失败", e));
-        } if (id !== '0') {
-            utools.db.promises.get(_id).then(res => {
-                if (res) {
-                    _rev = res._rev;
-                    let value = res.value;
-                    option = Object.assign(option, value.option);
-                    data = value.record;
-                }
-                resolve();
-            }).catch(e => {
-                MessageUtil.error("获取数据失败", e);
-                id = '0';
-                resolve();
-            })
-        } else {
-            resolve();
-        }
-    })
+    let id = useRoute().params.id as string;
+    let path = useRoute().query.path as string;
+    let record = await getRecord(GraphTypeEnum.MIND, id, path)
+    id = record.id;
+    _rev = record._rev;
+    option = Object.assign(option, record.option);
+    data = record.record;
 }
 
 onMounted(() => {

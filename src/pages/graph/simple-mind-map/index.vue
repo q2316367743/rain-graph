@@ -22,7 +22,6 @@ import SimpleMindMapMenu from './components/menu.vue';
 
 import MessageUtil from "@/utils/MessageUtil";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
-import { SimpleMindMapConfig } from "./domain/SimpleMindMapConfig";
 import { useSimpleMindMapStore } from "@/store/graph/SimpleMindMapStore";
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import { useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
@@ -89,6 +88,12 @@ export default defineComponent({
             simpleMindMapWrap.onNodeActive((hasNode) => {
                 this.hasNode = hasNode;
             });
+            // 设置主题
+            if(this.isDark) {
+                this.setTheme('dark');
+            }else {
+                this.setTheme('default')
+            }
         },
 
         save() {

@@ -65,6 +65,8 @@
         </div>
         <div class="container">
             <div id="white-board-view"></div>
+            <!-- 面板 -->
+            <white-board-panel class="white-board-panel" v-if="render" :app="app" :active-element="activeElement" :panel="panel" />
         </div>
         <!-- 菜单 -->
         <white-board-context-menu :app="app" v-if="render" />
@@ -73,7 +75,7 @@
         <!-- 显示设置 -->
         <white-board-display :background-color="config.backgroundColor" :scale="config.scale" :scroll-x="config.scrollX"
             :scroll-y="config.scrollY" @change-color="changeBackgroundColor" @scale-plus="scalePlus"
-            @scale-minus="scaleMinus" @scale-reset="scaleReset" @scroll-to-center="scrollToCenter"/>
+            @scale-minus="scaleMinus" @scale-reset="scaleReset" @scroll-to-center="scrollToCenter" />
         <a-drawer v-model:visible="helpDrawer" title="帮助" width="300px" :footer="false">
             <white-board-help />
         </a-drawer>
@@ -98,6 +100,7 @@ import WhiteBoardHelp from './components/help.vue';
 import WhiteBoardContextMenu from './components/contextmenu.vue';
 import WhiteBoardExportPng from './components/exportPng.vue';
 import WhiteBoardDisplay from './components/display.vue';
+import WhiteBoardPanel from './components/panel.vue';
 
 import { useGlobalStore } from "@/store/GlobalStore";
 import { useWhiteBoardStore } from "@/store/graph/WhiteBoardStore";
@@ -111,7 +114,7 @@ export default defineComponent({
     name: 'white-board',
     components: {
         IconChoose, IconCircle, IconDiamond, IconLine, IconRect, IconTriangle,
-        WhiteBoardHelp, WhiteBoardContextMenu, WhiteBoardExportPng, WhiteBoardDisplay
+        WhiteBoardHelp, WhiteBoardContextMenu, WhiteBoardExportPng, WhiteBoardDisplay, WhiteBoardPanel
     },
     data: () => ({
         ExportTypeEnum,
@@ -127,7 +130,7 @@ export default defineComponent({
             showGrid: false,
             readonly: false,
             backgroundColor: '#fff',
-            fontFamily: '微软雅黑, Microsoft YaHei',
+            fontFamily: '微软雅黑',
             fontSize: 18,
             // 	默认线条颜色
             strokeStyle: '#000000',
@@ -141,7 +144,18 @@ export default defineComponent({
         exportPngDialog: false,
         element: {},
         render: false,
-        lock: false
+        lock: false,
+
+        // 面板
+        activeElement: undefined as any | undefined,
+        panel: {
+            lineWidth: 'middle',
+            fontFamily: '',
+            fontSize: 18,
+            lineDash: 0,
+            globalAlpha: 0,
+            rotate: 0,
+        }
     }),
     computed: {
         ...mapState(useGlobalStore, ['size']),
@@ -229,8 +243,29 @@ export default defineComponent({
             this.app.on('scrollChange', (x: number, y: number) => {
                 this.config.scrollX = x;
                 this.config.scrollY = y;
-            })
+            });
+            this.app.on('activeElementChange', (element: any) => {
+                if (this.activeElement) {
+                    this.activeElement.off('elementRotateChange', this.onElementRotateChange);
+                }
+                this.activeElement = element
+                if (element) {
+                    let { style, rotate: elementRotate } = element
+                    this.panel = {
+                        lineWidth: style.lineWidth,
+                        fontFamily: style.fontFamily,
+                        fontSize: style.fontSize,
+                        lineDash: style.lineDash,
+                        globalAlpha: style.globalAlpha,
+                        rotate: elementRotate
+                    }
+                    element.on('elementRotateChange', this.onElementRotateChange)
+                }
+            });
             this.render = true;
+        },
+        onElementRotateChange(elementRotate: any) {
+            this.panel.rotate = elementRotate;
         },
         toHome() {
             this.$router.push({
@@ -342,6 +377,14 @@ export default defineComponent({
         right: 0;
         bottom: 0;
 
+    }
+
+    .white-board-panel {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 220px;
     }
 }
 

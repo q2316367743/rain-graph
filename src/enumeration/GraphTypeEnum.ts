@@ -25,6 +25,11 @@ enum GraphTypeEnum {
      */
     WHITE_BOARD = 'white-board',
 
+    /**
+     * 画板
+     */
+    DRAUU = 'drauu', // for RNN task only. 描述中不太明显的部分应用于任何图表。 有关任务
+
 }
 
 export default GraphTypeEnum;

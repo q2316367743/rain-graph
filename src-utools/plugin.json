@@ -16,7 +16,7 @@
     },
     "features": [
         {
-            "code": "application",
+            "code": "/home",
             "explain": "听雨图编辑器",
             "icon": "public/logo.png",
             "platform": [
@@ -29,7 +29,7 @@
             ]
         },
         {
-            "code": "mind",
+            "code": "/graph/mind/0",
             "explain": "听雨图编辑器",
             "icon": "public/logo.png",
             "platform": [
@@ -42,7 +42,7 @@
             ]
         },
         {
-            "code": "simple-mind-map",
+            "code": "/graph/simple-mind-map/0",
             "explain": "听雨图编辑器",
             "icon": "public/logo.png",
             "platform": [
@@ -55,7 +55,7 @@
             ]
         },
         {
-            "code": "diagram",
+            "code": "/graph/diagram/0",
             "explain": "听雨图编辑器",
             "icon": "public/logo.png",
             "platform": [
@@ -65,6 +65,32 @@
             ],
             "cmds": [
                 "流程图"
+            ]
+        },
+        {
+            "code": "/graph/white-board/0",
+            "explain": "听雨图编辑器",
+            "icon": "public/logo.png",
+            "platform": [
+                "win32",
+                "darwin",
+                "linux"
+            ],
+            "cmds": [
+                "白板"
+            ]
+        },
+        {
+            "code": "/echarts",
+            "explain": "听雨图编辑器",
+            "icon": "public/logo.png",
+            "platform": [
+                "win32",
+                "darwin",
+                "linux"
+            ],
+            "cmds": [
+                "可视化图表"
             ]
         }
     ]

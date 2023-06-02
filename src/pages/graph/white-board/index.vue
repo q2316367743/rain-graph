@@ -39,7 +39,7 @@
                     </template>
                 </a-dropdown>
             </a-button-group>
-            <a-radio-group type="button" v-model="activeKey">
+            <a-radio-group type="button" v-model="activeKey" class="draw-type">
                 <a-tooltip content="选择">
                     <a-radio value="selection"><icon-choose style="margin-top: 6px;" /></a-radio>
                 </a-tooltip>
@@ -66,7 +66,8 @@
         <div class="container">
             <div id="white-board-view"></div>
             <!-- 面板 -->
-            <white-board-panel class="white-board-panel" v-if="render" :app="app" :active-element="activeElement" :panel="panel" />
+            <white-board-panel class="white-board-panel" v-if="render" :app="app" :active-element="activeElement"
+                :panel="panel" />
         </div>
         <!-- 菜单 -->
         <white-board-context-menu :app="app" v-if="render" />
@@ -386,6 +387,13 @@ export default defineComponent({
         bottom: 0;
         width: 220px;
     }
+
+    .draw-type {
+        svg{
+            fill: var(--color-text-1);
+        }
+    }
+
 }
 
 #white-board-view {

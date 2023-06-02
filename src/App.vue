@@ -26,6 +26,12 @@
                             {{ Config.title[GraphTypeEnum.WHITE_BOARD].title }}
                         </a-menu-item>
                     </a-sub-menu>
+                    <a-menu-item key="/drauu" @click="jumpToDrauu">
+                        <template #icon>
+                            <icon-pen-fill />
+                        </template>
+                        画板
+                    </a-menu-item>
                     <a-menu-item key="/echarts" @click="jumpToEcharts">
                         <template #icon>
                             <icon-dashboard />
@@ -115,13 +121,12 @@ export default defineComponent({
         useDiagramStore().init();
         useSettingStore().init();
         utools.onPluginEnter(action => {
-            if (action.code !== 'application') {
+            if (action.code.startsWith('/graph')) {
                 useGlobalStore().setTitle('');
                 useGlobalStore().setType(action.code as GraphTypeEnum);
                 this.$router.push(`/graph/${action.code}/0`);
-            } else {
-                this.$router.push('/home');
             }
+            this.$router.push(action.code);
         });
 
         window.addEventListener("keydown", function (e) {
@@ -182,6 +187,11 @@ export default defineComponent({
                     name: path.startsWith('/gragh') ? name : undefined
                 }
             })
+        },
+        jumpToDrauu() {
+            useGlobalStore().setTitle(' ');
+            useGlobalStore().setType(undefined);
+            this.$router.push('/drauu');
         },
         jumpToSetting() {
             useGlobalStore().setTitle(' ');

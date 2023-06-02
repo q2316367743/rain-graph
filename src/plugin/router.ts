@@ -11,6 +11,10 @@ const router = createRouter({
         path: '/home',
         component: () => import('@/pages/home/index.vue')
     }, {
+        name: GraphTypeEnum.DRAUU,
+        path: '/drauu',
+        component: () => import('@/pages/drauu/index.vue')
+    }, {
         name: GraphTypeEnum.ECHARTS,
         path: '/echarts',
         component: () => import('@/pages/echarts/index.vue')

@@ -200,7 +200,7 @@ export default defineComponent({
 
     .about {
         position: absolute;
-        right: 4rem;
+        right: 2rem;
         bottom: 1rem;
         pointer-events: none;
         opacity: 0.35;

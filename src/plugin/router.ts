@@ -11,14 +11,6 @@ const router = createRouter({
         path: '/home',
         component: () => import('@/pages/home/index.vue')
     }, {
-        name: GraphTypeEnum.DRAUU,
-        path: '/drauu',
-        component: () => import('@/pages/drauu/index.vue')
-    }, {
-        name: GraphTypeEnum.ECHARTS,
-        path: '/echarts',
-        component: () => import('@/pages/echarts/index.vue')
-    }, {
         path: '/setting',
         component: () => import('@/pages/setting/index.vue')
     }, {
@@ -27,6 +19,16 @@ const router = createRouter({
     }, {
         path: '/about',
         component: () => import('@/pages/about/index.vue')
+    },
+    // 绘制
+    {
+        name: GraphTypeEnum.DRAUU,
+        path: '/draw/drauu',
+        component: () => import('@/pages/draw/drauu/index.vue')
+    }, {
+        name: GraphTypeEnum.ECHARTS,
+        path: '/draw/echarts',
+        component: () => import('@/pages/draw/echarts/index.vue')
     },
     // ------ 各种图 ------
     {

@@ -81,7 +81,7 @@
             ]
         },
         {
-            "code": "/drauu",
+            "code": "/draw/drauu",
             "explain": "听雨图编辑器",
             "icon": "public/logo.png",
             "platform": [
@@ -94,7 +94,7 @@
             ]
         },
         {
-            "code": "/echarts",
+            "code": "/draw/echarts",
             "explain": "听雨图编辑器",
             "icon": "public/logo.png",
             "platform": [

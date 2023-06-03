@@ -1,9 +1,9 @@
 <template>
     <div class="app">
         <a-layout>
-            <a-layout-sider :collapsed="collapsed">
-                <a-menu style="width: 200px;height: 100%;" show-collapse-button breakpoint="xl"
-                    v-model:selected-keys="selectedKeys" @collapse="(isColl) => collapsed = isColl">
+            <a-layout-sider collapsed>
+                <a-menu style="width: 200px;height: 100%;" breakpoint="xl"
+                    v-model:selected-keys="selectedKeys" >
                     <a-menu-item key="/home" @click="toHome">
                         <template #icon><icon-list /></template>
                         列表
@@ -26,18 +26,16 @@
                             {{ Config.title[GraphTypeEnum.WHITE_BOARD].title }}
                         </a-menu-item>
                     </a-sub-menu>
-                    <a-menu-item key="/drauu" @click="jumpToDrauu">
-                        <template #icon>
-                            <icon-pen-fill />
-                        </template>
-                        画板
-                    </a-menu-item>
-                    <a-menu-item key="/echarts" @click="jumpToEcharts">
-                        <template #icon>
-                            <icon-dashboard />
-                        </template>
-                        可视化图表
-                    </a-menu-item>
+                    <a-sub-menu key="1">
+                        <template #icon><icon-pen-fill /></template>
+                        <template #title>绘制</template>
+                        <a-menu-item key="/draw/drauu" @click="jumpToDrauu">
+                            画板
+                        </a-menu-item>
+                        <a-menu-item key="/draw/echarts" @click="jumpToEcharts">
+                            可视化图表
+                        </a-menu-item>
+                    </a-sub-menu>
                     <a-menu-item key="/setting" @click="jumpToSetting">
                         <template #icon>
                             <icon-settings />
@@ -84,7 +82,6 @@ export default defineComponent({
         ExportTypeEnum,
         GraphTypeEnum,
         Config,
-        collapsed: false,
         selectedKeys: ['/home']
     }),
     computed: {
@@ -191,17 +188,17 @@ export default defineComponent({
         jumpToDrauu() {
             useGlobalStore().setTitle(' ');
             useGlobalStore().setType(undefined);
-            this.$router.push('/drauu');
+            this.$router.push('/draw/drauu');
+        },
+        jumpToEcharts() {
+            useGlobalStore().setTitle(' ');
+            useGlobalStore().setType(undefined);
+            this.$router.push('/draw/echarts');
         },
         jumpToSetting() {
             useGlobalStore().setTitle(' ');
             useGlobalStore().setType(undefined);
             this.$router.push('/setting');
-        },
-        jumpToEcharts() {
-            useGlobalStore().setTitle(' ');
-            useGlobalStore().setType(undefined);
-            this.$router.push('/echarts');
         },
         jumpToAbout() {
             useGlobalStore().setTitle(' ');

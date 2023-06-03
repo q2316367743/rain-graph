@@ -33,50 +33,59 @@
                 <a-dropdown trigger="click">
                     <a-button>更多</a-button>
                     <template #content>
-                        <a-doption @click="changeGrid">网格显示</a-doption>
+                        <a-doption @click="changeGrid">网格</a-doption>
                         <a-doption @click="changeReadonly">编辑/只读</a-doption>
                         <a-doption @click="helpDrawer = true">帮助</a-doption>
                     </template>
                 </a-dropdown>
             </a-button-group>
-            <a-radio-group type="button" v-model="activeKey" class="draw-type">
-                <a-tooltip content="选择">
-                    <a-radio value="selection"><icon-choose style="margin-top: 6px;" /></a-radio>
-                </a-tooltip>
-                <a-tooltip content="橡皮擦">
-                    <a-radio value="eraser"><icon-eraser /></a-radio>
-                </a-tooltip>
-                <a-radio value="rectangle"><icon-rect style="margin-top: 6px;" /></a-radio>
-                <a-radio value="diamond"><icon-diamond style="margin-top: 6px;" /></a-radio>
-                <a-radio value="triangle"><icon-triangle style="margin-top: 6px;" /></a-radio>
-                <a-radio value="circle"><icon-circle style="margin-top: 6px;" /></a-radio>
-                <a-radio value="line"><icon-line style="margin-top: 6px;" /></a-radio>
-                <a-radio value="arrow"><icon-arrow-right /></a-radio>
-                <a-tooltip content="画笔">
-                    <a-radio value="freedraw"><icon-pen /></a-radio>
-                </a-tooltip>
-                <a-tooltip content="文字">
-                    <a-radio value="text"><icon-edit /></a-radio>
-                </a-tooltip>
-                <a-tooltip content="图片">
-                    <a-radio value="image"><icon-image /></a-radio>
-                </a-tooltip>
-            </a-radio-group>
+            <a-switch :model-value="config.readonly" type="round" style="margin: 4px 6px;" @change="changeReadonly">
+                <template #checked>锁定</template>
+                <template #unchecked>编辑</template>
+            </a-switch>
         </div>
-        <div class="container">
+        <a-layout class="container">
             <div id="white-board-view"></div>
+            <!-- 选择器 -->
+            <div class="white-board-draw-type" :style="{ left: drawTypeLeft }" v-show="!config.readonly">
+                <a-radio-group type="button" v-model="activeKey" class="draw-type">
+                    <a-tooltip content="选择">
+                        <a-radio value="selection"><icon-choose style="margin-top: 6px;" /></a-radio>
+                    </a-tooltip>
+                    <a-tooltip content="橡皮擦">
+                        <a-radio value="eraser"><icon-eraser /></a-radio>
+                    </a-tooltip>
+                    <a-radio value="rectangle"><icon-rect style="margin-top: 6px;" /></a-radio>
+                    <a-radio value="diamond"><icon-diamond style="margin-top: 6px;" /></a-radio>
+                    <a-radio value="triangle"><icon-triangle style="margin-top: 6px;" /></a-radio>
+                    <a-radio value="circle"><icon-circle style="margin-top: 6px;" /></a-radio>
+                    <a-radio value="line"><icon-line style="margin-top: 6px;" /></a-radio>
+                    <a-radio value="arrow"><icon-arrow-right /></a-radio>
+                    <a-tooltip content="画笔">
+                        <a-radio value="freedraw"><icon-pen /></a-radio>
+                    </a-tooltip>
+                    <a-tooltip content="文字">
+                        <a-radio value="text"><icon-edit /></a-radio>
+                    </a-tooltip>
+                    <a-tooltip content="图片">
+                        <a-radio value="image"><icon-image /></a-radio>
+                    </a-tooltip>
+                </a-radio-group>
+            </div>
             <!-- 面板 -->
-            <white-board-panel class="white-board-panel" v-if="render" :app="app" :active-element="activeElement"
-                :panel="panel" />
-        </div>
+            <white-board-panel class="white-board-panel" v-if="render" v-show="!config.readonly" :app="app"
+                :active-element="activeElement" :has-selected-elements="hasSelectedElements" :panel="panel" />
+        </a-layout>
         <!-- 菜单 -->
-        <white-board-context-menu :app="app" v-if="render" />
+        <white-board-context-menu :app="app" v-if="render" v-show="!config.readonly" />
         <!-- 图片导出 -->
         <white-board-export-png v-model:show="exportPngDialog" :app="app" />
         <!-- 显示设置 -->
-        <white-board-display :background-color="config.backgroundColor" :scale="config.scale" :scroll-x="config.scrollX"
-            :scroll-y="config.scrollY" @change-color="changeBackgroundColor" @scale-plus="scalePlus"
-            @scale-minus="scaleMinus" @scale-reset="scaleReset" @scroll-to-center="scrollToCenter" />
+        <white-board-display v-show="!config.readonly" :background-color="config.backgroundColor" :scale="config.scale"
+            :scroll-x="config.scrollX" :scroll-y="config.scrollY" @change-color="changeBackgroundColor"
+            @scale-plus="scalePlus" @scale-minus="scaleMinus" @scale-reset="scaleReset"
+            @scroll-to-center="scrollToCenter" />
+        <!-- 帮助 -->
         <a-drawer v-model:visible="helpDrawer" title="帮助" width="300px" :footer="false">
             <white-board-help />
         </a-drawer>
@@ -149,6 +158,7 @@ export default defineComponent({
 
         // 面板
         activeElement: undefined as any | undefined,
+        selectedElements: [] as any[],
         panel: {
             lineWidth: 'middle',
             fontFamily: '',
@@ -159,9 +169,15 @@ export default defineComponent({
         }
     }),
     computed: {
-        ...mapState(useGlobalStore, ['size']),
+        ...mapState(useGlobalStore, ['size', 'width']),
         _id() {
             return `/${GraphTypeEnum.WHITE_BOARD}/${this.id}`;
+        },
+        drawTypeLeft() {
+            return ((this.width - 460) / 2) + 'px';
+        },
+        hasSelectedElements() {
+            return this.selectedElements.length > 0;
         }
     },
     watch: {
@@ -170,6 +186,9 @@ export default defineComponent({
                 this.app.resize();
             },
             deep: true
+        },
+        collapsed() {
+            this.app.resize();
         },
         activeKey() {
             this.app.updateCurrentType(this.activeKey);
@@ -263,6 +282,9 @@ export default defineComponent({
                     element.on('elementRotateChange', this.onElementRotateChange)
                 }
             });
+            this.app.on('multiSelectChange', (elements: any[]) => {
+                this.selectedElements = elements
+            })
             this.render = true;
         },
         onElementRotateChange(elementRotate: any) {
@@ -289,7 +311,11 @@ export default defineComponent({
             }
         },
         changeReadonly() {
+            // 变更只读
             this.config.readonly = !this.config.readonly;
+            // 取消全部选中
+            this.app.cancelActiveElement();
+            // 处理
             if (this.config.readonly) {
                 this.app.setReadonlyMode();
             } else {
@@ -383,6 +409,16 @@ export default defineComponent({
         left: 0;
         right: 0;
         bottom: 0;
+
+        .white-board-draw-type {
+            position: absolute;
+            top: 7px;
+            background-color: var(--color-bg-1);
+            padding: 3px;
+            border-radius: 2px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            transition: 0.2ms all;
+        }
 
     }
 

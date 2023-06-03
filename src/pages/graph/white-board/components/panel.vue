@@ -1,5 +1,5 @@
 <template>
-    <div v-show="activeElement || hasSelectedElements">
+    <div v-if="activeElement || hasSelectedElements">
         <div class="elementStyle">
             <!-- 描边 -->
             <div class="styleBlock" v-if="!['text', 'image'].includes(activeElement?.type) ||
@@ -206,8 +206,6 @@ export default defineComponent({
 <style scoped lang="less">
 .elementStyle {
     padding: 10px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 4px;
     height: 100%;
     background-color: var(--color-bg-1);
     color: var(--color-text-1);

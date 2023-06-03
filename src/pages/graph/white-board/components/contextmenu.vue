@@ -133,29 +133,6 @@ const exec = (command: string) => {
         }
     }
 }
-
-  // onMousedown(e) {
-  //       if (e.which !== 3) {
-  //         return;
-  //       }
-  //       this.mosuedownX = e.clientX;
-  //       this.mosuedownY = e.clientY;
-  //       this.isMousedown = true;
-  //     }
-  //     onMouseup(e) {
-  //       if (!this.isMousedown) {
-  //         return;
-  //       }
-  //       this.isMousedown = false;
-  //       if (
-  //         Math.abs(this.mosuedownX - e.clientX) > 3 ||
-  //         Math.abs(this.mosuedownY - e.clientY) > 3
-  //       ) {
-  //         this.hide();
-  //         return;
-  //       }
-  //       this.show2(e);
-  //     },
 </script>
 
 <style lang="less" scoped>

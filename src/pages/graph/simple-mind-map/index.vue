@@ -1,21 +1,27 @@
 <template>
     <div class="simple-mind-map">
-        <a-button-group type="text" class="header">
-            <simple-mind-map-menu-file @save="save" @save-as="saveAs" />
-            <!-- 编辑 -->
-            <simple-mind-map-menu-edit :index="index" :len="len" :has-node="hasNode" @add-node="addBothNode"
-                @add-child-node="addChildNode" @remove-node="removeNode" @back="back" @forward="forward" />
-            <!-- 插入 -->
-            <simple-mind-map-menu-insert :has-node="hasNode" @add-link="addLink" />
-            <!-- 导出 -->
-            <simple-mind-map-menu-export @export="exportFile" />
-            <!-- 更多 -->
-            <simple-mind-map-menu-more :index="index" :len="len" :has-node="hasNode" :render-tree="renderTree"
-                @switch-theme="setTheme" @switch-layout="setLayout" @set-node="setNode" />
-        </a-button-group>
-        <div class="container">
-            <div id="simple-mind-map"></div>
+        <div class="header">
+            <a-button-group type="text">
+                <simple-mind-map-menu-file @save="save" @save-as="saveAs" />
+                <!-- 编辑 -->
+                <simple-mind-map-menu-edit :index="index" :len="len" :has-node="hasNode" @add-node="addBothNode"
+                    @add-child-node="addChildNode" @remove-node="removeNode" @back="back" @forward="forward" />
+                <!-- 插入 -->
+                <simple-mind-map-menu-insert :has-node="hasNode" @add-link="addLink" />
+                <!-- 导出 -->
+                <simple-mind-map-menu-export @export="exportFile" />
+                <!-- 更多 -->
+                <simple-mind-map-menu-more :index="index" :len="len" :has-node="hasNode" :render-tree="renderTree"
+                    @switch-theme="setTheme" @switch-layout="setLayout" @set-node="setNode" />
+            </a-button-group>
+            <a-button type="text" @click="collapsed = !collapsed">样式</a-button>
         </div>
+        <a-layout class="container">
+            <a-layout-content>
+                <div id="simple-mind-map"></div>
+            </a-layout-content>
+            <a-layout-sider :collapsed="collapsed" :width="200" :collapsed-width="0">Sider</a-layout-sider>
+        </a-layout>
     </div>
 </template>
 <script lang="ts">
@@ -48,8 +54,9 @@ export default defineComponent({
         index: 0,
         len: 0,
         hasNode: false,
-        name: ''
-        // 本身数据
+        name: '',
+        // 本身数据,
+        collapsed: false
     }),
     computed: {
         ...mapState(useGlobalStore, ['height', 'width', 'title', 'isDark'])
@@ -59,6 +66,9 @@ export default defineComponent({
             simpleMindMapWrap.setSize(this.width, this.height);
         },
         width() {
+            simpleMindMapWrap.setSize(this.width, this.height);
+        },
+        collapsed() {
             simpleMindMapWrap.setSize(this.width, this.height);
         }
     },
@@ -170,6 +180,8 @@ export default defineComponent({
         right: 0;
         height: 32px;
         border-bottom: 1px solid var(--color-neutral-3);
+        display: flex;
+        justify-content: space-between;
     }
 
     .container {
@@ -234,13 +246,15 @@ export default defineComponent({
         }
 
         .simple-mind-map-extra {
-
             .container {
                 text-align: center;
                 background-color: var(--color-bg-2);
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             }
+        }
 
+        .arco-layout-content {
+            overflow: hidden;
         }
     }
 }

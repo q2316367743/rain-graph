@@ -8,6 +8,9 @@
 - [在线使用](https://rain-graph.netlify.app/)
 - [utools](https://u.tools/)
 
+## 第三方面板
+
+- [思维导图](https://wanglin2.github.io/mind-map/#/)
 
 ## 思维导图
 
@@ -21,6 +24,7 @@
 ### 相关参考
 
 - [知犀思维导图](https://www.zhixi.com/space?page=owner)
+
 ## 流程图
 
 - [Flowchart.js](https://github.com/adrai/flowchart.js)：_Flowchart.js_ 仅需几行代码即可在 Web 上完成流程图的构建。可以从文字表述中画出简单的 SVG 流程图，也可以画出彩色的图表。

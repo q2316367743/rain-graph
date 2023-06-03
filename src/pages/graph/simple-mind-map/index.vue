@@ -1,11 +1,18 @@
 <template>
     <div class="simple-mind-map">
-        <div class="header">
-            <simple-mind-map-menu :index="index" :len="len" :has-node="hasNode" :render-tree="renderTree" @save="save"
-                @save-as="saveAs" @export="exportFile" @add-link="addLink" @switch-theme="setTheme"
-                @switch-layout="setLayout" @set-node="setNode" @add-node="addBothNode" @add-child-node="addChildNode"
-                @remove-node="removeNode" @back="back" @forward="forward" />
-        </div>
+        <a-button-group type="text" class="header">
+            <simple-mind-map-menu-file @save="save" @save-as="saveAs" />
+            <!-- 编辑 -->
+            <simple-mind-map-menu-edit :index="index" :len="len" :has-node="hasNode" @add-node="addBothNode"
+                @add-child-node="addChildNode" @remove-node="removeNode" @back="back" @forward="forward" />
+            <!-- 插入 -->
+            <simple-mind-map-menu-insert :has-node="hasNode" @add-link="addLink" />
+            <!-- 导出 -->
+            <simple-mind-map-menu-export @export="exportFile" />
+            <!-- 更多 -->
+            <simple-mind-map-menu-more :index="index" :len="len" :has-node="hasNode" :render-tree="renderTree"
+                @switch-theme="setTheme" @switch-layout="setLayout" @set-node="setNode" />
+        </a-button-group>
         <div class="container">
             <div id="simple-mind-map"></div>
         </div>
@@ -18,7 +25,11 @@ import { mapState } from "pinia";
 import { useGlobalStore } from "@/store/GlobalStore";
 
 // 组件
-import SimpleMindMapMenu from './components/menu.vue';
+import SimpleMindMapMenuMore from './components/menu-more.vue';
+import SimpleMindMapMenuFile from './components/menu-file.vue';
+import SimpleMindMapMenuEdit from './components/menu-edit.vue';
+import SimpleMindMapMenuInsert from './components/menu-insert.vue';
+import SimpleMindMapMenuExport from './components/menu-export.vue';
 
 import MessageUtil from "@/utils/MessageUtil";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
@@ -31,7 +42,7 @@ let simpleMindMapWrap = {} as SimpleMindMapWrap;
 
 export default defineComponent({
     name: '',
-    components: { SimpleMindMapMenu },
+    components: { SimpleMindMapMenuMore, SimpleMindMapMenuFile, SimpleMindMapMenuEdit, SimpleMindMapMenuInsert, SimpleMindMapMenuExport },
     data: () => ({
         renderTree: undefined as any | undefined,
         index: 0,
@@ -89,9 +100,9 @@ export default defineComponent({
                 this.hasNode = hasNode;
             });
             // 设置主题
-            if(this.isDark) {
+            if (this.isDark) {
                 this.setTheme('dark');
-            }else {
+            } else {
                 this.setTheme('default')
             }
         },

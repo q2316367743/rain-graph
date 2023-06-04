@@ -1,21 +1,21 @@
 <template>
     <div class="diagram-toolbar">
-        <div class="toolbar-item" :class="{ 'selection-active': selectionOpened }" @click="selectionSelect()">
-            <icon-fullscreen :size="18" />
-        </div>
         <div class="toolbar-item" @click="zoomIn()">
             <icon-zoom-in :size="18" />
         </div>
         <div class="toolbar-item" @click="zoomOut()">
             <icon-zoom-out :size="18" />
         </div>
-        <div class="toolbar-item" :class="{ 'disabled': !undoAble }" @click="undo()">
+        <div class="toolbar-item" :class="{ 'disabled': !undoAble }" @click="undo()" v-if="!readonly">
             <icon-undo :size="18" />
         </div>
-        <div class="toolbar-item" :class="{ 'disabled': !redoAble }" @click="redo()">
+        <div class="toolbar-item" :class="{ 'disabled': !redoAble }" @click="redo()" v-if="!readonly">
             <icon-redo :size="18" />
         </div>
-        <div>
+        <div class="toolbar-item" :class="{ 'selection-active': selectionOpened }" @click="selectionSelect()" v-if="!readonly">
+            <icon-fullscreen :size="18" />
+        </div>
+        <div v-if="!readonly">
             <a-select v-model="linetype" size="mini" @change="changeLineType">
                 <a-option v-for="item in lineOptions" :key="item.value" :value="item.value" :label="item.label"></a-option>
             </a-select>
@@ -30,7 +30,8 @@ import { defineComponent } from 'vue'
 export default defineComponent({
     props: {
         lf: Object,
-        activeEdges: Array<any>
+        activeEdges: Array<any>,
+        readonly: Boolean
     },
     data: () => ({
         selectionOpened: false,

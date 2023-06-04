@@ -2,23 +2,24 @@
     <div class="diagram">
         <!-- 顶部菜单栏 -->
         <diagram-menu class="header" v-if="render" v-model:panel-show="panelShow" :lf="lf" :collapsed="collapsed"
-            @save="save" />
+            :readonly="readonly" @save="save" @update-readonly="setReadonly" />
         <div class="container">
             <a-layout>
                 <!-- 侧边工具栏 -->
-                <a-layout-sider hide-trigger collapsible :collapsed="collapsed" :collapsed-width="0" :width="200">
+                <a-layout-sider hide-trigger collapsible :collapsed="collapsed || readonly" :collapsed-width="0"
+                    :width="200">
                     <diagram-sidebar v-if="render" @drag-in-node="dragInNode" />
                 </a-layout-sider>
                 <a-layout>
                     <!-- 内容 -->
                     <div class="content" id="diagram-view"></div>
-                    <!-- 右侧工具栏、属性栏 -->
+                    <!-- 左上角工具栏、属性栏 -->
                     <div class="toolbar">
-                        <diagram-toolbar v-if="render" :lf="lf" :active-edges="activeEdges" />
+                        <diagram-toolbar v-if="render" :lf="lf" :active-edges="activeEdges" :readonly="readonly" />
                     </div>
                     <div class="collapsed">
                         <!-- 折叠按钮 -->
-                        <a-button @click="collapsed = !collapsed" type="primary">
+                        <a-button @click="collapsed = !collapsed" type="primary" v-if="!readonly">
                             <template #icon>
                                 <icon-menu-unfold v-if="collapsed" />
                                 <icon-menu-fold v-else />
@@ -26,9 +27,9 @@
                         </a-button>
                     </div>
                     <!-- 右侧属性面板 -->
-                    <diagram-panel class="panel" v-if="activeNodes.length > 0 || activeEdges.length > 0" v-show="panelShow"
-                        :onlyEdge="activeNodes.length === 0" :elementsStyle="properties" @set-style="setStyle"
-                        @@set-level="setZIndex" />
+                    <diagram-panel class="panel" v-if="activeNodes.length > 0 || activeEdges.length > 0"
+                        v-show="panelShow && !readonly" :onlyEdge="activeNodes.length === 0" :elementsStyle="properties"
+                        @set-style="setStyle" @@set-level="setZIndex" />
                 </a-layout>
             </a-layout>
         </div>
@@ -62,6 +63,7 @@ import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import MessageUtil from "@/utils/MessageUtil";
 import { useSaveEvent, useSideEvent, useUndoEvent } from "@/global/BeanFactory";
 import { getRecord } from "@/utils/utools/DbUtil";
+import { silentConfig, originalConfig } from './constants';
 
 export default defineComponent({
     name: 'diagram',
@@ -89,7 +91,8 @@ export default defineComponent({
         activeNodes: [] as any[],
         activeEdges: [] as any[],
         properties: {},
-        panelShow: true
+        panelShow: true,
+        readonly: false
     }),
     computed: {
         ...mapState(useGlobalStore, ['size', 'title']),
@@ -97,13 +100,13 @@ export default defineComponent({
             return `/${GraphTypeEnum.DIAGRAM}/${this.id}`;
         },
         width() {
-            return this.size.width - (this.collapsed ? 0 : 200);
+            return this.size.width - (this.collapsed || this.readonly ? 0 : 200);
         },
         height() {
             return this.size.height - 33;
         },
         miniMapLeft() {
-            return this.size.width - 156 - 10 - (this.collapsed ? 0 : 200);
+            return this.size.width - 156 - 10 - (this.collapsed || this.readonly ? 0 : 200);
         },
         miniMapTop() {
             return this.size.height - 242 - 10 - 33;
@@ -125,6 +128,9 @@ export default defineComponent({
                 this.lf.extension.miniMap.hide();
                 this.lf.extension.miniMap.show(this.miniMapLeft, this.miniMapTop);
             }
+            this.lf.resize(this.width, this.height);
+        },
+        readonly() {
             this.lf.resize(this.width, this.height);
         }
     },
@@ -227,6 +233,14 @@ export default defineComponent({
                 this.lf.setElementZIndex(id, type)
             })
         },
+        setReadonly() {
+            this.readonly = !this.readonly;
+            if (this.readonly) {
+                this.lf.updateEditConfig(silentConfig);
+            } else {
+                this.lf.updateEditConfig(originalConfig);
+            }
+        }
     }
 });
 </script>

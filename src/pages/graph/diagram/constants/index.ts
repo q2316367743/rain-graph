@@ -53,4 +53,35 @@ export const borderStyles = [
     }
 ]
 
-export const fontFamilies = ['微软雅黑']
+export const fontFamilies = ['微软雅黑'];
+
+// 静默模式
+export const silentConfig = {
+    stopZoomGraph: false,
+    stopScrollGraph: false,
+    stopMoveGraph: false,
+    adjustEdge: false,
+    adjustEdgeStartAndEnd: false,
+    adjustNodePosition: false,
+    hideAnchors: true,
+    nodeSelectedOutline: true,
+    nodeTextEdit: false,
+    edgeTextEdit: false,
+    nodeTextDraggable: false,
+    edgeTextDraggable: false,
+};
+// 正常模式
+export const originalConfig = {
+    stopZoomGraph: true,
+    stopScrollGraph: true,
+    stopMoveGraph: true,
+    adjustEdge: true,
+    adjustEdgeStartAndEnd: true,
+    adjustNodePosition: true,
+    hideAnchors: false,
+    nodeSelectedOutline: false,
+    nodeTextEdit: true,
+    edgeTextEdit: true,
+    nodeTextDraggable: true,
+    edgeTextDraggable: true,
+};

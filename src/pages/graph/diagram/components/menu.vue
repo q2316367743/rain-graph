@@ -23,17 +23,27 @@
             <a-dropdown>
                 <a-button>查看</a-button>
                 <template #content>
-                    <a-dgroup title="">
-                        <a-doption @click="showMiniMap">
-                            <template #icon v-if="display.miniMap"><icon-check /></template>
-                            小地图
-                        </a-doption>
-                    </a-dgroup>
-                    <a-dgroup title="视图设置">
-                        <a-doption @click="reset">重置大小</a-doption>
-                        <a-doption @click="plus">放大</a-doption>
-                        <a-doption @click="reduce">缩小</a-doption>
-                    </a-dgroup>
+                    <a-doption @click="$emit('update-readonly')">
+                        <template #icon><icon-check :style="{ visibility: readonly ? 'visible' : 'hidden' }" /></template>
+                        只读
+                    </a-doption>
+                    <a-doption @click="panel = !panel">
+                        <template #icon><icon-check :style="{ visibility: panel ? 'visible' : 'hidden' }" /></template>
+                        面板
+                    </a-doption>
+                    <a-doption @click="showMiniMap">
+                        <template #icon><icon-check
+                                :style="{ visibility: display.miniMap ? 'visible' : 'hidden' }" /></template>
+                        小地图
+                    </a-doption>
+                </template>
+            </a-dropdown>
+            <a-dropdown>
+                <a-button>视图</a-button>
+                <template #content>
+                    <a-doption @click="reset">重置大小</a-doption>
+                    <a-doption @click="plus">放大</a-doption>
+                    <a-doption @click="reduce">缩小</a-doption>
                 </template>
             </a-dropdown>
             <a-dropdown>
@@ -59,10 +69,9 @@
                     <icon-fullscreen v-else />
                 </template>
             </a-button>
-            <a-button @click="panel = !panel">
+            <a-button @click="panel = !panel" :status="panel ? 'success' : 'normal'">
                 <template #icon>
-                    <i class="show-panel" v-if="panel" />
-                    <i class="hide-panel" v-else />
+                    <icon-layout />
                 </template>
             </a-button>
         </a-button-group>
@@ -82,18 +91,18 @@
     </div>
 </template>
 <script lang="ts">
-import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import { defineComponent, toRaw } from "vue";
+import { mapState } from "pinia";
+import { useFullscreen } from "@vueuse/core";
+import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import BrowserUtil from "@/utils/BrowserUtil";
 import { useGlobalStore } from "@/store/GlobalStore";
-import { mapState } from "pinia";
-import { useFullscreen } from "@vueuse/core";
 import { useMapEvent } from "@/global/BeanFactory";
 
 export default defineComponent({
     name: 'diagram-menu',
-    emits: ['update:panel-show', 'new', 'open', 'save', 'show-mini-map'],
+    emits: ['update:panel-show', 'new', 'open', 'save', 'show-mini-map', 'update-readonly'],
     props: {
         lf: {
             type: Object,
@@ -106,7 +115,8 @@ export default defineComponent({
             default: {}
         },
         collapsed: Boolean,
-        panelShow: Boolean
+        panelShow: Boolean,
+        readonly: Boolean
     },
     data: () => ({
         ExportTypeEnum,
@@ -116,7 +126,7 @@ export default defineComponent({
         // 显示设置
         display: {
             miniMap: false
-        }
+        },
     }),
     computed: {
         ...mapState(useGlobalStore, ['size', 'title']),
@@ -130,7 +140,7 @@ export default defineComponent({
     watch: {
         panel(newValue) {
             this.$emit('update:panel-show', newValue)
-        }
+        },
     },
     created() {
         useMapEvent.on(() => this.showMiniMap());

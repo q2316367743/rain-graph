@@ -137,17 +137,22 @@ export default defineComponent({
         config: {
             scrollX: 0,
             scrollY: 0,
+            // 显示布局
             showGrid: false,
+            // 只读
             readonly: false,
+            // 背景颜色
             backgroundColor: 'var(--color-bg-1)',
+            // 默认字体
             fontFamily: '微软雅黑',
+            // 默认字体大小
             fontSize: 18,
             // 	默认线条颜色
-            strokeStyle: '#000000',
+            strokeStyle: 'var(--color-text-1)',
             // 默认填充颜色
             fillStyle: 'transparent',
             // 选中元素的拖拽元素的默认线条颜色
-            dragStrokeStyle: '#666',
+            dragStrokeStyle: 'var(--color-neutral-8)',
             // 缩放
             scale: 1
         },
@@ -169,7 +174,7 @@ export default defineComponent({
         }
     }),
     computed: {
-        ...mapState(useGlobalStore, ['size', 'width']),
+        ...mapState(useGlobalStore, ['size', 'width', 'isDark']),
         _id() {
             return `/${GraphTypeEnum.WHITE_BOARD}/${this.id}`;
         },

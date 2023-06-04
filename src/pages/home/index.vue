@@ -134,6 +134,8 @@ export default defineComponent({
                 useSimpleMindMapStore().update(item);
             } else if (this.activeKey === GraphTypeEnum.DIAGRAM) {
                 useDiagramStore().update(item);
+            } else if (this.activeKey === GraphTypeEnum.WHITE_BOARD) {
+                useWhiteBoardStore().update(item);
             }
             this.search();
         },
@@ -144,6 +146,8 @@ export default defineComponent({
                 useSimpleMindMapStore().remove(item);
             } else if (this.activeKey === GraphTypeEnum.DIAGRAM) {
                 useDiagramStore().remove(item);
+            } else if (this.activeKey === GraphTypeEnum.WHITE_BOARD) {
+                useWhiteBoardStore().remove(item);
             }
             this.search();
         }

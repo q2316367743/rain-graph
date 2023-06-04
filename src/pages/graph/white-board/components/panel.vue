@@ -1,6 +1,6 @@
 <template>
-    <div v-if="activeElement || hasSelectedElements">
-        <div class="elementStyle">
+    <div class="white-board-panel">
+        <div class="elementStyle" v-if="(activeElement || hasSelectedElements) && show">
             <!-- 描边 -->
             <div class="styleBlock" v-if="!['text', 'image'].includes(activeElement?.type) ||
                 hasSelectedElements
@@ -104,25 +104,25 @@
                         :max="360" @change="onRotateChange" />
                 </div>
             </div>
-            <!-- 操作 -->
-            <div class="styleBlock">
-                <div class="styleBlockTitle">操作</div>
-                <div class="styleBlockContent">
-                    <a-button-group type="primary">
-                        <a-button status="danger" @click="deleteElement">
-                            <template #icon>
-                                <icon-delete />
-                            </template>
-                        </a-button>
-                        <a-button @click="copyElement" style="margin-left: 7px;">
-                            <template #icon>
-                                <icon-copy />
-                            </template>
-                        </a-button>
-                    </a-button-group>
-                </div>
-            </div>
         </div>
+        <!-- 显示面板 -->
+        <a-button-group type="primary" class="white-board-panel-action" :disabled="!(activeElement || hasSelectedElements)">
+            <a-button @click="show = !show">
+                <template #icon>
+                    <icon-bg-colors />
+                </template>
+            </a-button>
+            <a-button @click="copyElement" style="margin-left: 7px;">
+                <template #icon>
+                    <icon-copy />
+                </template>
+            </a-button>
+            <a-button status="danger" @click="deleteElement" style="margin-left: 7px;">
+                <template #icon>
+                    <icon-delete />
+                </template>
+            </a-button>
+        </a-button-group>
     </div>
 </template>
 <script lang="ts">
@@ -145,15 +145,18 @@ export default defineComponent({
         lineDash: 0,
         globalAlpha: 0,
         rotate: 0,
+        // 显示
+        show: false
     }),
     created() {
         if (this.panel) {
-            this.lineWidth = this.panel.lineWidth
-            this.fontFamily = this.panel.fontFamily
-            this.fontSize = this.panel.fontSize
-            this.lineDash = this.panel.lineDash
-            this.globalAlpha = this.panel.globalAlpha
-            this.rotate = this.panel.rotate
+            this.lineWidth = this.panel.lineWidth;
+            this.fontFamily = this.panel.fontFamily;
+            this.fontSize = this.panel.fontSize;
+            this.lineDash = this.panel.lineDash;
+            this.globalAlpha = this.panel.globalAlpha;
+            this.rotate = this.panel.rotate;
+            this.show = false;
         }
     },
     watch: {
@@ -165,6 +168,7 @@ export default defineComponent({
                 this.lineDash = panel.lineDash
                 this.globalAlpha = panel.globalAlpha
                 this.rotate = panel.rotate;
+                this.show = false;
             },
             deep: true
         }
@@ -204,66 +208,73 @@ export default defineComponent({
 });
 </script>
 <style scoped lang="less">
-.elementStyle {
-    padding: 10px;
-    height: 100%;
-    background-color: var(--color-bg-1);
-    color: var(--color-text-1);
+.white-board-panel {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 220px;
 
-    .styleBlock {
-        margin-bottom: 10px;
+    .elementStyle {
+        padding: 10px;
+        background-color: var(--color-bg-2);
+        color: var(--color-text-1);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        position: absolute;
+        right: 14px;
+        bottom: 85px;
 
-        .styleBlockTitle {
-            color: var(--color-text-1);
-            font-size: 14px;
+        .styleBlock {
             margin-bottom: 10px;
-        }
 
-        .styleBlockContent {
-            display: flex;
-
-            .lineWidthItem {
-                display: flex;
-                width: 30px;
-                height: 20px;
-                align-items: center;
-
-                .bar {
-                    width: 100%;
-                    background-color: #212529;
-                }
-
-                &.small {
-                    .bar {
-                        height: 2px;
-                    }
-                }
-
-                &.middle {
-                    .bar {
-                        height: 4px;
-                    }
-                }
-
-                &.large {
-                    .bar {
-                        height: 6px;
-                    }
-                }
+            .styleBlockTitle {
+                color: var(--color-text-1);
+                font-size: 14px;
+                margin-bottom: 10px;
             }
 
-            /deep/ .el-radio-group {
-                .el-radio-button {
-                    &.is-active {
-                        .lineWidthItem {
-                            .bar {
-                                background-color: #fff;
-                            }
+            .styleBlockContent {
+                display: flex;
+
+                .lineWidthItem {
+                    display: flex;
+                    width: 30px;
+                    height: 20px;
+                    align-items: center;
+
+                    .bar {
+                        width: 100%;
+                        background-color: #212529;
+                    }
+
+                    &.small {
+                        .bar {
+                            height: 2px;
+                        }
+                    }
+
+                    &.middle {
+                        .bar {
+                            height: 4px;
+                        }
+                    }
+
+                    &.large {
+                        .bar {
+                            height: 6px;
                         }
                     }
                 }
+
             }
         }
+    }
+
+    .white-board-panel-action {
+        position: absolute;
+        right: 14px;
+        bottom: 39px;
+        background-color: var(--color-bg-1);
+        padding: 4px;
     }
 }
 </style>

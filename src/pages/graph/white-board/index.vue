@@ -422,14 +422,6 @@ export default defineComponent({
 
     }
 
-    .white-board-panel {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        width: 220px;
-    }
-
     .draw-type {
         svg {
             fill: var(--color-text-1);

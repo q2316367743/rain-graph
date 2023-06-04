@@ -131,6 +131,9 @@ export default defineComponent({
     computed: {
         ...mapState(useGlobalStore, ['size', 'title']),
         miniMapLeft() {
+            if (this.readonly) {
+                return this.size.width - 156 - 10;
+            }
             return this.size.width - 156 - 10 - (this.collapsed ? 0 : 200);
         },
         miniMapTop() {

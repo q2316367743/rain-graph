@@ -106,7 +106,10 @@ export default defineComponent({
             return this.size.height - 33;
         },
         miniMapLeft() {
-            return this.size.width - 156 - 10 - (this.collapsed || this.readonly ? 0 : 200);
+            if (this.readonly) {
+                return this.size.width - 156 - 10;
+            }
+            return this.size.width - 156 - 10 - (this.collapsed ? 0 : 200);
         },
         miniMapTop() {
             return this.size.height - 242 - 10 - 33;
@@ -131,6 +134,10 @@ export default defineComponent({
             this.lf.resize(this.width, this.height);
         },
         readonly() {
+            if (this.lf.extension.miniMap.isShow) {
+                this.lf.extension.miniMap.hide();
+                this.lf.extension.miniMap.show(this.miniMapLeft, this.miniMapTop);
+            }
             this.lf.resize(this.width, this.height);
         }
     },

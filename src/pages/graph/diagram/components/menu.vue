@@ -62,19 +62,27 @@
                 </template>
             </a-dropdown>
         </a-button-group>
-        <a-button-group type="text">
-            <a-button @click="fullscreen.toggle()">
+        <div type="text">
+            <!-- 锁定 -->
+            <a-button type="text" @click="$emit('update-readonly')" :status="readonly ? 'success' : 'normal'">
+                <template #icon>
+                    <icon-lock />
+                </template>
+            </a-button>
+            <!-- 全屏 -->
+            <a-button type="text" @click="fullscreen.toggle()" :status="fullscreen.isFullscreen ? 'success' : 'normal'">
                 <template #icon>
                     <icon-fullscreen-exit v-if="fullscreen.isFullscreen" />
                     <icon-fullscreen v-else />
                 </template>
             </a-button>
-            <a-button @click="panel = !panel" :status="panel ? 'success' : 'normal'">
+            <!-- 面板 -->
+            <a-button type="text" @click="panel = !panel" :status="panel ? 'success' : 'normal'">
                 <template #icon>
                     <icon-layout />
                 </template>
             </a-button>
-        </a-button-group>
+        </div>
         <a-drawer title="快捷键" v-model:visible="keyboardShortcut" mask-closable :footer="false" width="300px">
             <a-descriptions align="right" title="节点操作" :column="1">
                 <a-descriptions-item label="保存">Ctrl + s</a-descriptions-item>

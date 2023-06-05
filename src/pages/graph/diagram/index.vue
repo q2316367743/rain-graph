@@ -65,6 +65,9 @@ import { useSaveEvent, useSideEvent, useUndoEvent } from "@/global/BeanFactory";
 import { getRecord } from "@/utils/utools/DbUtil";
 import { silentConfig, originalConfig } from './constants';
 
+// 主题
+import { DefaultTheme } from "./theme";
+
 export default defineComponent({
     name: 'diagram',
     components: { DiagramToolbar, DiagramSidebar, DiagramPanel, DiagramMenu },
@@ -173,6 +176,7 @@ export default defineComponent({
             registerCustomElement(lf);
             lf.setDefaultEdgeType('pro-polyline');
             lf.renderRawData(data);
+            lf.setTheme(DefaultTheme);
             this.render = true;
             this.lf = lf;
             this.lf.on('selection:selected,node:click,blank:click,edge:click', () => {

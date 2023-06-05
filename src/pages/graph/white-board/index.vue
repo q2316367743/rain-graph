@@ -242,9 +242,10 @@ export default defineComponent({
     methods: {
         init() {
             // 初始化数据
+            console.log(this.config)
             this.app = markRaw(new TinyWhiteboard({
                 container: document.getElementById('white-board-view'),
-                state: this.config
+                state: toRaw(this.config)
             }));
             // 事件监听
             this.app.on('currentTypeChange', (drawType: string) => {
@@ -354,6 +355,9 @@ export default defineComponent({
             }
         },
         save(show: boolean = false) {
+            if (!this.render) {
+                return;
+            }
             if (this.lock) {
                 return;
             }
@@ -419,10 +423,10 @@ export default defineComponent({
             position: absolute;
             top: 7px;
             background-color: var(--color-bg-1);
-            padding: 3px;
             border-radius: 2px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             transition: 0.2ms all;
+            border: 1px solid var(--color-neutral-3);
         }
 
     }

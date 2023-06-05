@@ -92,7 +92,7 @@ export default defineComponent({
             isShow: false,
             left: 0,
             top: 0,
-            node: null,
+            node: null as any,
             copyData: null,
             type: '',
             isMousedown: false,
@@ -228,23 +228,21 @@ export default defineComponent({
                     this.copyData = this.mindMap.renderer.copyNode()
                     break
                 case 'CUT_NODE':
-                    this.$bus.$emit('execCommand', key, copyData => {
+                    this.$emit('execCommand', key, (copyData: any) => {
                         this.copyData = copyData
                     })
                     break
                 case 'PASTE_NODE':
-                    this.$bus.$emit('execCommand', key, this.copyData)
+                    this.$emit('execCommand', key, this.copyData)
                     break
                 case 'RETURN_CENTER':
                     this.mindMap.view.reset()
                     break
                 case 'TOGGLE_ZEN_MODE':
-                    this.setLocalConfig({
-                        isZenMode: !this.isZenMode
-                    })
+                    // 切换禅模式
                     break
                 default:
-                    this.$bus.$emit('execCommand', key, ...args)
+                    this.$emit('execCommand', key, ...args)
                     break
             }
             this.hide()

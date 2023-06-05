@@ -1,9 +1,9 @@
 import { h } from '@logicflow/core'
-import { RectNode, RectNodeModel } from "@logicflow/core";
+import { ResizableRectModel, ResizableRectView } from '../root/RectNodeSource';
 import { getShapeStyleFunction, getTextStyleFunction } from '../getShapeStyleUtil'
 
 // 三角形
-class TriangleModel extends RectNodeModel {
+class TriangleModel extends ResizableRectModel {
     getNodeStyle() {
         const style = super.getNodeStyle()
         const properties = this.getProperties()
@@ -17,8 +17,8 @@ class TriangleModel extends RectNodeModel {
     }
 }
 
-class TriangleView extends RectNode {
-    getShape() {
+class TriangleView extends ResizableRectView {
+    getResizeShape() {
         const { x, y, width, height } = this.props.model
         const style = this.props.model.getNodeStyle()
         const attrs = {

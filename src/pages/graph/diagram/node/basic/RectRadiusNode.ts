@@ -1,9 +1,9 @@
-import { RectNode, RectNodeModel } from "@logicflow/core";
+import { RectResize } from "@logicflow/extension";
 import { getShapeStyleFunction, getTextStyleFunction } from "../getShapeStyleUtil";
 
 // 带圆角的矩形
-class RectRadiusModel extends RectNodeModel {
-  setAttributes () {
+class RectRadiusModel extends RectResize.model {
+  setAttributes() {
     super.setAttributes()
     this.radius = 20;
   }
@@ -19,8 +19,11 @@ class RectRadiusModel extends RectNodeModel {
     return getTextStyleFunction(style, properties)
   }
 }
+
+class ResizableRectView extends RectResize.view { }
+
 export default {
   type: 'rect-radius',
-  view: RectNode,
+  view: ResizableRectView,
   model: RectRadiusModel
 }

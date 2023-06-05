@@ -60,7 +60,7 @@ export default defineComponent({
         hasNode: false,
         name: '',
         // 本身数据,
-        collapsed: false
+        collapsed: true
     }),
     computed: {
         ...mapState(useGlobalStore, ['height', 'width', 'title', 'isDark'])

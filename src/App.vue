@@ -2,8 +2,7 @@
     <div class="app">
         <a-layout>
             <a-layout-sider collapsed>
-                <a-menu style="width: 200px;height: 100%;" breakpoint="xl"
-                    v-model:selected-keys="selectedKeys" >
+                <a-menu style="width: 200px;height: 100%;" breakpoint="xl" v-model:selected-keys="selectedKeys">
                     <a-menu-item key="/home" @click="toHome">
                         <template #icon><icon-list /></template>
                         列表
@@ -29,24 +28,24 @@
                     <a-sub-menu key="1">
                         <template #icon><icon-pen-fill /></template>
                         <template #title>绘制</template>
-                        <a-menu-item key="/draw/drauu" @click="jumpToDrauu">
+                        <a-menu-item key="/draw/drauu" @click="jumpToFunc('/draw/drauu')">
                             画板
                         </a-menu-item>
-                        <a-menu-item key="/draw/echarts" @click="jumpToEcharts">
+                        <a-menu-item key="/draw/echarts" @click="jumpToFunc('/draw/echarts')">
                             可视化图表
                         </a-menu-item>
                     </a-sub-menu>
-                    <a-menu-item key="/setting" @click="jumpToSetting">
+                    <a-menu-item key="/setting" @click="jumpToFunc('/setting')">
                         <template #icon>
                             <icon-settings />
                         </template>
                         设置
                     </a-menu-item>
-                    <a-menu-item key="/recommend" @click="jumpToRecommend">
+                    <a-menu-item key="/recommend" @click="jumpToFunc('/recommend')">
                         <template #icon><icon-thumb-up /></template>
                         推荐
                     </a-menu-item>
-                    <a-menu-item key="/about" @click="jumpToAbout">
+                    <a-menu-item key="/about" @click="jumpToFunc('/about')">
                         <template #icon>
                             <icon-exclamation-circle />
                         </template>
@@ -74,6 +73,9 @@ import { useSimpleMindMapStore } from "@/store/graph/SimpleMindMapStore";
 
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import GraphTypeEnum from '@/enumeration/GraphTypeEnum';
+import LocalNameEnum from '@/enumeration/LocalNameEnum';
+import Constant from "./global/Constant";
+import NotificationUtil from "./utils/NotificationUtil";
 
 
 export default defineComponent({
@@ -121,7 +123,6 @@ export default defineComponent({
             if (action.code.startsWith('/graph')) {
                 useGlobalStore().setTitle('');
                 useGlobalStore().setType(action.code as GraphTypeEnum);
-                this.$router.push(`/graph/${action.code}/0`);
             }
             this.$router.push(action.code);
         });
@@ -143,6 +144,7 @@ export default defineComponent({
             }
 
         }, false);
+        this.launch()
     },
     methods: {
         jumpTo(type: GraphTypeEnum) {
@@ -151,7 +153,7 @@ export default defineComponent({
             this.$router.push(`/graph/${type}/0`);
         },
         async openTo(type: GraphTypeEnum) {
-            let paths = await utools.showOpenDialog({
+            let paths = utools.showOpenDialog({
                 title: '选择图文件',
                 defaultPath: utools.getPath('documents'),
                 buttonLabel: '打开',
@@ -185,34 +187,35 @@ export default defineComponent({
                 }
             })
         },
-        jumpToDrauu() {
+        jumpToFunc(path: string) {
             useGlobalStore().setTitle(' ');
             useGlobalStore().setType(undefined);
-            this.$router.push('/draw/drauu');
-        },
-        jumpToEcharts() {
-            useGlobalStore().setTitle(' ');
-            useGlobalStore().setType(undefined);
-            this.$router.push('/draw/echarts');
-        },
-        jumpToSetting() {
-            useGlobalStore().setTitle(' ');
-            useGlobalStore().setType(undefined);
-            this.$router.push('/setting');
-        },
-        jumpToAbout() {
-            useGlobalStore().setTitle(' ');
-            useGlobalStore().setType(undefined);
-            this.$router.push('/about');
-        },
-        jumpToRecommend() {
-            useGlobalStore().setTitle(' ');
-            useGlobalStore().setType(undefined);
-            this.$router.push('/recommend');
+            this.$router.push(path);
         },
         // ------ 功能组件 ------
         switchDark() {
             useGlobalStore().switchDarkColors();
+        },
+        launch() {
+            utools.db.promises.get(LocalNameEnum.VERSION)
+                .then(versionWrap => {
+                    if (versionWrap) {
+                        if (Constant.version !== versionWrap.value) {
+                            NotificationUtil.success("版本更新到：" + Constant.version + "，请前往插件详情页查看更新日志", "版本更新");
+                            utools.db.promises.put({
+                                _id: LocalNameEnum.VERSION,
+                                _rev: versionWrap._rev,
+                                value: Constant.version
+                            });
+                        }
+                    } else {
+                        NotificationUtil.success("欢迎使用听雨图编辑器", "欢迎");
+                        utools.db.promises.put({
+                            _id: LocalNameEnum.VERSION,
+                            value: Constant.version
+                        });
+                    }
+                });
         }
     }
 });

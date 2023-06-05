@@ -39,10 +39,18 @@
                     </template>
                 </a-dropdown>
             </a-button-group>
-            <a-switch :model-value="config.readonly" type="round" style="margin: 4px 6px;" @change="changeReadonly">
-                <template #checked>锁定</template>
-                <template #unchecked>编辑</template>
-            </a-switch>
+            <a-button-group type="text">
+                <a-button @click="fullscreen.toggle()">
+                    <template #icon>
+                        <icon-fullscreen-exit v-if="fullscreen.isFullscreen" />
+                        <icon-fullscreen v-else />
+                    </template>
+                </a-button>
+                <a-switch :model-value="config.readonly" type="round" style="margin: 4px 6px;" @change="changeReadonly">
+                    <template #checked>锁定</template>
+                    <template #unchecked>编辑</template>
+                </a-switch>
+            </a-button-group>
         </div>
         <a-layout class="container">
             <div id="white-board-view"></div>
@@ -117,6 +125,7 @@ import { useWhiteBoardStore } from "@/store/graph/WhiteBoardStore";
 import { useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
 import MessageUtil from "@/utils/MessageUtil";
 import { getRecord } from '@/utils/utools/DbUtil';
+import { useFullscreen } from "@vueuse/core";
 
 let first = true;
 
@@ -171,7 +180,10 @@ export default defineComponent({
             lineDash: 0,
             globalAlpha: 0,
             rotate: 0,
-        }
+        },
+
+        // 全屏
+        fullscreen: useFullscreen()
     }),
     computed: {
         ...mapState(useGlobalStore, ['size', 'width', 'isDark']),

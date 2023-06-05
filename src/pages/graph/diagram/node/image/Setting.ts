@@ -10,7 +10,7 @@ class SettingModel extends ImageNode.model {
 }
 class SettingNode extends ImageNode.view {
   getImageHref () {
-    return '/image/setting.png';
+    return './image/setting.png';
   }
 }
 

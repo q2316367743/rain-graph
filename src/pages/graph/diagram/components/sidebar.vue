@@ -215,7 +215,7 @@ export default defineComponent({
 
     .image-user {
         width: 40px;
-        background: url('https://dpubstatic.udache.com/static/dpubimg/-6Fd2uIoJ-/user.png');
+        background: url('./image/user.png');
         background-size: cover;
     }
 

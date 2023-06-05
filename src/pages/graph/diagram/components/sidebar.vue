@@ -209,25 +209,25 @@ export default defineComponent({
     }
 
     .image-setting {
-        background: url('./image/setting.png');
+        background: url('/image/setting.png');
         background-size: cover;
     }
 
     .image-user {
         width: 40px;
-        background: url('./image/user.png');
+        background: url('/image/user.png');
         background-size: cover;
     }
 
     .image-cloud {
         width: 40px;
-        background: url('./image/cloud.png');
+        background: url('/image/cloud.png');
         background-size: cover;
     }
 
     .icon-message {
         height: 20px;
-        background: url('./image/message.png');
+        background: url('/image/message.png');
         background-size: cover;
     }
 }

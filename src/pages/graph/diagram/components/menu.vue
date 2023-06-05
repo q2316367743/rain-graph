@@ -226,16 +226,5 @@ export default defineComponent({
     display: flex;
     justify-content: space-between;
 
-    .show-panel {
-        background-image: url(@/assets/icon-show-panel.png);
-        height: 24px;
-        width: 24px;
-    }
-
-    .hide-panel {
-        background-image: url(@/assets/icon-hide-panel.png);
-        height: 24px;
-        width: 24px;
-    }
 }
 </style>

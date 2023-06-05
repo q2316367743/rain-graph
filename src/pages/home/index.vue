@@ -3,11 +3,16 @@
         <div class="header">
             <div>
                 <a-radio-group v-model="activeKey" type="button">
-                    <a-radio :value="GraphTypeEnum.MIND">{{ Config.title[GraphTypeEnum.MIND].title }}</a-radio>
-                    <a-radio :value="GraphTypeEnum.SIMPLE_MIND_MAP">{{ Config.title[GraphTypeEnum.SIMPLE_MIND_MAP].title
-                    }}</a-radio>
-                    <a-radio :value="GraphTypeEnum.DIAGRAM">{{ Config.title[GraphTypeEnum.DIAGRAM].title }}</a-radio>
-                    <a-radio :value="GraphTypeEnum.WHITE_BOARD">{{ Config.title[GraphTypeEnum.WHITE_BOARD].title
+                    <a-radio :value="GraphTypeEnum.MIND" v-if="showViews.includes(GraphTypeEnum.MIND)">{{
+                        Config.title[GraphTypeEnum.MIND].title }}</a-radio>
+                    <a-radio :value="GraphTypeEnum.SIMPLE_MIND_MAP"
+                        v-if="showViews.includes(GraphTypeEnum.SIMPLE_MIND_MAP)">{{
+                            Config.title[GraphTypeEnum.SIMPLE_MIND_MAP].title
+                        }}</a-radio>
+                    <a-radio :value="GraphTypeEnum.DIAGRAM" v-if="showViews.includes(GraphTypeEnum.DIAGRAM)">{{
+                        Config.title[GraphTypeEnum.DIAGRAM].title }}</a-radio>
+                    <a-radio :value="GraphTypeEnum.WHITE_BOARD" v-if="showViews.includes(GraphTypeEnum.WHITE_BOARD)">{{
+                        Config.title[GraphTypeEnum.WHITE_BOARD].title
                     }}</a-radio>
                 </a-radio-group>
                 <a-input-search style="width: 150px;margin-left: 14px;" placeholder="请输入项目名" allow-clear v-model="keyword"
@@ -73,7 +78,7 @@ export default defineComponent({
     }),
     computed: {
         ...mapState(useGlobalStore, ['isDark']),
-        ...mapState(useSettingStore, ['defaultView']),
+        ...mapState(useSettingStore, ['defaultView', 'showViews']),
         ...mapState(useMindStore, ['minds']),
         ...mapState(useDiagramStore, ['diagrams']),
         ...mapState(useWhiteBoardStore, ['whiteBoards']),
@@ -178,5 +183,4 @@ export default defineComponent({
         right: 7px;
         bottom: 7px;
     }
-}
-</style>
+}</style>

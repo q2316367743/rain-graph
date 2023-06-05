@@ -5,10 +5,20 @@
                 <a-option :value="GraphTypeEnum.MIND">简易思维导图</a-option>
                 <a-option :value="GraphTypeEnum.SIMPLE_MIND_MAP">完整思维导图</a-option>
                 <a-option :value="GraphTypeEnum.DIAGRAM">流程图</a-option>
+                <a-option :value="GraphTypeEnum.WHITE_BOARD">白板</a-option>
             </a-select>
+        </a-form-item>
+        <a-form-item label="显示的视图">
+            <a-checkbox-group v-model="setting.showViews">
+                <a-checkbox :value="GraphTypeEnum.MIND">简易思维导图</a-checkbox>
+                <a-checkbox :value="GraphTypeEnum.SIMPLE_MIND_MAP">完整思维导图</a-checkbox>
+                <a-checkbox :value="GraphTypeEnum.DIAGRAM">流程图</a-checkbox>
+                <a-checkbox :value="GraphTypeEnum.WHITE_BOARD">白板</a-checkbox>
+            </a-checkbox-group>
         </a-form-item>
         <a-form-item>
             <a-button type="primary" @click="save">保存</a-button>
+            <template #help>记得保存哦</template>
         </a-form-item>
     </a-form>
 </template>
@@ -30,7 +40,7 @@ export default defineComponent({
         ...mapState(useSettingStore, ['base'])
     },
     created() {
-        this.setting = this.base;
+        this.setting = Object.assign({}, this.base);
     },
     methods: {
         save() {

@@ -10,18 +10,18 @@
                     <a-sub-menu key="1">
                         <template #icon><icon-plus /></template>
                         <template #title>新建</template>
-                        <a-menu-item :key="`/$gragh/${GraphTypeEnum.MIND}/0`" @click="jumpTo(GraphTypeEnum.MIND)">
+                        <a-menu-item :key="`/$gragh/${GraphTypeEnum.MIND}/0`" @click="jumpTo(GraphTypeEnum.MIND)" v-if="showViews.includes(GraphTypeEnum.MIND)">
                             {{ Config.title[GraphTypeEnum.MIND].title }}
                         </a-menu-item>
                         <a-menu-item :key="`/$gragh/${GraphTypeEnum.SIMPLE_MIND_MAP}/0`"
-                            @click="jumpTo(GraphTypeEnum.SIMPLE_MIND_MAP)">
+                            @click="jumpTo(GraphTypeEnum.SIMPLE_MIND_MAP)"  v-if="showViews.includes(GraphTypeEnum.SIMPLE_MIND_MAP)">
                             {{ Config.title[GraphTypeEnum.SIMPLE_MIND_MAP].title }}
                         </a-menu-item>
-                        <a-menu-item :key="`/$gragh/${GraphTypeEnum.DIAGRAM}/0`" @click="jumpTo(GraphTypeEnum.DIAGRAM)">
+                        <a-menu-item :key="`/$gragh/${GraphTypeEnum.DIAGRAM}/0`" @click="jumpTo(GraphTypeEnum.DIAGRAM)"  v-if="showViews.includes(GraphTypeEnum.DIAGRAM)">
                             {{ Config.title[GraphTypeEnum.DIAGRAM].title }}
                         </a-menu-item>
                         <a-menu-item :key="`/$gragh/${GraphTypeEnum.WHITE_BOARD}/0`"
-                            @click="jumpTo(GraphTypeEnum.WHITE_BOARD)">
+                            @click="jumpTo(GraphTypeEnum.WHITE_BOARD)"  v-if="showViews.includes(GraphTypeEnum.WHITE_BOARD)">
                             {{ Config.title[GraphTypeEnum.WHITE_BOARD].title }}
                         </a-menu-item>
                     </a-sub-menu>
@@ -88,6 +88,7 @@ export default defineComponent({
     }),
     computed: {
         ...mapState(useGlobalStore, ['isDark', 'title', 'type', 'typeWrap', 'env']),
+        ...mapState(useSettingStore, ['showViews']),
         editDisabled() {
             return !this.$route.path.startsWith('/graph')
         },

@@ -6,7 +6,8 @@ import { toRaw } from "vue";
 
 export function getDefaultSetting(): Setting {
     return {
-        defaultView: GraphTypeEnum.MIND
+        defaultView: GraphTypeEnum.MIND,
+        showViews: [GraphTypeEnum.MIND, GraphTypeEnum.SIMPLE_MIND_MAP, GraphTypeEnum.DIAGRAM, GraphTypeEnum.WHITE_BOARD]
     }
 }
 
@@ -16,7 +17,8 @@ export const useSettingStore = defineStore('setting', {
         base_rev: undefined as string | undefined
     }),
     getters: {
-        defaultView: state => state.base.defaultView,
+        defaultView: state => state.base.defaultView || GraphTypeEnum.MIND,
+        showViews: state => state.base.showViews
     },
     actions: {
         init() {

@@ -7,4 +7,9 @@ export default interface Setting {
      */
     defaultView: GraphTypeEnum;
 
+    /**
+     * 显示的视图
+     */
+    showViews: GraphTypeEnum[];
+
 }

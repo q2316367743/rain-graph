@@ -4,7 +4,7 @@
             <div class="logo">
                 <img src="/logo.png" />
             </div>
-            <div class="title">{{ Constant.name }}</div>
+            <div class="title">{{ Constant.name }} <span class="version">{{ Constant.version }}</span></div>
             <div class="author">
                 <a-link :link="Constant.website" target="_blank" @click="openUrl(Constant.website)">
                     {{ Constant.author }}
@@ -17,6 +17,7 @@
             <div class="action">
                 <a-button @click="openUrl(Constant.homepage)">插件主页</a-button>
                 <a-button @click="openUrl(Constant.repo)">开源地址</a-button>
+                <a-button @click="openUrl(Constant.online)">在线地址</a-button>
             </div>
         </div>
     </div>
@@ -52,13 +53,16 @@ export default defineComponent({
     }
 
     .title {
-        font-size: 24px;
+        font-size: 2em;
         background: linear-gradient(60deg, #E21143, #FFB03A);
         -webkit-background-clip: text;
         color: transparent;
         font-weight: bolder;
         margin-top: 28px;
         user-select: none;
+        .version {
+            font-size: 0.5em;
+        }
     }
 
     .author {

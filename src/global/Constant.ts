@@ -4,5 +4,6 @@ export default {
     author: '落雨不悔',
     website: 'https://blog.esion.xyz',
     homepage: 'https://www.yuque.com/baozhiyige-tewwf/khg2sx/tbrfl0e57la92gm2',
-    repo: 'https://gitee.com/qiaoshengda/rain-graph'
+    repo: 'https://gitee.com/qiaoshengda/rain-graph',
+    online: 'https://rain-graph.netlify.app/'
 }

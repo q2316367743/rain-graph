@@ -14,7 +14,11 @@
                 <simple-mind-map-menu-more :index="index" :len="len" :has-node="hasNode" :render-tree="renderTree"
                     @switch-theme="setTheme" @switch-layout="setLayout" @set-node="setNode" />
             </a-button-group>
-            <a-button type="text" @click="collapsed = !collapsed">样式</a-button>
+            <a-button type="text" @click="collapsed = !collapsed" :status="collapsed ? 'normal' : 'success'">
+                <template #icon>
+                    <icon-layout />
+                </template>
+            </a-button>
         </div>
         <a-layout class="container">
             <a-layout-content>

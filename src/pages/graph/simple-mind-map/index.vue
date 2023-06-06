@@ -16,7 +16,7 @@
             </a-button-group>
             <div>
                 <!-- 小地图 -->
-                <a-button type="text">
+                <a-button type="text" @click="miniMap = !miniMap" :status="miniMap ? 'success' : 'normal'">
                     <template #icon>
                         <icon-location />
                     </template>
@@ -52,6 +52,8 @@
                 <simple-mind-map-toolbar v-if="render" :has-node="hasNode" :simple-mind-map-wrap="simpleMindMapWrap" />
                 <!-- 缩放 -->
                 <simple-mind-map-scale v-if="render" :simple-mind-map-wrap="simpleMindMapWrap" />
+                <!-- 小地图 -->
+                <simple-mind-map-mini-map v-if="render" v-show="miniMap" :simple-mind-map-wrap="simpleMindMapWrap" />
             </a-layout-content>
             <a-layout-sider :collapsed="collapsed" :width="200" :collapsed-width="0">Sider</a-layout-sider>
         </a-layout>
@@ -74,6 +76,7 @@ import SimpleMindMapContextMenu from './components/context-menu.vue';
 import SimpleMindMapCount from './components/count.vue';
 import SimpleMindMapToolbar from './components/toolbar.vue';
 import SimpleMindMapScale from './components/scale.vue';
+import SimpleMindMapMiniMap from './components/mini-map.vue';
 
 import MessageUtil from "@/utils/MessageUtil";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
@@ -88,7 +91,7 @@ export default defineComponent({
     name: '',
     components: {
         SimpleMindMapMenuMore, SimpleMindMapMenuFile, SimpleMindMapMenuEdit, SimpleMindMapMenuInsert, SimpleMindMapMenuExport,
-        SimpleMindMapContextMenu, SimpleMindMapCount, SimpleMindMapToolbar, SimpleMindMapScale
+        SimpleMindMapContextMenu, SimpleMindMapCount, SimpleMindMapToolbar, SimpleMindMapScale, SimpleMindMapMiniMap
     },
     data: () => ({
         renderTree: undefined as any | undefined,
@@ -100,7 +103,8 @@ export default defineComponent({
         collapsed: true,
         render: false,
         simpleMindMapWrap: markRaw(new SimpleMindMapWrap("", {})),
-        fullscreen: useFullscreen()
+        fullscreen: useFullscreen(),
+        miniMap: false
     }),
     computed: {
         ...mapState(useGlobalStore, ['height', 'width', 'title', 'isDark'])

@@ -68,16 +68,17 @@ export default defineComponent({
     position: absolute;
     left: 1rem;
     bottom: 3rem;
-    background: hsla(0, 0%, 100%, 0.8);
+    background-color: var(--color-neutral-2);
+    color: var(--color-text-1);
     border-radius: 2px;
     opacity: 0.8;
-    height: 22px;
-    line-height: 22px;
+    height: 32px;
+    line-height: 32px;
     font-size: 12px;
     display: flex;
+    user-select: none;
 
     .item {
-        color: #555;
         margin-right: 15px;
 
         &:last-of-type {

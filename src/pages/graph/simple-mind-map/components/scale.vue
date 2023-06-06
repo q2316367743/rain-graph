@@ -76,10 +76,11 @@ export default defineComponent({
     position: absolute;
     right: 1rem;
     bottom: 3rem;
-    background: hsla(0, 0%, 100%, 0.8);
+    background-color: var(--color-neutral-2);
+    color: var(--color-text-1);
     border-radius: 2px;
     opacity: 0.8;
-    height: 22px;
+    height: 32px;
     line-height: 22px;
     font-size: 12px;
 

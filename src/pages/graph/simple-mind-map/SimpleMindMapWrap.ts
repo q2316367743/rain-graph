@@ -8,7 +8,7 @@ import { useSimpleMindMapStore } from "@/store/graph/SimpleMindMapStore";
 import { getDefaultConfig, getDefaultData } from "./data/config";
 import { extraImages } from "./data/icon";
 
-type commandType = 'INSERT_CHILD_NODE' | 'INSERT_NODE' | 'REMOVE_NODE' | 'BACK' | 'FORWARD'
+type commandType = 'INSERT_CHILD_NODE' | 'INSERT_NODE' | 'REMOVE_NODE' | 'BACK' | 'FORWARD' | 'ADD_GENERALIZATION';
 
 //  思维导图
 export default class SimpleMindMapWrap {

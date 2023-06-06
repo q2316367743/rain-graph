@@ -13,7 +13,7 @@
 <script lang="ts">
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import { PropType, defineComponent } from "vue";
-import SimpleMindMapWrap from "../SimpleMindMapWrap";
+import SimpleMindMapWrap from "../../SimpleMindMapWrap";
 import MessageUtil from "@/utils/MessageUtil";
 import { mapState } from "pinia";
 import { useGlobalStore } from "@/store/GlobalStore";

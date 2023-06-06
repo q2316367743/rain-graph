@@ -18,7 +18,7 @@
                 <template #icon><icon-edit /></template>
                 备注
             </a-doption>
-            <a-doption :disabled="!hasNode">
+            <a-doption :disabled="!hasNode" @click="dialog.tag = true">
                 <template #icon><icon-tag /></template>
                 标签
             </a-doption>
@@ -36,19 +36,21 @@
     <node-icon v-model:visible="dialog.icon" :simple-mind-map-wrap="simpleMindMapWrap" />
     <node-hyper-link v-model:visible="dialog.hyperLink" :simple-mind-map-wrap="simpleMindMapWrap" />
     <node-note v-model:visible="dialog.note" :simple-mind-map-wrap="simpleMindMapWrap" />
+    <node-tag v-model:visible="dialog.tag" :simple-mind-map-wrap="simpleMindMapWrap" />
 </template>
 <script lang="ts">
 import { PropType, defineComponent } from "vue";
-import SimpleMindMapWrap from "../SimpleMindMapWrap";
+import SimpleMindMapWrap from "../../SimpleMindMapWrap";
 
 // 引入节点组件
-import NodeIcon from './node/icon.vue';
-import NodeHyperLink from './node/hyper-link.vue';
-import NodeNote from './node/note.vue';
+import NodeIcon from '../node/icon.vue';
+import NodeHyperLink from '../node/hyper-link.vue';
+import NodeNote from '../node/note.vue';
+import NodeTag from '../node/tag.vue';
 
 export default defineComponent({
     name: 'menu-insert',
-    components: { NodeIcon, NodeHyperLink, NodeNote },
+    components: { NodeIcon, NodeHyperLink, NodeNote, NodeTag },
     props: {
         hasNode: {
             type: Boolean,
@@ -65,7 +67,8 @@ export default defineComponent({
         dialog: {
             icon: false,
             hyperLink: false,
-            note: false
+            note: false,
+            tag: false
         }
     }),
     methods: {

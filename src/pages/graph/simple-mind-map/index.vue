@@ -44,7 +44,10 @@
         </div>
         <a-layout class="container">
             <a-layout-content>
+                <!-- 容器 -->
                 <div id="simple-mind-map"></div>
+                <!-- 数量统计 -->
+                <simple-mind-map-count v-if="render" :simple-mind-map-wrap="simpleMindMapWrap" />
             </a-layout-content>
             <a-layout-sider :collapsed="collapsed" :width="200" :collapsed-width="0">Sider</a-layout-sider>
         </a-layout>
@@ -58,12 +61,13 @@ import { mapState } from "pinia";
 import { useGlobalStore } from "@/store/GlobalStore";
 
 // 组件
-import SimpleMindMapMenuMore from './components/menu-more.vue';
-import SimpleMindMapMenuFile from './components/menu-file.vue';
-import SimpleMindMapMenuEdit from './components/menu-edit.vue';
-import SimpleMindMapMenuInsert from './components/menu-insert.vue';
-import SimpleMindMapMenuExport from './components/menu-export.vue';
+import SimpleMindMapMenuMore from './components/menu/menu-more.vue';
+import SimpleMindMapMenuFile from './components/menu/menu-file.vue';
+import SimpleMindMapMenuEdit from './components/menu/menu-edit.vue';
+import SimpleMindMapMenuInsert from './components/menu/menu-insert.vue';
+import SimpleMindMapMenuExport from './components/menu/menu-export.vue';
 import SimpleMindMapContextMenu from './components/context-menu.vue';
+import SimpleMindMapCount from './components/count.vue';
 
 import MessageUtil from "@/utils/MessageUtil";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
@@ -78,7 +82,7 @@ export default defineComponent({
     name: '',
     components: {
         SimpleMindMapMenuMore, SimpleMindMapMenuFile, SimpleMindMapMenuEdit, SimpleMindMapMenuInsert, SimpleMindMapMenuExport,
-        SimpleMindMapContextMenu
+        SimpleMindMapContextMenu, SimpleMindMapCount
     },
     data: () => ({
         renderTree: undefined as any | undefined,

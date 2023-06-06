@@ -12,7 +12,7 @@
 </template>
 <script lang="ts">
 import { PropType, defineComponent } from "vue";
-import SimpleMindMapWrap from "../SimpleMindMapWrap";
+import SimpleMindMapWrap from "../../SimpleMindMapWrap";
 import { useUndoEvent } from "@/global/BeanFactory";
 
 export default defineComponent({

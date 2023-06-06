@@ -1,5 +1,5 @@
 <template>
-    <a-modal class="nodeDialog" title="备注" v-model:visible="dialogVisible" fullscreen width="500" ok-text="新增"
+    <a-modal class="nodeDialog" title="备注" v-model:visible="dialogVisible" fullscreen width="500" ok-text="保存"
         @cancel="cancel" @ok="confirm">
         <a-textarea :auto-size="{ minRows: 3, maxRows: 10 }" v-model="note" />
     </a-modal>

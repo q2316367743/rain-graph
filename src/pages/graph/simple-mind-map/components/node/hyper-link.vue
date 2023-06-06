@@ -1,6 +1,6 @@
 <template>
     <a-modal class="nodeDialog" title="超链接" v-model:visible="dialogVisible" width="500" @cancel="cancel" @ok="confirm"
-        ok-text="新增">
+        ok-text="保存">
         <a-form :model="link" @submit="confirm">
             <a-form-item label="链接">
                 <a-input v-model="link.value" size="mini" placeholder="http://xxxx.xx/"></a-input>

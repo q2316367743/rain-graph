@@ -92,6 +92,13 @@ export default class SimpleMindMapWrap {
         this.mindMap.on(name, callback)
     }
 
+    off(name: string, callback: (...args: any[]) => void) {
+        if (!this.mindMap) {
+            return;
+        }
+        this.mindMap.off(name, callback)
+    }
+
     execCommand(command: string, ...args: any[]) {
         this.mindMap.execCommand(command, args)
     }

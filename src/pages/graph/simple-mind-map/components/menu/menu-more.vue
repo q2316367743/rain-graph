@@ -75,7 +75,7 @@ import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import { useGlobalStore } from "@/store/GlobalStore";
 import { mapState } from "pinia";
 import { defineComponent } from "vue";
-import { themeByLightList, themeByDarkList, layoutList } from "../data/constants";
+import { themeByLightList, themeByDarkList, layoutList } from "../../data/constants";
 
 export default defineComponent({
     name: '',

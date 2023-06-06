@@ -2,7 +2,7 @@
     <a-dropdown>
         <a-button>插入</a-button>
         <template #content>
-            <a-doption :disabled="!hasNode">
+            <a-doption :disabled="true">
                 <template #icon><icon-image /></template>
                 图片
             </a-doption>
@@ -32,7 +32,6 @@
             </a-doption>
         </template>
     </a-dropdown>
-    <!-- 图标 -->
     <node-icon v-model:visible="dialog.icon" :simple-mind-map-wrap="simpleMindMapWrap" />
     <node-hyper-link v-model:visible="dialog.hyperLink" :simple-mind-map-wrap="simpleMindMapWrap" />
     <node-note v-model:visible="dialog.note" :simple-mind-map-wrap="simpleMindMapWrap" />

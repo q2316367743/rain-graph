@@ -48,6 +48,8 @@
                 <div id="simple-mind-map"></div>
                 <!-- 数量统计 -->
                 <simple-mind-map-count v-if="render" :simple-mind-map-wrap="simpleMindMapWrap" />
+                <!-- 工具栏 -->
+                <simple-mind-map-toolbar v-if="render" :has-node="hasNode" :simple-mind-map-wrap="simpleMindMapWrap" />
             </a-layout-content>
             <a-layout-sider :collapsed="collapsed" :width="200" :collapsed-width="0">Sider</a-layout-sider>
         </a-layout>
@@ -68,6 +70,7 @@ import SimpleMindMapMenuInsert from './components/menu/menu-insert.vue';
 import SimpleMindMapMenuExport from './components/menu/menu-export.vue';
 import SimpleMindMapContextMenu from './components/context-menu.vue';
 import SimpleMindMapCount from './components/count.vue';
+import SimpleMindMapToolbar from './components/toolbar.vue';
 
 import MessageUtil from "@/utils/MessageUtil";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
@@ -82,7 +85,7 @@ export default defineComponent({
     name: '',
     components: {
         SimpleMindMapMenuMore, SimpleMindMapMenuFile, SimpleMindMapMenuEdit, SimpleMindMapMenuInsert, SimpleMindMapMenuExport,
-        SimpleMindMapContextMenu, SimpleMindMapCount
+        SimpleMindMapContextMenu, SimpleMindMapCount, SimpleMindMapToolbar
     },
     data: () => ({
         renderTree: undefined as any | undefined,

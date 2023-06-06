@@ -41,11 +41,6 @@ export default defineComponent({
         this.simpleMindMapWrap.off('data_change', this.onDataChange)
     },
     methods: {
-        /**
-         * @Author: 王林25
-         * @Date: 2022-11-14 19:20:20
-         * @Desc: 监听数据变化
-         */
         onDataChange(data: any) {
             this.textStr = ''
             this.words = 0
@@ -54,12 +49,6 @@ export default defineComponent({
             countEl.innerHTML = this.textStr
             this.words = (countEl.textContent || '').length
         },
-
-        /**
-         * @Author: 王林
-         * @Date: 2021-06-30 22:13:07
-         * @Desc: 遍历
-         */
         walk(data: any) {
             this.num++
             this.textStr += String(data.data.text) || ''

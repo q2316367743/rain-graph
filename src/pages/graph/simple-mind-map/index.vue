@@ -15,11 +15,23 @@
                     @switch-theme="setTheme" @switch-layout="setLayout" @set-node="setNode" />
             </a-button-group>
             <div>
+                <!-- 小地图 -->
+                <a-button type="text">
+                    <template #icon>
+                        <icon-location />
+                    </template>
+                </a-button>
+                <!-- 只读 -->
+                <a-button type="text">
+                    <template #icon>
+                        <icon-lock />
+                    </template>
+                </a-button>
                 <!-- 全屏 -->
                 <a-button type="text" @click="fullscreen.toggle()" :status="fullscreen.isFullscreen ? 'success' : 'normal'">
                     <template #icon>
                         <icon-fullscreen-exit v-if="fullscreen.isFullscreen" />
-                        <icon-fullscreen v-else/>
+                        <icon-fullscreen v-else />
                     </template>
                 </a-button>
                 <!-- 布局 -->

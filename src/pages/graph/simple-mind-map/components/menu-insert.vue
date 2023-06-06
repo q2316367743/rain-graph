@@ -6,7 +6,7 @@
                 <template #icon><icon-image /></template>
                 图片
             </a-doption>
-            <a-doption :disabled="!hasNode">
+            <a-doption :disabled="!hasNode" @click="dialog.icon = true">
                 <template #icon><icon-robot /></template>
                 图标
             </a-doption>
@@ -43,13 +43,19 @@
             </a-form-item>
         </a-form>
     </a-modal>
+    <!-- 图标 -->
+    <node-icon v-model:visible="dialog.icon" :simple-mind-map-wrap="simpleMindMapWrap" />
 </template>
 <script lang="ts">
 import { PropType, defineComponent } from "vue";
 import SimpleMindMapWrap from "../SimpleMindMapWrap";
 
+// 引入节点组件
+import NodeIcon from './node/icon.vue';
+
 export default defineComponent({
     name: 'menu-insert',
+    components: { NodeIcon },
     props: {
         hasNode: {
             type: Boolean,
@@ -70,6 +76,9 @@ export default defineComponent({
                 href: ''
             }
         },
+        dialog: {
+            icon: false
+        }
     }),
     methods: {
         openLink() {

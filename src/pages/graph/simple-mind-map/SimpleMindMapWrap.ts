@@ -1,11 +1,12 @@
 import { SimpleMindMapConfig } from "./domain/SimpleMindMapConfig";
 import MindMap from "simple-mind-map";
 import BrowserUtil from "@/utils/BrowserUtil";
-import { getDefaultConfig, getDefaultData } from "./data/config";
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import { useSimpleMindMapStore } from "@/store/graph/SimpleMindMapStore";
 
+import { getDefaultConfig, getDefaultData } from "./data/config";
+import { extraImages } from "./data/icon";
 //  思维导图
 export default class SimpleMindMapWrap {
 
@@ -33,7 +34,8 @@ export default class SimpleMindMapWrap {
         this.mindMap = new MindMap({
             el: document.querySelector(el),
             data: data ? data : getDefaultData(),
-            ...this.config
+            ...this.config,
+            iconList: extraImages
         });
     }
 
@@ -49,7 +51,7 @@ export default class SimpleMindMapWrap {
         svg.setAttribute('height', height + 'px');
     }
 
-    getConfig(): SimpleMindMapConfig{
+    getConfig(): SimpleMindMapConfig {
         return this.config;
     }
 

@@ -14,14 +14,21 @@
                 <simple-mind-map-menu-more :index="index" :len="len" :has-node="hasNode" :render-tree="renderTree"
                     @switch-theme="setTheme" @switch-layout="setLayout" @set-node="setNode" />
             </a-button-group>
-            <a-button-group type="text">
+            <div>
+                <!-- 全屏 -->
+                <a-button type="text" @click="fullscreen.toggle()" :status="fullscreen.isFullscreen ? 'success' : 'normal'">
+                    <template #icon>
+                        <icon-fullscreen-exit v-if="fullscreen.isFullscreen" />
+                        <icon-fullscreen v-else/>
+                    </template>
+                </a-button>
                 <!-- 布局 -->
-                <a-button @click="collapsed = !collapsed" :status="collapsed ? 'normal' : 'success'">
+                <a-button type="text" @click="collapsed = !collapsed" :status="collapsed ? 'normal' : 'success'">
                     <template #icon>
                         <icon-layout />
                     </template>
                 </a-button>
-            </a-button-group>
+            </div>
         </div>
         <a-layout class="container">
             <a-layout-content>
@@ -52,6 +59,7 @@ import { useSimpleMindMapStore } from "@/store/graph/SimpleMindMapStore";
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import { getRecord } from "@/utils/utools/DbUtil";
 import { markRaw } from "vue";
+import { useFullscreen } from "@vueuse/core";
 
 
 export default defineComponent({
@@ -69,7 +77,8 @@ export default defineComponent({
         // 本身数据,
         collapsed: true,
         render: false,
-        simpleMindMapWrap: markRaw(new SimpleMindMapWrap("", {}))
+        simpleMindMapWrap: markRaw(new SimpleMindMapWrap("", {})),
+        fullscreen: useFullscreen()
     }),
     computed: {
         ...mapState(useGlobalStore, ['height', 'width', 'title', 'isDark'])

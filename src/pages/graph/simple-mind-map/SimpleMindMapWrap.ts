@@ -49,6 +49,15 @@ export default class SimpleMindMapWrap {
         svg.setAttribute('height', height + 'px');
     }
 
+    getConfig(): SimpleMindMapConfig{
+        return this.config;
+    }
+
+    setConfig(config: SimpleMindMapConfig) {
+        this.mindMap.updateConfig(config);
+        this.save();
+    }
+
     // ------ 事件 ------
 
     /**

@@ -39,7 +39,7 @@ export function getDefaultConfig(): SimpleMindMapConfig {
               }
           */
         // 是否开启节点自由拖拽
-        enableFreeDrag: false,
+        enableFreeDrag: true,
         // 水印配置
         watermarkConfig: {
             text: '',

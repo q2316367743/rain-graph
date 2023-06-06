@@ -14,7 +14,7 @@
                 <template #icon><icon-link /></template>
                 超链接
             </a-doption>
-            <a-doption :disabled="!hasNode">
+            <a-doption :disabled="!hasNode" @click="dialog.note = true">
                 <template #icon><icon-edit /></template>
                 备注
             </a-doption>
@@ -35,6 +35,7 @@
     <!-- 图标 -->
     <node-icon v-model:visible="dialog.icon" :simple-mind-map-wrap="simpleMindMapWrap" />
     <node-hyper-link v-model:visible="dialog.hyperLink" :simple-mind-map-wrap="simpleMindMapWrap" />
+    <node-note v-model:visible="dialog.note" :simple-mind-map-wrap="simpleMindMapWrap" />
 </template>
 <script lang="ts">
 import { PropType, defineComponent } from "vue";
@@ -43,10 +44,11 @@ import SimpleMindMapWrap from "../SimpleMindMapWrap";
 // 引入节点组件
 import NodeIcon from './node/icon.vue';
 import NodeHyperLink from './node/hyper-link.vue';
+import NodeNote from './node/note.vue';
 
 export default defineComponent({
     name: 'menu-insert',
-    components: { NodeIcon, NodeHyperLink },
+    components: { NodeIcon, NodeHyperLink, NodeNote },
     props: {
         hasNode: {
             type: Boolean,
@@ -62,7 +64,8 @@ export default defineComponent({
     data: () => ({
         dialog: {
             icon: false,
-            hyperLink: false
+            hyperLink: false,
+            note: false
         }
     }),
     methods: {

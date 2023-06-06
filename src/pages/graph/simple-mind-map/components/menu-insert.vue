@@ -45,16 +45,21 @@
     </a-modal>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { PropType, defineComponent } from "vue";
+import SimpleMindMapWrap from "../SimpleMindMapWrap";
 
 export default defineComponent({
     name: 'menu-insert',
-    emits: ['add-link'],
     props: {
         hasNode: {
             type: Boolean,
             required: false,
             default: false
+        },
+        simpleMindMapWrap: {
+            type: Object as PropType<SimpleMindMapWrap>,
+            required: false,
+            default: new SimpleMindMapWrap("", {})
         }
     },
     data: () => ({
@@ -77,7 +82,7 @@ export default defineComponent({
             };
         },
         addLink() {
-            this.$emit('add-link', this.link.record.name, this.link.record.href);
+            this.simpleMindMapWrap.addLink(this.link.record.name, this.link.record.href);
             this.link.dialog = false;
         },
     }

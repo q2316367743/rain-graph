@@ -26,18 +26,6 @@
                 删除节点
                 <span class="desc">Delete</span>
             </div>
-            <div class="item" @click="exec('COPY_NODE')" :class="{ disabled: isGeneralization }">
-                复制节点
-                <span class="desc">Ctrl + C</span>
-            </div>
-            <div class="item" @click="exec('CUT_NODE')" :class="{ disabled: isGeneralization }">
-                剪切节点
-                <span class="desc">Ctrl + X</span>
-            </div>
-            <div class="item" :class="{ disabled: copyData === null }" @click="exec('PASTE_NODE')">
-                粘贴节点
-                <span class="desc">Ctrl + V</span>
-            </div>
         </template>
         <template v-if="type === 'svg'">
             <div class="item" @click="exec('RETURN_CENTER')">
@@ -50,10 +38,10 @@
                 收起节点
             </div>
             <div class="item">
-                未知
+                展开到
                 <div class="subItems listBox">
                     <div class="item" v-for="(item, index) in expandList" :key="item"
-                        @click="exec('UNEXPAND_TO_LEVEL', false, index + 1)">
+                        @click="exec('UNEXPAND_TO_LEVEL', index + 1)">
                         {{ item }}
                     </div>
                 </div>
@@ -62,29 +50,23 @@
                 一键整理布局
                 <span class="desc">Ctrl + L</span>
             </div>
-            <div class="item" @click="exec('TOGGLE_ZEN_MODE')">
-                禅模式
-                {{ isZenMode ? '√' : '' }}
-            </div>
         </template>
     </div>
 </template>
   
 <script lang="ts">
+import { PropType } from 'vue';
 import { defineComponent } from 'vue';
+import SimpleMindMapWrap from '../SimpleMindMapWrap';
+import MessageUtil from '@/utils/MessageUtil';
 
-/**
- * @Author: 王林
- * @Date: 2021-06-24 22:53:10
- * @Desc: 右键菜单
- */
 export default defineComponent({
-    name: 'Contextmenu',
+    name: 'simple-mind-map-context-menu',
     props: {
         mindMap: {
-            type: Object as any,
+            type: Object as PropType<SimpleMindMapWrap>,
             required: false,
-            default: {} as any
+            default: new SimpleMindMapWrap("", {})
         }
     },
     data() {
@@ -96,9 +78,8 @@ export default defineComponent({
             copyData: null,
             type: '',
             isMousedown: false,
-            mosuedownX: 0,
-            mosuedownY: 0,
-            isZenMode: false
+            mousedownX: 0,
+            mousedownY: 0
         }
     },
     computed: {
@@ -141,13 +122,20 @@ export default defineComponent({
             return this.node.isGeneralization
         }
     },
+    created() {
+        // 事件监听
+        this.mindMap.on('node_contextmenu', this.show)
+        this.mindMap.on('node_click', this.hide)
+        this.mindMap.on('draw_click', this.hide)
+        this.mindMap.on('expand_btn_click', this.hide)
+        this.mindMap.on('svg_mousedown', this.onMousedown)
+        this.mindMap.on('mouseup', this.onMouseup)
+        // 快捷键监听
+        // this.mindMap.keyCommand.addShortcut('Control+c', this.copy)
+        // this.mindMap.keyCommand.addShortcut('Control+v', this.paste)
+        // this.mindMap.keyCommand.addShortcut('Control+x', this.cut)
+    },
     methods: {
-
-        /**
-         * @Author: 王林
-         * @Date: 2021-07-14 21:38:50
-         * @Desc: 节点右键显示
-         */
         show(e: any, node: any) {
             this.type = 'node'
             this.left = e.clientX + 10
@@ -155,129 +143,69 @@ export default defineComponent({
             this.isShow = true
             this.node = node
         },
-
-        /**
-         * @Author: 王林
-         * @Date: 2021-07-16 13:27:48
-         * @Desc: 鼠标按下事件
-         */
         onMousedown(e: any) {
             if (e.which !== 3) {
                 return
             }
-            this.mosuedownX = e.clientX
-            this.mosuedownY = e.clientY
+            this.mousedownX = e.clientX
+            this.mousedownY = e.clientY
             this.isMousedown = true
         },
-
-        /**
-         * @Author: 王林
-         * @Date: 2021-07-16 13:27:53
-         * @Desc: 鼠标松开事件
-         */
         onMouseup(e: any) {
             if (!this.isMousedown) {
                 return
             }
             this.isMousedown = false
             if (
-                Math.abs(this.mosuedownX - e.clientX) > 3 ||
-                Math.abs(this.mosuedownY - e.clientY) > 3
+                Math.abs(this.mousedownX - e.clientX) > 3 ||
+                Math.abs(this.mousedownY - e.clientY) > 3
             ) {
                 this.hide()
                 return
             }
             this.show2(e)
         },
-
-        /**
-         * @Author: 王林
-         * @Date: 2021-07-15 22:54:08
-         * @Desc: 画布右键显示
-         */
         show2(e: any) {
             this.type = 'svg'
             this.left = e.clientX + 10
             this.top = e.clientY + 10
             this.isShow = true
         },
-
-        /**
-         * @Author: 王林
-         * @Date: 2021-07-14 21:37:55
-         * @Desc: 隐藏
-         */
         hide() {
             this.isShow = false
             this.left = 0
             this.top = 0
             this.type = ''
         },
-
-        /**
-         * @Author: 王林
-         * @Date: 2021-07-14 23:27:54
-         * @Desc: 执行命令
-         */
-        exec(key: string, disabled: boolean = true, ...args: any) {
-            if (disabled) {
-                return
-            }
-            switch (key) {
-                case 'COPY_NODE':
-                    this.copyData = this.mindMap.renderer.copyNode()
-                    break
-                case 'CUT_NODE':
-                    this.$emit('execCommand', key, (copyData: any) => {
-                        this.copyData = copyData
-                    })
-                    break
-                case 'PASTE_NODE':
-                    this.$emit('execCommand', key, this.copyData)
-                    break
-                case 'RETURN_CENTER':
-                    this.mindMap.view.reset()
-                    break
-                case 'TOGGLE_ZEN_MODE':
-                    // 切换禅模式
-                    break
-                default:
-                    this.$emit('execCommand', key, ...args)
-                    break
+        exec(key: string, index: number = -1) {
+            try {
+                switch (key) {
+                    case 'RETURN_CENTER':
+                        // 回到中央
+                        this.mindMap.viewReset()
+                        break
+                    default:
+                        this.mindMap.execCommand(key, index === -1 ? undefined : index);
+                        break
+                }
+            } catch (e) {
+                MessageUtil.error("命令执行异常", e);
             }
             this.hide()
         },
-
-        /**
-         * @Author: 王林25
-         * @Date: 2022-08-04 14:25:45
-         * @Desc: 复制
-         */
         copy() {
             this.exec('COPY_NODE')
         },
-
-        /**
-         * @Author: 王林25
-         * @Date: 2022-08-04 14:26:43
-         * @Desc: 粘贴
-         */
         paste() {
             this.exec('PASTE_NODE')
         },
-
-        /**
-         * @Author: 王林25
-         * @Date: 2022-08-04 14:27:32
-         * @Desc: 剪切
-         */
         cut() {
             this.exec('CUT_NODE')
         }
     }
 })
 </script>
-  
+
 <style lang="less" scoped>
 .listBox {
     width: 200px;

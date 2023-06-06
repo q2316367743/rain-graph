@@ -270,4 +270,23 @@ export const layoutValueList = [
     LAYOUT.TIMELINE,
     LAYOUT.TIMELINE2,
     LAYOUT.FISHBONE
-]
+];
+
+// 全部的事件
+export const events = [
+    'node_active',
+    'data_change',
+    'view_data_change',
+    'back_forward',
+    'node_contextmenu',
+    'node_click',
+    'draw_click',
+    'expand_btn_click',
+    'svg_mousedown',
+    'mouseup',
+    'mode_change',
+    'node_tree_render_end',
+    'rich_text_selection_change',
+    'transforming-dom-to-images',
+    'generalization_node_contextmenu'
+];

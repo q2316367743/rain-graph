@@ -27,6 +27,9 @@ export default class SimpleMindMapWrap {
     constructor(el: string, config: Partial<SimpleMindMapConfig>, data?: any) {
         this.el = el;
         this.config = Object.assign(getDefaultConfig(), config);
+        if (!el) {
+            return;
+        }
         this.mindMap = new MindMap({
             el: document.querySelector(el),
             data: data ? data : getDefaultData(),
@@ -67,6 +70,19 @@ export default class SimpleMindMapWrap {
             this.activeNodeList = activeNodeList;
             callback(activeNodeList.length > 0);
         });
+    }
+
+    // ------ 原生操作 ------
+
+    on(name: string, callback: (...args: any[]) => void) {
+        if (!this.mindMap) {
+            return;
+        }
+        this.mindMap.on(name, callback)
+    }
+
+    execCommand(command: string, ...args: any[]) {
+        this.mindMap.execCommand(command, args)
     }
 
     // ------ 操作 ------
@@ -134,6 +150,16 @@ export default class SimpleMindMapWrap {
 
     removeNode() {
         this.mindMap.execCommand('REMOVE_NODE')
+    }
+
+    // ------ 代理操作 ------
+
+    viewReset() {
+        this.mindMap.view.reset();
+    }
+
+    copyNode(): any {
+        return this.mindMap.renderer.copyNode();
     }
 
     // ------ 节点附加操作 ------

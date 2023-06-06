@@ -2,23 +2,26 @@
     <div class="simple-mind-map">
         <div class="header">
             <a-button-group type="text">
-                <simple-mind-map-menu-file @save="save" @save-as="saveAs" />
+                <simple-mind-map-menu-file v-if="render" :simple-mind-map-wrap="simpleMindMapWrap" />
                 <!-- 编辑 -->
-                <simple-mind-map-menu-edit :index="index" :len="len" :has-node="hasNode" @add-node="addBothNode"
-                    @add-child-node="addChildNode" @remove-node="removeNode" @back="back" @forward="forward" />
+                <simple-mind-map-menu-edit v-if="render" :simple-mind-map-wrap="simpleMindMapWrap" :index="index" :len="len"
+                    :has-node="hasNode" />
                 <!-- 插入 -->
-                <simple-mind-map-menu-insert :has-node="hasNode" @add-link="addLink" />
+                <simple-mind-map-menu-insert v-if="render" :simple-mind-map-wrap="simpleMindMapWrap" :has-node="hasNode" />
                 <!-- 导出 -->
                 <simple-mind-map-menu-export @export="exportFile" />
                 <!-- 更多 -->
                 <simple-mind-map-menu-more :index="index" :len="len" :has-node="hasNode" :render-tree="renderTree"
                     @switch-theme="setTheme" @switch-layout="setLayout" @set-node="setNode" />
             </a-button-group>
-            <a-button type="text" @click="collapsed = !collapsed" :status="collapsed ? 'normal' : 'success'">
-                <template #icon>
-                    <icon-layout />
-                </template>
-            </a-button>
+            <a-button-group type="text">
+                <!-- 布局 -->
+                <a-button @click="collapsed = !collapsed" :status="collapsed ? 'normal' : 'success'">
+                    <template #icon>
+                        <icon-layout />
+                    </template>
+                </a-button>
+            </a-button-group>
         </div>
         <a-layout class="container">
             <a-layout-content>
@@ -26,6 +29,7 @@
             </a-layout-content>
             <a-layout-sider :collapsed="collapsed" :width="200" :collapsed-width="0">Sider</a-layout-sider>
         </a-layout>
+        <simple-mind-map-context-menu :mind-map="simpleMindMapWrap" v-if="render" />
     </div>
 </template>
 <script lang="ts">
@@ -40,19 +44,22 @@ import SimpleMindMapMenuFile from './components/menu-file.vue';
 import SimpleMindMapMenuEdit from './components/menu-edit.vue';
 import SimpleMindMapMenuInsert from './components/menu-insert.vue';
 import SimpleMindMapMenuExport from './components/menu-export.vue';
+import SimpleMindMapContextMenu from './components/context-menu.vue';
 
 import MessageUtil from "@/utils/MessageUtil";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import { useSimpleMindMapStore } from "@/store/graph/SimpleMindMapStore";
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
-import { useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
 import { getRecord } from "@/utils/utools/DbUtil";
+import { markRaw } from "vue";
 
-let simpleMindMapWrap = {} as SimpleMindMapWrap;
 
 export default defineComponent({
     name: '',
-    components: { SimpleMindMapMenuMore, SimpleMindMapMenuFile, SimpleMindMapMenuEdit, SimpleMindMapMenuInsert, SimpleMindMapMenuExport },
+    components: {
+        SimpleMindMapMenuMore, SimpleMindMapMenuFile, SimpleMindMapMenuEdit, SimpleMindMapMenuInsert, SimpleMindMapMenuExport,
+        SimpleMindMapContextMenu
+    },
     data: () => ({
         renderTree: undefined as any | undefined,
         index: 0,
@@ -60,57 +67,58 @@ export default defineComponent({
         hasNode: false,
         name: '',
         // 本身数据,
-        collapsed: true
+        collapsed: true,
+        render: false,
+        simpleMindMapWrap: markRaw(new SimpleMindMapWrap("", {}))
     }),
     computed: {
         ...mapState(useGlobalStore, ['height', 'width', 'title', 'isDark'])
     },
     watch: {
         height() {
-            simpleMindMapWrap.setSize(this.width, this.height);
+            this.simpleMindMapWrap.setSize(this.width, this.height);
         },
         width() {
-            simpleMindMapWrap.setSize(this.width, this.height);
+            this.simpleMindMapWrap.setSize(this.width, this.height);
         },
         collapsed() {
-            simpleMindMapWrap.setSize(this.width, this.height);
+            this.simpleMindMapWrap.setSize(this.width, this.height);
         }
     },
     created() {
         let id = this.$route.params.id as string;
         let record = useSimpleMindMapStore().info(id);
         this.name = record.name;
-        useSaveEvent.on(() => this.save());
-        useUndoEvent.on(() => this.back());
     },
     mounted() {
         let id = this.$route.params.id as string;
         let path = this.$route.query.path as string;
         getRecord(GraphTypeEnum.SIMPLE_MIND_MAP, id, path).then(value => {
-            simpleMindMapWrap = new SimpleMindMapWrap(
+            this.simpleMindMapWrap = markRaw(new SimpleMindMapWrap(
                 "#simple-mind-map",
                 value.config,
-                value.record);
-            simpleMindMapWrap.init(value.id, value._rev);
+                value.record));
+            this.simpleMindMapWrap.init(value.id, value._rev);
             this.initAfter();
         }).catch(e => {
             MessageUtil.error("初始化数据出错", e);
-            simpleMindMapWrap = new SimpleMindMapWrap(
+            this.simpleMindMapWrap = markRaw(new SimpleMindMapWrap(
                 "#simple-mind-map",
-                {});
-            simpleMindMapWrap.init("0");
+                {}));
+            this.simpleMindMapWrap.init("0");
             this.initAfter();
         })
     },
     methods: {
         initAfter() {
+            this.render = true;
             // 事件
-            simpleMindMapWrap.onDataChange(renderTree => this.renderTree = renderTree);
-            simpleMindMapWrap.onBackForward((index, len) => {
+            this.simpleMindMapWrap.onDataChange(renderTree => this.renderTree = renderTree);
+            this.simpleMindMapWrap.onBackForward((index, len) => {
                 this.index = index;
                 this.len = len;
             });
-            simpleMindMapWrap.onNodeActive((hasNode) => {
+            this.simpleMindMapWrap.onNodeActive((hasNode) => {
                 this.hasNode = hasNode;
             });
             // 设置主题
@@ -120,52 +128,25 @@ export default defineComponent({
                 this.setTheme('default')
             }
         },
-
-        save() {
-            simpleMindMapWrap.save()
-                .then(() => MessageUtil.success("保存成功"))
-                .catch(e => MessageUtil.error("保存失败", e));
-        },
-        saveAs() {
-            simpleMindMapWrap.saveAs(this.title)
-        },
         exportFile(type: ExportTypeEnum) {
             // json特殊处理
             if (type === 'json') {
-                simpleMindMapWrap.saveAs(this.title);
+                this.simpleMindMapWrap.saveAs(this.title);
             } else {
-                simpleMindMapWrap.export(type, true, this.title, true)
+                this.simpleMindMapWrap.export(type, true, this.title, true)
             }
         },
 
         setTheme(theme: string) {
-            simpleMindMapWrap.setTheme(theme);
+            this.simpleMindMapWrap.setTheme(theme);
         },
         setLayout(layout: string) {
-            simpleMindMapWrap.setLayout(layout);
+            this.simpleMindMapWrap.setLayout(layout);
         },
         setNode(node: any) {
-            simpleMindMapWrap.setNode(node);
+            this.simpleMindMapWrap.setNode(node);
             node.active();
         },
-        addChildNode() {
-            simpleMindMapWrap.addChildNode();
-        },
-        addBothNode() {
-            simpleMindMapWrap.addBothNode();
-        },
-        removeNode() {
-            simpleMindMapWrap.removeNode();
-        },
-        back() {
-            simpleMindMapWrap.back();
-        },
-        forward() {
-            simpleMindMapWrap.forward();
-        },
-        addLink(name: string, href: string) {
-            simpleMindMapWrap.addLink(name, href);
-        }
     }
 });
 </script>

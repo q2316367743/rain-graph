@@ -2,16 +2,18 @@
     <a-dropdown trigger="click">
         <a-button>编辑</a-button>
         <template #content>
-            <a-doption :disabled="index === 0" @click="$emit('back')">后退</a-doption>
-            <a-doption :disabled="index === len - 1" @click="$emit('forward')">前进</a-doption>
-            <a-doption :disabled="!hasNode" @click="$emit('add-node')">插入同级节点</a-doption>
-            <a-doption :disabled="!hasNode" @click="$emit('add-child-node')">插入子节点</a-doption>
-            <a-doption :disabled="!hasNode" @click="$emit('remove-node')">删除节点</a-doption>
+            <a-doption :disabled="index === 0" @click="back">后退</a-doption>
+            <a-doption :disabled="index === len - 1" @click="forward">前进</a-doption>
+            <a-doption :disabled="!hasNode" @click="addBothNode">插入同级节点</a-doption>
+            <a-doption :disabled="!hasNode" @click="addChildNode">插入子节点</a-doption>
+            <a-doption :disabled="!hasNode" @click="removeNode">删除节点</a-doption>
         </template>
     </a-dropdown>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { PropType, defineComponent } from "vue";
+import SimpleMindMapWrap from "../SimpleMindMapWrap";
+import { useUndoEvent } from "@/global/BeanFactory";
 
 export default defineComponent({
     name: 'menu-edit',
@@ -31,11 +33,36 @@ export default defineComponent({
             type: Boolean,
             required: false,
             default: false
+        },
+        simpleMindMapWrap: {
+            type: Object as PropType<SimpleMindMapWrap>,
+            required: false,
+            default: new SimpleMindMapWrap("", {})
         }
     },
     data: () => ({
 
     }),
+    created() {
+        useUndoEvent.on(() => this.back());
+    },
+    methods: {
+        addChildNode() {
+            this.simpleMindMapWrap.addChildNode();
+        },
+        addBothNode() {
+            this.simpleMindMapWrap.addBothNode();
+        },
+        removeNode() {
+            this.simpleMindMapWrap.removeNode();
+        },
+        back() {
+            this.simpleMindMapWrap.back();
+        },
+        forward() {
+            this.simpleMindMapWrap.forward();
+        },
+    }
 });
 </script>
 <style scoped></style>

@@ -5,7 +5,9 @@
                 <template #icon><icon-minus /></template>
             </a-button>
         </a-tooltip>
-        <div class="scaleInfo">{{ scaleNum }}%</div>
+        <a-tooltip content="回到中心" placement="top">
+            <div class="scaleInfo" @click="returnCenter">{{ scaleNum }}%</div>
+        </a-tooltip>
         <a-tooltip content="放大" placement="top">
             <a-button @click="enlarge">
                 <template #icon><icon-plus /></template>
@@ -59,6 +61,10 @@ export default defineComponent({
          */
         enlarge() {
             this.simpleMindMapWrap.view.enlarge()
+        },
+
+        returnCenter() {
+            this.simpleMindMapWrap.viewReset()
         }
     }
 })
@@ -85,6 +91,8 @@ export default defineComponent({
         width: 40px;
         text-align: center;
         margin: 0 5px;
+        user-select: none;
+        cursor: pointer;
     }
 }
 </style>

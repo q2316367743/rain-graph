@@ -14,6 +14,9 @@ export default class SimpleMindMapWrap {
     private readonly mindMap: any;
     private readonly el;
 
+    // 代理属性
+    readonly view: any
+
     private id = '0';
     private _rev = undefined as string | undefined;
 
@@ -37,6 +40,7 @@ export default class SimpleMindMapWrap {
             ...this.config,
             iconList: extraImages
         });
+        this.view = this.mindMap.view;
     }
 
     init(id: string, _rev?: string) {

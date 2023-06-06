@@ -1,6 +1,6 @@
 <template>
     <a-modal class="nodeDialog" title="导出" v-model:visible="dialogVisible" width="700px" ok-text="导出" @ok="confirm"
-        @cancel="cancel">
+        @cancel="cancel" draggable>
         <div>
             <div class="nameInputBox">
                 <span class="name">导出文件名称</span>

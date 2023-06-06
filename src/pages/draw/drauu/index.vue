@@ -74,7 +74,9 @@ export default defineComponent({
     },
     watch: {
         color() {
-            drauu.brush.color = this.color;
+            if (drauu) {
+                drauu.brush.color = this.color;
+            }
         },
         size() {
             drauu.brush.size = this.size;
@@ -103,7 +105,6 @@ export default defineComponent({
                 color: this.color,
                 size: this.size,
             },
-            // acceptsInputTypes: ['pen'],
         });
     },
     methods: {
@@ -112,7 +113,8 @@ export default defineComponent({
         clear() { drauu.clear() },
         download() {
             drauu.el!.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
-            const data = drauu.el!.outerHTML || ''
+            const data = drauu.el!.outerHTML || '';
+            console.log(data)
             const blob = new Blob([data], { type: 'image/svg+xml' })
             const elem = window.document.createElement('a')
             elem.href = window.URL.createObjectURL(blob)

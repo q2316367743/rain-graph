@@ -21,19 +21,6 @@ import Drag from 'simple-mind-map/src/Drag.js'
 import Export from 'simple-mind-map/src/Export.js'
 import Select from 'simple-mind-map/src/Select.js'
 import AssociativeLine from 'simple-mind-map/src/AssociativeLine.js'
-
-import { utools } from './plugin/utools';
-
-window.rain = {
-    env: window.utools ? 'utools' : 'web'
-}
-
-// 非utools环境，需要注入utools对象
-if (!window.utools) {
-    // @ts-ignore
-    window.utools = utools;
-}
-
 // 注册插件
 MindMap.usePlugin(Export)
 //     .usePlugin(Watermark)
@@ -42,6 +29,18 @@ MindMap.usePlugin(Export)
     .usePlugin(Select)
     .usePlugin(MiniMap)
     .usePlugin(AssociativeLine)
+
+
+// utools
+import { utools } from './plugin/utools';
+window.rain = {
+    env: window.utools ? 'utools' : 'web'
+}
+// 非utools环境，需要注入utools对象
+if (!window.utools) {
+    // @ts-ignore
+    window.utools = utools;
+}
 
 
 createApp(App)

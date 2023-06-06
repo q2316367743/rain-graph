@@ -10,7 +10,7 @@
                 <template #icon><icon-robot /></template>
                 图标
             </a-doption>
-            <a-doption :disabled="!hasNode" @click="openLink">
+            <a-doption :disabled="!hasNode" @click="dialog.hyperLink = true">
                 <template #icon><icon-link /></template>
                 超链接
             </a-doption>
@@ -32,19 +32,9 @@
             </a-doption>
         </template>
     </a-dropdown>
-    <!-- 超链接 -->
-    <a-modal v-model:visible="link.dialog" title="添加超链接" ok-text="添加" @ok="addLink">
-        <a-form :model="link.record">
-            <a-form-item label="名称">
-                <a-input v-model="link.record.name" />
-            </a-form-item>
-            <a-form-item label="链接地址">
-                <a-input v-model="link.record.href" />
-            </a-form-item>
-        </a-form>
-    </a-modal>
     <!-- 图标 -->
     <node-icon v-model:visible="dialog.icon" :simple-mind-map-wrap="simpleMindMapWrap" />
+    <node-hyper-link v-model:visible="dialog.hyperLink" :simple-mind-map-wrap="simpleMindMapWrap" />
 </template>
 <script lang="ts">
 import { PropType, defineComponent } from "vue";
@@ -52,10 +42,11 @@ import SimpleMindMapWrap from "../SimpleMindMapWrap";
 
 // 引入节点组件
 import NodeIcon from './node/icon.vue';
+import NodeHyperLink from './node/hyper-link.vue';
 
 export default defineComponent({
     name: 'menu-insert',
-    components: { NodeIcon },
+    components: { NodeIcon, NodeHyperLink },
     props: {
         hasNode: {
             type: Boolean,
@@ -69,31 +60,12 @@ export default defineComponent({
         }
     },
     data: () => ({
-        link: {
-            dialog: false,
-            record: {
-                name: '',
-                href: ''
-            }
-        },
         dialog: {
-            icon: false
+            icon: false,
+            hyperLink: false
         }
     }),
     methods: {
-        openLink() {
-            this.link = {
-                dialog: true,
-                record: {
-                    name: '',
-                    href: ''
-                }
-            };
-        },
-        addLink() {
-            this.simpleMindMapWrap.addLink(this.link.record.name, this.link.record.href);
-            this.link.dialog = false;
-        },
     }
 });
 </script>

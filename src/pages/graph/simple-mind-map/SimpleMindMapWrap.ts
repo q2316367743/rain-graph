@@ -149,7 +149,7 @@ export default class SimpleMindMapWrap {
         }), title + '.json', 'text/json');
     }
 
-    export(type: ExportTypeEnum, download: boolean, fileName: string, withConfig: boolean) {
+    export(type: string, download: boolean, fileName: string, withConfig?: string | boolean) {
         this.mindMap.export(type, download, fileName, withConfig);
     }
 

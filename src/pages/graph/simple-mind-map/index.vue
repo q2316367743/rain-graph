@@ -8,11 +8,10 @@
                     :has-node="hasNode" />
                 <!-- 插入 -->
                 <simple-mind-map-menu-insert v-if="render" :simple-mind-map-wrap="simpleMindMapWrap" :has-node="hasNode" />
-                <!-- 导出 -->
-                <simple-mind-map-menu-export @export="exportFile" />
                 <!-- 更多 -->
-                <simple-mind-map-menu-more :index="index" :len="len" :has-node="hasNode" :render-tree="renderTree"
-                    @switch-theme="setTheme" @switch-layout="setLayout" @set-node="setNode" />
+                <simple-mind-map-menu-more v-if="render" :simple-mind-map-wrap="simpleMindMapWrap" :index="index" :len="len"
+                    :has-node="hasNode" :render-tree="renderTree" @switch-theme="setTheme" @switch-layout="setLayout"
+                    @set-node="setNode" />
             </a-button-group>
             <div>
                 <!-- 小地图 -->
@@ -71,7 +70,6 @@ import SimpleMindMapMenuMore from './components/menu/menu-more.vue';
 import SimpleMindMapMenuFile from './components/menu/menu-file.vue';
 import SimpleMindMapMenuEdit from './components/menu/menu-edit.vue';
 import SimpleMindMapMenuInsert from './components/menu/menu-insert.vue';
-import SimpleMindMapMenuExport from './components/menu/menu-export.vue';
 import SimpleMindMapContextMenu from './components/context-menu.vue';
 import SimpleMindMapCount from './components/count.vue';
 import SimpleMindMapToolbar from './components/toolbar.vue';
@@ -81,7 +79,6 @@ import SimpleMindMapMiniMap from './components/mini-map.vue';
 import MessageUtil from "@/utils/MessageUtil";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import { useSimpleMindMapStore } from "@/store/graph/SimpleMindMapStore";
-import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import { getRecord } from "@/utils/utools/DbUtil";
 import { markRaw } from "vue";
 import { useFullscreen } from "@vueuse/core";
@@ -90,7 +87,7 @@ import { useFullscreen } from "@vueuse/core";
 export default defineComponent({
     name: '',
     components: {
-        SimpleMindMapMenuMore, SimpleMindMapMenuFile, SimpleMindMapMenuEdit, SimpleMindMapMenuInsert, SimpleMindMapMenuExport,
+        SimpleMindMapMenuMore, SimpleMindMapMenuFile, SimpleMindMapMenuEdit, SimpleMindMapMenuInsert,
         SimpleMindMapContextMenu, SimpleMindMapCount, SimpleMindMapToolbar, SimpleMindMapScale, SimpleMindMapMiniMap
     },
     data: () => ({
@@ -163,15 +160,6 @@ export default defineComponent({
                 this.setTheme('default')
             }
         },
-        exportFile(type: ExportTypeEnum) {
-            // json特殊处理
-            if (type === 'json') {
-                this.simpleMindMapWrap.saveAs(this.title);
-            } else {
-                this.simpleMindMapWrap.export(type, true, this.title, true)
-            }
-        },
-
         setTheme(theme: string) {
             this.simpleMindMapWrap.setTheme(theme);
         },

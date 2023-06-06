@@ -185,7 +185,7 @@ export default defineComponent({
                         this.mindMap.viewReset()
                         break
                     default:
-                        this.mindMap.execCommand(key, index === -1 ? undefined : index);
+                        this.mindMap.execCommand(key as any, index === -1 ? undefined : index);
                         break
                 }
             } catch (e) {

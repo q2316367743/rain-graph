@@ -22,12 +22,12 @@
                 <template #icon><icon-tag /></template>
                 标签
             </a-doption>
-            <a-doption :disabled="!hasNode">
+            <a-doption :disabled="true">
                 <template #icon><icon-apps /></template>
                 概要
             </a-doption>
-            <a-doption :disabled="!hasNode">
-                <template #icon><icon-oblique-line /></template>
+            <a-doption :disabled="!hasNode" @click="createAssociativeLine">
+                <template #icon><icon-arrow-right /></template>
                 关联线
             </a-doption>
         </template>
@@ -71,6 +71,9 @@ export default defineComponent({
         }
     }),
     methods: {
+        createAssociativeLine() {
+            this.simpleMindMapWrap.createAssociativeLine();
+        }
     }
 });
 </script>

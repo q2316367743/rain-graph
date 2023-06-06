@@ -23,13 +23,13 @@
                 </a-button>
             </a-tooltip>
             <a-tooltip content="概要" position="bottom">
-                <a-button value="text" :disabled="!hasNode">
+                <a-button value="text" :disabled="true">
                     <template #icon><icon-apps /></template>
                 </a-button>
             </a-tooltip>
             <a-tooltip content="关联线" position="bottom">
-                <a-button value="image" :disabled="!hasNode">
-                    <template #icon><icon-oblique-line /></template>
+                <a-button value="image" :disabled="!hasNode" @click="createAssociativeLine">
+                    <template #icon><icon-arrow-right /></template>
                 </a-button>
             </a-tooltip>
         </a-button-group>
@@ -79,6 +79,11 @@ export default defineComponent({
         drawTypeLeft() {
             return ((this.width - 192) / 2) + 'px';
         },
+    },
+    methods: {
+        createAssociativeLine() {
+            this.simpleMindMapWrap.createAssociativeLine();
+        }
     }
 });
 </script>

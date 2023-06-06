@@ -48,19 +48,19 @@ export default defineComponent({
     },
     methods: {
         addChildNode() {
-            this.simpleMindMapWrap.addChildNode();
+            this.simpleMindMapWrap.execCommand("INSERT_CHILD_NODE");
         },
         addBothNode() {
-            this.simpleMindMapWrap.addBothNode();
+            this.simpleMindMapWrap.execCommand("INSERT_NODE");
         },
         removeNode() {
-            this.simpleMindMapWrap.removeNode();
+            this.simpleMindMapWrap.execCommand("REMOVE_NODE");
         },
         back() {
-            this.simpleMindMapWrap.back();
+            this.simpleMindMapWrap.execCommand("BACK");
         },
         forward() {
-            this.simpleMindMapWrap.forward();
+            this.simpleMindMapWrap.execCommand("FORWARD");
         },
     }
 });

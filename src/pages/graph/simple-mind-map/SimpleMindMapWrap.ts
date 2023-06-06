@@ -7,6 +7,9 @@ import { useSimpleMindMapStore } from "@/store/graph/SimpleMindMapStore";
 
 import { getDefaultConfig, getDefaultData } from "./data/config";
 import { extraImages } from "./data/icon";
+
+type commandType = 'INSERT_CHILD_NODE' | 'INSERT_NODE' | 'REMOVE_NODE' | 'BACK' | 'FORWARD'
+
 //  思维导图
 export default class SimpleMindMapWrap {
 
@@ -105,7 +108,7 @@ export default class SimpleMindMapWrap {
         this.mindMap.off(name, callback)
     }
 
-    execCommand(command: string, ...args: any[]) {
+    execCommand(command: commandType, ...args: any[]) {
         this.mindMap.execCommand(command, args)
     }
 
@@ -119,14 +122,6 @@ export default class SimpleMindMapWrap {
     setLayout(layout: string) {
         this.mindMap.setLayout(layout);
         this.config.layout = layout;
-    }
-
-    back() {
-        this.mindMap.execCommand('BACK')
-    }
-
-    forward() {
-        this.mindMap.execCommand('FORWARD')
     }
 
     async save() {
@@ -164,18 +159,6 @@ export default class SimpleMindMapWrap {
         this.mindMap.renderer.moveNodeToCenter(node);
     }
 
-    addChildNode() {
-        this.mindMap.execCommand('INSERT_CHILD_NODE')
-    }
-
-    addBothNode() {
-        this.mindMap.execCommand('INSERT_NODE')
-    }
-
-    removeNode() {
-        this.mindMap.execCommand('REMOVE_NODE')
-    }
-
     // ------ 代理操作 ------
 
     viewReset() {
@@ -184,6 +167,10 @@ export default class SimpleMindMapWrap {
 
     copyNode(): any {
         return this.mindMap.renderer.copyNode();
+    }
+
+    createAssociativeLine() {
+        this.mindMap.associativeLine.createLineFromActiveNode();
     }
 
     // ------ 节点附加操作 ------

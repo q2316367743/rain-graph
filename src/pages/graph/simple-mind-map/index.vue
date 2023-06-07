@@ -21,7 +21,7 @@
                     </template>
                 </a-button>
                 <!-- 只读 -->
-                <a-button type="text">
+                <a-button type="text" disabled>
                     <template #icon>
                         <icon-lock />
                     </template>
@@ -34,7 +34,7 @@
                     </template>
                 </a-button>
                 <!-- 布局 -->
-                <a-button type="text" @click="collapsed = !collapsed" :status="collapsed ? 'normal' : 'success'">
+                <a-button type="text" disabled @click="collapsed = !collapsed" :status="collapsed ? 'normal' : 'success'">
                     <template #icon>
                         <icon-layout />
                     </template>

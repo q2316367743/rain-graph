@@ -7,7 +7,7 @@
                 图片
             </a-doption>
             <a-doption :disabled="!hasNode" @click="dialog.icon = true">
-                <template #icon><icon-robot /></template>
+                <template #icon><icon-heart /></template>
                 图标
             </a-doption>
             <a-doption :disabled="!hasNode" @click="dialog.hyperLink = true">

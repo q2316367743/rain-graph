@@ -4,7 +4,7 @@
         <a-button-group type="text" class="draw-type">
             <a-tooltip content="图标" position="bottom">
                 <a-button value="freedraw" :disabled="!hasNode" @click="dialog.icon = true">
-                    <template #icon><icon-robot /></template>
+                    <template #icon><icon-heart /></template>
                 </a-button>
             </a-tooltip>
             <a-tooltip content="超链接" position="bottom">

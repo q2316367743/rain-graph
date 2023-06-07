@@ -2,7 +2,7 @@
     <a-modal class="nodeDialog" title="标签" v-model:visible="dialogVisible" width="500" ok-text="保存" @cancel="cancel"
         @ok="confirm">
         <a-input v-model="tag" @keyup.native.enter="add" @keyup.native.stop :disabled="tagArr.length >= max"
-            placeholder="新增标签">
+            placeholder="请输入标签，回车新增">
         </a-input>
         <div class="tagList">
             <div class="tagItem" v-for="(item, index) in tagArr" :key="index" :style="{

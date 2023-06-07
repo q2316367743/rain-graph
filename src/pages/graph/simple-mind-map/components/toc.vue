@@ -1,8 +1,8 @@
 <template>
     <div class="simple-mind-map-toc">
         <a-scrollbar style="height:100%;overflow: auto;">
-            <a-tree :data="[renderTree || {}]" block-node class="toc-tree" :selectable="false" :field-names="fieldNames"
-                show-line ref="simpleMindMapTocTree">
+            <a-tree :data="renderTrees" block-node class="toc-tree" :selectable="false" :field-names="fieldNames" show-line
+                ref="simpleMindMapTocTree">
                 <template #title="nodeData">
                     <div class="toc-tree-node" v-if="nodeData.data">
                         <div class="text" ref="tocEdit" contenteditable="true" @click="textClient(nodeData._node)"
@@ -48,22 +48,18 @@ export default defineComponent({
     data: () => ({
         tagColorList,
         fieldNames: {
-            key: 'value',
-            title: 'data.text',
+            key: 'data.text',
+            title: 'data.uid',
         },
-        renderTree: {},
-        first: true
+        renderTrees: new Array<any>(),
     }),
     mounted() {
         this.simpleMindMapWrap.on('data_change', () => {
-            this.renderTree = this.simpleMindMapWrap.renderer.renderTree;
-            if (this.first) {
-                this.$nextTick(() => {
-                    let simpleMindMapTocTree = this.$refs['simpleMindMapTocTree'] as TreeInstance;
-                    simpleMindMapTocTree.expandAll(true);
-                })
-                this.first = false;
-            }
+            this.renderTrees = [this.simpleMindMapWrap.renderer.renderTree];
+            this.$nextTick(() => {
+                let simpleMindMapTocTree = this.$refs['simpleMindMapTocTree'] as TreeInstance;
+                simpleMindMapTocTree.expandAll(true);
+            })
         });
     },
     methods: {

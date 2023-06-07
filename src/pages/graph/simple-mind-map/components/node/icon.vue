@@ -97,9 +97,6 @@ export default defineComponent({
 
 <style lang="less" scoped>
 .nodeDialog {
-    /deep/ .el-dialog__body {
-        padding: 0 20px;
-    }
 
     .deleteBtn {
         margin-bottom: 20px;
@@ -125,12 +122,12 @@ export default defineComponent({
                 cursor: pointer;
                 position: relative;
 
-                /deep/ img {
+                img {
                     width: 100%;
                     height: 100%;
                 }
 
-                /deep/ svg {
+                svg {
                     width: 100%;
                     height: 100%;
                 }

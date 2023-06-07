@@ -5,9 +5,9 @@
         </a-button>
         <template #content>
             <a-doption @click="exportDialog = true">导出</a-doption>
+            <a-doption>设置</a-doption>
             <a-doption @click="openTheme">主题</a-doption>
             <a-doption @click="layoutDrawer = true">布局</a-doption>
-            <a-doption @click="tocDrawer = true">大纲</a-doption>
             <a-doption @click="keyboardShortcut = true;">快捷键</a-doption>
         </template>
     </a-dropdown>
@@ -38,12 +38,6 @@
             </a-list-item>
         </a-list>
     </a-drawer>
-    <!-- 大纲 -->
-    <a-drawer title="大纲" v-model:visible="tocDrawer" mask-closable :footer="false" width="372px" unmount-on-close>
-        <a-tree :data="[renderTree || {}]" block-node>
-            <template #title="nodeData">{{ nodeData.data.text }}</template>
-        </a-tree>
-    </a-drawer>
     <!-- 导出 -->
     <more-export v-model:visible="exportDialog" :simple-mind-map-wrap="simpleMindMapWrap" />
     <!-- 快捷键 -->
@@ -70,7 +64,6 @@ export default defineComponent({
             required: false,
             default: new SimpleMindMapWrap("", {})
         },
-        renderTree: Object,
         index: {
             type: Number,
             required: false,
@@ -87,7 +80,7 @@ export default defineComponent({
             default: false
         }
     },
-    emits: ['switch-theme', 'switch-layout', 'set-node'],
+    emits: ['switch-theme', 'switch-layout'],
     data: () => ({
         ExportTypeEnum, themeByLightList, themeByDarkList, layoutList,
         show: false,
@@ -95,12 +88,7 @@ export default defineComponent({
         themeDrawer: false,
         themeType: 'light',
         layoutDrawer: false,
-        tocDrawer: false,
-        exportDialog: false,
-        fieldNames: {
-            key: 'value',
-            title: 'data.text',
-        }
+        exportDialog: false
     }),
     computed: {
         ...mapState(useGlobalStore, ['width', 'isDark']),
@@ -129,10 +117,6 @@ export default defineComponent({
             this.$emit('switch-layout', layout);
             this.layoutDrawer = false;
         },
-        setNode(node: any) {
-            console.log(node)
-            this.$emit('set-node', node);
-        }
     }
 });
 </script>

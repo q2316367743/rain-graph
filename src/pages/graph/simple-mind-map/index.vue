@@ -1,5 +1,6 @@
 <template>
     <div class="simple-mind-map">
+        <!-- 顶部工具栏 -->
         <div class="header">
             <a-button-group type="text">
                 <simple-mind-map-menu-file v-if="render" :simple-mind-map-wrap="simpleMindMapWrap" />
@@ -10,8 +11,7 @@
                 <simple-mind-map-menu-insert v-if="render" :simple-mind-map-wrap="simpleMindMapWrap" :has-node="hasNode" />
                 <!-- 更多 -->
                 <simple-mind-map-menu-more v-if="render" :simple-mind-map-wrap="simpleMindMapWrap" :index="index" :len="len"
-                    :has-node="hasNode" :render-tree="renderTree" @switch-theme="setTheme" @switch-layout="setLayout"
-                    @set-node="setNode" />
+                    :has-node="hasNode" @switch-theme="setTheme" @switch-layout="setLayout" />
             </a-button-group>
             <div>
                 <!-- 小地图 -->
@@ -41,18 +41,31 @@
                 </a-button>
             </div>
         </div>
+        <!-- 内容 -->
         <a-layout class="container">
             <a-layout-content>
                 <!-- 容器 -->
                 <div id="simple-mind-map"></div>
+                <!-- 大纲 -->
+                <simple-mind-map-toc v-if="render" v-show="display === 'toc'" :simple-mind-map-wrap="simpleMindMapWrap"
+                    :render-tree="renderTree" />
+                <!-- 思维导图/大纲切换 -->
+                <a-radio-group v-model="display" type="button" class="simple-mind-map-display">
+                    <a-radio value="mind"><icon-mind-mapping /></a-radio>
+                    <a-radio value="toc"><icon-unordered-list /></a-radio>
+                </a-radio-group>
                 <!-- 数量统计 -->
-                <simple-mind-map-count v-if="render" :simple-mind-map-wrap="simpleMindMapWrap" />
+                <simple-mind-map-count v-if="render" v-show="display === 'mind'"
+                    :simple-mind-map-wrap="simpleMindMapWrap" />
                 <!-- 工具栏 -->
-                <simple-mind-map-toolbar v-if="render" :has-node="hasNode" :simple-mind-map-wrap="simpleMindMapWrap" />
+                <simple-mind-map-toolbar v-if="render" v-show="display === 'mind'" :has-node="hasNode"
+                    :simple-mind-map-wrap="simpleMindMapWrap" />
                 <!-- 缩放 -->
-                <simple-mind-map-scale v-if="render" :simple-mind-map-wrap="simpleMindMapWrap" />
+                <simple-mind-map-scale v-if="render" v-show="display === 'mind'"
+                    :simple-mind-map-wrap="simpleMindMapWrap" />
                 <!-- 小地图 -->
-                <simple-mind-map-mini-map v-if="render" v-show="miniMap" :simple-mind-map-wrap="simpleMindMapWrap" />
+                <simple-mind-map-mini-map v-if="render" v-show="display === 'mind' && miniMap"
+                    :simple-mind-map-wrap="simpleMindMapWrap" />
             </a-layout-content>
             <a-layout-sider :collapsed="collapsed" :width="200" :collapsed-width="0">Sider</a-layout-sider>
         </a-layout>
@@ -75,6 +88,7 @@ import SimpleMindMapCount from './components/count.vue';
 import SimpleMindMapToolbar from './components/toolbar.vue';
 import SimpleMindMapScale from './components/scale.vue';
 import SimpleMindMapMiniMap from './components/mini-map.vue';
+import SimpleMindMapToc from './components/toc.vue';
 
 import MessageUtil from "@/utils/MessageUtil";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
@@ -87,7 +101,7 @@ import { useFullscreen } from "@vueuse/core";
 export default defineComponent({
     name: '',
     components: {
-        SimpleMindMapMenuMore, SimpleMindMapMenuFile, SimpleMindMapMenuEdit, SimpleMindMapMenuInsert,
+        SimpleMindMapMenuMore, SimpleMindMapMenuFile, SimpleMindMapMenuEdit, SimpleMindMapMenuInsert, SimpleMindMapToc,
         SimpleMindMapContextMenu, SimpleMindMapCount, SimpleMindMapToolbar, SimpleMindMapScale, SimpleMindMapMiniMap
     },
     data: () => ({
@@ -101,7 +115,8 @@ export default defineComponent({
         render: false,
         simpleMindMapWrap: markRaw(new SimpleMindMapWrap("", {})),
         fullscreen: useFullscreen(),
-        miniMap: false
+        miniMap: false,
+        display: 'mind' as 'mind' | 'toc'
     }),
     computed: {
         ...mapState(useGlobalStore, ['height', 'width', 'title', 'isDark'])
@@ -166,10 +181,6 @@ export default defineComponent({
         setLayout(layout: string) {
             this.simpleMindMapWrap.setLayout(layout);
         },
-        setNode(node: any) {
-            this.simpleMindMapWrap.setNode(node);
-            node.active();
-        },
     }
 });
 </script>
@@ -198,72 +209,15 @@ export default defineComponent({
         left: 0;
         right: 0;
         bottom: 0;
+        overflow: hidden;
 
-        .option {
+
+        .simple-mind-map-display {
             position: absolute;
-            top: 96px;
-            padding: 7px;
-            display: flex;
-            transition: 0.2s;
-
-            &.show {
-                right: 0px;
-            }
-
-            &.hidden {
-                right: -95px;
-            }
-
-            .container {
-                width: 88px;
-
-                .arco-btn {
-                    width: 88px;
-                }
-            }
-        }
-
-        .action {
-            position: absolute;
-            padding: 7px;
-            transition: 0.2s;
-
-            &.show {
-                top: 5px;
-            }
-
-            &.hidden {
-                top: -60px;
-            }
-
-            .op {
-                .arco-btn {
-                    height: 32px;
-                }
-            }
-
-            .container {
-                height: 50px;
-            }
-        }
-
-        .node {
-            position: absolute;
-            bottom: 14px;
+            top: 7px;
             left: 14px;
         }
 
-        .simple-mind-map-extra {
-            .container {
-                text-align: center;
-                background-color: var(--color-bg-2);
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            }
-        }
-
-        .arco-layout-content {
-            overflow: hidden;
-        }
     }
 }
 

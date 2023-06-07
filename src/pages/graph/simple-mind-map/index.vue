@@ -47,8 +47,7 @@
                 <!-- 容器 -->
                 <div id="simple-mind-map"></div>
                 <!-- 大纲 -->
-                <simple-mind-map-toc v-if="render" v-show="display === 'toc'" :simple-mind-map-wrap="simpleMindMapWrap"
-                    :render-tree="renderTree" />
+                <simple-mind-map-toc v-if="render" v-show="display === 'toc'" :simple-mind-map-wrap="simpleMindMapWrap" />
                 <!-- 思维导图/大纲切换 -->
                 <a-radio-group v-model="display" type="button" class="simple-mind-map-display">
                     <a-radio value="mind"><icon-mind-mapping /></a-radio>
@@ -96,6 +95,7 @@ import { useSimpleMindMapStore } from "@/store/graph/SimpleMindMapStore";
 import { getRecord } from "@/utils/utools/DbUtil";
 import { markRaw } from "vue";
 import { useFullscreen } from "@vueuse/core";
+import { useSimpleMindMapSettingStore } from "@/store/SimpleMindMapSetting";
 
 
 export default defineComponent({
@@ -105,7 +105,6 @@ export default defineComponent({
         SimpleMindMapContextMenu, SimpleMindMapCount, SimpleMindMapToolbar, SimpleMindMapScale, SimpleMindMapMiniMap
     },
     data: () => ({
-        renderTree: undefined as any | undefined,
         index: 0,
         len: 0,
         hasNode: false,
@@ -119,7 +118,10 @@ export default defineComponent({
         display: 'mind' as 'mind' | 'toc'
     }),
     computed: {
-        ...mapState(useGlobalStore, ['height', 'width', 'title', 'isDark'])
+        ...mapState(useGlobalStore, ['height', 'width', 'title', 'isDark']),
+        ...mapState(useSimpleMindMapSettingStore, {
+            displaySource: 'display'
+        })
     },
     watch: {
         height() {
@@ -136,6 +138,7 @@ export default defineComponent({
         let id = this.$route.params.id as string;
         let record = useSimpleMindMapStore().info(id);
         this.name = record.name;
+        this.display = this.displaySource;
     },
     mounted() {
         let id = this.$route.params.id as string;
@@ -160,7 +163,6 @@ export default defineComponent({
         initAfter() {
             this.render = true;
             // 事件
-            this.simpleMindMapWrap.onDataChange(renderTree => this.renderTree = renderTree);
             this.simpleMindMapWrap.onBackForward((index, len) => {
                 this.index = index;
                 this.len = len;
@@ -216,6 +218,7 @@ export default defineComponent({
             position: absolute;
             top: 7px;
             left: 14px;
+            z-index: 30002;
         }
 
     }

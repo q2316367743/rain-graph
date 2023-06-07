@@ -70,6 +70,7 @@ import { useDiagramStore } from "@/store/graph/DiagramStore";
 import { useWhiteBoardStore } from "@/store/graph/WhiteBoardStore";
 import { useSettingStore } from "@/store/SettingStore";
 import { useSimpleMindMapStore } from "@/store/graph/SimpleMindMapStore";
+import { useSimpleMindMapSettingStore } from "./store/SimpleMindMapSetting";
 
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import GraphTypeEnum from '@/enumeration/GraphTypeEnum';
@@ -119,7 +120,10 @@ export default defineComponent({
         useWhiteBoardStore().init();
         useSimpleMindMapStore().init();
         useDiagramStore().init();
+        // 初始化设置
         useSettingStore().init();
+        useSimpleMindMapSettingStore().init();
+        // 插件进入事件
         utools.onPluginEnter(action => {
             if (action.code.startsWith('/graph')) {
                 useGlobalStore().setTitle('');
@@ -127,7 +131,7 @@ export default defineComponent({
             }
             this.$router.push(action.code);
         });
-
+        // 快捷键注册
         window.addEventListener("keydown", function (e) {
             //可以判断是不是mac，如果是mac,ctrl变为花键
             //event.preventDefault() 方法阻止元素发生默认的行为。
@@ -145,6 +149,7 @@ export default defineComponent({
             }
 
         }, false);
+        // 版本检查
         this.launch()
     },
     methods: {

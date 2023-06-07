@@ -6,10 +6,12 @@
                 <a-tab-pane title="简易思维导图" key="mind"></a-tab-pane>
                 <a-tab-pane title="完整思维导图" key="simple-mind-map"></a-tab-pane>
                 <a-tab-pane title="流程图" key="diagram"></a-tab-pane>
+                <a-tab-pane title="白板" key="white-board"></a-tab-pane>
             </a-tabs>
         </div>
         <div class="content">
             <setting-base v-if="activeKey === 'global'" />
+            <setting-simple-mind-map v-else-if="activeKey === 'simple-mind-map'" />
         </div>
     </div>
 </template>
@@ -17,10 +19,11 @@
 import { defineComponent } from "vue";
 
 import SettingBase from './base.vue';
+import SettingSimpleMindMap from './simple-mind-map.vue';
 
 export default defineComponent({
     name: 'setting',
-    components: { SettingBase },
+    components: { SettingBase, SettingSimpleMindMap },
     data: () => ({
         activeKey: 'global'
     }),
@@ -37,7 +40,7 @@ export default defineComponent({
         height: 40px;
 
         .arco-tabs {
-            width: 460px;
+            width: 514px;
             margin: 4px auto;
         }
     }

@@ -1,18 +1,29 @@
 <template>
     <div class="simple-mind-map-toc">
         <a-scrollbar style="height:100%;overflow: auto;">
-            <a-tree :data="[renderTree || {}]" block-node class="toc-tree" :selectable="false" :field-names="fieldNames" show-line>
+            <a-tree :data="[renderTree || {}]" block-node class="toc-tree" :selectable="false" :field-names="fieldNames"
+                show-line>
                 <template #title="nodeData">
                     <div class="toc-tree-node" v-if="nodeData.data">
-                        <div class="text" contenteditable="true">{{ nodeData.data.text }}</div>
+                        <div class="text" ref="tocEdit" contenteditable="true" @click="textClient(nodeData._node)"
+                            @input="textEdit($event, nodeData._node)">
+                            {{ nodeData.data.text }}
+                        </div>
                     </div>
                 </template>
                 <template #extra="nodeData">
-                    <a-button type="text">
-                        <template #icon>
-                            <icon-more />
+                    <a-dropdown>
+                        <a-button type="text">
+                            <template #icon>
+                                <icon-more />
+                            </template>
+                        </a-button>
+                        <template #content>
+                            <a-doption @click="addNode(nodeData._node)" :disabled="nodeData.data.uid === 1">新增同级节点</a-doption>
+                            <a-doption @click="addChildNode(nodeData._node)">新增子节点</a-doption>
+                            <a-doption @click="removeNode(nodeData._node)">删除节点</a-doption>
                         </template>
-                    </a-button>
+                    </a-dropdown>
                 </template>
             </a-tree>
         </a-scrollbar>
@@ -30,20 +41,43 @@ export default defineComponent({
             type: Object as PropType<SimpleMindMapWrap>,
             required: false,
             default: new SimpleMindMapWrap("", {})
-        },
-        renderTree: Object,
+        }
     },
     data: () => ({
         tagColorList,
         fieldNames: {
             key: 'value',
             title: 'data.text',
-        }
+        },
+        renderTree: {}
     }),
     created() {
-
+        this.simpleMindMapWrap.on('data_change', () => {
+            this.renderTree = this.simpleMindMapWrap.renderer.renderTree;
+            console.log(this.renderTree)
+        });
     },
     methods: {
+        textClient(_node: any) {
+            this.simpleMindMapWrap.renderer.moveNodeToCenter(_node);
+            _node.active();
+        },
+        textEdit(e: Event, _node: any) {
+            let tocEdit = e.target as HTMLDivElement;
+            _node.setText(tocEdit.innerText);
+        },
+        addNode(_node: any) {
+            this.textClient(_node);
+            this.simpleMindMapWrap.execCommand('INSERT_NODE', false);
+        },
+        addChildNode(_node: any) {
+            this.textClient(_node);
+            this.simpleMindMapWrap.execCommand('INSERT_CHILD_NODE', false);
+        },
+        removeNode(_node: any) {
+            this.textClient(_node);
+            this.simpleMindMapWrap.execCommand('REMOVE_NODE');
+        }
     }
 });
 </script>
@@ -55,6 +89,7 @@ export default defineComponent({
     right: 0;
     bottom: 0;
     background-color: var(--color-bg-1);
+    z-index: 3001;
 
     .toc-tree {
         margin: 50px 100px 80px 100px;
@@ -77,12 +112,14 @@ export default defineComponent({
 
         }
     }
+
     .arco-tree-node-title-text {
         width: 100%;
     }
 
     .toc-tree-node {
         cursor: default;
+
         .text {
             color: var(--color-text-1) !important;
             cursor: text;

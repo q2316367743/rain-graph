@@ -14,6 +14,8 @@ enum LocalNameEnum {
 
     SETTING_MIND = '/setting/mind',
 
+    SETTING_SIMPLE_MIND_MAP = '/setting/simple-mind-map',
+
     // ------ 全局变量 ------
 
     VERSION = '/global/version'

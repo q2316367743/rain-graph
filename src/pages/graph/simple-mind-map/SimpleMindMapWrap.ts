@@ -20,6 +20,7 @@ export default class SimpleMindMapWrap {
     // 代理属性
     readonly view: any;
     readonly miniMap: any;
+    readonly renderer: any;
 
     private id = '0';
     private _rev = undefined as string | undefined;
@@ -46,6 +47,7 @@ export default class SimpleMindMapWrap {
         });
         this.view = this.mindMap.view;
         this.miniMap = this.mindMap.miniMap;
+        this.renderer = this.mindMap.renderer;
     }
 
     init(id: string, _rev?: string) {
@@ -70,15 +72,6 @@ export default class SimpleMindMapWrap {
     }
 
     // ------ 事件 ------
-
-    /**
-     * 数据变更
-     * @param event 事件名
-     * @param callback 回调函数
-     */
-    onDataChange(callback: (data: any) => void) {
-        this.mindMap.on('data_change', callback);
-    }
 
     onBackForward(callback: (index: number, len: number) => void) {
         this.mindMap.on('back_forward', callback);

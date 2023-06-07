@@ -2,7 +2,7 @@
     <div class="simple-mind-map-toc">
         <a-scrollbar style="height:100%;overflow: auto;">
             <a-tree :data="[renderTree || {}]" block-node class="toc-tree" :selectable="false" :field-names="fieldNames"
-                show-line>
+                show-line ref="simpleMindMapTocTree">
                 <template #title="nodeData">
                     <div class="toc-tree-node" v-if="nodeData.data">
                         <div class="text" ref="tocEdit" contenteditable="true" @click="textClient(nodeData._node)"
@@ -19,7 +19,8 @@
                             </template>
                         </a-button>
                         <template #content>
-                            <a-doption @click="addNode(nodeData._node)" :disabled="nodeData.data.uid === 1">新增同级节点</a-doption>
+                            <a-doption @click="addNode(nodeData._node)"
+                                :disabled="nodeData.data.uid === 1">新增同级节点</a-doption>
                             <a-doption @click="addChildNode(nodeData._node)">新增子节点</a-doption>
                             <a-doption @click="removeNode(nodeData._node)">删除节点</a-doption>
                         </template>
@@ -32,7 +33,8 @@
 <script lang="ts">
 import { PropType, defineComponent } from "vue";
 import SimpleMindMapWrap from "../SimpleMindMapWrap";
-import { tagColorList } from '../data/constants'
+import { tagColorList } from '../data/constants';
+import { TreeInstance } from '@arco-design/web-vue'
 
 export default defineComponent({
     name: 'simple-mind-map-toc',
@@ -49,12 +51,19 @@ export default defineComponent({
             key: 'value',
             title: 'data.text',
         },
-        renderTree: {}
+        renderTree: {},
+        first: true
     }),
-    created() {
+    mounted() {
         this.simpleMindMapWrap.on('data_change', () => {
             this.renderTree = this.simpleMindMapWrap.renderer.renderTree;
-            console.log(this.renderTree)
+            if (this.first) {
+                this.$nextTick(() => {
+                    let simpleMindMapTocTree = this.$refs['simpleMindMapTocTree'] as TreeInstance;
+                    simpleMindMapTocTree.expandAll(true);
+                })
+                this.first = false;
+            }
         });
     },
     methods: {

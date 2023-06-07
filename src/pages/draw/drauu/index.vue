@@ -22,7 +22,13 @@
                     <a-button title="后退" @click="undo" style="width: 32px;">↩️</a-button>
                     <a-button title="前进" @click="redo" style="width: 32px;">↪️</a-button>
                     <a-button title="清空" @click="clear" style="width: 32px;">🗑</a-button>
-                    <a-button title="导出" @click="download" style="width: 32px;">📥</a-button>
+                    <a-dropdown trigger="click">
+                        <a-button title="导出" style="width: 32px;">📥</a-button>
+                        <template #content>
+                            <a-doption @click="downloadToSvg">SVG</a-doption>
+                            <a-doption @click="downloadToPng">PNG</a-doption>
+                        </template>
+                    </a-dropdown>
                 </a-button-group>
             </div>
         </div>
@@ -43,7 +49,7 @@
         </div>
         <!-- 内容 -->
         <div class="drauu-view-wrap">
-            <svg id="drauu-view" style="touch-action: none"></svg>
+            <svg id="drauu-view" ref="drauu-view" style="touch-action: none"></svg>
         </div>
         <!-- 帮助信息 -->
         <pre class="about">
@@ -58,6 +64,8 @@ import { defineComponent } from "vue";
 import { createDrauu, Drauu, DrawingMode } from 'drauu';
 import { mapState } from "pinia";
 import { useGlobalStore } from "@/store/GlobalStore";
+import BrowserUtil from "@/utils/BrowserUtil";
+import MessageUtil from "@/utils/MessageUtil";
 
 let drauu: Drauu;
 
@@ -111,10 +119,9 @@ export default defineComponent({
         undo() { drauu.undo() },
         redo() { drauu.redo() },
         clear() { drauu.clear() },
-        download() {
+        downloadToSvg() {
             drauu.el!.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
             const data = drauu.el!.outerHTML || '';
-            console.log(data)
             const blob = new Blob([data], { type: 'image/svg+xml' })
             const elem = window.document.createElement('a')
             elem.href = window.URL.createObjectURL(blob)
@@ -122,6 +129,11 @@ export default defineComponent({
             document.body.appendChild(elem)
             elem.click()
             document.body.removeChild(elem)
+        },
+        downloadToPng() {
+            BrowserUtil.svg2png(this.$refs['drauu-view'] as SVGSVGElement)
+                .then(e => BrowserUtil.downloadByBase64(e))
+                .catch(e => MessageUtil.error("下载图片失败", e));
         }
     }
 });

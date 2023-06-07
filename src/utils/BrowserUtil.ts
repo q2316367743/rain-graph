@@ -67,4 +67,56 @@ export default {
 
     },
 
+    svg2png(svg: SVGSVGElement): Promise<string> {
+        // 创建一个Image对象，用于保存生成的图片
+        const img = new Image();
+        // 创建一个Canvas元素
+        const canvas = document.createElement('canvas');
+        // 获取Canvas上下文对象
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+            return Promise.reject("创建canvas对象错误");
+        }
+        // 获取SVG的宽高
+        const svgRect = svg.getBoundingClientRect();
+        // 设置Canvas的宽高与SVG相同
+        canvas.width = svgRect.width;
+        canvas.height = svgRect.height;
+        // 创建一个新的Image对象，用于绘制SVG
+        const svgImage = new Image();
+        // 将SVG转为Base64编码的data URL
+        const svgData = new XMLSerializer().serializeToString(svg);
+        const svgUrl = `data:image/svg+xml;base64,${btoa(svgData)}`;
+        return new Promise<string>((resolve, reject) => {
+            // 在Image对象中加载SVG
+            svgImage.onload = () => {
+                // 将SVG绘制到Canvas上  
+                ctx.drawImage(svgImage, 0, 0);
+                // 将Canvas转为图片
+                resolve(canvas.toDataURL('image/png'));
+            };
+            svgImage.onerror = e => reject(e);
+            // 加载SVG
+            svgImage.src = svgUrl;
+        })
+    },
+
+    downloadByBase64(base64: string) {
+        var byteCharacters = atob(
+            base64.replace(/^data:image\/(png|jpeg|jpg);base64,/, "")
+        );
+        var byteNumbers = new Array(byteCharacters.length);
+        for (var i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        var byteArray = new Uint8Array(byteNumbers);
+        var blob = new Blob([byteArray], {
+            type: undefined,
+        });
+        var aLink = document.createElement("a");
+        aLink.download = "图片名称.png"; //这里写保存时的图片名称
+        aLink.href = URL.createObjectURL(blob);
+        aLink.click();
+    }
+
 }

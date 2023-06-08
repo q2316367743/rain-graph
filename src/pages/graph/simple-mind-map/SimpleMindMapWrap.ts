@@ -73,6 +73,7 @@ export default class SimpleMindMapWrap {
         let svg = el.querySelector(this.el + '>svg') as SVGElement;
         svg.setAttribute('width', width + 'px');
         svg.setAttribute('height', height + 'px');
+        this.mindMap.resize();
     }
 
     // ------ 内容 ------
@@ -169,6 +170,10 @@ export default class SimpleMindMapWrap {
     }
 
     export(type: string, download: boolean, fileName: string, withConfig?: string | boolean) {
+        if (type === 'json') {
+            this.saveAs(fileName);
+            return;
+        }
         this.mindMap.export(type, download, fileName, withConfig);
     }
 

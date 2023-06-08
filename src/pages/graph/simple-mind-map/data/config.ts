@@ -1,3 +1,4 @@
+import { MindMapNode } from "../domain/MindMapNode";
 import { SimpleMindMapConfig } from "../domain/SimpleMindMapConfig";
 import { MOUSE_WHEEL_ACTION, LAYOUT } from "./constants";
 
@@ -116,11 +117,12 @@ export function getDefaultConfig(): SimpleMindMapConfig {
     }
 }
 
-export function getDefaultData() {
+export function getDefaultData(): MindMapNode {
     return {
-        "data": {
-            "text": "思维导图"
+        data: {
+            text: "思维导图",
+            expand: true
         },
-        "children": []
+        children: []
     }
 }

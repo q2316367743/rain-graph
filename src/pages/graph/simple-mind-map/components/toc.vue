@@ -1,12 +1,11 @@
 <template>
     <div class="simple-mind-map-toc">
         <a-scrollbar style="height:100%;overflow: auto;">
-            <a-tree :data="renderTrees" block-node class="toc-tree" :selectable="false" :field-names="fieldNames" show-line
+            <a-tree :data="renderTrees" block-node class="toc-tree" :field-names="fieldNames" show-line
                 ref="simpleMindMapTocTree">
                 <template #title="nodeData">
                     <div class="toc-tree-node" v-if="nodeData.data">
-                        <div class="text" ref="tocEdit" contenteditable="true" @click="textClient(nodeData._node)"
-                            @input="textEdit($event, nodeData._node)">
+                        <div class="text" ref="tocEdit" contenteditable="true" @input="textEdit($event, nodeData)">
                             {{ nodeData.data.text }}
                         </div>
                     </div>
@@ -19,10 +18,9 @@
                             </template>
                         </a-button>
                         <template #content>
-                            <a-doption @click="addNode(nodeData._node)"
-                                :disabled="nodeData.data.uid === 1">新增同级节点</a-doption>
-                            <a-doption @click="addChildNode(nodeData._node)">新增子节点</a-doption>
-                            <a-doption @click="removeNode(nodeData._node)">删除节点</a-doption>
+                            <a-doption :disabled="nodeData.data.uid === 1">新增同级节点</a-doption>
+                            <a-doption @click="addChildNode(nodeData)">新增子节点</a-doption>
+                            <a-doption>删除节点</a-doption>
                         </template>
                     </a-dropdown>
                 </template>
@@ -35,6 +33,7 @@ import { PropType, defineComponent } from "vue";
 import SimpleMindMapWrap from "../SimpleMindMapWrap";
 import { tagColorList } from '../data/constants';
 import { TreeInstance } from '@arco-design/web-vue'
+import { MindMapNode } from "../domain/MindMapNode";
 
 export default defineComponent({
     name: 'simple-mind-map-toc',
@@ -51,37 +50,38 @@ export default defineComponent({
             key: 'data.text',
             title: 'data.uid',
         },
-        renderTrees: new Array<any>(),
+        renderTrees: new Array<MindMapNode>(),
     }),
     mounted() {
-        this.simpleMindMapWrap.on('data_change', () => {
-            this.renderTrees = [this.simpleMindMapWrap.renderer.renderTree];
-            this.$nextTick(() => {
-                let simpleMindMapTocTree = this.$refs['simpleMindMapTocTree'] as TreeInstance;
-                simpleMindMapTocTree.expandAll(true);
-            })
-        });
+        this.renderTrees = [this.simpleMindMapWrap.getData()];
+        this.expandAll();
     },
     methods: {
-        textClient(_node: any) {
-            this.simpleMindMapWrap.renderer.moveNodeToCenter(_node);
-            _node.active();
+        expandAll() {
+            this.$nextTick(() => {
+                this.$nextTick(() => {
+                    let simpleMindMapTocTree = this.$refs['simpleMindMapTocTree'] as TreeInstance;
+                    simpleMindMapTocTree.expandAll(true);
+                });
+            });
         },
-        textEdit(e: Event, _node: any) {
+        textEdit(e: Event, nodeData: MindMapNode) {
             let tocEdit = e.target as HTMLDivElement;
-            _node.setText(tocEdit.innerText);
+            nodeData.data.text = tocEdit.innerText;
         },
-        addNode(_node: any) {
-            this.textClient(_node);
-            this.simpleMindMapWrap.execCommand('INSERT_NODE', false);
-        },
-        addChildNode(_node: any) {
-            this.textClient(_node);
-            this.simpleMindMapWrap.execCommand('INSERT_CHILD_NODE', false);
-        },
-        removeNode(_node: any) {
-            this.textClient(_node);
-            this.simpleMindMapWrap.execCommand('REMOVE_NODE');
+        addChildNode(nodeData: MindMapNode) {
+            const children = nodeData.children || []
+            children.push({
+                data: {
+                    text: '子节点',
+                    expand: false
+                },
+                children: []
+            })
+            nodeData.children = children
+            this.renderTrees = [...this.renderTrees];
+            this.simpleMindMapWrap.setData(this.renderTrees[0]);
+            this.expandAll();
         }
     }
 });
@@ -123,7 +123,6 @@ export default defineComponent({
     }
 
     .toc-tree-node {
-        cursor: default;
 
         .text {
             color: var(--color-text-1) !important;

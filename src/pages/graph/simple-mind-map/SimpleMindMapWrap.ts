@@ -1,12 +1,12 @@
 import { SimpleMindMapConfig } from "./domain/SimpleMindMapConfig";
 import MindMap from "simple-mind-map";
 import BrowserUtil from "@/utils/BrowserUtil";
-import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import { useSimpleMindMapStore } from "@/store/graph/SimpleMindMapStore";
 
 import { getDefaultConfig, getDefaultData } from "./data/config";
 import { extraImages } from "./data/icon";
+import { MindMapNode } from "./domain/MindMapNode";
 
 type commandType = 'INSERT_CHILD_NODE' | 'INSERT_NODE' | 'REMOVE_NODE' | 'BACK' | 'FORWARD' | 'ADD_GENERALIZATION';
 
@@ -16,6 +16,7 @@ export default class SimpleMindMapWrap {
     private readonly config;
     private readonly mindMap: any;
     private readonly el;
+    private data: MindMapNode;
 
     // 代理属性
     readonly view: any;
@@ -27,27 +28,38 @@ export default class SimpleMindMapWrap {
 
     private node = undefined as any;
     private activeNodeList = [] as any[];
+    // 是否保存锁定
+    private lock = false;
+    // 是否有待办
+    private todo = false;
 
     /**
      * 初始化
      * @param config 配置
      * @param data 数据
      */
-    constructor(el: string, config: Partial<SimpleMindMapConfig>, data?: any) {
+    constructor(el: string, config: Partial<SimpleMindMapConfig>, data?: MindMapNode) {
         this.el = el;
+        this.data = Object.assign(getDefaultData(), data);
         this.config = Object.assign(getDefaultConfig(), config);
         if (!el) {
             return;
         }
         this.mindMap = new MindMap({
             el: document.querySelector(el),
-            data: data ? data : getDefaultData(),
+            data: this.data,
             ...this.config,
             iconList: extraImages
         });
         this.view = this.mindMap.view;
         this.miniMap = this.mindMap.miniMap;
         this.renderer = this.mindMap.renderer;
+
+        this.on('data_change', (data: MindMapNode) => {
+            this.data = data;
+            this.save();
+        });
+
     }
 
     init(id: string, _rev?: string) {
@@ -62,12 +74,24 @@ export default class SimpleMindMapWrap {
         svg.setAttribute('height', height + 'px');
     }
 
+    // ------ 内容 ------
+
     getConfig(): SimpleMindMapConfig {
         return this.config;
     }
 
     setConfig(config: SimpleMindMapConfig) {
         this.mindMap.updateConfig(config);
+        this.save();
+    }
+
+    getData(): MindMapNode {
+        return this.data;
+    }
+
+    setData(data: MindMapNode) {
+        this.data = data;
+        this.mindMap.setData(this.data);
         this.save();
     }
 
@@ -118,6 +142,11 @@ export default class SimpleMindMapWrap {
     }
 
     async save() {
+        if (this.lock) {
+            this.todo = true;
+            return;
+        }
+        this.lock = true;
         let id = await useSimpleMindMapStore().addMind(this.id);
         this.id = id;
         let res = await utools.db.promises.put({
@@ -125,13 +154,18 @@ export default class SimpleMindMapWrap {
             _rev: this._rev,
             value: {
                 config: this.config,
-                record: this.mindMap.getData(false)
+                record: this.data
             }
         });
         if (res.error) {
             return Promise.reject(res.message || "新增失败");
         }
         this._rev = res.rev;
+        this.lock = false;
+        if (this.todo) {
+            this.todo = false;
+            await this.save();
+        }
         return Promise.resolve();
     }
 

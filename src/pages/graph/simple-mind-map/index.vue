@@ -47,7 +47,7 @@
                 <!-- 容器 -->
                 <div id="simple-mind-map"></div>
                 <!-- 大纲 -->
-                <simple-mind-map-toc v-if="render" v-show="display === 'toc'" :simple-mind-map-wrap="simpleMindMapWrap" />
+                <simple-mind-map-toc v-if="render && display === 'toc'" :simple-mind-map-wrap="simpleMindMapWrap" />
                 <!-- 思维导图/大纲切换 -->
                 <a-radio-group v-model="display" type="button" class="simple-mind-map-display">
                     <a-radio value="mind"><icon-mind-mapping /></a-radio>
@@ -132,6 +132,8 @@ export default defineComponent({
         },
         collapsed() {
             this.simpleMindMapWrap.setSize(this.width, this.height);
+        },
+        display(newValue: 'mind' | 'toc') {
         }
     },
     created() {

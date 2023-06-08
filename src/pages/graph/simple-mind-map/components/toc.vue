@@ -131,7 +131,7 @@ export default defineComponent({
     right: 0;
     bottom: 0;
     background-color: var(--color-bg-1);
-    z-index: 3001;
+    z-index: 301;
 
     .toc-tree {
         margin: 50px 100px 80px 100px;

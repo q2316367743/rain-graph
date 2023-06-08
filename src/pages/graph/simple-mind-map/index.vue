@@ -225,7 +225,7 @@ export default defineComponent({
             position: absolute;
             top: 7px;
             left: 14px;
-            z-index: 30002;
+            z-index: 302;
             border-radius: 2px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             transition: 0.2ms all;

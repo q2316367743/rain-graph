@@ -32,7 +32,7 @@ export function getDefaultConfig(): SimpleMindMapConfig {
         // 多选节点时鼠标移动距边缘多少距离时开始偏移
         selectTranslateLimit: 20,
         // 自定义节点备注内容显示
-        customNoteContentShow: null,
+        customNoteContentShow: "",
         /*
               {
                   show(){},

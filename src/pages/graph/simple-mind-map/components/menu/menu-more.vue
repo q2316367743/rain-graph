@@ -5,7 +5,7 @@
         </a-button>
         <template #content>
             <a-doption @click="exportDialog = true">导出</a-doption>
-            <a-doption>设置</a-doption>
+            <a-doption @click="settingDrawer = true">设置</a-doption>
             <a-doption @click="openTheme">主题</a-doption>
             <a-doption @click="layoutDrawer = true">布局</a-doption>
             <a-doption @click="keyboardShortcut = true;">快捷键</a-doption>
@@ -42,6 +42,8 @@
     <more-export v-model:visible="exportDialog" :simple-mind-map-wrap="simpleMindMapWrap" />
     <!-- 快捷键 -->
     <more-help v-model:visible="keyboardShortcut" />
+    <!-- 设置 -->
+    <more-setting v-model:visible="settingDrawer" />
 </template>
 <script lang="ts">
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
@@ -54,10 +56,11 @@ import SimpleMindMapWrap from "../../SimpleMindMapWrap";
 // 更多
 import MoreExport from './more/more-export.vue'
 import MoreHelp from './more/more-help.vue'
+import MoreSetting from './more/more-setting.vue'
 
 export default defineComponent({
     name: '',
-    components: { MoreExport, MoreHelp },
+    components: { MoreExport, MoreHelp, MoreSetting },
     props: {
         simpleMindMapWrap: {
             type: Object as PropType<SimpleMindMapWrap>,
@@ -88,7 +91,8 @@ export default defineComponent({
         themeDrawer: false,
         themeType: 'light',
         layoutDrawer: false,
-        exportDialog: false
+        exportDialog: false,
+        settingDrawer: false
     }),
     computed: {
         ...mapState(useGlobalStore, ['width', 'isDark']),

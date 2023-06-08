@@ -28,7 +28,7 @@ export interface SimpleMindMapConfig {
     // 多选节点时鼠标移动距边缘多少距离时开始偏移
     selectTranslateLimit:                  number;
     // 自定义节点备注内容显示
-    customNoteContentShow:                 null;
+    customNoteContentShow:                 string;
     // 是否开启节点自由拖拽
     enableFreeDrag:                        boolean;
     // 水印配置

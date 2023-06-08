@@ -122,6 +122,10 @@ export default class SimpleMindMapWrap {
         this.mindMap.execCommand(command, args)
     }
 
+    getThemeConfig(key: string): any {
+        return this.mindMap.getThemeConfig(key);
+    }
+
     // ------ 操作 ------
 
     setTheme(theme: string) {

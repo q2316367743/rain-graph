@@ -133,6 +133,10 @@ export default defineComponent({
     background-color: var(--color-bg-1);
     z-index: 301;
 
+    .title{
+        margin-bottom: 14px;
+    }
+
     .toc-tree {
         margin: 50px 100px 80px 100px;
     }

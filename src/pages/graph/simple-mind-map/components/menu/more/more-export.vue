@@ -66,6 +66,10 @@ export default defineComponent({
     watch: {
         visible(newValue) {
             this.dialogVisible = newValue;
+            if (newValue) {
+                this.paddingX = this.simpleMindMapWrap.getConfig().exportPaddingX;
+                this.paddingY = this.simpleMindMapWrap.getConfig().exportPaddingY;
+            }
         },
         dialogVisible(newValue) {
             this.$emit('update:visible', newValue);

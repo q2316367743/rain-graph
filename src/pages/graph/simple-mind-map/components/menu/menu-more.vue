@@ -43,7 +43,7 @@
     <!-- 快捷键 -->
     <more-help v-model:visible="keyboardShortcut" />
     <!-- 设置 -->
-    <more-setting v-model:visible="settingDrawer" />
+    <more-setting v-model:visible="settingDrawer" :simple-mind-map-wrap="simpleMindMapWrap"/>
 </template>
 <script lang="ts">
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";

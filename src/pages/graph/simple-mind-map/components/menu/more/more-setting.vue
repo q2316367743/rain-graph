@@ -1,5 +1,5 @@
 <template>
-    <a-drawer title="设置" v-model:visible="settingDrawer" mask-closable width="300px" cancel-text="取消" ok-text="保存">
+    <a-drawer title="设置" v-model:visible="settingDrawer" mask-closable width="300px" cancel-text="取消" ok-text="保存" @ok="save">
         <a-form :model="instance" layout="vertical" class="smm-menu-more-setting">
             <a-form-item label="倾斜角度">
                 <a-input-number v-model="instance.fishboneDeg" :min="1" :max="179" style="width: 100px;">
@@ -8,7 +8,7 @@
                 <template #help>如果结构为鱼骨图，那么可以通过该选项控制倾斜角度</template>
             </a-form-item>
             <a-form-item label="放大缩小的增量比例">
-                <a-input-number v-model="instance.scaleRatio" />
+                <a-input-number v-model="instance.scaleRatio" :min="0" :step="0.1" :max="1"/>
             </a-form-item>
             <a-form-item label="最多显示几个标签">
                 <a-input-number v-model="instance.maxTag" />
@@ -47,7 +47,7 @@
                 </a-radio-group>
             </a-form-item>
             <a-form-item label="视图移动的步长" v-if="instance.mousewheelAction === 'move'">
-                <a-input-number v-model="instance.mousewheelMoveStep" >
+                <a-input-number v-model="instance.mousewheelMoveStep">
                     <template #append>px</template>
                 </a-input-number>
             </a-form-item>
@@ -64,7 +64,7 @@
                 <a-switch v-model="instance.enableNodeTransitionMove" />
             </a-form-item>
             <a-form-item label="过渡的时间" v-if="instance.enableNodeTransitionMove">
-                <a-input-number v-model="instance.mousewheelMoveStep" >
+                <a-input-number v-model="instance.mousewheelMoveStep">
                     <template #append>ms</template>
                 </a-input-number>
             </a-form-item>
@@ -100,6 +100,7 @@ import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { getDefaultConfig } from "../../../data/config";
 import SimpleMindMapWrap from "../../../SimpleMindMapWrap";
+import { toRaw } from "vue";
 
 export default defineComponent({
     name: 'smm-menu-more-setting',
@@ -127,6 +128,11 @@ export default defineComponent({
             this.$emit('update:visible', newValue);
         }
     },
+    methods: {
+        save() {
+            this.simpleMindMapWrap.setConfig(toRaw(this.instance));
+        }
+    }
 });
 </script>
 <style scoped></style>

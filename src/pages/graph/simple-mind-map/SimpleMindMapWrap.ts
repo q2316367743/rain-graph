@@ -13,7 +13,6 @@ type commandType = 'INSERT_CHILD_NODE' | 'INSERT_NODE' | 'REMOVE_NODE' | 'BACK' 
 //  思维导图
 export default class SimpleMindMapWrap {
 
-    private readonly config;
     private readonly mindMap: any;
     private readonly el;
     private data: MindMapNode;
@@ -26,6 +25,7 @@ export default class SimpleMindMapWrap {
     private id = '0';
     private _rev = undefined as string | undefined;
 
+    private config;
     private node = undefined as any;
     private activeNodeList = [] as any[];
     // 是否保存锁定
@@ -82,6 +82,7 @@ export default class SimpleMindMapWrap {
     }
 
     setConfig(config: SimpleMindMapConfig) {
+        this.config = config;
         this.mindMap.updateConfig(config);
         this.save();
     }

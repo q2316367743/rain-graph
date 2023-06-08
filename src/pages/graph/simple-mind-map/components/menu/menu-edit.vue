@@ -1,6 +1,6 @@
 <template>
     <a-dropdown trigger="click">
-        <a-button>编辑</a-button>
+        <a-button :disabled="readonly">编辑</a-button>
         <template #content>
             <a-doption :disabled="index === 0" @click="back">后退</a-doption>
             <a-doption :disabled="index === len - 1" @click="forward">前进</a-doption>
@@ -38,6 +38,11 @@ export default defineComponent({
             type: Object as PropType<SimpleMindMapWrap>,
             required: false,
             default: new SimpleMindMapWrap("", {})
+        },
+        readonly: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
     data: () => ({

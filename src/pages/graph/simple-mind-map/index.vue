@@ -6,9 +6,10 @@
                 <simple-mind-map-menu-file v-if="render" :simple-mind-map-wrap="simpleMindMapWrap" />
                 <!-- 编辑 -->
                 <simple-mind-map-menu-edit v-if="render" :simple-mind-map-wrap="simpleMindMapWrap" :index="index" :len="len"
-                    :has-node="hasNode" />
+                    :has-node="hasNode" :readonly="readonly" />
                 <!-- 插入 -->
-                <simple-mind-map-menu-insert v-if="render" :simple-mind-map-wrap="simpleMindMapWrap" :has-node="hasNode" />
+                <simple-mind-map-menu-insert v-if="render" :simple-mind-map-wrap="simpleMindMapWrap" :has-node="hasNode"
+                    :readonly="readonly" />
                 <!-- 更多 -->
                 <simple-mind-map-menu-more v-if="render" :simple-mind-map-wrap="simpleMindMapWrap" :index="index" :len="len"
                     :has-node="hasNode" @switch-theme="setTheme" @switch-layout="setLayout" />
@@ -21,7 +22,7 @@
                     </template>
                 </a-button>
                 <!-- 只读 -->
-                <a-button type="text" disabled>
+                <a-button type="text" @click="readonly = !readonly" :status="readonly ? 'warning' : 'normal'">
                     <template #icon>
                         <icon-lock />
                     </template>
@@ -47,7 +48,8 @@
                 <!-- 容器 -->
                 <div id="simple-mind-map"></div>
                 <!-- 大纲 -->
-                <simple-mind-map-toc v-if="render && display === 'toc'" :simple-mind-map-wrap="simpleMindMapWrap" />
+                <simple-mind-map-toc v-if="render && display === 'toc'" :simple-mind-map-wrap="simpleMindMapWrap"
+                    :readonly="readonly" />
                 <!-- 思维导图/大纲切换 -->
                 <a-radio-group v-model="display" type="button" class="simple-mind-map-display">
                     <a-radio value="mind"><icon-mind-mapping /></a-radio>
@@ -57,7 +59,7 @@
                 <simple-mind-map-count v-if="render" v-show="display === 'mind'"
                     :simple-mind-map-wrap="simpleMindMapWrap" />
                 <!-- 工具栏 -->
-                <simple-mind-map-toolbar v-if="render" v-show="display === 'mind'" :has-node="hasNode"
+                <simple-mind-map-toolbar v-if="render" v-show="display === 'mind' && !readonly" :has-node="hasNode"
                     :simple-mind-map-wrap="simpleMindMapWrap" />
                 <!-- 缩放 -->
                 <simple-mind-map-scale v-if="render" v-show="display === 'mind'"
@@ -96,6 +98,7 @@ import { getRecord } from "@/utils/utools/DbUtil";
 import { markRaw } from "vue";
 import { useFullscreen } from "@vueuse/core";
 import { useSimpleMindMapSettingStore } from "@/store/SimpleMindMapSetting";
+import { readonly } from "vue";
 
 
 export default defineComponent({
@@ -115,7 +118,8 @@ export default defineComponent({
         simpleMindMapWrap: markRaw(new SimpleMindMapWrap("", {})),
         fullscreen: useFullscreen(),
         miniMap: false,
-        display: 'mind' as 'mind' | 'toc'
+        display: 'mind' as 'mind' | 'toc',
+        readonly: false
     }),
     computed: {
         ...mapState(useGlobalStore, ['height', 'width', 'title', 'isDark']),
@@ -133,7 +137,8 @@ export default defineComponent({
         collapsed() {
             this.simpleMindMapWrap.setSize(this.width, this.height);
         },
-        display(newValue: 'mind' | 'toc') {
+        readonly(newValue: boolean) {
+            this.simpleMindMapWrap.readonly(newValue);
         }
     },
     created() {

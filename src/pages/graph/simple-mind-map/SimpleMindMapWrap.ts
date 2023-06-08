@@ -171,6 +171,12 @@ export default class SimpleMindMapWrap {
         this.mindMap.export(type, download, fileName, withConfig);
     }
 
+    readonly(readonly: boolean) {
+        this.mindMap.updateConfig({
+            readonly
+        })
+    }
+
     // ------ 节点操作 ------
 
     setNode(node: any) {

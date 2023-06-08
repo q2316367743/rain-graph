@@ -3,12 +3,12 @@
         <a-scrollbar style="height:100%;overflow: auto;">
             <div class="toc-tree">
                 <div class="title">
-                    <a-input v-model="title.data.text" @click="textClick(title)" @change="titleEdit" />
+                    <a-input v-model="title.data.text" @click="textClick(title)" @change="titleEdit" :disabled="readonly"/>
                 </div>
                 <a-tree :data="renderTrees" block-node :field-names="fieldNames" show-line ref="simpleMindMapTocTree">
                     <template #title="nodeData">
                         <div class="toc-tree-node" v-if="nodeData.data" @click="textClick(nodeData)">
-                            <div class="text" ref="tocEdit" contenteditable="true" @input="textEdit($event, nodeData)">
+                            <div class="text" ref="tocEdit" :contenteditable="!readonly" @input="textEdit($event, nodeData)">
                                 {{ nodeData.data.text }}
                             </div>
                         </div>
@@ -46,6 +46,11 @@ export default defineComponent({
             type: Object as PropType<SimpleMindMapWrap>,
             required: false,
             default: new SimpleMindMapWrap("", {})
+        },
+        readonly: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
     data: () => ({

@@ -1,6 +1,6 @@
 <template>
     <a-dropdown>
-        <a-button>插入</a-button>
+        <a-button :disabled="readonly">插入</a-button>
         <template #content>
             <a-doption :disabled="true">
                 <template #icon><icon-image /></template>
@@ -60,6 +60,11 @@ export default defineComponent({
             type: Object as PropType<SimpleMindMapWrap>,
             required: false,
             default: new SimpleMindMapWrap("", {})
+        },
+        readonly: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
     data: () => ({

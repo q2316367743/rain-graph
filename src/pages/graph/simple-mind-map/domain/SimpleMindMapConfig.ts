@@ -91,15 +91,47 @@ export interface ExpandBtnStyle {
 
 
 export interface WatermarkConfig {
+
+    /**
+     * 水印文字
+     */
     text:        string;
+
+    /**
+     * 水印每行之间的间距
+     */
     lineSpacing: number;
+
+    /**
+     * 同一行水印之间的间距
+     */
     textSpacing: number;
+
+    /**
+     * 水印的倾斜角度
+     */
     angle:       number;
+
+    /**
+     * 水印文字的样式
+     */
     textStyle:   TextStyle;
 }
 
 export interface TextStyle {
+    
+    /**
+     * 文字颜色
+     */
     color:    string;
+
+    /**
+     * 文字透明度
+     */
     opacity:  number;
+
+    /**
+     * 文字大小
+     */
     fontSize: number;
 }

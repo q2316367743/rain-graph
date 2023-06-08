@@ -48,7 +48,7 @@ export function getDefaultConfig(): SimpleMindMapConfig {
             textSpacing: 100,
             angle: 30,
             textStyle: {
-                color: '#999',
+                color: '#999999',
                 opacity: 0.5,
                 fontSize: 14
             }

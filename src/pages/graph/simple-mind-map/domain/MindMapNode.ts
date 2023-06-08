@@ -1,6 +1,7 @@
 export interface MindMapNode {
     data: Data;
     children: MindMapNode[];
+    _node?: any;
 }
 
 export interface Data {

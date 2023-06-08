@@ -1,30 +1,34 @@
 <template>
     <div class="simple-mind-map-toc">
         <a-scrollbar style="height:100%;overflow: auto;">
-            <a-tree :data="renderTrees" block-node class="toc-tree" :field-names="fieldNames" show-line
-                ref="simpleMindMapTocTree">
-                <template #title="nodeData">
-                    <div class="toc-tree-node" v-if="nodeData.data">
-                        <div class="text" ref="tocEdit" contenteditable="true" @input="textEdit($event, nodeData)">
-                            {{ nodeData.data.text }}
+            <div class="toc-tree">
+                <div class="title">
+                    <a-input v-model="title.data.text" @click="textClick(title)" @change="titleEdit" />
+                </div>
+                <a-tree :data="renderTrees" block-node :field-names="fieldNames" show-line ref="simpleMindMapTocTree">
+                    <template #title="nodeData">
+                        <div class="toc-tree-node" v-if="nodeData.data" @click="textClick(nodeData)">
+                            <div class="text" ref="tocEdit" contenteditable="true" @input="textEdit($event, nodeData)">
+                                {{ nodeData.data.text }}
+                            </div>
                         </div>
-                    </div>
-                </template>
-                <template #extra="nodeData">
-                    <a-dropdown>
-                        <a-button type="text">
-                            <template #icon>
-                                <icon-more />
+                    </template>
+                    <template #extra="nodeData">
+                        <a-dropdown>
+                            <a-button type="text" disabled>
+                                <template #icon>
+                                    <icon-more />
+                                </template>
+                            </a-button>
+                            <template #content>
+                                <a-doption @click="addNode(nodeData)">新增同级节点</a-doption>
+                                <a-doption @click="addChildNode(nodeData)">新增子节点</a-doption>
+                                <a-doption @click="removeNode(nodeData)">删除节点</a-doption>
                             </template>
-                        </a-button>
-                        <template #content>
-                            <a-doption :disabled="nodeData.data.uid === 1">新增同级节点</a-doption>
-                            <a-doption @click="addChildNode(nodeData)">新增子节点</a-doption>
-                            <a-doption>删除节点</a-doption>
-                        </template>
-                    </a-dropdown>
-                </template>
-            </a-tree>
+                        </a-dropdown>
+                    </template>
+                </a-tree>
+            </div>
         </a-scrollbar>
     </div>
 </template>
@@ -50,13 +54,25 @@ export default defineComponent({
             key: 'data.text',
             title: 'data.uid',
         },
+        title: {
+            data: { text: '' }
+        } as MindMapNode,
         renderTrees: new Array<MindMapNode>(),
     }),
     mounted() {
-        this.renderTrees = [this.simpleMindMapWrap.getData()];
-        this.expandAll();
+        this.init();
     },
     methods: {
+        init() {
+            let data = this.simpleMindMapWrap.getRenderTree();
+            this.title = {
+                data: data.data,
+                children: [],
+                _node: data._node
+            }
+            this.renderTrees = data.children || [];
+            this.expandAll();
+        },
         expandAll() {
             this.$nextTick(() => {
                 this.$nextTick(() => {
@@ -65,23 +81,39 @@ export default defineComponent({
                 });
             });
         },
+        textClick(nodeData: MindMapNode) {
+            if (nodeData._node) {
+                this.simpleMindMapWrap.renderer.moveNodeToCenter(nodeData._node);
+                nodeData._node.active();
+            }
+        },
+        titleEdit() {
+            this.textClick(this.title);
+            this.title._node.setText(this.title.data.text);
+        },
         textEdit(e: Event, nodeData: MindMapNode) {
             let tocEdit = e.target as HTMLDivElement;
-            nodeData.data.text = tocEdit.innerText;
+            this.textClick(nodeData);
+            if (nodeData._node) {
+                nodeData._node.setText(tocEdit.innerText);
+            }
+            // 编辑节点不刷新数据
+        },
+        addNode(nodeData: MindMapNode) {
+            this.textClick(nodeData);
+            this.simpleMindMapWrap.execCommand('INSERT_NODE');
+            this.init();
         },
         addChildNode(nodeData: MindMapNode) {
-            const children = nodeData.children || []
-            children.push({
-                data: {
-                    text: '子节点',
-                    expand: false
-                },
-                children: []
-            })
-            nodeData.children = children
-            this.renderTrees = [...this.renderTrees];
-            this.simpleMindMapWrap.setData(this.renderTrees[0]);
-            this.expandAll();
+            this.textClick(nodeData);
+            this.simpleMindMapWrap.execCommand('INSERT_CHILD_NODE');
+            this.init();
+        },
+        removeNode(nodeData: MindMapNode) {
+            this.textClick(nodeData);
+            this.simpleMindMapWrap.execCommand('REMOVE_NODE');
+            this.init();
+
         }
     }
 });

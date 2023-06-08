@@ -57,6 +57,7 @@ export default class SimpleMindMapWrap {
 
         this.on('data_change', (data: MindMapNode) => {
             this.data = data;
+            // 自动保存
             this.save();
         });
 
@@ -82,16 +83,6 @@ export default class SimpleMindMapWrap {
 
     setConfig(config: SimpleMindMapConfig) {
         this.mindMap.updateConfig(config);
-        this.save();
-    }
-
-    getData(): MindMapNode {
-        return this.data;
-    }
-
-    setData(data: MindMapNode) {
-        this.data = data;
-        this.mindMap.setData(this.data);
         this.save();
     }
 
@@ -186,6 +177,10 @@ export default class SimpleMindMapWrap {
         this.mindMap.renderer.moveNodeToCenter(node);
     }
 
+    getRenderTree(): any {
+        return this.mindMap.renderer.renderTree;
+    }
+
     // ------ 代理操作 ------
 
     viewReset() {
@@ -198,14 +193,6 @@ export default class SimpleMindMapWrap {
 
     createAssociativeLine() {
         this.mindMap.associativeLine.createLineFromActiveNode();
-    }
-
-    // ------ 节点附加操作 ------
-
-    addLink(name: string, href: string) {
-        this.activeNodeList.forEach(node => {
-            node.setHyperlink(href, name);
-        });
     }
 
 }

@@ -221,6 +221,10 @@ export default defineComponent({
             top: 7px;
             left: 14px;
             z-index: 30002;
+            border-radius: 2px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            transition: 0.2ms all;
+            border: 1px solid var(--color-neutral-3);
         }
 
     }

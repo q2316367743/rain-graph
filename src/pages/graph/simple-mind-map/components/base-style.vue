@@ -4,10 +4,6 @@
         <a-divider>背景</a-divider>
         <a-tabs class="tab" v-model:active-key="activeTab">
             <a-tab-pane title="颜色" key="color">
-                <Color :color="style.backgroundColor" @change="color => {
-                    update('backgroundColor', color)
-                }
-                    "></Color>
             </a-tab-pane>
             <a-tab-pane title="图片" key="image">
                 <a-upload draggable action="/" style="width: 250px;" />
@@ -164,7 +160,7 @@ export default defineComponent({
             marginX: 0,
             marginY: 0,
             nodeUseLineStyle: false
-        },
+        } as Record<string, any>,
         config: {
             enableFreeDrag: false,
             mousewheelAction: 'zoom'

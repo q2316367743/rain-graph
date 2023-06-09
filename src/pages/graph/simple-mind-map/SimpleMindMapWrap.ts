@@ -68,12 +68,14 @@ export default class SimpleMindMapWrap {
         this._rev = _rev;
     }
 
-    setSize(width: number, height: number) {
+    setSize(width: number, height: number, resize: boolean = true) {
         let el = this.mindMap.opt.el as HTMLDivElement;
         let svg = el.querySelector(this.el + '>svg') as SVGElement;
         svg.setAttribute('width', width + 'px');
         svg.setAttribute('height', height + 'px');
-        this.mindMap.resize();
+        if (resize) {
+            this.mindMap.resize();
+        }
     }
 
     // ------ 内容 ------

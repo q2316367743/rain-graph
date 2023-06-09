@@ -35,7 +35,8 @@
                     </template>
                 </a-button>
                 <!-- 布局 -->
-                <a-button type="text" @click="collapsed = !collapsed" :status="collapsed ? 'normal' : 'success'">
+                <a-button type="text" @click="collapsed = !collapsed" :status="collapsed ? 'normal' : 'success'"
+                    :disabled="display === 'toc'">
                     <template #icon>
                         <icon-layout />
                     </template>
@@ -68,9 +69,9 @@
                 <simple-mind-map-mini-map v-if="render" v-show="display === 'mind' && miniMap"
                     :simple-mind-map-wrap="simpleMindMapWrap" />
             </a-layout-content>
-            <a-layout-sider :collapsed="collapsed" :width="280" :collapsed-width="0">
+            <a-layout-sider :collapsed="collapsed || display === 'toc'" :width="280" :collapsed-width="0">
                 <!-- 基础样式 -->
-                <simple-mind-map-base-style v-if="render" :simple-mind-map-wrap="simpleMindMapWrap" />
+                <simple-mind-map-style v-if="render" :simple-mind-map-wrap="simpleMindMapWrap" />
             </a-layout-sider>
         </a-layout>
         <simple-mind-map-context-menu :mind-map="simpleMindMapWrap" v-if="render" />
@@ -93,7 +94,7 @@ import SimpleMindMapToolbar from './components/toolbar.vue';
 import SimpleMindMapScale from './components/scale.vue';
 import SimpleMindMapMiniMap from './components/mini-map.vue';
 import SimpleMindMapToc from './components/toc.vue';
-import SimpleMindMapBaseStyle from './components/base-style.vue';
+import SimpleMindMapStyle from './components/style.vue';
 
 import MessageUtil from "@/utils/MessageUtil";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
@@ -110,7 +111,7 @@ export default defineComponent({
     components: {
         SimpleMindMapMenuMore, SimpleMindMapMenuFile, SimpleMindMapMenuEdit, SimpleMindMapMenuInsert, SimpleMindMapToc,
         SimpleMindMapContextMenu, SimpleMindMapCount, SimpleMindMapToolbar, SimpleMindMapScale, SimpleMindMapMiniMap,
-        SimpleMindMapBaseStyle
+        SimpleMindMapStyle
     },
     data: () => ({
         index: 0,
@@ -140,7 +141,7 @@ export default defineComponent({
             this.simpleMindMapWrap.setSize(this.width, this.height);
         },
         collapsed() {
-            this.simpleMindMapWrap.setSize(this.width, this.height);
+            this.simpleMindMapWrap.setSize(this.width, this.height, false);
         },
         readonly(newValue: boolean) {
             this.simpleMindMapWrap.readonly(newValue);

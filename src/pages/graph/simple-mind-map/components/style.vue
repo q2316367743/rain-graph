@@ -27,63 +27,65 @@
                     </a-option>
                 </a-select>
             </a-form-item>
-            <div>
-                <div class="row">
-                    <div class="btnGroup">
-                        <a-trigger ref="popover" placement="bottom" trigger="hover" :disabled="checkDisabled('color')">
-                            <a-tooltip content="颜色" placement="bottom">
-                                <div class="styleBtn" v-popover:popover :class="{ disabled: checkDisabled('color') }">
-                                    A
-                                    <span class="colorShow" :style="{ backgroundColor: style.color || '#eee' }"></span>
-                                </div>
-                            </a-tooltip>
-                            <template #content>
-                                颜色选择器
-                            </template>
-                        </a-trigger>
-                        <a-tooltip content="加粗" placement="bottom">
-                            <div class="styleBtn" :class="{
-                                actived: style.fontWeight === 'bold',
-                                disabled: checkDisabled('fontWeight')
-                            }" @click="toggleFontWeight">
-                                B
+            <div class="row">
+                <div class="btnGroup">
+                    <a-trigger placement="bottom" trigger="hover" :disabled="checkDisabled('color')">
+                        <a-tooltip content="颜色" placement="bottom">
+                            <div class="styleBtn" :class="{ disabled: checkDisabled('color') }">
+                                A
+                                <span class="colorShow" :style="{ backgroundColor: style.color || '#eee' }"></span>
                             </div>
                         </a-tooltip>
-                        <a-tooltip content="斜体" placement="bottom">
-                            <div class="styleBtn i" :class="{
-                                actived: style.fontStyle === 'italic',
-                                disabled: checkDisabled('fontStyle')
-                            }" @click="toggleFontStyle">
-                                I
+                        <template #content>
+                            <simple-mind-map-base-color v-model:color="style.color" @change="update('color')" />
+                        </template>
+                    </a-trigger>
+                    <a-tooltip content="加粗" placement="bottom">
+                        <div class="styleBtn" :class="{
+                            actived: style.fontWeight === 'bold',
+                            disabled: checkDisabled('fontWeight')
+                        }" @click="toggleFontWeight">
+                            B
+                        </div>
+                    </a-tooltip>
+                    <a-tooltip content="斜体" placement="bottom">
+                        <div class="styleBtn i" :class="{
+                            actived: style.fontStyle === 'italic',
+                            disabled: checkDisabled('fontStyle')
+                        }" @click="toggleFontStyle">
+                            I
+                        </div>
+                    </a-tooltip>
+                    <a-trigger placement="bottom" trigger="hover" :disabled="checkDisabled('textDecoration')"
+                        :popup-translate="[-100, 10]">
+                        <a-tooltip content="划线" placement="bottom">
+                            <div class="styleBtn u" :style="{ textDecoration: style.textDecoration || 'none' }"
+                                :class="{ disabled: checkDisabled('textDecoration') }">
+                                U
                             </div>
                         </a-tooltip>
-                        <a-trigger ref="popover2" placement="bottom" trigger="hover"
-                            :disabled="checkDisabled('textDecoration')">
-                            <a-tooltip content="划线" placement="bottom">
-                                <div class="styleBtn u" :style="{ textDecoration: style.textDecoration || 'none' }"
-                                    :class="{ disabled: checkDisabled('textDecoration') }" v-popover:popover2>
-                                    U
-                                </div>
-                            </a-tooltip>
-                            <template #content>
-                                <a-radio-group size="mini" v-model="style.textDecoration"
+                        <template #content>
+                            <div
+                                style="padding: 7px;background-color: var(--color-bg-1);box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);width: 235px;">
+                                <a-radio-group type="button" size="mini" v-model="style.textDecoration"
                                     @change="update('textDecoration')">
+                                    <a-radio :value="''">无</a-radio>
                                     <a-radio value="underline">下划线</a-radio>
                                     <a-radio value="line-through">中划线</a-radio>
                                     <a-radio value="overline">上划线</a-radio>
                                 </a-radio-group>
-                            </template>
-                        </a-trigger>
-                    </div>
+                            </div>
+                        </template>
+                    </a-trigger>
                 </div>
             </div>
             <a-divider>边框</a-divider>
             <a-form-item label="颜色">
-                <a-trigger ref="popover3" placement="bottom" trigger="hover" :disabled="checkDisabled('borderColor')">
-                    <span class="block" v-popover:popover3 :style="{ width: '80px', backgroundColor: style.borderColor }"
+                <a-trigger placement="bottom" trigger="hover" :disabled="checkDisabled('borderColor')">
+                    <span class="block" :style="{ backgroundColor: style.borderColor }"
                         :class="{ disabled: checkDisabled('borderColor') }"></span>
                     <template #content>
-                        颜色选择器
+                        <simple-mind-map-base-color v-model:color="style.borderColor" @change="update('borderColor')" />
                     </template>
                 </a-trigger>
             </a-form-item>
@@ -113,11 +115,11 @@
             </a-form-item>
             <a-divider>背景</a-divider>
             <a-form-item label="颜色">
-                <a-trigger ref="popover4" placement="bottom" trigger="hover" :disabled="checkDisabled('fillColor')">
-                    <span class="block" v-popover:popover4 :style="{ backgroundColor: style.fillColor }"
+                <a-trigger placement="bottom" trigger="hover" :disabled="checkDisabled('fillColor')">
+                    <span class="block" :style="{ backgroundColor: style.fillColor }"
                         :class="{ disabled: checkDisabled('fillColor') }"></span>
                     <template #content>
-                        颜色选择器
+                        <simple-mind-map-base-color v-model:color="style.fillColor" @change="update('fillColor')" />
                     </template>
                 </a-trigger>
             </a-form-item>
@@ -132,11 +134,11 @@
             </div>
             <a-divider>线条</a-divider>
             <a-form-item label="颜色">
-                <a-trigger ref="popover5" placement="bottom" trigger="hover" :disabled="checkDisabled('lineColor')">
-                    <span class="block" v-popover:popover5 :style="{ width: '80px', backgroundColor: style.lineColor }"
+                <a-trigger placement="bottom" trigger="hover" :disabled="checkDisabled('lineColor')">
+                    <span class="block" :style="{ backgroundColor: style.lineColor }"
                         :class="{ disabled: checkDisabled('lineColor') }"></span>
                     <template #content>
-                        颜色选择器
+                        <simple-mind-map-base-color v-model:color="style.lineColor" @change="update('lineColor')" />
                     </template>
                 </a-trigger>
             </a-form-item>
@@ -181,13 +183,12 @@ import {
 } from '../data/theme'
 import SimpleMindMapWrap from '../SimpleMindMapWrap';
 
-/**
- * @Author: 王林
- * @Date: 2021-06-24 22:54:47
- * @Desc: 节点样式设置
- */
+import SimpleMindMapBaseColor from './base/color.vue';
+
+// 节点样式设置
 export default defineComponent({
     name: 'simple-mind-map-style',
+    components: { SimpleMindMapBaseColor },
     props: {
         simpleMindMapWrap: {
             type: Object as PropType<SimpleMindMapWrap>,
@@ -345,61 +346,14 @@ export default defineComponent({
     padding: 0 7px;
     padding-bottom: 28px;
     background-color: var(--color-bg-1);
-}
 
-.row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-
-    .btnGroup {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .rowItem {
-        display: flex;
-        align-items: center;
-
-        .name {
-            font-size: 12px;
-            margin-right: 10px;
-        }
-
-        .block {
-            display: inline-block;
-            width: 30px;
-            height: 30px;
-            border: 1px solid #dcdfe6;
-            border-radius: 4px;
-            cursor: pointer;
-
-            &.disabled {
-                background-color: #f5f7fa !important;
-                border-color: #e4e7ed !important;
-                color: #c0c4cc !important;
-                cursor: not-allowed !important;
-            }
-        }
-    }
-
-    .styleBtn {
-        position: relative;
-        width: 50px;
+    .block {
+        display: inline-block;
+        width: 30px;
         height: 30px;
-        background: #fff;
-        border: 1px solid #eee;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-weight: bold;
-        cursor: pointer;
+        border: 1px solid #dcdfe6;
         border-radius: 4px;
-
-        &.actived {
-            background-color: #eee;
-        }
+        cursor: pointer;
 
         &.disabled {
             background-color: #f5f7fa !important;
@@ -407,17 +361,54 @@ export default defineComponent({
             color: #c0c4cc !important;
             cursor: not-allowed !important;
         }
+    }
 
-        &.i {
-            font-style: italic;
+    .row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+
+        .btnGroup {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
         }
 
-        .colorShow {
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            height: 2px;
+        .styleBtn {
+            position: relative;
+            width: 50px;
+            height: 30px;
+            background: #fff;
+            border: 1px solid #eee;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+
+            &.actived {
+                background-color: #eee;
+            }
+
+            &.disabled {
+                background-color: #f5f7fa !important;
+                border-color: #e4e7ed !important;
+                color: #c0c4cc !important;
+                cursor: not-allowed !important;
+            }
+
+            &.i {
+                font-style: italic;
+            }
+
+            .colorShow {
+                position: absolute;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                height: 2px;
+            }
         }
     }
 }

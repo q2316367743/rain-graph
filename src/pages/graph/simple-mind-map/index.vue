@@ -78,9 +78,10 @@
     </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
-import SimpleMindMapWrap from "./SimpleMindMapWrap";
 import { mapState } from "pinia";
+import { defineComponent, markRaw } from "vue";
+import { useFullscreen } from "@vueuse/core";
+import SimpleMindMapWrap from "./SimpleMindMapWrap";
 import { useGlobalStore } from "@/store/GlobalStore";
 
 // 组件
@@ -97,13 +98,11 @@ import SimpleMindMapToc from './components/toc.vue';
 import SimpleMindMapStyle from './components/style.vue';
 
 import MessageUtil from "@/utils/MessageUtil";
+import { getRecord } from "@/utils/utools/DbUtil";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import { useSimpleMindMapStore } from "@/store/graph/SimpleMindMapStore";
-import { getRecord } from "@/utils/utools/DbUtil";
-import { markRaw } from "vue";
-import { useFullscreen } from "@vueuse/core";
 import { useSimpleMindMapSettingStore } from "@/store/SimpleMindMapSetting";
-import { readonly } from "vue";
+
 
 
 export default defineComponent({
@@ -189,6 +188,8 @@ export default defineComponent({
             } else {
                 this.setTheme('default')
             }
+            // 初始化完成
+            this.simpleMindMapWrap.complete();
         },
         setTheme(theme: string) {
             this.simpleMindMapWrap.setTheme(theme);

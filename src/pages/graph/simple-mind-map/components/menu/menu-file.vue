@@ -3,19 +3,19 @@
         <a-button>文件</a-button>
         <template #content>
             <a-doption @click="toHome">返回列表</a-doption>
-            <a-doption disabled>新建</a-doption>
-            <a-doption disabled>打开</a-doption>
+            <a-doption @click="open" :disabled="!fileSystem.isSupported">打开</a-doption>
             <a-doption @click="save">保存</a-doption>
             <a-doption @click="saveAs">另存为</a-doption>
         </template>
     </a-dropdown>
 </template>
 <script lang="ts">
-import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
+import { mapState } from "pinia";
 import { PropType, defineComponent } from "vue";
+import { useFileSystemAccess } from '@vueuse/core'
+import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import SimpleMindMapWrap from "../../SimpleMindMapWrap";
 import MessageUtil from "@/utils/MessageUtil";
-import { mapState } from "pinia";
 import { useGlobalStore } from "@/store/GlobalStore";
 import { useSaveEvent } from "@/global/BeanFactory";
 
@@ -29,10 +29,18 @@ export default defineComponent({
         }
     },
     data: () => ({
-
+        fileSystem: useFileSystemAccess({
+            dataType: 'Text',
+            types: [{
+                description: 'json',
+                accept: {
+                    'application/json': ['.json', '.ssm'],
+                },
+            }]
+        })
     }),
     computed: {
-        ... mapState(useGlobalStore, ['title'])
+        ...mapState(useGlobalStore, ['title'])
     },
     created() {
         useSaveEvent.on(() => this.save());
@@ -54,6 +62,28 @@ export default defineComponent({
         saveAs() {
             this.simpleMindMapWrap.saveAs(this.title)
         },
+        open() {
+            let res = this.fileSystem.open() as Promise<void>;
+            res.then(() => {
+                let content = this.fileSystem.data || '';
+                try {
+                    let json = JSON.parse(content);
+                    let config = json['config'];
+                    let data = json['record'];
+                    console.log(config);
+                    console.log(data)
+                    this.simpleMindMapWrap.setConfig(config);
+                    this.simpleMindMapWrap.setData(data);
+                } catch (e) {
+                    MessageUtil.error("文件解析失败", e);
+                }
+            }).catch(e => {
+                if (e.name === 'AbortError') {
+                    return;
+                }
+                MessageUtil.error("打开失败", e)
+            });
+        }
     }
 });
 </script>

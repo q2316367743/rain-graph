@@ -293,18 +293,6 @@ export const events = [
 // 下载类型列表
 export const downTypeList = [
     {
-        name: '专有文件',
-        type: 'smm',
-        icon: 'iconwenjian',
-        desc: '可用于导入'
-    },
-    {
-        name: 'JSON',
-        type: 'json',
-        icon: 'iconjson',
-        desc: '流行的数据交换格式，可用于导入'
-    },
-    {
         name: '图片',
         type: 'png',
         icon: 'iconPNG',

@@ -64,7 +64,7 @@ import { defineComponent } from "vue";
 import { createDrauu, Drauu, DrawingMode } from 'drauu';
 import { mapState } from "pinia";
 import { useGlobalStore } from "@/store/GlobalStore";
-import BrowserUtil from "@/utils/BrowserUtil";
+import { svg2png, downloadByBase64 } from "@/utils/BrowserUtil";
 import MessageUtil from "@/utils/MessageUtil";
 import { markRaw } from "vue";
 
@@ -139,8 +139,8 @@ export default defineComponent({
             document.body.removeChild(elem)
         },
         downloadToPng() {
-            BrowserUtil.svg2png(this.drauu.el!)
-                .then(e => BrowserUtil.downloadByBase64(e))
+            svg2png(this.drauu.el!)
+                .then(e => downloadByBase64(e))
                 .catch(e => MessageUtil.error("下载图片失败", e));
         }
     }

@@ -32,6 +32,8 @@ export default class SimpleMindMapWrap {
     private lock = false;
     // 是否有待办
     private todo = false;
+    // 初始化是否完成
+    private initComplete = false;
 
     /**
      * 初始化
@@ -58,7 +60,9 @@ export default class SimpleMindMapWrap {
         this.on('data_change', (data: MindMapNode) => {
             this.data = data;
             // 自动保存
-            this.save();
+            if (this.initComplete) {
+                this.save();
+            }
         });
 
     }
@@ -66,6 +70,10 @@ export default class SimpleMindMapWrap {
     init(id: string, _rev?: string) {
         this.id = id;
         this._rev = _rev;
+    }
+
+    complete() {
+        setTimeout(() => this.initComplete = true, 100);
     }
 
     setSize(width: number, height: number, resize: boolean = true) {
@@ -88,6 +96,11 @@ export default class SimpleMindMapWrap {
         this.config = config;
         this.mindMap.updateConfig(config);
         this.save();
+    }
+
+    setData(data: any) {
+        this.data = data;
+        this.mindMap.setData(this.data);
     }
 
     // ------ 事件 ------

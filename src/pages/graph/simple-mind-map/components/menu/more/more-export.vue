@@ -56,7 +56,7 @@ export default defineComponent({
         return {
             downTypeList,
             dialogVisible: false,
-            exportType: 'smm',
+            exportType: 'png',
             widthConfig: true,
             isTransparent: false,
             paddingX: 10,

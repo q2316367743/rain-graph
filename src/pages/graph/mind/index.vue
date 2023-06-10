@@ -36,7 +36,7 @@
 <script lang="ts" setup>
 import { computed, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useWindowSize } from "@vueuse/core";
+import { useFileSystemAccess, useWindowSize } from "@vueuse/core";
 import MindElixir from "mind-elixir";
 import { data2Html } from '@mind-elixir/export-html'
 import { useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
@@ -55,7 +55,6 @@ const router = useRouter()
 // 参数
 let mind: any | undefined;
 let id = useRoute().params.id as string;
-let _id = computed(() => `/mind/${id}`);
 let path = useRoute().query.path as string;
 let _rev = undefined as string | undefined;
 
@@ -77,6 +76,16 @@ let option = {
     allowUndo: true
 };
 let data = {} as any;
+
+const fileSystem = useFileSystemAccess({
+    dataType: 'Text',
+    types: [{
+        description: 'json',
+        accept: {
+            'application/json': ['.json', '.ssm'],
+        },
+    }]
+});
 
 async function initData() {
     let id = useRoute().params.id as string;
@@ -120,6 +129,27 @@ function save(show: boolean = true) {
                 MessageUtil.success('保存成功');
             }
         });
+    });
+}
+
+function open() {
+    let res = fileSystem.open() as Promise<void>;
+    res.then(() => {
+        let content = fileSystem.data.value || '';
+        try {
+            let json = JSON.parse(content);
+            let config = json['config'];
+            let data = json['record'];
+            console.log(config);
+            console.log(data)
+        } catch (e) {
+            MessageUtil.error("文件解析失败", e);
+        }
+    }).catch(e => {
+        if (e.name === 'AbortError') {
+            return;
+        }
+        MessageUtil.error("打开失败", e)
     });
 }
 

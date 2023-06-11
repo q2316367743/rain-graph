@@ -70,8 +70,6 @@ export default defineComponent({
                     let json = JSON.parse(content);
                     let config = json['config'];
                     let data = json['record'];
-                    console.log(config);
-                    console.log(data)
                     this.simpleMindMapWrap.setConfig(config);
                     this.simpleMindMapWrap.setData(data);
                 } catch (e) {

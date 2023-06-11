@@ -254,7 +254,6 @@ export default defineComponent({
     methods: {
         init() {
             // 初始化数据
-            console.log(this.config)
             this.app = markRaw(new TinyWhiteboard({
                 container: document.getElementById('white-board-view'),
                 state: toRaw(this.config)

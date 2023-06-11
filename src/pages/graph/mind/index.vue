@@ -6,8 +6,7 @@
                     <a-button>文件</a-button>
                     <template #content>
                         <a-doption @click="toHome">返回列表</a-doption>
-                        <a-doption disabled>新建</a-doption>
-                        <a-doption disabled>打开</a-doption>
+                        <a-doption @click="open">打开</a-doption>
                         <a-doption @click="save(true)">保存</a-doption>
                         <a-doption @click="saveAs">另存为</a-doption>
                     </template>
@@ -24,8 +23,14 @@
                     </a-button>
                     <template #content>
                         <a-doption :value="ExportTypeEnum.HTML">HTML</a-doption>
+                        <a-doption :value="ExportTypeEnum.MD">Markdown</a-doption>
                     </template>
                 </a-dropdown>
+            </a-button-group>
+            <a-button-group type="text">
+                <a-button @click="switchReadonly" :status="readonly ? 'success' : 'normal'">
+                    <template #icon><icon-lock /></template>
+                </a-button>
             </a-button-group>
         </div>
         <div class="container">
@@ -34,7 +39,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { computed, onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useFileSystemAccess, useWindowSize } from "@vueuse/core";
 import MindElixir from "mind-elixir";
@@ -57,6 +62,7 @@ let mind: any | undefined;
 let id = useRoute().params.id as string;
 let path = useRoute().query.path as string;
 let _rev = undefined as string | undefined;
+const readonly = ref(false);
 
 let option = {
     el: "#mind-elixir-view",
@@ -139,9 +145,13 @@ function open() {
         try {
             let json = JSON.parse(content);
             let config = json['config'];
-            let data = json['record'];
-            console.log(config);
-            console.log(data)
+            let record = json['record'];
+            // 赋值
+            option = Object.assign(option, config);
+            data = record
+            // 初始化对象
+            mind = new MindElixir(option);
+            mind.init(data);
         } catch (e) {
             MessageUtil.error("文件解析失败", e);
         }
@@ -182,6 +192,21 @@ function exportData(type: any) {
             data2Html(mind.getData()),
             useGlobalStore().title + ".html",
             'text/html')
+    } else if (type === ExportTypeEnum.MD) {
+        BrowserUtil.download(
+            mind.getDataMd(),
+            useGlobalStore().title + ".md",
+            'text/html'
+        );
+    }
+}
+
+function switchReadonly() {
+    readonly.value = !readonly.value;
+    if (readonly.value) {
+        mind.disableEdit();
+    } else {
+        mind.enableEdit();
     }
 }
 
@@ -201,6 +226,8 @@ useUndoEvent.on(() => toUndo());
         left: 0;
         right: 0;
         border-bottom: 1px solid var(--color-neutral-3);
+        display: flex;
+        justify-content: space-between;
     }
 
     .container {

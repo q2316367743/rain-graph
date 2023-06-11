@@ -14,7 +14,8 @@
                 <a-dropdown trigger="click">
                     <a-button>编辑</a-button>
                     <template #content>
-                        <a-doption @click="toUndo">后退</a-doption>
+                        <a-doption @click="toUndo" :disabled="!option.allowUndo">后退</a-doption>
+                        <a-doption @click="settingVisible = !settingVisible">设置</a-doption>
                     </template>
                 </a-dropdown>
                 <a-dropdown trigger="click" @select="exportData">
@@ -36,6 +37,7 @@
         <div class="container">
             <div id="mind-elixir-view" :style="{ height: viewHeight + 'px' }"></div>
         </div>
+        <mind-elixir-setting v-model:visible="settingVisible" :option="option" @save="saveOption" />
     </div>
 </template>
 <script lang="ts" setup>
@@ -52,6 +54,9 @@ import { useGlobalStore } from "@/store/GlobalStore";
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import BrowserUtil from "@/utils/BrowserUtil";
 import { getRecord } from "@/utils/utools/DbUtil";
+import { MindOption, getDefaultOption } from "./domain/MindOption";
+import MindElixirSetting from './components/setting.vue'
+import { toRaw } from "vue";
 
 const size = useWindowSize();
 const viewHeight = computed(() => size.height.value - 33);
@@ -63,24 +68,14 @@ let id = useRoute().params.id as string;
 let path = useRoute().query.path as string;
 let _rev = undefined as string | undefined;
 const readonly = ref(false);
+const settingVisible = ref(false);
 
-let option = {
+let defaultOption = {
     el: "#mind-elixir-view",
     direction: MindElixir.RIGHT,
-    // create new map data
-    // the data return from `.getData()`
-    draggable: true, // default true
-    contextMenu: true, // default true
-    toolBar: true, // default true
-    nodeMenu: true, // default true
-    keypress: true, // default true
-    locale: 'zh_CN', // [zh_CN,zh_TW,en,ja,pt] waiting for PRs
-    overflowHidden: false, // default false
-    mainLinkStyle: 2, // [1,2] default 1
-    mainNodeVerticalGap: 15, // default 25
-    mainNodeHorizontalGap: 15, // default 65
-    allowUndo: true
 };
+
+let option = ref(getDefaultOption());
 let data = {} as any;
 
 const fileSystem = useFileSystemAccess({
@@ -99,14 +94,17 @@ async function initData() {
     let record = await getRecord(GraphTypeEnum.MIND, id, path)
     id = record.id;
     _rev = record._rev;
-    option = Object.assign(option, record.option);
+    option.value = Object.assign(option.value, record.option);
     data = record.record;
 }
 
 onMounted(() => {
     initData().catch(e => MessageUtil.error("获取数据失败", e))
         .finally(() => {
-            mind = new MindElixir(option);
+            mind = new MindElixir({
+                ...option.value,
+                ...defaultOption
+            });
             if (id !== '0') {
                 mind.init(data);
             } else {
@@ -123,7 +121,7 @@ function save(show: boolean = true) {
             _rev,
             value: {
                 record: mind.getData(),
-                option: option
+                option: toRaw(option.value)
             }
         }).then(res => {
             if (res.error) {
@@ -147,10 +145,13 @@ function open() {
             let config = json['config'];
             let record = json['record'];
             // 赋值
-            option = Object.assign(option, config);
+            option.value = Object.assign(option.value, config);
             data = record
             // 初始化对象
-            mind = new MindElixir(option);
+            mind = new MindElixir({
+                ...option.value,
+                ...defaultOption
+            });
             mind.init(data);
         } catch (e) {
             MessageUtil.error("文件解析失败", e);
@@ -166,15 +167,19 @@ function open() {
 function saveAs() {
     BrowserUtil.download(JSON.stringify({
         record: mind.getData(),
-        option: option
+        option: option.value
     }, null, 4), useGlobalStore().title + '.json', 'application/json');
 }
 
 function toUndo() {
-    if (mind) {
-        mind.undo();
-        save(false);
+    if (!mind) {
+        return;
     }
+    if (!option.value.allowUndo) {
+        return;
+    }
+    mind.undo();
+        save(false);
 }
 
 function toHome() {
@@ -208,6 +213,19 @@ function switchReadonly() {
     } else {
         mind.enableEdit();
     }
+}
+
+function saveOption(value: MindOption) {
+    // 保存设置
+    option.value = Object.assign(option.value, value);
+    // 重新设置布局
+    mind = new MindElixir({
+        ...option.value,
+        ...defaultOption
+    });
+    mind.init(data);
+    // 保存
+    save();
 }
 
 useSaveEvent.on(() => save());

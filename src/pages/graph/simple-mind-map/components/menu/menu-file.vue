@@ -3,9 +3,9 @@
         <a-button>文件</a-button>
         <template #content>
             <a-doption @click="toHome">返回列表</a-doption>
-            <a-doption @click="open" :disabled="!fileSystem.isSupported">打开</a-doption>
+            <a-doption @click="open" :disabled="!fileSystem.isSupported || isNotVip">打开</a-doption>
             <a-doption @click="save">保存</a-doption>
-            <a-doption @click="saveAs">另存为</a-doption>
+            <a-doption @click="saveAs" :disabled="isNotVip">另存为</a-doption>
         </template>
     </a-dropdown>
 </template>
@@ -18,6 +18,7 @@ import SimpleMindMapWrap from "../../SimpleMindMapWrap";
 import MessageUtil from "@/utils/MessageUtil";
 import { useGlobalStore } from "@/store/GlobalStore";
 import { useSaveEvent } from "@/global/BeanFactory";
+import { useVipStore } from "@/store/VipStore";
 
 export default defineComponent({
     name: 'menu-file',
@@ -40,7 +41,8 @@ export default defineComponent({
         })
     }),
     computed: {
-        ...mapState(useGlobalStore, ['title'])
+        ...mapState(useGlobalStore, ['title']),
+        ...mapState(useVipStore, ['isNotVip'])
     },
     created() {
         useSaveEvent.on(() => this.save());

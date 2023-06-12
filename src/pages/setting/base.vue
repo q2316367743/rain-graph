@@ -24,7 +24,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
-import { getDefaultSetting, useSettingStore } from '@/store/SettingStore';
+import { getDefaultSetting, useSettingStore } from '@/store/setting/SettingStore';
 import { mapState } from "pinia";
 import { toRaw } from "vue";
 import MessageUtil from "@/utils/MessageUtil";

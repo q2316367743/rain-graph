@@ -129,5 +129,8 @@ export const utools = {
     showOpenDialog(options: any): (string[]) | (undefined) {
         MessageUtil.warning("web环境不支持打开文件操作，请使用utools版本");
         return [];
+    },
+    fetchUserPayments(): Promise<any[]>{
+        return Promise.resolve([]);
     }
 }

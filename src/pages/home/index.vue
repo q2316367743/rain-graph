@@ -60,7 +60,7 @@ import { useMapEvent, useSaveEvent, useSideEvent, useUndoEvent } from "@/global/
 import GraphRecord from "@/entity/GraphRecord";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import { useGlobalStore } from "@/store/GlobalStore";
-import { useSettingStore } from "@/store/SettingStore";
+import { useSettingStore } from "@/store/setting/SettingStore";
 import { useMindStore } from "@/store/graph/MindStore";
 import { useDiagramStore } from "@/store/graph/DiagramStore";
 import { useWhiteBoardStore } from "@/store/graph/WhiteBoardStore";

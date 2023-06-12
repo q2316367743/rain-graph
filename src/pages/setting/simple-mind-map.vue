@@ -14,7 +14,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
-import { getDefaultSimpleMindMapSetting, useSimpleMindMapSettingStore } from '@/store/SimpleMindMapSetting';
+import { getDefaultSimpleMindMapSetting, useSimpleMindMapSettingStore } from '@/store/setting/SimpleMindMapSetting';
 import { mapState } from "pinia";
 import { toRaw } from "vue";
 import MessageUtil from "@/utils/MessageUtil";

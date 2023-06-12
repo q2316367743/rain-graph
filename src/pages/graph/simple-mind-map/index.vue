@@ -101,7 +101,7 @@ import MessageUtil from "@/utils/MessageUtil";
 import { getRecord } from "@/utils/utools/DbUtil";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import { useSimpleMindMapStore } from "@/store/graph/SimpleMindMapStore";
-import { useSimpleMindMapSettingStore } from "@/store/SimpleMindMapSetting";
+import { useSimpleMindMapSettingStore } from "@/store/setting/SimpleMindMapSetting";
 
 
 

@@ -64,19 +64,21 @@ import { defineComponent } from "vue";
 import { useMapEvent, useSaveEvent, useSideEvent, useUndoEvent } from "@/global/BeanFactory";
 import Config from '@/global/Config'
 
+import { useVipStore } from "./store/VipStore";
 import { useGlobalStore } from "@/store/GlobalStore";
 import { useMindStore } from "@/store/graph/MindStore";
 import { useDiagramStore } from "@/store/graph/DiagramStore";
 import { useWhiteBoardStore } from "@/store/graph/WhiteBoardStore";
-import { useSettingStore } from "@/store/SettingStore";
+import { useSettingStore } from "@/store/setting/SettingStore";
 import { useSimpleMindMapStore } from "@/store/graph/SimpleMindMapStore";
-import { useSimpleMindMapSettingStore } from "./store/SimpleMindMapSetting";
+import { useSimpleMindMapSettingStore } from "./store/setting/SimpleMindMapSetting";
 
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import GraphTypeEnum from '@/enumeration/GraphTypeEnum';
 import LocalNameEnum from '@/enumeration/LocalNameEnum';
 import Constant from "./global/Constant";
 import NotificationUtil from "./utils/NotificationUtil";
+import { useBackupSettingStore } from "./store/setting/BackupSettingStore";
 
 
 export default defineComponent({
@@ -122,7 +124,10 @@ export default defineComponent({
         useDiagramStore().init();
         // 初始化设置
         useSettingStore().init();
+        useBackupSettingStore().init();
         useSimpleMindMapSettingStore().init();
+        // 初始化认证
+        useVipStore().init();
         // 插件进入事件
         utools.onPluginEnter(action => {
             if (action.code.startsWith('/graph')) {

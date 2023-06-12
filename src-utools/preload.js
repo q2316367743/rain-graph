@@ -1,6 +1,8 @@
 const { existsSync } = require('fs');
 const { readFile } = require('fs/promises');
 
+const BackupApi = require('./lib/BackupApi');
+
 window.preload = {};
 
 /**
@@ -22,3 +24,6 @@ async function openFileToString(path) {
 
 window.preload['openFile'] = openFile;
 window.preload['openFileToString'] = openFileToString;
+
+window.api = {};
+window.api['backup'] = BackupApi;

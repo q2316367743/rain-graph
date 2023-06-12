@@ -1,60 +1,66 @@
 <template>
     <div class="app">
-        <a-layout>
-            <a-layout-sider collapsed>
-                <a-menu style="width: 200px;height: 100%;" breakpoint="xl" v-model:selected-keys="selectedKeys">
-                    <a-menu-item key="/home" @click="toHome">
-                        <template #icon><icon-list /></template>
-                        列表
-                    </a-menu-item>
-                    <a-sub-menu key="1">
-                        <template #icon><icon-plus /></template>
-                        <template #title>新建</template>
-                        <a-menu-item :key="`/$gragh/${GraphTypeEnum.MIND}/0`" @click="jumpTo(GraphTypeEnum.MIND)" v-if="showViews.includes(GraphTypeEnum.MIND)">
-                            {{ Config.title[GraphTypeEnum.MIND].title }}
+        <a-spin :loading="loading" :tip="loadingText" class="rain-loading">
+            <a-layout>
+                <a-layout-sider collapsed>
+                    <a-menu style="width: 200px;height: 100%;" breakpoint="xl" v-model:selected-keys="selectedKeys">
+                        <a-menu-item key="/home" @click="toHome">
+                            <template #icon><icon-list /></template>
+                            列表
                         </a-menu-item>
-                        <a-menu-item :key="`/$gragh/${GraphTypeEnum.SIMPLE_MIND_MAP}/0`"
-                            @click="jumpTo(GraphTypeEnum.SIMPLE_MIND_MAP)"  v-if="showViews.includes(GraphTypeEnum.SIMPLE_MIND_MAP)">
-                            {{ Config.title[GraphTypeEnum.SIMPLE_MIND_MAP].title }}
+                        <a-sub-menu key="1">
+                            <template #icon><icon-plus /></template>
+                            <template #title>新建</template>
+                            <a-menu-item :key="`/$gragh/${GraphTypeEnum.MIND}/0`" @click="jumpTo(GraphTypeEnum.MIND)"
+                                v-if="showViews.includes(GraphTypeEnum.MIND)">
+                                {{ Config.title[GraphTypeEnum.MIND].title }}
+                            </a-menu-item>
+                            <a-menu-item :key="`/$gragh/${GraphTypeEnum.SIMPLE_MIND_MAP}/0`"
+                                @click="jumpTo(GraphTypeEnum.SIMPLE_MIND_MAP)"
+                                v-if="showViews.includes(GraphTypeEnum.SIMPLE_MIND_MAP)">
+                                {{ Config.title[GraphTypeEnum.SIMPLE_MIND_MAP].title }}
+                            </a-menu-item>
+                            <a-menu-item :key="`/$gragh/${GraphTypeEnum.DIAGRAM}/0`" @click="jumpTo(GraphTypeEnum.DIAGRAM)"
+                                v-if="showViews.includes(GraphTypeEnum.DIAGRAM)">
+                                {{ Config.title[GraphTypeEnum.DIAGRAM].title }}
+                            </a-menu-item>
+                            <a-menu-item :key="`/$gragh/${GraphTypeEnum.WHITE_BOARD}/0`"
+                                @click="jumpTo(GraphTypeEnum.WHITE_BOARD)"
+                                v-if="showViews.includes(GraphTypeEnum.WHITE_BOARD)">
+                                {{ Config.title[GraphTypeEnum.WHITE_BOARD].title }}
+                            </a-menu-item>
+                        </a-sub-menu>
+                        <a-sub-menu key="1">
+                            <template #icon><icon-pen-fill /></template>
+                            <template #title>绘制</template>
+                            <a-menu-item key="/draw/drauu" @click="jumpToFunc('/draw/drauu')">
+                                画板
+                            </a-menu-item>
+                            <a-menu-item key="/draw/echarts" @click="jumpToFunc('/draw/echarts')">
+                                可视化图表
+                            </a-menu-item>
+                        </a-sub-menu>
+                        <a-menu-item key="/setting" @click="jumpToFunc('/setting')">
+                            <template #icon>
+                                <icon-settings />
+                            </template>
+                            设置
                         </a-menu-item>
-                        <a-menu-item :key="`/$gragh/${GraphTypeEnum.DIAGRAM}/0`" @click="jumpTo(GraphTypeEnum.DIAGRAM)"  v-if="showViews.includes(GraphTypeEnum.DIAGRAM)">
-                            {{ Config.title[GraphTypeEnum.DIAGRAM].title }}
+                        <a-menu-item key="/recommend" @click="jumpToFunc('/recommend')">
+                            <template #icon><icon-thumb-up /></template>
+                            推荐
                         </a-menu-item>
-                        <a-menu-item :key="`/$gragh/${GraphTypeEnum.WHITE_BOARD}/0`"
-                            @click="jumpTo(GraphTypeEnum.WHITE_BOARD)"  v-if="showViews.includes(GraphTypeEnum.WHITE_BOARD)">
-                            {{ Config.title[GraphTypeEnum.WHITE_BOARD].title }}
+                        <a-menu-item key="/about" @click="jumpToFunc('/about')">
+                            <template #icon>
+                                <icon-exclamation-circle />
+                            </template>
+                            关于
                         </a-menu-item>
-                    </a-sub-menu>
-                    <a-sub-menu key="1">
-                        <template #icon><icon-pen-fill /></template>
-                        <template #title>绘制</template>
-                        <a-menu-item key="/draw/drauu" @click="jumpToFunc('/draw/drauu')">
-                            画板
-                        </a-menu-item>
-                        <a-menu-item key="/draw/echarts" @click="jumpToFunc('/draw/echarts')">
-                            可视化图表
-                        </a-menu-item>
-                    </a-sub-menu>
-                    <a-menu-item key="/setting" @click="jumpToFunc('/setting')">
-                        <template #icon>
-                            <icon-settings />
-                        </template>
-                        设置
-                    </a-menu-item>
-                    <a-menu-item key="/recommend" @click="jumpToFunc('/recommend')">
-                        <template #icon><icon-thumb-up /></template>
-                        推荐
-                    </a-menu-item>
-                    <a-menu-item key="/about" @click="jumpToFunc('/about')">
-                        <template #icon>
-                            <icon-exclamation-circle />
-                        </template>
-                        关于
-                    </a-menu-item>
-                </a-menu>
-            </a-layout-sider>
-            <a-layout-content><router-view /></a-layout-content>
-        </a-layout>
+                    </a-menu>
+                </a-layout-sider>
+                <a-layout-content><router-view /></a-layout-content>
+            </a-layout>
+        </a-spin>
     </div>
 </template>
 <script lang="ts">
@@ -90,7 +96,7 @@ export default defineComponent({
         selectedKeys: ['/home']
     }),
     computed: {
-        ...mapState(useGlobalStore, ['isDark', 'title', 'type', 'typeWrap', 'env']),
+        ...mapState(useGlobalStore, ['isDark', 'title', 'type', 'typeWrap', 'env', 'loading', 'loadingText']),
         ...mapState(useSettingStore, ['showViews']),
         editDisabled() {
             return !this.$route.path.startsWith('/graph')

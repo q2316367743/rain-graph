@@ -33,6 +33,7 @@ MindMap.usePlugin(Export)
 
 // utools
 import { utools } from './plugin/utools';
+import {preload, api} from './plugin/preload';
 window.rain = {
     env: window.utools ? 'utools' : 'web'
 }
@@ -40,6 +41,10 @@ window.rain = {
 if (!window.utools) {
     // @ts-ignore
     window.utools = utools;
+    // @ts-ignore
+    window.preload = preload;
+    // @ts-ignore
+    window.api = api;
 }
 
 

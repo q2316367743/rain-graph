@@ -22,7 +22,7 @@ export const useSettingStore = defineStore('setting', {
     },
     actions: {
         init() {
-            utools.db.promises.get(LocalNameEnum.SETTING_MIND)
+            utools.db.promises.get(LocalNameEnum.SETTING_BASE)
                 .then(res => {
                     if (res) {
                         this.base = Object.assign(this.base, res.value);
@@ -33,7 +33,7 @@ export const useSettingStore = defineStore('setting', {
         async saveBase(setting: Setting): Promise<void> {
             this.base = Object.assign(this.base, setting);
             const res = await utools.db.promises.put({
-                _id: LocalNameEnum.SETTING_MIND,
+                _id: LocalNameEnum.SETTING_BASE,
                 _rev: this.base_rev,
                 value: toRaw(this.base)
             });

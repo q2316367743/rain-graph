@@ -16,6 +16,12 @@ interface Window {
     preload: {
         openFile: (path: string) => Promise<Buffer>,
         openFileToString: (path: string) => Promise<string>
+    },
+    api: {
+        backup: {
+            listBackup(path: string): Promise<string[]>,
+            writeBackup(path: string, name: string, file: string, content: string): Promise<void>
+        }
     }
 }
 

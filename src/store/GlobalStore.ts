@@ -9,7 +9,9 @@ export const useGlobalStore = defineStore('global', {
         size: useWindowSize(),
         titleWrap: '',
         typeWrap: undefined as GraphTypeEnum | undefined,
-        env: window.rain.env
+        env: window.rain.env,
+        loading: false,
+        loadingText: ''
     }),
     getters: {
         height: state => state.size.height,
@@ -38,6 +40,13 @@ export const useGlobalStore = defineStore('global', {
                 // 恢复亮色主题
                 document.body.removeAttribute('arco-theme');
             }
+        },
+        startLoading(text?: string) { // 加载中.. 可以加载完成后自动关闭页面.. 不要忘
+            this.loading = true;
+            this.loadingText = text || '加载中...';
+        },
+        closeLoading() {
+            this.loading = false;
         }
     }
 })

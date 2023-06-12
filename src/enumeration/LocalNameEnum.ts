@@ -12,6 +12,8 @@ enum LocalNameEnum {
 
     // ------ 设置 ------
 
+    SETTING_BASE = '/setting/base',
+
     SETTING_MIND = '/setting/mind',
 
     SETTING_SIMPLE_MIND_MAP = '/setting/simple-mind-map',

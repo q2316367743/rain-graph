@@ -1,4 +1,5 @@
 export default {
+    id: 'rain-graph',
     name: '听雨图编辑器',
     version: '1.0.6',
     author: '落雨不悔',

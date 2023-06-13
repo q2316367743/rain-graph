@@ -11,10 +11,10 @@
             </a-input>
         </a-form-item>
         <a-form-item label="操作">
-            <a-button-group type="primary" :disabled="isWeb">
+            <a-button-group type="primary" :disabled="localDisabled">
                 <a-button @click="localExecuteWrap">执行备份</a-button>
-                <a-button status="success" style="margin-left: 7px;">恢复备份</a-button>
-                <a-button status="warning" style="margin-left: 7px;" @click="localBackupRead">管理备份</a-button>
+                <a-button @click="localBackupRecoveryWrap" status="success" style="margin-left: 7px;">恢复备份</a-button>
+                <a-button @click="localBackupReadWrap" status="warning" style="margin-left: 7px;">管理备份</a-button>
             </a-button-group>
         </a-form-item>
         <a-divider>WebDAV备份</a-divider>
@@ -45,8 +45,9 @@
                         </template>
                     </a-list-item-meta>
                     <template #actions>
+                        <a-button type="text" status="success" v-if="recovery">恢复</a-button>
                         <a-popconfirm content="确认删除此备份，删除后无法恢复" @ok="localRemove(backup.file)" type="warning"
-                            :ok-button-props="{ status: 'danger' }" ok-text="删除">
+                            :ok-button-props="{ status: 'danger' }" ok-text="删除" v-else>
                             <a-button type="text" status="danger">删除</a-button>
                         </a-popconfirm>
                     </template>
@@ -78,15 +79,17 @@ interface BackupItem {
 export default defineComponent({
     name: 'setting-backup',
     data: () => ({
+        isWeb: window.rain.env === 'web',
         setting: getDefaultBackupSetting(),
         init: false,
         fileDrawer: false,
-        backupItems: new Array<BackupItem>()
+        backupItems: new Array<BackupItem>(),
+        recovery: false
     }),
     computed: {
         ...mapState(useBackupSettingStore, ['instance']),
-        isWeb() {
-            return typeof utools.getUser === 'undefined'
+        localDisabled() {
+            return this.setting.localPath.trim() === '' || this.isWeb
         }
     },
     watch: {
@@ -130,10 +133,18 @@ export default defineComponent({
             window.api.backup.removeBackup(this.setting.localPath, name)
                 .then(() => {
                     MessageUtil.success("删除完成");
-                    this.localBackupRead();
+                    this.localBackupReadWrap();
                 })
                 .catch(e => MessageUtil.error("删除失败", e))
                 .finally(() => useGlobalStore().closeLoading());
+        },
+        localBackupRecoveryWrap() {
+            this.recovery = true;
+            this.localBackupRead();
+        },
+        localBackupReadWrap() {
+            this.recovery = false;
+            this.localBackupRead();
         },
         localBackupRead() {
             let backupItems = new Array<BackupItem>();

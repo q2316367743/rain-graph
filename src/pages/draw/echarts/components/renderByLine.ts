@@ -21,7 +21,7 @@ export function renderByLine(
             trigger: 'axis',
             axisPointer: {
                 type: 'shadow'
-            }
+            },
         },
         legend: {
             textStyle: {

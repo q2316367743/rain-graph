@@ -91,8 +91,8 @@ export default defineComponent({
             return (this.height - 33 - 28) + 'px';
         },
         viewWidth() {
-            return (this.width - 28) + 'px';
-        }
+            return (this.width - 28 - 48) + 'px';
+        },
     },
     watch: {
         size: {

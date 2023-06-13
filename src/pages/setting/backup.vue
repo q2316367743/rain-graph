@@ -45,7 +45,10 @@
                         </template>
                     </a-list-item-meta>
                     <template #actions>
-                        <a-button type="text" status="danger">删除</a-button>
+                        <a-popconfirm content="确认删除此备份，删除后无法恢复" @ok="localRemove(backup.file)" type="warning"
+                            :ok-button-props="{ status: 'danger' }" ok-text="删除">
+                            <a-button type="text" status="danger">删除</a-button>
+                        </a-popconfirm>
                     </template>
                 </a-list-item>
             </a-list>
@@ -60,7 +63,6 @@ import { useBackupSettingStore } from '@/store/setting/BackupSettingStore';
 import { toDateString } from "xe-utils";
 import { useGlobalStore } from "@/store/GlobalStore";
 import { localExecute } from './BackupFunc';
-import LocalNameEnum from "@/enumeration/LocalNameEnum";
 import MessageUtil from "@/utils/MessageUtil";
 
 // 文件夹规则：rain-graph@1.0.0@1635902578251
@@ -121,6 +123,16 @@ export default defineComponent({
             localExecute(this.setting.localPath)
                 .then(() => MessageUtil.success("备份完成"))
                 .catch(e => MessageUtil.error("备份失败", e))
+                .finally(() => useGlobalStore().closeLoading());
+        },
+        localRemove(name: string) {
+            useGlobalStore().startLoading("正在删除备份");
+            window.api.backup.removeBackup(this.setting.localPath, name)
+                .then(() => {
+                    MessageUtil.success("删除完成");
+                    this.localBackupRead();
+                })
+                .catch(e => MessageUtil.error("删除失败", e))
                 .finally(() => useGlobalStore().closeLoading());
         },
         localBackupRead() {

@@ -20,7 +20,8 @@ interface Window {
     api: {
         backup: {
             listBackup(path: string): Promise<string[]>,
-            writeBackup(path: string, name: string, file: string, content: string): Promise<void>
+            writeBackup(path: string, name: string, file: string, content: string): Promise<void>,
+            removeBackup(path: string, name: string): Promise<void>,
         }
     }
 }

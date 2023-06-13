@@ -16,6 +16,9 @@ export const api = {
         },
         writeBackup() {
             MessageUtil.warning("请前往utools体验此功能");
+        },
+        removeBackup() {
+            MessageUtil.warning("请前往utools体验此功能");
         }
     }
 }

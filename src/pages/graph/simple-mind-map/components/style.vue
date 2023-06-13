@@ -351,7 +351,7 @@ export default defineComponent({
         display: inline-block;
         width: 30px;
         height: 30px;
-        border: 1px solid #dcdfe6;
+        border: 1px solid var(--color-neutral-3);
         border-radius: 4px;
         cursor: pointer;
 
@@ -378,17 +378,18 @@ export default defineComponent({
             position: relative;
             width: 50px;
             height: 30px;
-            background: #fff;
-            border: 1px solid #eee;
+            background: var(--color-bg-1);
+            border: 1px solid var(--color-neutral-3);
             display: flex;
             justify-content: center;
             align-items: center;
             font-weight: bold;
             cursor: pointer;
             border-radius: 4px;
+            color: var(--color-text-1);
 
             &.actived {
-                background-color: #eee;
+                background-color: var(--color-neutral-2);
             }
 
             &.disabled {

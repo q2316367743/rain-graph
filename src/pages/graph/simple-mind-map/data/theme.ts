@@ -62,7 +62,7 @@ export const lineHeightList = [1, 1.5, 2, 2.5, 3]
 
 // 颜色
 export const colorList = [
-    '#4D4D4D',
+    'var(--color-bg-1)',
     '#999999',
     '#FFFFFF',
     '#F44E3B',

@@ -209,7 +209,7 @@ export default defineComponent({
 <style lang="less" scoped>
 .listBox {
     width: 200px;
-    background: #fff;
+    background: var(--color-neutral-2);
     box-shadow: 0 4px 12px 0 hsla(0, 0%, 69%, 0.5);
     border-radius: 4px;
     padding-top: 16px;
@@ -221,7 +221,7 @@ export default defineComponent({
     font-size: 14px;
     font-family: PingFangSC-Regular, PingFang SC;
     font-weight: 400;
-    color: #1a1a1a;
+    color: var(--color-text-1);
 
     .item {
         position: relative;
@@ -237,7 +237,7 @@ export default defineComponent({
         }
 
         &:hover {
-            background: #f5f5f5;
+            background: var(--color-neutral-4);
 
             .subItems {
                 visibility: visible;
@@ -245,17 +245,17 @@ export default defineComponent({
         }
 
         &.disabled {
-            color: grey;
+            color: var(--color-neutral-4);
             cursor: not-allowed;
             pointer-events: none;
 
             &:hover {
-                background: #fff;
+                background: var(--color-neutral-1);
             }
         }
 
         .desc {
-            color: #999;
+            color: var(--color-neutral-6);
         }
 
         .subItems {

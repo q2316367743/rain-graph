@@ -66,6 +66,7 @@ export default defineComponent({
     padding: 14px;
     width: 240px;
     background-color: var(--color-bg-1);
+    color: var(--color-text-1);
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 
     .colorItem {

@@ -21,7 +21,7 @@
                     <a-button>编辑</a-button>
                     <template #content>
                         <a-doption @click="openJsonDialog">JSON</a-doption>
-                        <a-doption disable>可视化</a-doption>
+                        <a-doption @click="openExcelDialog">可视化</a-doption>
                     </template>
                 </a-dropdown>
                 <a-dropdown>
@@ -48,6 +48,7 @@
             <codemirror v-model="json.record" autofocus auto-destroy :extensions="extensions"
                 style="width: 100%;height: 100%;" />
         </a-modal>
+        <draw-echarts-excel v-model:visible="excel.dialog" @render="renderExcel" />
     </div>
 </template>
 <script lang="ts">
@@ -61,27 +62,29 @@ import MessageUtil from "@/utils/MessageUtil";
 import { getExample, exportForJson, exportForPng } from "./algorithm";
 import EchartsTypeEnum from "./enumeration/EchartsTypeEnum";
 
+import DrawEchartsExcel from "./components/ExcelEditor.vue";
+
 export default defineComponent({
     name: 'echarts',
-    components: { Codemirror },
-    data: () => {
-        let type = 'line' as EchartsTypeEnum
-        let config = {
+    components: { Codemirror, DrawEchartsExcel },
+    data: () => ({
+        type: 'line' as EchartsTypeEnum,
+        config: {
             title: '听雨图编辑器',
             subtitle: '使用echarts实现听雨图编辑器',
-        };
-        return {
-            type,
-            config,
-            option: {},
-            myChart: markRaw({}) as EChartsType,
-            extensions: markRaw([json()]) as any[],
-            json: {
-                dialog: false,
-                record: ''
-            }
+        },
+        option: {},
+        myChart: markRaw({}) as EChartsType,
+        extensions: markRaw([json()]) as any[],
+        json: {
+            dialog: false,
+            record: ''
+        },
+        excel: {
+            dialog: false,
+            record: []
         }
-    },
+    }),
     computed: {
         ...mapState(useGlobalStore, ['height', 'width', 'size']),
         viewHeight() {
@@ -125,16 +128,26 @@ export default defineComponent({
                 record: JSON.stringify(this.option, null, 4)
             };
         },
+        openExcelDialog() {
+            this.excel = {
+                dialog: true,
+                record: []
+            }
+        },
         renderJson() {
             try {
-                let option = JSON.parse(this.json.record); // 将字符串转换为对象形式。这是v3的生成
-                this.option = option; // 将对象转换为ES6形式。这是v3的生成 或 v2的转
-                this.drawEcharts(); // 重新绘制，以使新的option可以正确展示展示选择器的图
+                let option = JSON.parse(this.json.record);
+                this.option = option;
+                this.drawEcharts();
             } catch (e) {
                 MessageUtil.error("渲染异常", e);
             } finally {
                 this.json.dialog = false;
             }
+        },
+        renderExcel(option: any) {
+            this.option = option;
+            this.drawEcharts();
         },
         exportForJson() {
             exportForJson(this.option);

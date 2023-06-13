@@ -6,6 +6,18 @@ export function getBaseBar() {
             subtext: "使用echarts实现听雨图编辑器",
             left: "center"
         },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        legend: {
+            textStyle: {
+                color: 'white'
+            },
+            bottom: '20',
+        },
         "xAxis": {
             "type": "category",
             "data": [

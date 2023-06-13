@@ -6,6 +6,18 @@ export function getBaseLine() {
             "subtext": "使用echarts实现听雨图编辑器",
             "left": "center"
         },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        legend: {
+            textStyle: {
+                color: 'white'
+            },
+            bottom: '20',
+        },
         "xAxis": {
             "type": "category",
             "data": [
@@ -45,6 +57,18 @@ export function getSmoothLine() {
             subtext: "使用echarts实现听雨图编辑器",
             left: "center"
         },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        legend: {
+            textStyle: {
+                color: 'white'
+            },
+            bottom: '20',
+        },
         xAxis: {
             type: 'category',
             data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
@@ -68,6 +92,18 @@ export function getAreaLine() {
             text: "听雨图编辑器",
             subtext: "使用echarts实现听雨图编辑器",
             left: "center"
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        legend: {
+            textStyle: {
+                color: 'white'
+            },
+            bottom: '20',
         },
         xAxis: {
             type: 'category',
@@ -93,7 +129,10 @@ export function getStockLine() {
             trigger: 'axis'
         },
         legend: {
-            data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
+            data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine'],
+            itemStyle: {
+                color: 'var(--color-text-1)'
+            }
         },
         grid: {
             left: '3%',
@@ -155,6 +194,18 @@ export function getStyleLine() {
             text: "听雨图编辑器",
             subtext: "使用echarts实现听雨图编辑器",
             left: "center"
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        legend: {
+            textStyle: {
+                color: 'white'
+            },
+            bottom: '20',
         },
         xAxis: {
             type: 'category',

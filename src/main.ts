@@ -5,7 +5,6 @@ import ArcoVue from '@arco-design/web-vue';
 import { createPinia } from 'pinia';
 import App from './App.vue'
 import router from './plugin/router';
-import { statistics } from './global/BeanFactory';
 
 
 // 样式
@@ -56,4 +55,6 @@ createApp(App)
     .use(router)
     .mount('#app');
 
+import { statistics } from './global/BeanFactory';
+statistics.init();
 statistics.open();

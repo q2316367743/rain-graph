@@ -17,6 +17,16 @@ export interface DbReturn {
     message?: string
 }
 
+function generateUUID(): string {
+    var d = new Date().getTime();
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = (d + Math.random() * 16) % 16 | 0;
+        d = Math.floor(d / 16);
+        return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+    return uuid;
+};
+
 export const utools = {
     db: {
         promises: {
@@ -130,7 +140,21 @@ export const utools = {
         MessageUtil.warning("web环境不支持打开文件操作，请使用utools版本");
         return [];
     },
-    fetchUserPayments(): Promise<any[]>{
+    fetchUserPayments(): Promise<any[]> {
         return Promise.resolve([]);
+    },
+    getUser() {
+        return { avatar: "", nickname: "web用户", type: "" };
+    },
+    fetchUserServerTemporaryToken(): Promise<{ token: string, expiredAt: number }> {
+        let token = localStorage.getItem("token");
+        if (!token) {
+            token = generateUUID();
+            localStorage.setItem("token", token);
+        }
+        return Promise.resolve({
+            token,
+            expiredAt: 999999999
+        })
     }
 }

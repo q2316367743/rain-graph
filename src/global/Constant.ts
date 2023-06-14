@@ -8,5 +8,5 @@ export default {
     repo: 'https://gitee.com/qiaoshengda/rain-graph',
     online: 'https://rain-graph.netlify.app/',
     goodsId: 'zk3LWEdkL0OLeAGKfYVko1b2xmypphg3',
-    statistics: "http://127.0.0.1:3000/statistics"
+    statistics: "http://127.0.0.1:3000/statistics/rain-graph"
 }

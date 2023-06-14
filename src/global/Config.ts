@@ -1,6 +1,14 @@
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 
+function renderGraph(path: string, target: string, name: string): string {
+    if (path === target + '/0') {
+        return '新建' + name;
+    } else {
+        return '编辑' + name;
+    }
+}
+
 export default {
     // 导出
     export: {
@@ -39,5 +47,34 @@ export default {
     } as Record<GraphTypeEnum, {
         title: string;
         color: string;
-    }>
+    }>,
+    routeToTag(path: string): string {
+        switch (path) {
+            case '/home':
+                return '首页';
+            case '/setting':
+                return '设置';
+            case '/recommend':
+                return '推荐';
+            case '/about':
+                return '关于';
+            case '/draw/drauu':
+                return '使用画板';
+            case '/draw/echarts':
+                return '使用可视化图表'
+        }
+        if (path.startsWith("/graph/")) {
+            path = path.substring(7);
+            if (path.startsWith("mind")) {
+                return renderGraph(path, 'mind', '简易思维导图');
+            } else if (path.startsWith("simple-mind-map")) {
+                return renderGraph(path, 'simple-mind-map', '完整思维导图');
+            } else if (path.startsWith("diagram")) {
+                return renderGraph(path, 'diagram', '流程图');
+            } else if (path.startsWith("white-board")) {
+                return renderGraph(path, 'white-board', '白板');
+            }
+        }
+        return '未知';
+    }
 }

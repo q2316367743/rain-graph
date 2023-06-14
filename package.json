@@ -16,6 +16,7 @@
         "@logicflow/extension": "^1.2.7",
         "@mind-elixir/export-html": "^2.0.0",
         "@vueuse/core": "^9.13.0",
+        "axios": "^1.4.0",
         "codemirror": "^6.0.1",
         "drauu": "^0.3.2",
         "echarts": "^5.4.2",

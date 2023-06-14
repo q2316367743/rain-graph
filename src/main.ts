@@ -5,6 +5,7 @@ import ArcoVue from '@arco-design/web-vue';
 import { createPinia } from 'pinia';
 import App from './App.vue'
 import router from './plugin/router';
+import { statistics } from './global/BeanFactory';
 
 
 // 样式
@@ -23,9 +24,9 @@ import Select from 'simple-mind-map/src/Select.js'
 import AssociativeLine from 'simple-mind-map/src/AssociativeLine.js'
 // 注册插件
 MindMap.usePlugin(Export)
-//     .usePlugin(Watermark)
+    //     .usePlugin(Watermark)
     .usePlugin(Drag)
-//     .usePlugin(KeyboardNavigation)
+    //     .usePlugin(KeyboardNavigation)
     .usePlugin(Select)
     .usePlugin(MiniMap)
     .usePlugin(AssociativeLine)
@@ -33,7 +34,7 @@ MindMap.usePlugin(Export)
 
 // utools
 import { utools } from './plugin/utools';
-import {preload, api} from './plugin/preload';
+import { preload, api } from './plugin/preload';
 window.rain = {
     env: window.utools ? 'utools' : 'web'
 }
@@ -53,4 +54,6 @@ createApp(App)
     .use(ArcoVueIcon)
     .use(createPinia())
     .use(router)
-    .mount('#app')
+    .mount('#app');
+
+statistics.open();

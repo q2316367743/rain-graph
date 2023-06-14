@@ -7,5 +7,9 @@ export default {
     homepage: 'https://www.yuque.com/baozhiyige-tewwf/khg2sx/tbrfl0e57la92gm2',
     repo: 'https://gitee.com/qiaoshengda/rain-graph',
     online: 'https://rain-graph.netlify.app/',
-    goodsId: 'zk3LWEdkL0OLeAGKfYVko1b2xmypphg3'
+    goodsId: 'zk3LWEdkL0OLeAGKfYVko1b2xmypphg3',
+    seatable: {
+        url: '',
+        token: ''
+    }
 }

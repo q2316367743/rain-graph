@@ -67,7 +67,7 @@
 import { mapState } from "pinia";
 import { defineComponent } from "vue";
 
-import { useMapEvent, useSaveEvent, useSideEvent, useUndoEvent } from "@/global/BeanFactory";
+import { statistics, useMapEvent, useSaveEvent, useSideEvent, useUndoEvent } from "@/global/BeanFactory";
 import Config from '@/global/Config'
 
 import { useVipStore } from "./store/VipStore";
@@ -112,6 +112,7 @@ export default defineComponent({
         '$route.path': {
             handler(newValue) {
                 this.selectedKeys = [newValue];
+                statistics.access(Config.routeToTag(newValue));
             }
         }
     },

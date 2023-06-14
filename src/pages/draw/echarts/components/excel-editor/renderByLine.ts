@@ -10,18 +10,6 @@ export function renderByLine(
     let headers = items[0].slice(1).filter(e => e !== '');
     // 表头
     return {
-        tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-                type: 'shadow'
-            },
-        },
-        legend: {
-            textStyle: {
-                color: '#333'
-            },
-            bottom: '20',
-        },
         xAxis: {
             "type": "category",
             "data": headers
@@ -40,7 +28,8 @@ export function renderByLine(
                         show: setting.labelShow,
                         position: "top",
                         distance: 10
-                    }
+                    },
+                    smooth: setting.smooth
                 }
             })
     }

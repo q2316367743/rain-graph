@@ -7,4 +7,14 @@ export default interface EchartsBase {
 
     subtitle: string;
 
+    /**
+     * 标签是否显示
+     */
+    tooltipShow: boolean;
+
+    /**
+     * 图例是否显示
+     */
+    legendShow: boolean;
+
 }

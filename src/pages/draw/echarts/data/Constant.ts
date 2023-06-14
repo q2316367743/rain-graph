@@ -48,13 +48,16 @@ export function getDefaultData(): Handsontable.GridSettings {
 export function getDefaultBaseSetting(): EchartsBaseSetting {
     return {
         title: '',
-        subtitle: ''
+        subtitle: '',
+        tooltipShow: true,
+        legendShow: true
     }
 }
 
 export function getDefaultDataSetting(): EchartsDataSetting {
     return {
         labelShow: false,
-        type: 'line'
+        type: 'line',
+        smooth: false
     }
 }

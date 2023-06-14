@@ -30,4 +30,15 @@ export function renderBaseSetting(baseSetting: BaseSetting, option: any) {
         subtext: baseSetting.subtitle,
         left: "center"
     }
+    option['tooltip'] = {
+        trigger: 'axis',
+        show: baseSetting.tooltipShow,
+        axisPointer: {
+            type: 'shadow'
+        },
+    }
+    option['legend'] = {
+        show: baseSetting.legendShow,
+        bottom: '20',
+    }
 }

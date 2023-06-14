@@ -89,6 +89,7 @@ export default defineComponent({
             this.drawEcharts();
         },
         drawEcharts() {
+            console.log(this.option)
             this.myChart.clear();
             this.myChart.setOption(this.option)
         },

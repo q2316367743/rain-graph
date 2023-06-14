@@ -10,7 +10,7 @@
         <!-- 表格 -->
         <hot-table :width="containerWidth" :height="containerHeight" :settings="hotSettings"
             v-show="activeKey === 'data'" />
-        <!-- 更多信心 -->
+        <!-- 设置 -->
         <a-form :model="setting" layout="horizontal" auto-label-width v-show="activeKey === 'setting'">
             <a-form-item label="类型">
                 <a-radio-group v-model="setting.type">
@@ -20,6 +20,10 @@
             </a-form-item>
             <a-form-item label="数值显示">
                 <a-switch v-model="setting.labelShow" />
+            </a-form-item>
+            <a-form-item label="是否平滑">
+                <a-switch v-model="setting.smooth" :disabled="!setting.type.startsWith('line')" />
+                <template #help>只有折线图有效</template>
             </a-form-item>
         </a-form>
     </a-modal>

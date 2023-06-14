@@ -15,4 +15,9 @@ export default interface EchartsDataSetting{
      */
     type: EchartsTypeEnum;
 
+    /**
+     * 线是否平滑
+     */
+    smooth: boolean;
+
 }

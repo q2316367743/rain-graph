@@ -1,48 +1,19 @@
 <template>
     <div class="echarts">
+        <!-- 顶部菜单栏 -->
         <div class="header">
             <a-button-group type="text">
-                <a-dropdown>
-                    <a-button>例子</a-button>
-                    <template #content>
-                        <a-dgroup title="折线图">
-                            <a-doption @click="drawInitEcharts('line')">基础折线图</a-doption>
-                            <a-doption @click="drawInitEcharts('line-smooth')">平滑折线图</a-doption>
-                            <a-doption @click="drawInitEcharts('line-area')">面积图</a-doption>
-                            <a-doption @click="drawInitEcharts('line-stock')">折线图堆叠</a-doption>
-                            <a-doption @click="drawInitEcharts('line-style')">自定义样式</a-doption>
-                        </a-dgroup>
-                        <a-dgroup title="柱状图">
-                            <a-doption @click="drawInitEcharts('bar')">基础柱状图</a-doption>
-                        </a-dgroup>
-                    </template>
-                </a-dropdown>
-                <a-dropdown>
-                    <a-button>编辑</a-button>
-                    <template #content>
-                        <a-doption @click="openJsonDialog">JSON</a-doption>
-                        <a-doption @click="openExcelDialog">可视化</a-doption>
-                    </template>
-                </a-dropdown>
-                <a-dropdown>
-                    <a-button>操作</a-button>
-                    <template #content>
-                        <a-doption @click="drawEcharts">刷新</a-doption>
-                        <a-doption @click="openSettingDrawer">设置</a-doption>
-                    </template>
-                </a-dropdown>
-                <a-dropdown>
-                    <a-button>导出</a-button>
-                    <template #content>
-                        <a-doption @click="exportForJson">JSON</a-doption>
-                        <a-doption @click="exportForPng">PNG</a-doption>
-                    </template>
-                </a-dropdown>
+                <menu-example @draw-init-echarts="drawInitEcharts" />
+                <menu-edit @json="openJsonDialog" @excel="openExcelDialog" />
+                <menu-operation @refresh="drawEcharts" @setting="openSettingDrawer" />
+                <menu-export @json="exportForJson" @png="exportForPng" />
             </a-button-group>
         </div>
+        <!-- 显示容器 -->
         <div class="container">
             <div id="echarts-view" :style="{ height, width }"></div>
         </div>
+        <!-- 对话框 -->
         <draw-json-editor v-model:visible="dialog.json" @render="render" />
         <draw-echarts-editor v-model:visible="dialog.excel" @render="render" />
         <draw-setting v-model:visible="dialog.setting" v-model:base-setting="baseSetting" @render="renderSetting" />
@@ -57,13 +28,21 @@ import { getExample, exportForJson, exportForPng, renderBaseSetting } from "./al
 import { getDefaultBaseSetting } from "./data/Constant";
 import EchartsTypeEnum from "./enumeration/EchartsTypeEnum";
 
+import MenuExample from "./components/menu/menu-example.vue";
+import MenuEdit from "./components/menu/menu-edit.vue";
+import MenuOperation from "./components/menu/menu-operation.vue";
+import MenuExport from "./components/menu/menu-export.vue";
+
 import DrawEchartsEditor from "./components/excel-editor/index.vue";
 import DrawJsonEditor from "./components/json-editor/index.vue";
 import DrawSetting from "./components/setting/index.vue";
 
 export default defineComponent({
     name: 'echarts',
-    components: { DrawJsonEditor, DrawEchartsEditor, DrawSetting },
+    components: {
+        MenuExample, MenuEdit, MenuOperation, MenuExport,
+        DrawJsonEditor, DrawEchartsEditor, DrawSetting
+    },
     data: () => ({
         type: 'line' as EchartsTypeEnum,
         config: {

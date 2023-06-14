@@ -28,7 +28,7 @@
                     <a-button>操作</a-button>
                     <template #content>
                         <a-doption @click="drawEcharts">刷新</a-doption>
-                        <a-doption disable>设置</a-doption>
+                        <a-doption @click="openSettingDrawer">设置</a-doption>
                     </template>
                 </a-dropdown>
                 <a-dropdown>
@@ -43,30 +43,27 @@
         <div class="container">
             <div id="echarts-view" :style="{ height, width }"></div>
         </div>
-        <a-modal v-model:visible="json.dialog" title="JSON编辑器" ok-text="渲染" fullscreen popup-container=".echarts"
-            :render-to-body="false" @ok="renderJson">
-            <codemirror v-model="json.record" autofocus auto-destroy :extensions="extensions"
-                style="width: 100%;height: 100%;" />
-        </a-modal>
-        <draw-echarts-excel v-model:visible="excel.dialog" @render="renderExcel" />
+        <draw-json-editor v-model:visible="dialog.json" @render="render" />
+        <draw-echarts-editor v-model:visible="dialog.excel" @render="render" />
+        <draw-setting v-model:visible="dialog.setting" v-model:base-setting="baseSetting" @render="renderSetting" />
     </div>
 </template>
 <script lang="ts">
 import { defineComponent, markRaw } from "vue";
 import { init, EChartsType } from 'echarts';
 import { mapState } from "pinia";
-import { Codemirror } from 'vue-codemirror';
-import { json } from '@codemirror/lang-json';
 import { useGlobalStore } from "@/store/GlobalStore";
-import MessageUtil from "@/utils/MessageUtil";
-import { getExample, exportForJson, exportForPng } from "./algorithm";
+import { getExample, exportForJson, exportForPng, renderBaseSetting } from "./algorithm";
+import { getDefaultBaseSetting } from "./data/Constant";
 import EchartsTypeEnum from "./enumeration/EchartsTypeEnum";
 
-import DrawEchartsExcel from "./components/ExcelEditor.vue";
+import DrawEchartsEditor from "./components/excel-editor/index.vue";
+import DrawJsonEditor from "./components/json-editor/index.vue";
+import DrawSetting from "./components/setting/index.vue";
 
 export default defineComponent({
     name: 'echarts',
-    components: { Codemirror, DrawEchartsExcel },
+    components: { DrawJsonEditor, DrawEchartsEditor, DrawSetting },
     data: () => ({
         type: 'line' as EchartsTypeEnum,
         config: {
@@ -75,14 +72,11 @@ export default defineComponent({
         },
         option: {},
         myChart: markRaw({}) as EChartsType,
-        extensions: markRaw([json()]) as any[],
-        json: {
-            dialog: false,
-            record: ''
-        },
-        excel: {
-            dialog: false,
-            record: []
+        baseSetting: getDefaultBaseSetting(),
+        dialog: {
+            json: false,
+            excel: false,
+            setting: false
         }
     }),
     computed: {
@@ -123,30 +117,21 @@ export default defineComponent({
             this.myChart.resize();
         },
         openJsonDialog() {
-            this.json = {
-                dialog: true,
-                record: JSON.stringify(this.option, null, 4)
-            };
+            this.dialog.json = true;
         },
         openExcelDialog() {
-            this.excel = {
-                dialog: true,
-                record: []
-            }
+            this.dialog.excel = true;
         },
-        renderJson() {
-            try {
-                let option = JSON.parse(this.json.record);
-                this.option = option;
-                this.drawEcharts();
-            } catch (e) {
-                MessageUtil.error("渲染异常", e);
-            } finally {
-                this.json.dialog = false;
-            }
+        openSettingDrawer() {
+            this.dialog.setting = true;
         },
-        renderExcel(option: any) {
+        render(option: any) {
             this.option = option;
+            renderBaseSetting(this.baseSetting, this.option)
+            this.drawEcharts();
+        },
+        renderSetting() {
+            renderBaseSetting(this.baseSetting, this.option)
             this.drawEcharts();
         },
         exportForJson() {
@@ -168,6 +153,8 @@ export default defineComponent({
         position: relative;
         height: 32px;
         border-bottom: 1px solid var(--color-neutral-3);
+        display: flex;
+        justify-content: space-between;
     }
 
     .container {

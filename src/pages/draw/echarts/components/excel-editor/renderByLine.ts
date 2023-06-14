@@ -1,9 +1,7 @@
-import EchartsBase from "../domain/EchartsBase";
-import EchartsSetting from "../domain/EchartsSetting";
+import EchartsDataSetting from "../../domain/EchartsDataSetting";
 
 export function renderByLine(
-    base: EchartsBase,
-    setting: EchartsSetting,
+    setting: EchartsDataSetting,
     items: any[][]
 ): any | null {
     if (items.length === 0) {
@@ -12,11 +10,6 @@ export function renderByLine(
     let headers = items[0].slice(1).filter(e => e !== '');
     // 表头
     return {
-        title: {
-            text: base.title,
-            subtext: base.subtitle,
-            left: "center"
-        },
         tooltip: {
             trigger: 'axis',
             axisPointer: {
@@ -25,7 +18,7 @@ export function renderByLine(
         },
         legend: {
             textStyle: {
-                color: 'white'
+                color: '#333'
             },
             bottom: '20',
         },
@@ -41,7 +34,7 @@ export function renderByLine(
             .map(e => {
                 return {
                     data: e.splice(1, headers.length),
-                    type: base.type,
+                    type: setting.type,
                     name: e[0],
                     label: {
                         show: setting.labelShow,

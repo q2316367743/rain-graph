@@ -1,7 +1,6 @@
 import Handsontable from 'handsontable';
-import EchartsBase from '../domain/EchartsBase';
-import EchartsTypeEnum from '../enumeration/EchartsTypeEnum';
-import EchartsSetting from '../domain/EchartsSetting';
+import EchartsBaseSetting from '../domain/EchartsBaseSetting';
+import EchartsDataSetting from '../domain/EchartsDataSetting';
 
 export function getDefaultData(): Handsontable.GridSettings {
     return {
@@ -46,16 +45,16 @@ export function getDefaultData(): Handsontable.GridSettings {
     };
 }
 
-export function getDefaultBase(): EchartsBase {
+export function getDefaultBaseSetting(): EchartsBaseSetting {
     return {
         title: '',
-        subtitle: '',
-        type: 'line' as EchartsTypeEnum
+        subtitle: ''
     }
 }
 
-export function getDefaultSetting(): EchartsSetting {
+export function getDefaultDataSetting(): EchartsDataSetting {
     return {
-        labelShow: false
+        labelShow: false,
+        type: 'line'
     }
 }

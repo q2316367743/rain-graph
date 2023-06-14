@@ -1,4 +1,5 @@
 import EchartsTypeEnum from "../enumeration/EchartsTypeEnum";
+import BaseSetting from '../domain/EchartsBaseSetting'
 import * as exampleForLine from './exampleForLine';
 import * as exampleForBar from './exampleForBar';
 
@@ -20,5 +21,13 @@ export function getExample(type: EchartsTypeEnum): any {
             return exampleForBar.getBaseBar();
         default:
             return exampleForLine.getBaseLine();
+    }
+}
+
+export function renderBaseSetting(baseSetting: BaseSetting, option: any) {
+    option["title"] = {
+        text: baseSetting.title,
+        subtext: baseSetting.subtitle,
+        left: "center"
     }
 }

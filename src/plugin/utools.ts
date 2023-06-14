@@ -156,5 +156,8 @@ export const utools = {
             token,
             expiredAt: 999999999
         })
+    },
+    isDev(): boolean {
+        return false;
     }
 }

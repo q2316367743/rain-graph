@@ -22,7 +22,9 @@ enum LocalNameEnum {
 
     // ------ 全局变量 ------
 
-    VERSION = '/global/version'
+    VERSION = '/global/version',
+
+    PRIVACY = '/global/privacy'
 
 }
 

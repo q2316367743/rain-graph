@@ -1,3 +1,4 @@
+import LocalNameEnum from '@/enumeration/LocalNameEnum';
 import Constant from '@/global/Constant';
 import axios from 'axios';
 
@@ -30,6 +31,15 @@ export default class Statistics {
      * @param tag 标签
      */
     async access(tag: string) {
+        if(utools.isDev()) {
+            return;
+        }
+        let privacy = await utools.db.promises.get(LocalNameEnum.PRIVACY);
+        if (privacy) {
+            if (!privacy.value) {
+                return;
+            }
+        }
         let now = new Date();
         console.debug("访问：" + tag);
         if (this.token === '') {

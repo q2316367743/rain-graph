@@ -5,8 +5,7 @@
                 <a-button>文件</a-button>
                 <template #content>
                     <a-doption @click="toHome">返回文件列表</a-doption>
-                    <a-doption @click="$emit('new')" disabled>新建</a-doption>
-                    <a-doption @click="$emit('open')" disabled>打开</a-doption>
+                    <a-doption @click="open">打开</a-doption>
                     <a-doption @click="$emit('save')">保存</a-doption>
                     <a-doption @click="saveAs">另存为</a-doption>
                 </template>
@@ -101,19 +100,21 @@
 <script lang="ts">
 import { defineComponent, toRaw } from "vue";
 import { mapState } from "pinia";
-import { useFullscreen } from "@vueuse/core";
+import { useFileSystemAccess, useFullscreen } from "@vueuse/core";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import { download } from "@/utils/BrowserUtil";
 import { useGlobalStore } from "@/store/GlobalStore";
 import { useMapEvent } from "@/global/BeanFactory";
+import MessageUtil from "@/utils/MessageUtil";
+import LogicFlow from "@logicflow/core";
 
 export default defineComponent({
     name: 'diagram-menu',
     emits: ['update:panel-show', 'new', 'open', 'save', 'show-mini-map', 'update-readonly'],
     props: {
         lf: {
-            type: Object,
+            type: LogicFlow,
             required: false,
             default: {}
         },
@@ -135,6 +136,15 @@ export default defineComponent({
         display: {
             miniMap: false
         },
+        fileSystem: useFileSystemAccess({
+            dataType: 'Text',
+            types: [{
+                description: 'json',
+                accept: {
+                    'application/json': ['.json'],
+                },
+            }]
+        })
     }),
     computed: {
         ...mapState(useGlobalStore, ['size', 'title']),
@@ -218,6 +228,26 @@ export default defineComponent({
         unSelectAll() {
             this.lf.clearSelectElements();
         },
+        open() {
+            let res = this.fileSystem.open() as Promise<void>;
+            res.then(() => {
+                let content = this.fileSystem.data || '';
+                try {
+                    let json = JSON.parse(content);
+                    let config = json['config'];
+                    let data = json['record'];
+                    this.lf.updateEditConfig(config);
+                    this.lf.renderRawData(data);
+                } catch (e) {
+                    MessageUtil.error("文件解析失败", e);
+                }
+            }).catch(e => {
+                if (e.name === 'AbortError') {
+                    return;
+                }
+                MessageUtil.error("打开失败", e)
+            });
+        }
     }
 });
 </script>

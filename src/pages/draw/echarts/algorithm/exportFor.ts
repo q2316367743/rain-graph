@@ -1,9 +1,9 @@
 import { EChartsType } from 'echarts';
-import BrowserUtil from "@/utils/BrowserUtil";
+import { download } from "@/utils/BrowserUtil";
 import MessageUtil from '@/utils/MessageUtil';
 
 export function exportForJson(option: any) {
-    BrowserUtil.download(
+    download(
         JSON.stringify(option, null, 4),
         '图表.json',
         'application/json');

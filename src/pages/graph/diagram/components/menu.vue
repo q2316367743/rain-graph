@@ -104,7 +104,7 @@ import { mapState } from "pinia";
 import { useFullscreen } from "@vueuse/core";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
-import BrowserUtil from "@/utils/BrowserUtil";
+import { download } from "@/utils/BrowserUtil";
 import { useGlobalStore } from "@/store/GlobalStore";
 import { useMapEvent } from "@/global/BeanFactory";
 
@@ -168,7 +168,7 @@ export default defineComponent({
         },
         onExport(type: ExportTypeEnum) {
             if (type === ExportTypeEnum.JSON) {
-                BrowserUtil.download(JSON.stringify({
+                download(JSON.stringify({
                     config: toRaw(this.config),
                     record: this.lf.getGraphRawData()
                 }), this.title + '.json', 'text/json');
@@ -176,11 +176,11 @@ export default defineComponent({
                 this.lf.extension.snapshot.lf.getSnapshot(this.title + '.png');
             } else if (type === ExportTypeEnum.XML) {
                 const data = this.lf.getGraphData() as string;
-                BrowserUtil.download(data, this.title + '.xml', 'text/xml');
+                download(data, this.title + '.xml', 'text/xml');
             }
         },
         saveAs() {
-            BrowserUtil.download(JSON.stringify({
+            download(JSON.stringify({
                 config: toRaw(this.config),
                 record: this.lf.getGraphRawData()
             }), this.title + '.json', 'text/json');

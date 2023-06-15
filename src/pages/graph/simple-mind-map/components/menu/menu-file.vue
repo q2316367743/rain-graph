@@ -34,7 +34,7 @@ export default defineComponent({
             types: [{
                 description: 'json',
                 accept: {
-                    'application/json': ['.json', '.ssm'],
+                    'application/json': ['.json'],
                 },
             }]
         })

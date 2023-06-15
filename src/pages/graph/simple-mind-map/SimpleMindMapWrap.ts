@@ -1,6 +1,6 @@
 import { SimpleMindMapConfig } from "./domain/SimpleMindMapConfig";
 import MindMap from "simple-mind-map";
-import BrowserUtil from "@/utils/BrowserUtil";
+import { download } from "@/utils/BrowserUtil";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import { useSimpleMindMapStore } from "@/store/graph/SimpleMindMapStore";
 
@@ -182,7 +182,7 @@ export default class SimpleMindMapWrap {
     }
 
     saveAs(title: string) {
-        BrowserUtil.download(JSON.stringify({
+        download(JSON.stringify({
             config: this.config,
             record: this.mindMap.getData(false)
         }), title + '.json', 'text/json');

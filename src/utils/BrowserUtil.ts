@@ -1,29 +1,23 @@
 import MessageUtil from "@/utils/MessageUtil";
 
-export default {
-
-
-    /**
-     * 下载
-     * @param data 内容
-     * @param fileName 文件名
-     * @param mineType 文件类型
-     */
-    download(data: string | ArrayBuffer | Blob, fileName: string, mineType: string) {
-        // 创建 blob
-        let blob = data instanceof Blob ? data : new Blob([data], { type: mineType });
-        // 创建 href 超链接，点击进行下载
-        window.URL = window.URL || window.webkitURL;
-        let href = URL.createObjectURL(blob);
-        let downA = document.createElement("a");
-        downA.href = href;
-        downA.download = fileName;
-        downA.click();
-        // 销毁超连接
-        window.URL.revokeObjectURL(href);
-    },
-
-
+/**
+ * 下载
+ * @param data 内容
+ * @param fileName 文件名
+ * @param mineType 文件类型
+ */
+export function download(data: string | ArrayBuffer | Blob, fileName: string, mineType: string) {
+    // 创建 blob
+    let blob = data instanceof Blob ? data : new Blob([data], { type: mineType });
+    // 创建 href 超链接，点击进行下载
+    window.URL = window.URL || window.webkitURL;
+    let href = URL.createObjectURL(blob);
+    let downA = document.createElement("a");
+    downA.href = href;
+    downA.download = fileName;
+    downA.click();
+    // 销毁超连接
+    window.URL.revokeObjectURL(href);
 }
 
 /**

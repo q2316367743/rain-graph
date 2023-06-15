@@ -6,8 +6,7 @@
                     <a-button>文件</a-button>
                     <template #content>
                         <a-doption @click="toHome">返回列表</a-doption>
-                        <a-doption disabled>新建</a-doption>
-                        <a-doption disabled>打开</a-doption>
+                        <a-doption @click="open">打开</a-doption>
                         <a-doption @click="save(true)">保存</a-doption>
                         <a-doption @click="saveAs">另存为</a-doption>
                     </template>
@@ -125,7 +124,8 @@ import { useWhiteBoardStore } from "@/store/graph/WhiteBoardStore";
 import { useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
 import MessageUtil from "@/utils/MessageUtil";
 import { getRecord } from '@/utils/utools/DbUtil';
-import { useFullscreen } from "@vueuse/core";
+import { useFileSystemAccess, useFullscreen } from "@vueuse/core";
+import { download } from "@/utils/BrowserUtil";
 
 let first = true;
 
@@ -183,10 +183,19 @@ export default defineComponent({
         },
 
         // 全屏
-        fullscreen: useFullscreen()
+        fullscreen: useFullscreen(),
+        fileSystem: useFileSystemAccess({
+            dataType: 'Text',
+            types: [{
+                description: 'json',
+                accept: {
+                    'application/json': ['.json'],
+                },
+            }]
+        })
     }),
     computed: {
-        ...mapState(useGlobalStore, ['size', 'width', 'isDark']),
+        ...mapState(useGlobalStore, ['size', 'width', 'isDark', 'title']),
         _id() {
             return `/${GraphTypeEnum.WHITE_BOARD}/${this.id}`;
         },
@@ -402,7 +411,32 @@ export default defineComponent({
                     }).catch(e => MessageUtil.error("保存失败", e));
                 }).catch(e => MessageUtil.error("保存失败", e));
         },
-        saveAs() { },
+        saveAs() {
+            download(JSON.stringify({
+                config: toRaw(this.config),
+                record: this.app.getData()
+            }), this.title + ".json", "application/json")
+        },
+        open() {
+            let res = this.fileSystem.open() as Promise<void>;
+            res.then(() => {
+                let content = this.fileSystem.data || '';
+                try {
+                    let json = JSON.parse(content);
+                    let config = json['config'];
+                    let data = json['record'];
+                    this.app.updateState(config);
+                    this.app.setData(data);
+                } catch (e) {
+                    MessageUtil.error("文件解析失败", e);
+                }
+            }).catch(e => {
+                if (e.name === 'AbortError') {
+                    return;
+                }
+                MessageUtil.error("打开失败", e)
+            });
+        }
     }
 });
 </script>

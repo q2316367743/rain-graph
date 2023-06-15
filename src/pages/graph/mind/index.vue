@@ -52,7 +52,7 @@ import MessageUtil from "@/utils/MessageUtil";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import { useGlobalStore } from "@/store/GlobalStore";
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
-import BrowserUtil from "@/utils/BrowserUtil";
+import { download } from "@/utils/BrowserUtil";
 import { getRecord } from "@/utils/utools/DbUtil";
 import { MindOption, getDefaultOption } from "./domain/MindOption";
 import MindElixirSetting from './components/setting.vue'
@@ -165,7 +165,7 @@ function open() {
 }
 
 function saveAs() {
-    BrowserUtil.download(JSON.stringify({
+    download(JSON.stringify({
         record: mind.getData(),
         option: option.value
     }, null, 4), useGlobalStore().title + '.json', 'application/json');
@@ -179,7 +179,7 @@ function toUndo() {
         return;
     }
     mind.undo();
-        save(false);
+    save(false);
 }
 
 function toHome() {
@@ -193,12 +193,12 @@ function toHome() {
 
 function exportData(type: any) {
     if (type === ExportTypeEnum.HTML) {
-        BrowserUtil.download(
+        download(
             data2Html(mind.getData()),
             useGlobalStore().title + ".html",
             'text/html')
     } else if (type === ExportTypeEnum.MD) {
-        BrowserUtil.download(
+        download(
             mind.getDataMd(),
             useGlobalStore().title + ".md",
             'text/html'

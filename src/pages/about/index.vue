@@ -42,6 +42,7 @@ import Constant from "@/global/Constant";
 import LocalNameEnum from "@/enumeration/LocalNameEnum";
 import MessageUtil from "@/utils/MessageUtil";
 import MessageBoxUtil from "@/utils/MessageBoxUtil";
+import { statistics } from "@/global/BeanFactory";
 
 export default defineComponent({
     name: '',
@@ -68,13 +69,14 @@ export default defineComponent({
                     }
                 })
         },
-        change(newValue: boolean) {
+        change(newValue: any) {
             if (!newValue) {
                 MessageBoxUtil.confirm("数据的收集有利于插件的更好发展，并且我们只收集您的功能使用情况，不会收集您的隐私数据，确认关闭？", "提示", {
                     confirmButtonText: "关闭",
                     cancelButtonText: "取消"
                 }).then(() => {
                     this.privacyLoading = true;
+                    statistics.access("关闭使用统计");
                     utools.db.promises.put({
                         _id: LocalNameEnum.PRIVACY,
                         _rev: this.rev,
@@ -88,6 +90,7 @@ export default defineComponent({
                 }).catch(() => this.privacy = true);
             } else {
                 this.privacyLoading = true;
+                    statistics.access("重新打开使用统计");
                 utools.db.promises.put({
                     _id: LocalNameEnum.PRIVACY,
                     _rev: this.rev,

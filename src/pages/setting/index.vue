@@ -3,7 +3,7 @@
         <div class="header">
             <a-tabs v-model:active-key="activeKey" hide-content>
                 <a-tab-pane title="全局设置" key="global"></a-tab-pane>
-                <a-tab-pane title="备份" key="backup"></a-tab-pane>
+                <a-tab-pane title="备份" key="backup" disabled></a-tab-pane>
                 <a-tab-pane title="简易思维导图" key="mind"></a-tab-pane>
                 <a-tab-pane title="完整思维导图" key="simple-mind-map"></a-tab-pane>
                 <a-tab-pane title="流程图" key="diagram"></a-tab-pane>

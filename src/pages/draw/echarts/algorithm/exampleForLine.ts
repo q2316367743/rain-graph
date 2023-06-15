@@ -3,7 +3,7 @@ export function getBaseLine() {
     return {
         "title": {
             "text": "听雨图编辑器",
-            "subtext": "使用echarts实现听雨图编辑器",
+            "subtext": "基础折线图",
             "left": "center"
         },
         tooltip: {
@@ -54,7 +54,7 @@ export function getSmoothLine() {
     return {
         title: {
             text: "听雨图编辑器",
-            subtext: "使用echarts实现听雨图编辑器",
+            subtext: "平滑折线图",
             left: "center"
         },
         tooltip: {
@@ -90,7 +90,7 @@ export function getAreaLine() {
     return {
         title: {
             text: "听雨图编辑器",
-            subtext: "使用echarts实现听雨图编辑器",
+            subtext: "面积图",
             left: "center"
         },
         tooltip: {

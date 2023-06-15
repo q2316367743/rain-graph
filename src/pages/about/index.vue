@@ -90,7 +90,6 @@ export default defineComponent({
                 }).catch(() => this.privacy = true);
             } else {
                 this.privacyLoading = true;
-                    statistics.access("重新打开使用统计");
                 utools.db.promises.put({
                     _id: LocalNameEnum.PRIVACY,
                     _rev: this.rev,
@@ -100,6 +99,7 @@ export default defineComponent({
                         MessageUtil.error("更新错误，请刷新后重试", res.message);
                     }
                     this.rev = res.rev;
+                    statistics.access("重新打开使用统计");
                 }).finally(() => this.privacyLoading = false);
             }
         }

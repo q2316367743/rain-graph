@@ -70,7 +70,6 @@ import { defineComponent } from "vue";
 import { statistics, useMapEvent, useSaveEvent, useSideEvent, useUndoEvent } from "@/global/BeanFactory";
 import Config from '@/global/Config'
 
-import { useVipStore } from "./store/VipStore";
 import { useGlobalStore } from "@/store/GlobalStore";
 import { useMindStore } from "@/store/graph/MindStore";
 import { useDiagramStore } from "@/store/graph/DiagramStore";
@@ -133,8 +132,6 @@ export default defineComponent({
         useSettingStore().init();
         useBackupSettingStore().init();
         useSimpleMindMapSettingStore().init();
-        // 初始化认证
-        useVipStore().init();
         // 插件进入事件
         utools.onPluginEnter(action => {
             if (action.code.startsWith('/graph')) {

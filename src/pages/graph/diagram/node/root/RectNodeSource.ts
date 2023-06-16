@@ -32,7 +32,7 @@ class ResizableRectView extends RectResize.view {
      */
     getResizeShape() {
         const { model } = this.props;
-        const { x, y, width, height, radius, properties } = model;
+        const { x, y, width, height, radius } = model;
         const style = model.getNodeStyle();
         return h("g", {}, [
             h("rect", {

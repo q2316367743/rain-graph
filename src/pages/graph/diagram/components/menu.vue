@@ -63,7 +63,7 @@
         </a-button-group>
         <div type="text">
             <!-- 锁定 -->
-            <a-button type="text" @click="$emit('update-readonly')" :status="readonly ? 'success' : 'normal'">
+            <a-button type="text" @click="$emit('update-readonly')" :status="readonly ? 'warning' : 'normal'">
                 <template #icon>
                     <icon-lock />
                 </template>

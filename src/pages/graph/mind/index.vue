@@ -36,7 +36,7 @@
                 </a-dropdown>
             </a-button-group>
             <a-button-group type="text">
-                <a-button @click="switchReadonly" :status="readonly ? 'success' : 'normal'">
+                <a-button @click="switchReadonly" :status="readonly ? 'warning' : 'normal'">
                     <template #icon><icon-lock /></template>
                 </a-button>
             </a-button-group>

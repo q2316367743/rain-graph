@@ -38,18 +38,17 @@
                     </template>
                 </a-dropdown>
             </a-button-group>
-            <a-button-group type="text">
-                <a-button @click="fullscreen.toggle()">
+            <div>
+                <a-button type="text" @click="config.readonly = !config.readonly" :status="config.readonly ? 'warning' : 'normal'">
+                    <template #icon><icon-lock /></template>
+                </a-button>
+                <a-button type="text" @click="fullscreen.toggle()">
                     <template #icon>
                         <icon-fullscreen-exit v-if="fullscreen.isFullscreen" />
                         <icon-fullscreen v-else />
                     </template>
                 </a-button>
-                <a-switch :model-value="config.readonly" type="round" style="margin: 4px 6px;" @change="changeReadonly">
-                    <template #checked>锁定</template>
-                    <template #unchecked>编辑</template>
-                </a-switch>
-            </a-button-group>
+            </div>
         </div>
         <a-layout class="container">
             <div id="white-board-view"></div>

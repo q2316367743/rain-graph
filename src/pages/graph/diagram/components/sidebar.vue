@@ -2,80 +2,8 @@
     <div class="diagram-sidebar">
         <a-collapse :bordered="false" :default-active-key="['1', '2', '3']">
             <a-collapse-item header="基础图形" key="1">
-                <div class="node-item" @mousedown="dragInNode('pro-circle')">
-                    <icon-circle class="svg-node" />
-                </div>
-                <div class="node-item" @mousedown="dragInNode('pro-rect')">
-                    <icon-rect class="svg-node" />
-                </div>
-                <div class="node-item" @mousedown="dragInNode('rect-radius')">
-                    <icon-rect-radius class="svg-node" />
-                </div>
-                <div class="node-item" @mousedown="dragInNode('triangle')">
-                    <icon-triangle class="svg-node" />
-                </div>
-                <div class="node-item" @mousedown="dragInNode('pro-ellipse')">
-                    <icon-ellipse class="svg-node" />
-                </div>
-                <div class="node-item" @mousedown="dragInNode('pro-diamond')">
-                    <icon-diamond class="svg-node" />
-                </div>
-                <div class="node-item" @mousedown="dragInNode('cylinde')">
-                    <icon-cylinde class="svg-node" />
-                </div>
-                <div class="node-item" @mousedown="dragInNode('actor')">
-                    <icon-actor class="svg-node" />
-                </div>
-                <div class="node-item" @mousedown="dragInNode('parallelogram')">
-                    <icon-parallelogram class="svg-node" />
-                </div>
-                <div class="node-item" @mousedown="dragInNode('pro-text')">
-                    <icon-text class="svg-node" />
-                </div>
-                <div class="node-item" @mousedown="dragInNode('left-arrow')">
-                    <icon-left-arrow class="svg-node" />
-                </div>
-                <div class="node-item" @mousedown="dragInNode('right-arrow')">
-                    <icon-right-arrow class="svg-node" />
-                </div>
-                <div class="node-item" @mousedown="dragInNode('horizontal-arrow')">
-                    <icon-horizontal-arrow class="svg-node" />
-                </div>
-                <div class="node-item" @mousedown="dragInNode('up-arrow')">
-                    <icon-up-arrow class="svg-node" />
-                </div>
-                <div class="node-item" @mousedown="dragInNode('down-arrow')">
-                    <icon-down-arrow class="svg-node" />
-                </div>
-                <div class="node-item" @mousedown="dragInNode('vertical-arrow')">
-                    <icon-vertical-arrow class="svg-node" />
-                </div>
-                <div class="node-item" @mousedown="dragInNode('pentagon')">
-                    <icon-pentagon class="svg-node" />
-                </div>
-                <div class="node-item" @mousedown="dragInNode('hexagon')">
-                    <icon-hexagon class="svg-node" />
-                </div>
-                <div class="node-item" @mousedown="dragInNode('septagon')">
-                    <icon-septagon class="svg-node" />
-                </div>
-                <div class="node-item" @mousedown="dragInNode('heptagon')">
-                    <icon-heptagon class="svg-node" />
-                </div>
-                <div class="node-item" @mousedown="dragInNode('trapezoid')">
-                    <icon-trapezoid class="svg-node" />
-                </div>
-                <div class="node-item" @mousedown="dragInNode('cross')">
-                    <icon-cross class="svg-node" />
-                </div>
-                <div class="node-item" @mousedown="dragInNode('minus')">
-                    <icon-minus class="svg-node" />
-                </div>
-                <div class="node-item" @mousedown="dragInNode('times')">
-                    <icon-times class="svg-node" />
-                </div>
-                <div class="node-item" @mousedown="dragInNode('divide')">
-                    <icon-divide class="svg-node" />
+                <div v-for="node in BasicNodes" class="node-item" @mousedown="dragInNode(node.name)">
+                    <component :is="node.icon" class="svg-node" />
                 </div>
             </a-collapse-item>
             <a-collapse-item header="图片" key="2">
@@ -121,9 +49,14 @@ import IconMinus from '../icon/Minus.vue'
 import IconTimes from '../icon/Times.vue'
 import IconDivide from '../icon/Divide.vue'
 
+import { BasicNodes } from '../node';
+
 export default defineComponent({
     name: 'DiagramSidebar',
     emits: ['dragInNode'],
+    data: () => ({
+        BasicNodes
+    }),
     methods: {
         dragInNode(type: any) {
             this.$emit('dragInNode', type)

@@ -81,3 +81,4 @@ export const registerCustomElement = (lf: LogicFlow) => {
   lf.register(Bezier)
 }
 
+export * from './data/basic';

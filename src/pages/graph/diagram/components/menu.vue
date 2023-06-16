@@ -107,14 +107,13 @@ import { download } from "@/utils/BrowserUtil";
 import { useGlobalStore } from "@/store/GlobalStore";
 import { useMapEvent } from "@/global/BeanFactory";
 import MessageUtil from "@/utils/MessageUtil";
-import LogicFlow from "@logicflow/core";
 
 export default defineComponent({
     name: 'diagram-menu',
     emits: ['update:panel-show', 'new', 'open', 'save', 'show-mini-map', 'update-readonly'],
     props: {
         lf: {
-            type: LogicFlow,
+            type: Object,
             required: false,
             default: {}
         },

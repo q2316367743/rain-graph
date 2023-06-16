@@ -1,6 +1,8 @@
 enum LocalNameEnum {
 
+    // =====================
     // ------ 本地存储 ------
+    // =====================
 
     MIND = '/local/mind',
 
@@ -10,7 +12,21 @@ enum LocalNameEnum {
 
     WHITE_BOARD = '/local/white-board',
 
+    // =====================
+    // ------ 模板管理 ------
+    // =====================
+
+    TEMPLATE_MIND = '/template/mind',
+    
+    TEMPLATE_SIMPLE_MIND_MAP = '/template/simple-mind-map',
+    
+    TEMPLATE_DIAGRAM = '/template/diagram',
+    
+    TEMPLATE_WHITE_BOARD = '/template/white-board',
+
+    // =====================
     // ------ 设置 ------
+    // =====================
 
     SETTING_BASE = '/setting/base',
 
@@ -20,7 +36,9 @@ enum LocalNameEnum {
 
     SETTING_BACKUP = '/setting/backup',
 
+    // =====================
     // ------ 全局变量 ------
+    // =====================
 
     VERSION = '/global/version',
 

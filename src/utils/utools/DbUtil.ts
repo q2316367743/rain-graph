@@ -1,6 +1,7 @@
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
+import MessageBoxUtil from "../MessageBoxUtil";
 
-export interface StoreRecord {
+export interface StoreRecordCore {
 
     /**
      * 记录
@@ -16,6 +17,20 @@ export interface StoreRecord {
      * 操作设置
      */
     option?: any;
+
+}
+
+export interface StoreRecordIndex {
+
+    id: string;
+
+    name: string;
+
+    createTime: Date | string;
+
+}
+
+export interface StoreRecord extends StoreRecordCore {
 
     /**
      * ID
@@ -94,4 +109,90 @@ export async function getRecord(type: GraphTypeEnum, id: string, path: string = 
             message: ""
         });
     }
+}
+
+export async function saveTemplate(type: GraphTypeEnum, record: StoreRecordCore) {
+    const name = await MessageBoxUtil.prompt("请输入模板名称", "保存模板", {});
+    // 插入记录
+    const now = new Date();
+    const id = now.getTime() + '';
+    let recordId = `/${type}/${id}`
+    const recordRes = await utools.db.promises.put({
+        _id: recordId,
+        value: record
+    });
+    if (recordRes.error) {
+        return Promise.reject('保存记录，' + (recordRes.message || "保存模板失败"))
+    }
+    // 更新模板索引
+    let templates = new Array<StoreRecordIndex>();
+    let _rev = undefined as string | undefined;
+    let key = '/template/' + type;
+    let templateWrap = await utools.db.promises.get(key);
+    if (templateWrap) {
+        _rev = templateWrap._rev;
+        templates = templateWrap.value;
+    }
+    templates.push({
+        id,
+        name,
+        createTime: now
+    });
+    // 保存模板索引
+    const res = await utools.db.promises.put({
+        _id: '/template/' + type,
+        _rev,
+        value: templates
+    });
+    if (res.error) {
+        // 删除记录
+        await utools.db.promises.remove(recordId);
+        return Promise.reject('保存索引，' + (res.message || "保存模板失败"));
+    }
+    return Promise.resolve();
+}
+
+export async function listTemplate(type: GraphTypeEnum): Promise<Array<StoreRecordIndex>> {
+    let templates = new Array<StoreRecordIndex>();
+    let key = '/template/' + type;
+    let templateWrap = await utools.db.promises.get(key);
+    if (templateWrap) {
+        templates = templateWrap.value;
+    }
+    for (let template of templates) {
+        template.createTime = new Date(template.createTime);
+    }
+    // 排序
+    templates.sort((a, b) => (b.createTime as Date).getTime() - (a.createTime as Date).getTime())
+    return Promise.resolve(templates);
+}
+
+export async function removeTemplate(type: GraphTypeEnum, id: string) {
+    // 初始化数据
+    let templates = new Array<StoreRecordIndex>();
+    let _rev = undefined as string | undefined;
+    let key = '/template/' + type;
+    let templateWrap = await utools.db.promises.get(key);
+    if (templateWrap) {
+        _rev = templateWrap._rev;
+        templates = templateWrap.value;
+    }
+    // 删除模板
+    let index = templates.findIndex(e => e.id === id);
+    if (index > -1) {
+        templates.splice(index, 1);
+    }
+    const res = await utools.db.promises.put({
+        _id: '/template/' + type,
+        _rev,
+        value: templates
+    });
+    if (res.error) {
+        // 删除记录
+        return Promise.reject('保存索引，' + (res.message || "保存模板失败"));
+    }
+    // 删除记录
+    let recordId = `/${type}/${id}`;
+    await utools.db.promises.remove(recordId);
+    return Promise.resolve();
 }

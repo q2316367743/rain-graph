@@ -6,9 +6,9 @@
                     <a-button>文件</a-button>
                     <template #content>
                         <a-doption @click="toHome">返回列表</a-doption>
-                        <a-doption @click="open">打开</a-doption>
                         <a-doption @click="save(true)">保存</a-doption>
-                        <a-doption @click="saveAs">另存为</a-doption>
+                        <a-doption @click="open" :disabled="isNotVip">打开</a-doption>
+                        <a-doption @click="saveAs" :disabled="isNotVip">另存为</a-doption>
                     </template>
                 </a-dropdown>
                 <a-dropdown trigger="click">
@@ -27,6 +27,13 @@
                         <a-doption :value="ExportTypeEnum.MD">Markdown</a-doption>
                     </template>
                 </a-dropdown>
+                <a-dropdown>
+                    <a-button :disabled="isNotVip">模板</a-button>
+                    <template #content>
+                        <a-doption @click="saveToTemplate">保存为模板</a-doption>
+                        <a-doption @click="templateDrawer = true">模板管理</a-doption>
+                    </template>
+                </a-dropdown>
             </a-button-group>
             <a-button-group type="text">
                 <a-button @click="switchReadonly" :status="readonly ? 'success' : 'normal'">
@@ -38,6 +45,7 @@
             <div id="mind-elixir-view" :style="{ height: viewHeight + 'px' }"></div>
         </div>
         <mind-elixir-setting v-model:visible="settingVisible" :option="option" @save="saveOption" />
+        <mind-elixir-template v-model:visible="templateDrawer" @render="renderTo" />
     </div>
 </template>
 <script lang="ts" setup>
@@ -53,10 +61,12 @@ import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import { useGlobalStore } from "@/store/GlobalStore";
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import { download } from "@/utils/BrowserUtil";
-import { getRecord } from "@/utils/utools/DbUtil";
+import { getRecord, saveTemplate } from "@/utils/utools/DbUtil";
 import { MindOption, getDefaultOption } from "./domain/MindOption";
-import MindElixirSetting from './components/setting.vue'
+import MindElixirSetting from './components/setting.vue';
+import MindElixirTemplate from './components/template.vue';
 import { toRaw } from "vue";
+import { useVipStore } from "@/store/VipStore";
 
 const size = useWindowSize();
 const viewHeight = computed(() => size.height.value - 33);
@@ -69,6 +79,8 @@ let path = useRoute().query.path as string;
 let _rev = undefined as string | undefined;
 const readonly = ref(false);
 const settingVisible = ref(false);
+const isNotVip = useVipStore().isNotVip;
+const templateDrawer = ref(false);
 
 let defaultOption = {
     el: "#mind-elixir-view",
@@ -142,10 +154,10 @@ function open() {
         let content = fileSystem.data.value || '';
         try {
             let json = JSON.parse(content);
-            let config = json['config'];
+            let optionWrap = json['option'];
             let record = json['record'];
             // 赋值
-            option.value = Object.assign(option.value, config);
+            option.value = Object.assign(option.value, optionWrap);
             data = record
             // 初始化对象
             mind = new MindElixir({
@@ -162,6 +174,28 @@ function open() {
         }
         MessageUtil.error("打开失败", e)
     });
+}
+
+async function renderTo(id: string) {
+    const recordId = `/${GraphTypeEnum.MIND}/${id}`;
+    // 获取数据
+    const valueWrap = await utools.db.promises.get(recordId);
+    if (!valueWrap) {
+        MessageUtil.error("模板不存在，请刷新后重试");
+        return;
+    }
+    const value = valueWrap['value'];
+    let optionWrap = value['option'];
+    let record = value['record'];
+    // 赋值
+    option.value = Object.assign(option.value, optionWrap);
+    data = record
+    // 初始化对象
+    mind = new MindElixir({
+        ...option.value,
+        ...defaultOption
+    });
+    mind.init(data);
 }
 
 function saveAs() {
@@ -226,6 +260,19 @@ function saveOption(value: MindOption) {
     mind.init(data);
     // 保存
     save();
+}
+
+/**
+ * 保存到模板
+ */
+function saveToTemplate() {
+    saveTemplate(GraphTypeEnum.MIND, {
+        record: toRaw(mind.getData()),
+        config: {},
+        option: toRaw(option.value)
+    })
+        .then(() => MessageUtil.success("保存成功"))
+        .catch(e => MessageUtil.error("保存失败", e));
 }
 
 useSaveEvent.on(() => save());

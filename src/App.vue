@@ -70,6 +70,7 @@ import { defineComponent } from "vue";
 import { statistics, useMapEvent, useSaveEvent, useSideEvent, useUndoEvent } from "@/global/BeanFactory";
 import Config from '@/global/Config'
 
+import { useVipStore } from "./store/VipStore";
 import { useGlobalStore } from "@/store/GlobalStore";
 import { useMindStore } from "@/store/graph/MindStore";
 import { useDiagramStore } from "@/store/graph/DiagramStore";
@@ -123,6 +124,7 @@ export default defineComponent({
             // 恢复亮色主题
             document.body.removeAttribute('arco-theme');
         }
+        useVipStore().init();
         // 初始化图信息
         useMindStore().init();
         useWhiteBoardStore().init();

@@ -7,7 +7,7 @@ class ResizableRectModel extends RectResize.model {
         super.initNodeData(data);
         this.width = 100;
         this.height = 40;
-        this.text.draggable = true;
+        this.text.draggable = false;
     }
 
     setToBottom() {

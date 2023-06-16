@@ -20,6 +20,24 @@ class DownArrowModel extends ResizableRectModel {
         const properties = this.getProperties()
         return getTextStyleFunction(style, properties)
     }
+    // 定义节点只有左右两个锚点. 锚点位置通过中心点和宽度算出来。
+    getDefaultAnchor() {
+        const { height, x, y, id } = this;
+        return [
+            {
+                x: x,
+                y: y - height / 2,
+                name: 'left',
+                id: `${id}_0`
+            },
+            {
+                x: x,
+                y: y + height / 2,
+                name: 'right',
+                id: `${id}_1`,
+            },
+        ]
+    }
 }
 class DownArrowView extends ResizableRectView {
     getResizeShape() {

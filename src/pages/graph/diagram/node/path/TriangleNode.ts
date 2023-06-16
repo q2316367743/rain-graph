@@ -15,6 +15,24 @@ class TriangleModel extends ResizableRectModel {
         const properties = this.getProperties()
         return getTextStyleFunction(style, properties)
     }
+    // 定义节点只有左右两个锚点. 锚点位置通过中心点和宽度算出来。
+    getDefaultAnchor() {
+        const { width, x, y, id } = this;
+        return [
+            {
+                x: x - width / 2,
+                y,
+                name: 'left',
+                id: `${id}_0`
+            },
+            {
+                x: x + width / 2,
+                y,
+                name: 'right',
+                id: `${id}_1`,
+            },
+        ]
+    }
 }
 
 class TriangleView extends ResizableRectView {

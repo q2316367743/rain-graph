@@ -1,8 +1,7 @@
 <template>
     <div class="diagram-sidebar">
-        <div>
-            <h1 class="node-category-title">基础图形</h1>
-            <div class="node-category">
+        <a-collapse :bordered="false" :default-active-key="['1', '2', '3']">
+            <a-collapse-item header="基础图形" key="1">
                 <div class="node-item" @mousedown="dragInNode('pro-circle')">
                     <icon-circle class="svg-node" />
                 </div>
@@ -78,22 +77,19 @@
                 <div class="node-item" @mousedown="dragInNode('divide')">
                     <icon-divide class="svg-node" />
                 </div>
-            </div>
-        </div>
-        <div>
-            <h1 class="node-category-title">图片</h1>
-            <div class="image-node image-setting" @mousedown="dragInNode('image-setting')">
-            </div>
-            <div class="image-node image-user" @mousedown="dragInNode('image-user')">
-            </div>
-            <div class="image-node image-cloud" @mousedown="dragInNode('image-cloud')">
-            </div>
-        </div>
-        <div>
-            <h1 class="node-category-title">ICON</h1>
-            <div class="icon-node icon-message" @mousedown="dragInNode('icon-message')">
-            </div>
-        </div>
+            </a-collapse-item>
+            <a-collapse-item header="图片" key="2">
+                <div class="image-node image-setting" @mousedown="dragInNode('image-setting')">
+                </div>
+                <div class="image-node image-user" @mousedown="dragInNode('image-user')">
+                </div>
+                <div class="image-node image-cloud" @mousedown="dragInNode('image-cloud')">
+                </div>
+            </a-collapse-item>
+            <a-collapse-item header="ICON" key="3">
+                <div class="icon-node icon-message" @mousedown="dragInNode('icon-message')"></div>
+            </a-collapse-item>
+        </a-collapse>
     </div>
 </template>
 <script lang="ts">
@@ -163,30 +159,21 @@ export default defineComponent({
 })
 </script>
 
-<style scoped lang="less">
+<style lang="less">
 .diagram-sidebar {
     user-select: none;
     width: 200px;
 
-    .node-category-title {
-        margin: 0;
-        font-size: 14px;
-        display: block;
-        border-bottom: 1px solid #e5e5e5;
-        line-height: 30px;
-        margin-bottom: 10px;
-        padding: 0 14px;
+    .arco-collapse-item-content {
+        padding: 0;
     }
 
     .node-item {
         width: 35px;
         height: 35px;
-        margin-right: 5px;
+        margin-left: 3px;
+        margin-right: 2px;
         display: inline-block;
-    }
-
-    .node-category {
-        border-bottom: 1px solid #e5e5e5;
     }
 
     .svg-node {

@@ -32,6 +32,7 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
     name: 'simple-mind-map-more-help',
+    emits: ['update:visible'],
     props: {
         visible: Boolean
     },
@@ -42,7 +43,7 @@ export default defineComponent({
         visible(newValue) {
             this.keyboardShortcut = newValue;
         },
-        dialogVisible(newValue) {
+        keyboardShortcut(newValue) {
             this.$emit('update:visible', newValue);
         }
     },

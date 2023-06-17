@@ -31,13 +31,19 @@
                             </a-menu-item>
                         </a-sub-menu>
                         <a-sub-menu key="2">
-                            <template #icon><icon-pen-fill /></template>
-                            <template #title>绘制</template>
-                            <a-menu-item key="/draw/drauu" @click="jumpToFunc('/draw/drauu')">
+                            <template #icon><icon-apps /></template>
+                            <template #title>小程序</template>
+                            <a-menu-item :key="'/apps/' + GraphTypeEnum.DRAUU"
+                                @click="jumpToFunc('/apps/' + GraphTypeEnum.DRAUU)">
                                 画板
                             </a-menu-item>
-                            <a-menu-item key="/draw/echarts" @click="jumpToFunc('/draw/echarts')">
+                            <a-menu-item :key="'/apps/' + GraphTypeEnum.ECHARTS"
+                                @click="jumpToFunc('/apps/' + GraphTypeEnum.ECHARTS)">
                                 可视化图表
+                            </a-menu-item>
+                            <a-menu-item :key="'/apps/' + GraphTypeEnum.WORD_CLOUD"
+                                @click="jumpToFunc('/apps/' + GraphTypeEnum.WORD_CLOUD)">
+                                词云生成器
                             </a-menu-item>
                         </a-sub-menu>
                         <a-sub-menu key="3">

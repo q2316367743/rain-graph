@@ -16,19 +16,24 @@ enum GraphTypeEnum {
     DIAGRAM = 'diagram',
 
     /**
-     * echarts可视化图表
-     */
-    ECHARTS = 'echarts',
-
-    /**
      * 白板
      */
     WHITE_BOARD = 'white-board',
 
     /**
+     * echarts可视化图表
+     */
+    ECHARTS = 'echarts',
+
+    /**
      * 画板
      */
-    DRAUU = 'drauu', // for RNN task only. 描述中不太明显的部分应用于任何图表。 有关任务
+    DRAUU = 'drauu',
+
+    /**
+     * 词云
+     */
+    WORD_CLOUD = 'word-cloud'
 
 }
 

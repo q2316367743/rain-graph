@@ -1,55 +1,55 @@
 // 字体列表
 export const fontFamilyList = [
     {
-        name: '宋体',
+        label: '宋体',
         value: '宋体, SimSun, Songti SC'
     },
     {
-        name: '微软雅黑',
+        label: '微软雅黑',
         value: '微软雅黑, Microsoft YaHei'
     },
     {
-        name: '楷体',
+        label: '楷体',
         value: '楷体, 楷体_GB2312, SimKai, STKaiti'
     },
     {
-        name: '黑体',
+        label: '黑体',
         value: '黑体, SimHei, Heiti SC'
     },
     {
-        name: '隶书',
+        label: '隶书',
         value: '隶书, SimLi'
     },
     {
-        name: 'Andale Mono',
+        label: 'Andale Mono',
         value: 'andale mono'
     },
     {
-        name: 'Arial',
+        label: 'Arial',
         value: 'arial, helvetica, sans-serif'
     },
     {
-        name: 'arialBlack',
+        label: 'arialBlack',
         value: 'arial black, avant garde'
     },
     {
-        name: 'Comic Sans Ms',
+        label: 'Comic Sans Ms',
         value: 'comic sans ms'
     },
     {
-        name: 'Impact',
+        label: 'Impact',
         value: 'impact, chicago'
     },
     {
-        name: 'Times New Roman',
+        label: 'Times New Roman',
         value: 'times new roman'
     },
     {
-        name: 'Sans-Serif',
+        label: 'Sans-Serif',
         value: 'sans-serif'
     },
     {
-        name: 'serif',
+        label: 'serif',
         value: 'serif'
     }
 ]

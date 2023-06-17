@@ -17,15 +17,21 @@ const router = createRouter({
         path: '/about',
         component: () => import('@/pages/about/index.vue')
     },
-    // 绘制
+    // =================
+    // ------ 绘制 ------
+    // =================
     {
         name: GraphTypeEnum.DRAUU,
-        path: '/draw/drauu',
-        component: () => import('@/pages/draw/drauu/index.vue')
+        path: '/apps/' + GraphTypeEnum.DRAUU,
+        component: () => import('@/pages/apps/drauu/index.vue')
     }, {
         name: GraphTypeEnum.ECHARTS,
-        path: '/draw/echarts',
-        component: () => import('@/pages/draw/echarts/index.vue')
+        path: '/apps/' + GraphTypeEnum.ECHARTS,
+        component: () => import('@/pages/apps/echarts/index.vue')
+    }, {
+        name: GraphTypeEnum.WORD_CLOUD,
+        path: '/apps/' + GraphTypeEnum.WORD_CLOUD,
+        component: () => import('@/pages/apps/word-cloud/index.vue')
     },
     // ===================
     // ------ 各种图 ------

@@ -13,13 +13,8 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { colorList } from '../../data/theme';
+import { colorList } from '@/global/theme';
 
-/**
- * @Author: 王林
- * @Date: 2021-06-24 22:53:10
- * @Desc: 颜色选择器
- */
 export default defineComponent({
     name: 'simple-mind-map-base-color',
     emits: ['update:color', 'change'],
@@ -48,11 +43,6 @@ export default defineComponent({
         this.selectColor = this.color
     },
     methods: {
-        /**
-         * @Author: 王林
-         * @Date: 2021-05-05 09:38:06
-         * @Desc: 点击预设颜色
-         */
         clickColorItem(color: string) {
             this.selectColor = color;
         },

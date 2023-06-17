@@ -7,7 +7,7 @@
                 <a-select size="mini" v-model="style.fontFamily" :disabled="checkDisabled('fontFamily')"
                     @change="update('fontFamily')">
                     <a-option v-for="item in fontFamilyList" :key="item.value" :value="item.value"
-                        :style="{ fontFamily: item.value }"> {{ item.name }}
+                        :style="{ fontFamily: item.value }"> {{ item.label }}
                     </a-option>
                 </a-select>
             </a-form-item>
@@ -180,7 +180,7 @@ import {
     borderRadiusList,
     lineHeightList,
     shapeList
-} from '../data/theme'
+} from '@/global/theme'
 import SimpleMindMapWrap from '../SimpleMindMapWrap';
 
 import SimpleMindMapBaseColor from './base/color.vue';

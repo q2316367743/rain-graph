@@ -58,9 +58,9 @@ export default {
                 return '推荐';
             case '/about':
                 return '关于';
-            case '/draw/drauu':
+            case '/apps/drauu':
                 return '使用画板';
-            case '/draw/echarts':
+            case '/apps/echarts':
                 return '使用可视化图表'
         }
         if (path.startsWith("/graph/")) {

@@ -32,11 +32,13 @@
         "vue": "^3.2.47",
         "vue-codemirror": "^6.1.1",
         "vue-router": "^4.0.13",
+        "wordcloud": "^1.2.2",
         "xe-utils": "^3.5.7",
         "xlsx": "^0.18.5"
     },
     "devDependencies": {
         "@types/lodash-es": "^4.17.7",
+        "@types/wordcloud": "^1.2.0",
         "@vitejs/plugin-vue": "^4.1.0",
         "typescript": "^4.9.3",
         "utools-api-types": "^3.0.0",

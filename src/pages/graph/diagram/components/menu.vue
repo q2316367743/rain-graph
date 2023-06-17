@@ -287,8 +287,7 @@ export default defineComponent({
                     this.lf.updateEditConfig(config);
                     this.lf.renderRawData(data);
                 })
-                .catch(e => MessageUtil.error("模板渲染失败", e))
-                .finally(() => this.templateDrawer = false);
+                .catch(e => MessageUtil.error("模板渲染失败", e));
         }
     }
 });

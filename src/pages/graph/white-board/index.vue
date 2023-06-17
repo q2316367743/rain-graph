@@ -37,9 +37,17 @@
                         <a-doption @click="helpDrawer = true">帮助</a-doption>
                     </template>
                 </a-dropdown>
+                <a-dropdown>
+                    <a-button>模板</a-button>
+                    <template #content>
+                        <a-doption @click="saveToTemplate">保存为模板</a-doption>
+                        <a-doption @click="templateDrawer = true">模板管理</a-doption>
+                    </template>
+                </a-dropdown>
             </a-button-group>
             <div>
-                <a-button type="text" @click="config.readonly = !config.readonly" :status="config.readonly ? 'warning' : 'normal'">
+                <a-button type="text" @click="config.readonly = !config.readonly"
+                    :status="config.readonly ? 'warning' : 'normal'">
                     <template #icon><icon-lock /></template>
                 </a-button>
                 <a-button type="text" @click="fullscreen.toggle()">
@@ -95,12 +103,15 @@
         <a-drawer v-model:visible="helpDrawer" title="帮助" width="300px" :footer="false">
             <white-board-help />
         </a-drawer>
+        <!-- 模板管理 -->
+        <template-manage v-model:visible="templateDrawer" :type="GraphTypeEnum.WHITE_BOARD" @render="renderTo" />
     </div>
 </template>
 <script lang="ts">
 import { defineComponent, toRaw, markRaw } from "vue";
 import TinyWhiteboard from "tiny-whiteboard";
 import { mapState } from "pinia";
+import { useFileSystemAccess, useFullscreen } from "@vueuse/core";
 
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
@@ -118,12 +129,13 @@ import WhiteBoardExportPng from './components/exportPng.vue';
 import WhiteBoardDisplay from './components/display.vue';
 import WhiteBoardPanel from './components/panel.vue';
 
+import TemplateManage from '@/components/template-manage/index.vue';
+
 import { useGlobalStore } from "@/store/GlobalStore";
 import { useWhiteBoardStore } from "@/store/graph/WhiteBoardStore";
 import { useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
 import MessageUtil from "@/utils/MessageUtil";
-import { getRecord } from '@/utils/utools/DbUtil';
-import { useFileSystemAccess, useFullscreen } from "@vueuse/core";
+import { getRecord, saveTemplate } from '@/utils/utools/DbUtil';
 import { download } from "@/utils/BrowserUtil";
 
 let first = true;
@@ -132,10 +144,12 @@ export default defineComponent({
     name: 'white-board',
     components: {
         IconChoose, IconCircle, IconDiamond, IconLine, IconRect, IconTriangle,
-        WhiteBoardHelp, WhiteBoardContextMenu, WhiteBoardExportPng, WhiteBoardDisplay, WhiteBoardPanel
+        WhiteBoardHelp, WhiteBoardContextMenu, WhiteBoardExportPng, WhiteBoardDisplay, WhiteBoardPanel,
+        TemplateManage
     },
     data: () => ({
         ExportTypeEnum,
+        GraphTypeEnum,
         // 数据
         id: '0',
         _rev: undefined as string | undefined,
@@ -168,6 +182,7 @@ export default defineComponent({
         element: {},
         render: false,
         lock: false,
+        templateDrawer: false,
 
         // 面板
         activeElement: undefined as any | undefined,
@@ -435,6 +450,34 @@ export default defineComponent({
                 }
                 MessageUtil.error("打开失败", e)
             });
+        },
+        saveToTemplate() {
+            saveTemplate(GraphTypeEnum.WHITE_BOARD, {
+                config: toRaw(this.config),
+                record: this.app.getData()
+            })
+                .then(() => MessageUtil.success("保存模板成功"))
+                .catch(e => {
+                    if (e === 'cancel') {
+                        return;
+                    }
+                    MessageUtil.error("保存模板失败", e)
+                });
+        },
+        renderTo(id: string) {
+            utools.db.promises.get(`/${GraphTypeEnum.WHITE_BOARD}/${id}`)
+                .then(valueWrap => {
+                    if (!valueWrap) {
+                        MessageUtil.error("模板不存在，请刷新后重试");
+                        return;
+                    }
+                    const json = valueWrap.value;
+                    let config = json['config'];
+                    let data = json['record'];
+                    this.app.updateState(config);
+                    this.app.setData(data);
+                })
+                .catch(e => MessageUtil.error("获取模板失败", e));
         }
     }
 });

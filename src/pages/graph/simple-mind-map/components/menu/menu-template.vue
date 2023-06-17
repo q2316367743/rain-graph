@@ -51,8 +51,7 @@ export default defineComponent({
                     this.simpleMindMapWrap.setConfig(config);
                     this.simpleMindMapWrap.setData(data);
                 })
-                .catch(e => MessageUtil.error("获取模板失败", e))
-                .finally(() => this.visible = false);
+                .catch(e => MessageUtil.error("获取模板失败", e));
         }
     }
 });

@@ -111,9 +111,6 @@ export default defineComponent({
             }
         }
     },
-    created() {
-        this.color = this.isDark ? '#f2f2f2' : '#000000';
-    },
     mounted() {
         this.drauu = markRaw(createDrauu({
             el: `#drauu-view-${this.id}`,
@@ -122,6 +119,7 @@ export default defineComponent({
                 size: this.size,
             },
         }));
+        this.color = this.isDark ? '#f2f2f2' : '#000000';
     },
     methods: {
         undo() { this.drauu.undo() },

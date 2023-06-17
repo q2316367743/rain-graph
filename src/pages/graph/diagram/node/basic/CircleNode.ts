@@ -7,6 +7,7 @@ class CircleNewModel extends CircleNodeModel {
     super.initNodeData(data)
     this.rx = 35
     this.ry = 35
+    this.text.draggable = false;
   }
 
   setToBottom() {

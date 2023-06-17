@@ -7,6 +7,7 @@ class ResizeEllipseModel extends EllipseResize.model {
         super.initNodeData(data)
         this.rx = 60
         this.ry = 30
+        this.text.draggable = false;
     }
 
     getNodeStyle() {

@@ -10,6 +10,7 @@ class ResizableDiamondModel extends DiamondResize.model {
         super.initNodeData(data)
         this.rx = 35
         this.ry = 35
+        this.text.draggable = false;
     }
     getNodeStyle() {
         const style = super.getNodeStyle()

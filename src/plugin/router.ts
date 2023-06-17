@@ -62,7 +62,7 @@ const router = createRouter({
             component: () => import('@/pages/setting/base.vue')
         }, {
             path: '/setting/backup',
-            component: () => import('@/pages/setting/backup.vue')
+            component: () => import('@/pages/setting/backup/index.vue')
         }, {
             path: '/setting/simple-mind-map',
             component: () => import('@/pages/setting/simple-mind-map.vue')

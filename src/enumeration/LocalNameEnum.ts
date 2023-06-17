@@ -36,6 +36,8 @@ enum LocalNameEnum {
 
     SETTING_BACKUP = '/setting/backup',
 
+    SETTING_DIAGRAM = '/setting/diagram',
+
     // =====================
     // ------ 全局变量 ------
     // =====================

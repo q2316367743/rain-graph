@@ -66,6 +66,9 @@ const router = createRouter({
         }, {
             path: '/setting/simple-mind-map',
             component: () => import('@/pages/setting/simple-mind-map.vue')
+        }, {
+            path: '/setting/diagram',
+            component: () => import('@/pages/setting/diagram.vue')
         }]
     }]
 });

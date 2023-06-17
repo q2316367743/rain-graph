@@ -67,6 +67,7 @@ import { silentConfig, originalConfig } from './constants';
 
 // 主题
 import { DefaultTheme } from "./theme";
+import { useDiagramSettingStore } from "@/store/setting/DiagramSettingStore";
 
 export default defineComponent({
     name: 'diagram',
@@ -99,6 +100,7 @@ export default defineComponent({
     }),
     computed: {
         ...mapState(useGlobalStore, ['size', 'title']),
+        ...mapState(useDiagramSettingStore, ['diagramSetting']),
         _id() {
             return `/${GraphTypeEnum.DIAGRAM}/${this.id}`;
         },
@@ -145,6 +147,7 @@ export default defineComponent({
         }
     },
     created() {
+        this.config = Object.assign(this.config, this.diagramSetting);
         useSaveEvent.on(() => this.save());
         useUndoEvent.on(() => this.lf.undo());
         useSideEvent.on(() => this.collapsed = !this.collapsed);

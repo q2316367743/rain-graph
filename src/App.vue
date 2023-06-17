@@ -52,6 +52,9 @@
                             <a-menu-item key="/setting/simple-mind-map" @click="jumpToFunc('/setting/simple-mind-map')">
                                 完整流程图
                             </a-menu-item>
+                            <a-menu-item key="/setting/diagram" @click="jumpToFunc('/setting/diagram')">
+                                流程图
+                            </a-menu-item>
                         </a-sub-menu>
                         <a-menu-item key="/recommend" @click="jumpToFunc('/recommend')">
                             <template #icon><icon-thumb-up /></template>
@@ -81,9 +84,10 @@ import { useVipStore } from "./store/VipStore";
 import { useGlobalStore } from "@/store/GlobalStore";
 import { useMindStore } from "@/store/graph/MindStore";
 import { useDiagramStore } from "@/store/graph/DiagramStore";
-import { useWhiteBoardStore } from "@/store/graph/WhiteBoardStore";
 import { useSettingStore } from "@/store/setting/SettingStore";
+import { useWhiteBoardStore } from "@/store/graph/WhiteBoardStore";
 import { useSimpleMindMapStore } from "@/store/graph/SimpleMindMapStore";
+import { useDiagramSettingStore } from "./store/setting/DiagramSettingStore";
 import { useSimpleMindMapSettingStore } from "./store/setting/SimpleMindMapSetting";
 
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
@@ -134,12 +138,13 @@ export default defineComponent({
         useVipStore().init();
         // 初始化图信息
         useMindStore().init();
+        useDiagramStore().init();
         useWhiteBoardStore().init();
         useSimpleMindMapStore().init();
-        useDiagramStore().init();
         // 初始化设置
         useSettingStore().init();
         useBackupSettingStore().init();
+        useDiagramSettingStore().init();
         useSimpleMindMapSettingStore().init();
         // 插件进入事件
         utools.onPluginEnter(action => {

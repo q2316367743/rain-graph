@@ -1,24 +1,10 @@
 <template>
     <div class="diagram-menu">
         <a-button-group type="text">
-            <a-dropdown>
-                <a-button>文件</a-button>
-                <template #content>
-                    <a-doption @click="toHome">返回文件列表</a-doption>
-                    <a-doption @click="open">打开</a-doption>
-                    <a-doption @click="$emit('save')">保存</a-doption>
-                    <a-doption @click="saveAs">另存为</a-doption>
-                </template>
-            </a-dropdown>
-            <a-dropdown>
-                <a-button>编辑</a-button>
-                <template #content>
-                    <a-doption @click="lf.undo()">后退</a-doption>
-                    <a-doption @click="lf.redo()">前进</a-doption>
-                    <a-doption @click="selectAll">全选</a-doption>
-                    <a-doption @click="unSelectAll">全不选</a-doption>
-                </template>
-            </a-dropdown>
+            <!-- 文件 -->
+            <menu-file :lf="lf" :config="config" @save="$emit('save')" />
+            <!-- 编辑 -->
+            <menu-edit :lf="lf" />
             <a-dropdown>
                 <a-button>查看</a-button>
                 <template #content>
@@ -37,36 +23,14 @@
                     </a-doption>
                 </template>
             </a-dropdown>
-            <a-dropdown>
-                <a-button>视图</a-button>
-                <template #content>
-                    <a-doption @click="reset">重置大小</a-doption>
-                    <a-doption @click="plus">放大</a-doption>
-                    <a-doption @click="reduce">缩小</a-doption>
-                </template>
-            </a-dropdown>
-            <a-dropdown>
-                <a-button>导出</a-button>
-                <template #content>
-                    <a-doption @click="onExport(ExportTypeEnum.JSON)">JSON</a-doption>
-                    <a-doption @click="onExport(ExportTypeEnum.XML)">XML</a-doption>
-                    <a-doption @click="onExport(ExportTypeEnum.PNG)">PNG</a-doption>
-                </template>
-            </a-dropdown>
-            <a-dropdown>
-                <a-button>更多</a-button>
-                <template #content>
-                    <a-doption disabled>主题</a-doption>
-                    <a-doption @click="keyboardShortcut = true;">快捷键</a-doption>
-                </template>
-            </a-dropdown>
-            <a-dropdown>
-                <a-button>模板</a-button>
-                <template #content>
-                    <a-doption @click="saveToTemplate">保存为模板</a-doption>
-                    <a-doption @click="templateDrawer = true;">管理模板</a-doption>
-                </template>
-            </a-dropdown>
+            <!-- 视图 -->
+            <menu-view :lf="lf"/>
+            <!-- 导出 -->
+            <menu-export :lf="lf" :config="config"/>
+            <!-- 更多 -->
+            <menu-more :lf="lf"/>
+            <!-- 模板 -->
+            <menu-template :lf="lf" />
         </a-button-group>
         <div type="text">
             <!-- 锁定 -->
@@ -89,39 +53,26 @@
                 </template>
             </a-button>
         </div>
-        <a-drawer title="快捷键" v-model:visible="keyboardShortcut" mask-closable :footer="false" width="300px">
-            <a-descriptions align="right" title="节点操作" :column="1">
-                <a-descriptions-item label="保存">Ctrl + s</a-descriptions-item>
-                <a-descriptions-item label="复制">Ctrl + c</a-descriptions-item>
-                <a-descriptions-item label="粘贴">Ctrl + v</a-descriptions-item>
-                <a-descriptions-item label="回退">Ctrl + Z</a-descriptions-item>
-                <a-descriptions-item label="删除">backspace</a-descriptions-item>
-                <a-descriptions-item label="侧边栏">Ctrl + b</a-descriptions-item>
-                <a-descriptions-item label="小地图">Ctrl + m</a-descriptions-item>
-                <a-descriptions-item label="选中">按住Ctrl + 鼠标左键拖动</a-descriptions-item>
-                <a-descriptions-item label="放大/缩小">按住Ctrl + 滚轮</a-descriptions-item>
-            </a-descriptions>
-        </a-drawer>
-        <template-manage v-model:visible="templateDrawer" :type="GraphTypeEnum.DIAGRAM" @render="render" />
     </div>
 </template>
 <script lang="ts">
-import { defineComponent, toRaw } from "vue";
+import { defineComponent } from "vue";
 import { mapState } from "pinia";
-import { useFileSystemAccess, useFullscreen } from "@vueuse/core";
-import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
-import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
-import { download } from "@/utils/BrowserUtil";
+import { useFullscreen } from "@vueuse/core";
 import { useGlobalStore } from "@/store/GlobalStore";
 import { useMapEvent } from "@/global/BeanFactory";
-import MessageUtil from "@/utils/MessageUtil";
 
-import TemplateManage from '@/components/template-manage/index.vue';
-import { saveTemplate } from "@/utils/utools/DbUtil";
+// 组件
+import MenuFile from "./menu/menu-file.vue";
+import MenuEdit from "./menu/menu-edit.vue";
+import MenuMore from "./menu/menu-more.vue";
+import MenuView from "./menu/menu-view.vue";
+import MenuTemplate from "./menu/menu-template.vue";
+import MenuExport from "./menu/menu-export.vue";
 
 export default defineComponent({
     name: 'diagram-menu',
-    components: { TemplateManage },
+    components: { MenuTemplate, MenuFile, MenuEdit, MenuMore, MenuView, MenuExport },
     emits: ['update:panel-show', 'new', 'open', 'save', 'show-mini-map', 'update-readonly'],
     props: {
         lf: {
@@ -139,28 +90,15 @@ export default defineComponent({
         readonly: Boolean
     },
     data: () => ({
-        ExportTypeEnum,
-        GraphTypeEnum,
-        keyboardShortcut: false,
-        templateDrawer: false,
         fullscreen: useFullscreen(),
         panel: true,
         // 显示设置
         display: {
             miniMap: false
         },
-        fileSystem: useFileSystemAccess({
-            dataType: 'Text',
-            types: [{
-                description: 'json',
-                accept: {
-                    'application/json': ['.json'],
-                },
-            }]
-        })
     }),
     computed: {
-        ...mapState(useGlobalStore, ['size', 'title']),
+        ...mapState(useGlobalStore, ['size']),
         miniMapLeft() {
             if (this.readonly) {
                 return this.size.width - 156 - 10;
@@ -181,33 +119,6 @@ export default defineComponent({
         this.display.miniMap = this.lf.extension.miniMap.isShow;
     },
     methods: {
-        toHome() {
-            this.$router.push({
-                path: '/home',
-                query: {
-                    name: GraphTypeEnum.DIAGRAM
-                }
-            })
-        },
-        onExport(type: ExportTypeEnum) {
-            if (type === ExportTypeEnum.JSON) {
-                download(JSON.stringify({
-                    config: toRaw(this.config),
-                    record: this.lf.getGraphRawData()
-                }), this.title + '.json', 'text/json');
-            } else if (type === ExportTypeEnum.PNG) {
-                this.lf.extension.snapshot.lf.getSnapshot(this.title + '.png');
-            } else if (type === ExportTypeEnum.XML) {
-                const data = this.lf.getGraphData() as string;
-                download(data, this.title + '.xml', 'text/xml');
-            }
-        },
-        saveAs() {
-            download(JSON.stringify({
-                config: toRaw(this.config),
-                record: this.lf.getGraphRawData()
-            }), this.title + '.json', 'text/json');
-        },
         showMiniMap() {
             try {
                 if (this.lf.extension.miniMap.isShow) {
@@ -219,76 +130,6 @@ export default defineComponent({
             } catch (_) {
             }
         },
-        reset() {
-            this.lf.resetZoom();
-        },
-        plus() {
-            this.lf.zoom(true);
-        },
-        reduce() {
-            this.lf.zoom(false);
-        },
-        selectAll() {
-            let nodes = this.lf.getGraphRawData().nodes as any[];
-            let first = true;
-            for (let node of nodes) {
-                if (node.id) {
-                    this.lf.selectElementById(node.id, !first);
-                    first = false;
-                }
-            }
-        },
-        unSelectAll() {
-            this.lf.clearSelectElements();
-        },
-        open() {
-            let res = this.fileSystem.open() as Promise<void>;
-            res.then(() => {
-                let content = this.fileSystem.data || '';
-                try {
-                    let json = JSON.parse(content);
-                    let config = json['config'];
-                    let data = json['record'];
-                    this.lf.updateEditConfig(config);
-                    this.lf.renderRawData(data);
-                } catch (e) {
-                    MessageUtil.error("文件解析失败", e);
-                }
-            }).catch(e => {
-                if (e.name === 'AbortError') {
-                    return;
-                }
-                MessageUtil.error("打开失败", e)
-            });
-        },
-        saveToTemplate() {
-            saveTemplate(GraphTypeEnum.DIAGRAM, {
-                config: toRaw(this.config),
-                record: this.lf.getGraphRawData()
-            })
-                .then(() => MessageUtil.success("保存模板成功"))
-                .catch(e => {
-                    if (e === 'cancel') {
-                        return;
-                    }
-                    MessageUtil.error("保存模板失败", e);
-                });
-        },
-        render(id: string) {
-            utools.db.promises.get(`/${GraphTypeEnum.DIAGRAM}/${id}`)
-                .then(valueWrap => {
-                    if (!valueWrap) {
-                        MessageUtil.error("模板不存在，请刷新后重试");
-                        return;
-                    }
-                    const json = valueWrap.value;
-                    let config = json['config'];
-                    let data = json['record'];
-                    this.lf.updateEditConfig(config);
-                    this.lf.renderRawData(data);
-                })
-                .catch(e => MessageUtil.error("模板渲染失败", e));
-        }
     }
 });
 </script>

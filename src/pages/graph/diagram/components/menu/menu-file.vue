@@ -61,7 +61,8 @@ export default defineComponent({
         saveAs() {
             download(JSON.stringify({
                 config: toRaw(this.config),
-                record: this.lf.getGraphRawData()
+                record: this.lf.getGraphRawData(),
+                editConfig: this.lf.getEditConfig()
             }), this.title + '.json', 'text/json');
         },
         open() {
@@ -70,9 +71,13 @@ export default defineComponent({
                 let content = this.fileSystem.data || '';
                 try {
                     let json = JSON.parse(content);
-                    let config = json['config'];
+                    let config = json['config'] || {};
                     let data = json['record'];
-                    this.lf.updateEditConfig(config);
+                    let editConfig = json['editConfig'] || {};
+                    this.lf.updateEditConfig({
+                        ...config,
+                        ...editConfig
+                    });
                     this.lf.renderRawData(data);
                 } catch (e) {
                     MessageUtil.error("文件解析失败", e);
@@ -87,5 +92,4 @@ export default defineComponent({
     }
 });
 </script>
-<style scoped lang="less">
-</style>
+<style scoped lang="less"></style>

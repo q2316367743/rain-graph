@@ -158,20 +158,21 @@ export default defineComponent({
             this.id = data.id;
             this._rev = data._rev;
             this.config = Object.assign(this.config, data.config);
-            this.init(data.record);
+            this.init(data['editConfig'] || {}, data.record);
         }).catch(e => {
             MessageUtil.error("初始化失败", e);
-            this.init();
+            this.init({});
         })
     },
     methods: {
-        init(data?: any) {
+        init(editConfig: any, data?: any) {
             let lf = new LogicFlow({
                 ...this.config,
                 container: document.querySelector('#diagram-view') as HTMLElement,
                 plugins: [BpmnElement, BpmnXmlAdapter, Snapshot, SelectionSelect, MiniMap, Menu],
                 width: this.width,
-                height: this.height
+                height: this.height,
+                ...editConfig
             });
             registerCustomElement(lf);
             lf.setDefaultEdgeType('pro-polyline');
@@ -198,7 +199,8 @@ export default defineComponent({
                         _rev: this._rev,
                         value: {
                             config: toRaw(this.config),
-                            record: this.lf.getGraphRawData()
+                            record: this.lf.getGraphRawData(),
+                            editConfig: this.lf.getEditConfig()
                         }
                     }).then(res => {
                         if (res.error) {

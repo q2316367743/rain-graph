@@ -65,7 +65,7 @@ import { useMapEvent } from "@/global/BeanFactory";
 // 组件
 import MenuFile from "./menu-file.vue";
 import MenuEdit from "./menu-edit.vue";
-import MenuMore from "./menu-more.vue";
+import MenuMore from "./menu-more/index.vue";
 import MenuView from "./menu-view.vue";
 import MenuTemplate from "./menu-template.vue";
 import MenuExport from "./menu-export.vue";

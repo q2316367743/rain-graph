@@ -18,6 +18,11 @@ export interface StoreRecordCore {
      */
     option?: any;
 
+    /**
+     * 额外自定义设置
+     */
+    [key: string]: any;
+
 }
 
 export interface StoreRecordIndex {

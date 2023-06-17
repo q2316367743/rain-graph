@@ -39,7 +39,8 @@ export default defineComponent({
         saveToTemplate() {
             saveTemplate(GraphTypeEnum.DIAGRAM, {
                 config: toRaw(this.config),
-                record: this.lf.getGraphRawData()
+                record: this.lf.getGraphRawData(),
+                editConfig: this.lf.getEditConfig()
             })
                 .then(() => MessageUtil.success("保存模板成功"))
                 .catch(e => {
@@ -59,7 +60,11 @@ export default defineComponent({
                     const json = valueWrap.value;
                     let config = json['config'];
                     let data = json['record'];
-                    this.lf.updateEditConfig(config);
+                    let editConfig = json['editConfig'] || {};
+                    this.lf.updateEditConfig({
+                        ...config,
+                        ...editConfig
+                    });
                     this.lf.renderRawData(data);
                 })
                 .catch(e => MessageUtil.error("模板渲染失败", e));
@@ -67,5 +72,4 @@ export default defineComponent({
     }
 });
 </script>
-<style scoped lang="less">
-</style>
+<style scoped lang="less"></style>

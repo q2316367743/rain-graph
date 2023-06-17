@@ -54,7 +54,7 @@ import "@logicflow/core/dist/style/index.css";
 import DiagramToolbar from './components/toolbar.vue';
 import DiagramSidebar from './components/sidebar.vue';
 import DiagramPanel from './components/panel.vue';
-import DiagramMenu from './components/menu.vue';
+import DiagramMenu from './components/menu/index.vue';
 import { registerCustomElement } from './node';
 
 import { useGlobalStore } from "@/store/GlobalStore";

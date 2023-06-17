@@ -63,12 +63,12 @@ import { useGlobalStore } from "@/store/GlobalStore";
 import { useMapEvent } from "@/global/BeanFactory";
 
 // 组件
-import MenuFile from "./menu/menu-file.vue";
-import MenuEdit from "./menu/menu-edit.vue";
-import MenuMore from "./menu/menu-more.vue";
-import MenuView from "./menu/menu-view.vue";
-import MenuTemplate from "./menu/menu-template.vue";
-import MenuExport from "./menu/menu-export.vue";
+import MenuFile from "./menu-file.vue";
+import MenuEdit from "./menu-edit.vue";
+import MenuMore from "./menu-more.vue";
+import MenuView from "./menu-view.vue";
+import MenuTemplate from "./menu-template.vue";
+import MenuExport from "./menu-export.vue";
 
 export default defineComponent({
     name: 'diagram-menu',

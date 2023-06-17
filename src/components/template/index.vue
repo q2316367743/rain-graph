@@ -23,6 +23,7 @@
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import MessageUtil from "@/utils/MessageUtil";
 import { StoreRecordIndex, listTemplate, removeTemplate } from "@/utils/utools/DbUtil";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { toDateString } from "xe-utils";
 
@@ -30,7 +31,11 @@ export default defineComponent({
     name: 'mind-elixir-template',
     emits: ['update:visible', 'render'],
     props: {
-        visible: Boolean
+        visible: Boolean,
+        type: {
+            type: String as PropType<GraphTypeEnum>,
+            required: true
+        }
     },
     data: () => ({
         modal: false,
@@ -41,7 +46,7 @@ export default defineComponent({
             this.modal = newValue;
             if (newValue) {
                 this.templates = new Array<StoreRecordIndex>()
-                listTemplate(GraphTypeEnum.MIND).then(templates => {
+                listTemplate(this.type).then(templates => {
                     this.templates = templates;
                 });
             }
@@ -53,10 +58,10 @@ export default defineComponent({
     methods: {
         toDateString,
         removeTemplate(id: string) {
-            removeTemplate(GraphTypeEnum.MIND, id)
+            removeTemplate(this.type, id)
                 .then(() => {
                     this.templates = new Array<StoreRecordIndex>()
-                    listTemplate(GraphTypeEnum.MIND).then(templates => {
+                    listTemplate(this.type).then(templates => {
                         this.templates = templates;
                     });
                     MessageUtil.success("删除成功");

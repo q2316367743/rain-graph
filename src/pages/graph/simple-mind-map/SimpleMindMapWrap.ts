@@ -60,7 +60,9 @@ export default class SimpleMindMapWrap {
         this.on('data_change', (data: MindMapNode) => {
             this.data = data;
             // 自动保存
-            if (this.initComplete) {
+            if (this.initComplete &&
+                this.id !== '0' &&
+                this.id !== '-1') {
                 this.save();
             }
         });

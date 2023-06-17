@@ -45,11 +45,11 @@
             <div id="mind-elixir-view" :style="{ height: viewHeight + 'px' }"></div>
         </div>
         <mind-elixir-setting v-model:visible="settingVisible" :option="option" @save="saveOption" />
-        <mind-elixir-template v-model:visible="templateDrawer" @render="renderTo" />
+        <mind-elixir-template v-model:visible="templateDrawer" :type="GraphTypeEnum.MIND" @render="renderTo" />
     </div>
 </template>
 <script lang="ts" setup>
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, toRaw } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useFileSystemAccess, useWindowSize } from "@vueuse/core";
 import MindElixir from "mind-elixir";
@@ -64,8 +64,7 @@ import { download } from "@/utils/BrowserUtil";
 import { getRecord, saveTemplate } from "@/utils/utools/DbUtil";
 import { MindOption, getDefaultOption } from "./domain/MindOption";
 import MindElixirSetting from './components/setting.vue';
-import MindElixirTemplate from './components/template.vue';
-import { toRaw } from "vue";
+import MindElixirTemplate from '@/components/template/index.vue';
 import { useVipStore } from "@/store/VipStore";
 
 const size = useWindowSize();
@@ -272,7 +271,12 @@ function saveToTemplate() {
         option: toRaw(option.value)
     })
         .then(() => MessageUtil.success("保存成功"))
-        .catch(e => MessageUtil.error("保存失败", e));
+        .catch(e => {
+            if (e === 'cancel') {
+                return;
+            }
+            MessageUtil.error("保存失败", e);
+        });
 }
 
 useSaveEvent.on(() => save());

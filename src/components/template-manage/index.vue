@@ -28,7 +28,7 @@ import { defineComponent } from "vue";
 import { toDateString } from "xe-utils";
 
 export default defineComponent({
-    name: 'mind-elixir-template',
+    name: 'template-manage',
     emits: ['update:visible', 'render'],
     props: {
         visible: Boolean,

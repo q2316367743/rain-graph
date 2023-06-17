@@ -13,6 +13,8 @@
                 <!-- 更多 -->
                 <simple-mind-map-menu-more v-if="render" :simple-mind-map-wrap="simpleMindMapWrap" :index="index" :len="len"
                     :has-node="hasNode" @switch-theme="setTheme" @switch-layout="setLayout" />
+                <!-- 模板管理 -->
+                <simple-mind-map-menu-template v-if="render" :simple-mind-map-wrap="simpleMindMapWrap" />
             </a-button-group>
             <div>
                 <!-- 小地图 -->
@@ -85,6 +87,7 @@ import SimpleMindMapWrap from "./SimpleMindMapWrap";
 import { useGlobalStore } from "@/store/GlobalStore";
 
 // 组件
+import SimpleMindMapMenuTemplate from './components/menu/menu-template.vue';
 import SimpleMindMapMenuMore from './components/menu/menu-more.vue';
 import SimpleMindMapMenuFile from './components/menu/menu-file.vue';
 import SimpleMindMapMenuEdit from './components/menu/menu-edit.vue';
@@ -110,7 +113,7 @@ export default defineComponent({
     components: {
         SimpleMindMapMenuMore, SimpleMindMapMenuFile, SimpleMindMapMenuEdit, SimpleMindMapMenuInsert, SimpleMindMapToc,
         SimpleMindMapContextMenu, SimpleMindMapCount, SimpleMindMapToolbar, SimpleMindMapScale, SimpleMindMapMiniMap,
-        SimpleMindMapStyle
+        SimpleMindMapStyle, SimpleMindMapMenuTemplate
     },
     data: () => ({
         index: 0,

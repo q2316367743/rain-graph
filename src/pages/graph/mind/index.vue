@@ -45,7 +45,7 @@
             <div id="mind-elixir-view" :style="{ height: viewHeight + 'px' }"></div>
         </div>
         <mind-elixir-setting v-model:visible="settingVisible" :option="option" @save="saveOption" />
-        <mind-elixir-template v-model:visible="templateDrawer" :type="GraphTypeEnum.MIND" @render="renderTo" />
+        <template-manage v-model:visible="templateDrawer" :type="GraphTypeEnum.MIND" @render="renderTo" />
     </div>
 </template>
 <script lang="ts" setup>
@@ -64,7 +64,7 @@ import { download } from "@/utils/BrowserUtil";
 import { getRecord, saveTemplate } from "@/utils/utools/DbUtil";
 import { MindOption, getDefaultOption } from "./domain/MindOption";
 import MindElixirSetting from './components/setting.vue';
-import MindElixirTemplate from '@/components/template/index.vue';
+import TemplateManage from '@/components/template-manage/index.vue';
 import { useVipStore } from "@/store/VipStore";
 
 const size = useWindowSize();

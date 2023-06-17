@@ -7,6 +7,8 @@ import { useSimpleMindMapStore } from "@/store/graph/SimpleMindMapStore";
 import { getDefaultConfig, getDefaultData } from "./data/config";
 import { extraImages } from "./data/icon";
 import { MindMapNode } from "./domain/MindMapNode";
+import { saveTemplate } from "@/utils/utools/DbUtil";
+import MessageUtil from "@/utils/MessageUtil";
 
 type commandType = 'INSERT_CHILD_NODE' | 'INSERT_NODE' | 'REMOVE_NODE' | 'BACK' | 'FORWARD' | 'ADD_GENERALIZATION';
 
@@ -97,7 +99,9 @@ export default class SimpleMindMapWrap {
     setConfig(config: SimpleMindMapConfig) {
         this.config = config;
         this.mindMap.updateConfig(config);
-        this.save();
+        if (this.id !== '0' && this.id !== '-1') {
+            this.save();
+        }
     }
 
     setData(data: any) {
@@ -188,6 +192,15 @@ export default class SimpleMindMapWrap {
             config: this.config,
             record: this.mindMap.getData(false)
         }), title + '.json', 'text/json');
+    }
+
+    saveToTemplate() {
+        saveTemplate(GraphTypeEnum.SIMPLE_MIND_MAP, {
+            config: this.config,
+            record: this.mindMap.getData(false)
+        })
+            .then(() => MessageUtil.success("保存模板成功"))
+            .catch(e => MessageUtil.error("保存模板失败", e))
     }
 
     export(type: string, download: boolean, fileName: string, withConfig?: string | boolean) {

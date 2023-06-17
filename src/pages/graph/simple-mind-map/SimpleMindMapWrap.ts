@@ -200,7 +200,12 @@ export default class SimpleMindMapWrap {
             record: this.mindMap.getData(false)
         })
             .then(() => MessageUtil.success("保存模板成功"))
-            .catch(e => MessageUtil.error("保存模板失败", e))
+            .catch(e => {
+                if (e === 'cancel') {
+                    return;
+                }
+                MessageUtil.error("保存模板失败", e);
+            })
     }
 
     export(type: string, download: boolean, fileName: string, withConfig?: string | boolean) {

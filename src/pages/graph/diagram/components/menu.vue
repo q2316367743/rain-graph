@@ -60,6 +60,13 @@
                     <a-doption @click="keyboardShortcut = true;">快捷键</a-doption>
                 </template>
             </a-dropdown>
+            <a-dropdown>
+                <a-button>模板</a-button>
+                <template #content>
+                    <a-doption @click="saveToTemplate">保存为模板</a-doption>
+                    <a-doption @click="templateDrawer = true;">管理模板</a-doption>
+                </template>
+            </a-dropdown>
         </a-button-group>
         <div type="text">
             <!-- 锁定 -->
@@ -95,6 +102,7 @@
                 <a-descriptions-item label="放大/缩小">按住Ctrl + 滚轮</a-descriptions-item>
             </a-descriptions>
         </a-drawer>
+        <template-manage v-model:visible="templateDrawer" :type="GraphTypeEnum.DIAGRAM" @render="render" />
     </div>
 </template>
 <script lang="ts">
@@ -108,8 +116,12 @@ import { useGlobalStore } from "@/store/GlobalStore";
 import { useMapEvent } from "@/global/BeanFactory";
 import MessageUtil from "@/utils/MessageUtil";
 
+import TemplateManage from '@/components/template-manage/index.vue';
+import { saveTemplate } from "@/utils/utools/DbUtil";
+
 export default defineComponent({
     name: 'diagram-menu',
+    components: { TemplateManage },
     emits: ['update:panel-show', 'new', 'open', 'save', 'show-mini-map', 'update-readonly'],
     props: {
         lf: {
@@ -128,7 +140,9 @@ export default defineComponent({
     },
     data: () => ({
         ExportTypeEnum,
+        GraphTypeEnum,
         keyboardShortcut: false,
+        templateDrawer: false,
         fullscreen: useFullscreen(),
         panel: true,
         // 显示设置
@@ -246,6 +260,35 @@ export default defineComponent({
                 }
                 MessageUtil.error("打开失败", e)
             });
+        },
+        saveToTemplate() {
+            saveTemplate(GraphTypeEnum.DIAGRAM, {
+                config: toRaw(this.config),
+                record: this.lf.getGraphRawData()
+            })
+                .then(() => MessageUtil.success("保存模板成功"))
+                .catch(e => {
+                    if (e === 'cancel') {
+                        return;
+                    }
+                    MessageUtil.error("保存模板失败", e);
+                });
+        },
+        render(id: string) {
+            utools.db.promises.get(`/${GraphTypeEnum.DIAGRAM}/${id}`)
+                .then(valueWrap => {
+                    if (!valueWrap) {
+                        MessageUtil.error("模板不存在，请刷新后重试");
+                        return;
+                    }
+                    const json = valueWrap.value;
+                    let config = json['config'];
+                    let data = json['record'];
+                    this.lf.updateEditConfig(config);
+                    this.lf.renderRawData(data);
+                })
+                .catch(e => MessageUtil.error("模板渲染失败", e))
+                .finally(() => this.templateDrawer = false);
         }
     }
 });

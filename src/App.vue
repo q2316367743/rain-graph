@@ -30,7 +30,7 @@
                                 {{ Config.title[GraphTypeEnum.WHITE_BOARD].title }}
                             </a-menu-item>
                         </a-sub-menu>
-                        <a-sub-menu key="1">
+                        <a-sub-menu key="2">
                             <template #icon><icon-pen-fill /></template>
                             <template #title>绘制</template>
                             <a-menu-item key="/draw/drauu" @click="jumpToFunc('/draw/drauu')">
@@ -40,12 +40,19 @@
                                 可视化图表
                             </a-menu-item>
                         </a-sub-menu>
-                        <a-menu-item key="/setting" @click="jumpToFunc('/setting')">
-                            <template #icon>
-                                <icon-settings />
-                            </template>
-                            设置
-                        </a-menu-item>
+                        <a-sub-menu key="3">
+                            <template #icon><icon-settings /></template>
+                            <template #title>设置</template>
+                            <a-menu-item key="/setting/base" @click="jumpToFunc('/setting/base')">
+                                基础设置
+                            </a-menu-item>
+                            <a-menu-item key="/setting/backup" @click="jumpToFunc('/setting/backup')">
+                                备份设置
+                            </a-menu-item>
+                            <a-menu-item key="/setting/simple-mind-map" @click="jumpToFunc('/setting/simple-mind-map')">
+                                完整流程图
+                            </a-menu-item>
+                        </a-sub-menu>
                         <a-menu-item key="/recommend" @click="jumpToFunc('/recommend')">
                             <template #icon><icon-thumb-up /></template>
                             推荐

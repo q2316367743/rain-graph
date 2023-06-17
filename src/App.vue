@@ -41,7 +41,7 @@
                                 @click="jumpToFunc('/apps/' + GraphTypeEnum.ECHARTS)">
                                 可视化图表
                             </a-menu-item>
-                            <a-menu-item :key="'/apps/' + GraphTypeEnum.WORD_CLOUD"
+                            <a-menu-item disabled :key="'/apps/' + GraphTypeEnum.WORD_CLOUD"
                                 @click="jumpToFunc('/apps/' + GraphTypeEnum.WORD_CLOUD)">
                                 词云生成器
                             </a-menu-item>

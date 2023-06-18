@@ -38,7 +38,12 @@ enum GraphTypeEnum {
     /**
      * 二维码
      */
-    QR_CODE = 'qr-code'
+    QR_CODE = 'qr-code',
+
+    /**
+     * 图片剪切
+     */
+    CROPPER = 'cropper'
 
 }
 

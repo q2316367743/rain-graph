@@ -44,11 +44,15 @@ export function copy(content: string, showMessage: boolean = true) {
     }
 }
 
-export function downloadByUrl(url: string) {
+export function downloadByUrl(url: string, fileName?: string) {
     let downA = document.createElement("a");
     downA.href = url;
-    let index = url.lastIndexOf("/")
-    downA.download = url.substring(index + 1, url.length);
+    let index = url.lastIndexOf("/");
+    if (fileName) {
+        downA.download = fileName;
+    } else {
+        downA.download = url.substring(index + 1, url.length);
+    }
     downA.click();
 }
 

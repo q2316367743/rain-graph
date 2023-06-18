@@ -49,6 +49,10 @@
                                 @click="jumpToFunc('/apps/' + GraphTypeEnum.QR_CODE)">
                                 二维码
                             </a-menu-item>
+                            <a-menu-item :key="'/apps/' + GraphTypeEnum.CROPPER"
+                                @click="jumpToFunc('/apps/' + GraphTypeEnum.CROPPER)">
+                                图片裁剪
+                            </a-menu-item>
                         </a-sub-menu>
                         <a-sub-menu key="3">
                             <template #icon><icon-settings /></template>

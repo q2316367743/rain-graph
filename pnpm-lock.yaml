@@ -32,6 +32,9 @@ dependencies:
   codemirror:
     specifier: ^6.0.1
     version: 6.0.1(@lezer/common@1.0.2)
+  cropperjs:
+    specifier: ^1.5.13
+    version: registry.npmmirror.com/cropperjs@1.5.13
   drauu:
     specifier: ^0.3.2
     version: 0.3.2
@@ -5000,6 +5003,12 @@ packages:
     requiresBuild: true
     dev: false
     optional: true
+
+  registry.npmmirror.com/cropperjs@1.5.13:
+    resolution: {integrity: sha512-by7jKAo73y5/Do0K6sxdTKHgndY0NMjG2bEdgeJxycbcmHuCiMXqw8sxy5C5Y5WTOTcDGmbT7Sr5CgKOXR06OA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/cropperjs/-/cropperjs-1.5.13.tgz}
+    name: cropperjs
+    version: 1.5.13
+    dev: false
 
   registry.npmmirror.com/dompurify@2.4.5:
     resolution: {integrity: sha512-jggCCd+8Iqp4Tsz0nIvpcb22InKEBrGz5dw3EQJMs8HPJDsKbFIO3STYtAvCfDx26Muevn1MHVI0XxjgFfmiSA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/dompurify/-/dompurify-2.4.5.tgz}

@@ -36,6 +36,10 @@ const router = createRouter({
         name: GraphTypeEnum.QR_CODE,
         path: '/apps/' + GraphTypeEnum.QR_CODE,
         component: () => import('@/pages/apps/qr-code/index.vue')
+    }, {
+        name: GraphTypeEnum.CROPPER,
+        path: '/apps/' + GraphTypeEnum.CROPPER,
+        component: () => import('@/pages/apps/cropper/index.vue')
     },
     // ===================
     // ------ 各种图 ------

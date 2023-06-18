@@ -27,6 +27,7 @@
         "lodash-es": "^4.17.21",
         "mind-elixir": "^2.0.2",
         "pinia": "^2.0.34",
+        "qr-code-styling": "1.6.0-rc.1",
         "simple-mind-map": "^0.5.11",
         "tiny-whiteboard": "^0.1.12",
         "vue": "^3.2.47",

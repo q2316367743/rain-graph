@@ -59,6 +59,9 @@ dependencies:
   pinia:
     specifier: ^2.0.34
     version: 2.0.34(typescript@4.9.3)(vue@3.2.47)
+  qr-code-styling:
+    specifier: 1.6.0-rc.1
+    version: registry.npmmirror.com/qr-code-styling@1.6.0-rc.1
   simple-mind-map:
     specifier: ^0.5.11
     version: 0.5.11
@@ -5276,6 +5279,20 @@ packages:
     name: punycode
     version: 2.3.0
     engines: {node: '>=6'}
+    dev: false
+
+  registry.npmmirror.com/qr-code-styling@1.6.0-rc.1:
+    resolution: {integrity: sha512-ModRIiW6oUnsP18QzrRYZSc/CFKFKIdj7pUs57AEVH20ajlglRpN3HukjHk0UbNMTlKGuaYl7Gt6/O5Gg2NU2Q==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/qr-code-styling/-/qr-code-styling-1.6.0-rc.1.tgz}
+    name: qr-code-styling
+    version: 1.6.0-rc.1
+    dependencies:
+      qrcode-generator: registry.npmmirror.com/qrcode-generator@1.4.4
+    dev: false
+
+  registry.npmmirror.com/qrcode-generator@1.4.4:
+    resolution: {integrity: sha512-HM7yY8O2ilqhmULxGMpcHSF1EhJJ9yBj8gvDEuZ6M+KGJ0YY2hKpnXvRD+hZPLrDVck3ExIGhmPtSdcjC+guuw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/qrcode-generator/-/qrcode-generator-1.4.4.tgz}
+    name: qrcode-generator
+    version: 1.4.4
     dev: false
 
   registry.npmmirror.com/randombytes@2.1.0:

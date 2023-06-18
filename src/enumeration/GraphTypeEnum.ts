@@ -33,7 +33,12 @@ enum GraphTypeEnum {
     /**
      * 词云
      */
-    WORD_CLOUD = 'word-cloud'
+    WORD_CLOUD = 'word-cloud',
+
+    /**
+     * 二维码
+     */
+    QR_CODE = 'qr-code'
 
 }
 

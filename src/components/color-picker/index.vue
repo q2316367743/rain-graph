@@ -36,6 +36,9 @@ export default defineComponent({
             this.$emit('change', newValue);
         }
     },
+    created() {
+        this.sourceColor = this.color;
+    },
     data: () => ({
         sourceColor: '#ffffff',
         colorList: [
@@ -97,9 +100,10 @@ export default defineComponent({
 .simple-mind-map-base-color {
     padding: 14px;
     width: 240px;
-    background-color: var(--color-bg-1);
+    background-color: var(--color-neutral-2);
     color: var(--color-text-1);
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
 
     .colorItem {
         display: inline-block;

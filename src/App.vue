@@ -45,6 +45,10 @@
                                 @click="jumpToFunc('/apps/' + GraphTypeEnum.WORD_CLOUD)">
                                 词云生成器
                             </a-menu-item>
+                            <a-menu-item :key="'/apps/' + GraphTypeEnum.QR_CODE"
+                                @click="jumpToFunc('/apps/' + GraphTypeEnum.QR_CODE)">
+                                二维码
+                            </a-menu-item>
                         </a-sub-menu>
                         <a-sub-menu key="3">
                             <template #icon><icon-settings /></template>

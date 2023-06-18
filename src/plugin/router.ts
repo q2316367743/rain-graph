@@ -17,9 +17,9 @@ const router = createRouter({
         path: '/about',
         component: () => import('@/pages/about/index.vue')
     },
-    // =================
-    // ------ 绘制 ------
-    // =================
+    // ===================
+    // ------ 小程序 ------
+    // ===================
     {
         name: GraphTypeEnum.DRAUU,
         path: '/apps/' + GraphTypeEnum.DRAUU,
@@ -32,6 +32,10 @@ const router = createRouter({
         name: GraphTypeEnum.WORD_CLOUD,
         path: '/apps/' + GraphTypeEnum.WORD_CLOUD,
         component: () => import('@/pages/apps/word-cloud/index.vue')
+    }, {
+        name: GraphTypeEnum.QR_CODE,
+        path: '/apps/' + GraphTypeEnum.QR_CODE,
+        component: () => import('@/pages/apps/qr-code/index.vue')
     },
     // ===================
     // ------ 各种图 ------

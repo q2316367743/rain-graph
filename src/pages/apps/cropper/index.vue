@@ -1,9 +1,9 @@
 <template>
     <a-layout class="cropper">
+        <!-- 头部 -->
         <a-layout-header class="header">
             <a-button-group type="text">
-                <a-button @click="collapsed = !collapsed" :status="collapsed ? 'normal' : 'success'"
-                    :disabled="imageSrc === '' || lock">
+                <a-button @click="collapsed = !collapsed" :disabled="imageSrc === '' || lock">
                     <template #icon><icon-layout /></template>
                 </a-button>
                 <a-button @click="upload" :disabled="lock">
@@ -22,6 +22,9 @@
             </a-radio-group>
             <div style="text-align: right;">
                 <a-button-group type="text">
+                    <a-button :disabled="lock || imageSrc === ''">
+                        <template #icon><icon-settings /></template>
+                    </a-button>
                     <a-button @click="switchLock" :status="lock ? 'success' : 'normal'" :disabled="imageSrc === ''">
                         <template #icon><icon-lock /></template>
                     </a-button>
@@ -31,30 +34,40 @@
                 </a-button-group>
             </div>
         </a-layout-header>
+        <!-- 内容 -->
         <a-layout style="height: 400px;">
-            <a-layout-sider :width="230" :collapsed-width="0" :collapsed="collapsed">
-                <a-divider>比例</a-divider>
-                <a-button type="outline" v-for="proportion in proportions" style="margin: 3px 4px;"
-                    @click="updateAspectRatio(proportion.value)">
-                    {{ proportion.label }}
-                </a-button>
-                <a-divider>尺寸</a-divider>
-                <a-button type="outline" v-for="size in sizes" style="margin: 3px 4px;"
-                    @click="updateAspectRatio(size.value)">
-                    {{ size.label }}
-                </a-button>
-            </a-layout-sider>
-            <a-layout-content>
-                <div class="cropper-container-wrap" ref="cropper-container-wrap">
-                    <img class="cropper-container" ref="cropper-container" :src="imageSrc" />
-                </div>
-            </a-layout-content>
+            <div class="cropper-container-wrap" ref="cropper-container-wrap">
+                <img class="cropper-container" ref="cropper-container" :src="imageSrc" />
+            </div>
         </a-layout>
+        <!-- 裁剪预览 -->
         <a-image-preview :src="preview.src" v-model:visible="preview.dialog">
             <template #actions>
                 <a-image-preview-action name="下载" @click="execDown"><icon-download /></a-image-preview-action>
             </template>
         </a-image-preview>
+        <!-- 比例设置 -->
+        <a-drawer placement="left" :header="false" :footer="false" v-model:visible="collapsed" popup-container=".cropper">
+            <a-radio-group v-model="options.aspectRatio" @change="updateAspectRatio">
+                <a-divider>比例</a-divider>
+                <a-radio :value="proportion.value" v-for="proportion in proportions" style="margin: 7px 4px;">
+                    {{ proportion.label }}
+                </a-radio>
+                <a-divider>尺寸</a-divider>
+                <a-radio :value="size.value" v-for="size in sizes" style="margin: 7px 4px;">
+                    {{ size.label }}
+                </a-radio>
+                <a-radio value="customer" style="margin: 7px 4px;">自定义</a-radio>
+                <a-input-group style="margin-top: 7px;" v-if="options.aspectRatio === 'customer'">
+                    <span>长</span>
+                    <a-input-number v-model="aspectRatio.x" :min="1" style="margin-left: 14px;" />
+                </a-input-group>
+                <a-input-group style="margin-top: 7px;" v-if="options.aspectRatio === 'customer'">
+                    <span>高</span>
+                    <a-input-number v-model="aspectRatio.y" :min="1" style="margin-left: 14px;" />
+                </a-input-group>
+            </a-radio-group>
+        </a-drawer>
     </a-layout>
 </template>
 <script lang="ts">
@@ -70,7 +83,7 @@ export default defineComponent({
     name: 'cropper',
     data: () => ({
         sizes, proportions,
-        collapsed: true,
+        collapsed: false,
         drag: false,
         instance: undefined as Cropper | undefined,
         fileSystem: useFileSystemAccess({
@@ -87,16 +100,20 @@ export default defineComponent({
             // 是否显示虚拟网格线
             guides: true,
             // 不允许超出图片边界
-            viewMode: 1,
+            viewMode: 1 as 0 | 1 | 2 | 3,
             // 裁剪图片的宽高比例
-            aspectRatio: 1 / 1,
-        } as Cropper.Options<HTMLImageElement>,
+            aspectRatio: 1 / 1 as number | string,
+        },
         lock: false,
         preview: {
             dialog: false,
             src: '',
             width: 200,
             height: 200
+        },
+        aspectRatio: {
+            x: 1,
+            y: 1
         }
     }),
     watch: {
@@ -109,6 +126,15 @@ export default defineComponent({
             } else {
                 this.instance.setDragMode('crop');
             }
+        },
+        aspectRatio: {
+            handler() {
+                if (!this.instance) {
+                    return;
+                }
+                this.instance.setAspectRatio(this.aspectRatio.x / this.aspectRatio.y);
+            },
+            deep: true
         }
     },
     methods: {
@@ -128,7 +154,7 @@ export default defineComponent({
                             // 不允许超出图片边界
                             viewMode: this.options.viewMode,
                             // 裁剪图片的宽高比例
-                            aspectRatio: this.options.aspectRatio,
+                            aspectRatio: typeof this.options.aspectRatio === 'number' ? this.options.aspectRatio : (this.aspectRatio.x / this.aspectRatio.y),
                             dragMode: this.drag ? 'move' : 'crop',
                         }
                     );
@@ -173,12 +199,14 @@ export default defineComponent({
         execDown() {
             downloadByUrl(this.preview.src, "图片编辑器.png");
         },
-        updateAspectRatio(aspectRatio: number) {
+        updateAspectRatio(aspectRatio: any) {
             if (!this.instance) {
                 return;
             }
-            this.options.aspectRatio = aspectRatio;
-            this.instance.setAspectRatio(this.options.aspectRatio);
+            if (typeof aspectRatio === 'number') {
+                this.options.aspectRatio = aspectRatio;
+                this.instance.setAspectRatio(this.options.aspectRatio as number);
+            }
         }
     }
 });
@@ -203,7 +231,7 @@ export default defineComponent({
     .cropper-container-wrap {
         // 定位
         position: absolute;
-        top: 0;
+        top: 32px;
         left: 0;
         right: 0;
         bottom: 0;

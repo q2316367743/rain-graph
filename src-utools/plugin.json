@@ -118,6 +118,19 @@
             "cmds": [
                 "二维码生成器"
             ]
+        },
+        {
+            "code": "/apps/cropper",
+            "explain": "听雨图编辑器",
+            "icon": "public/logo.png",
+            "platform": [
+                "win32",
+                "darwin",
+                "linux"
+            ],
+            "cmds": [
+                "图片裁剪"
+            ]
         }
     ]
 }

@@ -42,7 +42,4 @@ export const sizes = [{
 }, {
     label: '拼多多(750x352)',
     value: 750 / 352
-}, {
-    label: '手机(1242x2208)',
-    value: 1242 / 2208
 }]

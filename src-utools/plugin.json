@@ -81,7 +81,7 @@
             ]
         },
         {
-            "code": "/draw/drauu",
+            "code": "/apps/drauu",
             "explain": "听雨图编辑器",
             "icon": "public/logo.png",
             "platform": [
@@ -94,7 +94,7 @@
             ]
         },
         {
-            "code": "/draw/echarts",
+            "code": "/apps/echarts",
             "explain": "听雨图编辑器",
             "icon": "public/logo.png",
             "platform": [
@@ -104,6 +104,19 @@
             ],
             "cmds": [
                 "可视化图表"
+            ]
+        },
+        {
+            "code": "/apps/qr-code",
+            "explain": "听雨图编辑器",
+            "icon": "public/logo.png",
+            "platform": [
+                "win32",
+                "darwin",
+                "linux"
+            ],
+            "cmds": [
+                "二维码生成器"
             ]
         }
     ]

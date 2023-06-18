@@ -270,7 +270,8 @@ export default defineComponent({
                 margin: 0,
                 width: 186,
                 height: 186
-            }
+            };
+            this.clearImage();
         },
         generate() {
             // 校验文字

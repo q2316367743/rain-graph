@@ -377,7 +377,6 @@ export default defineComponent({
         async open() {
             let res = this.fileSystem.open() as Promise<void>;
             res.then(() => {
-                console.log(this.fileSystem.data);
                 this.image = window.URL.createObjectURL(this.fileSystem.data as Blob);
                 this.imageName = this.fileSystem.fileName;
             })

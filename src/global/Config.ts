@@ -49,19 +49,24 @@ export default {
         color: string;
     }>,
     routeToTag(path: string): string {
+        if (path.startsWith("/setting/")) {
+            return '设置'
+        }
         switch (path) {
             case '/home':
                 return '首页';
-            case '/setting':
-                return '设置';
-            case '/recommend':
+            case '/more/recommend':
                 return '推荐';
-            case '/about':
+            case '/more/vip':
+                return '高级版';
+            case '/more/about':
                 return '关于';
             case '/apps/drauu':
                 return '使用画板';
             case '/apps/echarts':
                 return '使用可视化图表'
+            case '/image/cropper':
+                return '使用图片剪切'
         }
         if (path.startsWith("/graph/")) {
             path = path.substring(7);

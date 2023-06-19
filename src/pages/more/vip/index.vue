@@ -18,9 +18,9 @@
                 <a-typography-paragraph>5、本插件接受任何使用建议和反馈，但最终是否接受相关建议进行调整修改，将由插件作者决定。</a-typography-paragraph>
             </a-typography>
             <template #footer>
-                <a-button>【阅读】兑换</a-button>
-                <a-button type="dashed" disabled>激活码激活</a-button>
-                <a-button type="primary" @click="payment">支付</a-button>
+                <!-- <a-button disabled>【阅读】兑换</a-button> -->
+                <!-- <a-button type="dashed" disabled>激活码激活</a-button> -->
+                <a-button type="primary" @click="payment">开通</a-button>
             </template>
         </a-modal>
     </div>

@@ -19,20 +19,20 @@ export interface Contrast {
 
 export const data = [{
     func: "简易思维导图",
-    free: "✅",
-    vip: "✅"
+    free: "基础功能",
+    vip: "另存为、打开、模板管理"
 }, {
     func: "完整思维导图",
-    free: "✅",
-    vip: "✅"
+    free: "基础功能",
+    vip: "另存为、打开、模板管理"
 }, {
     func: "流程图",
-    free: "✅",
-    vip: "✅"
+    free: "基础功能",
+    vip: "另存为、打开、模板管理"
 }, {
     func: "白板",
-    free: "✅",
-    vip: "✅"
+    free: "基础功能",
+    vip: "另存为、打开、模板管理"
 }, {
     func: "画板",
     free: "✅",
@@ -50,17 +50,9 @@ export const data = [{
     free: "✅",
     vip: "✅"
 }, {
-    func: "另存为、打开",
-    free: "✅",
-    vip: "❌"
-}, {
-    func: "模板管理",
-    free: "✅",
-    vip: "❌"
-}, {
-    func: "本地备份、WebDAV备份",
-    free: "✅",
-    vip: "❌"
+    func: "更多功能，敬请期待",
+    free: "······",
+    vip: "······"
 }] as Contrast[];
 
 export const columns = [{

@@ -64,7 +64,7 @@
                             <a-menu-item key="/setting/base" @click="jumpToFunc('/setting/base')">
                                 基础设置
                             </a-menu-item>
-                            <a-menu-item key="/setting/backup" @click="jumpToFunc('/setting/backup')">
+                            <a-menu-item key="/setting/backup" @click="jumpToFunc('/setting/backup')" disabled>
                                 备份设置
                             </a-menu-item>
                             <a-menu-item key="/setting/simple-mind-map" @click="jumpToFunc('/setting/simple-mind-map')">

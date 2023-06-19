@@ -22,7 +22,7 @@
             </a-radio-group>
             <div style="text-align: right;">
                 <a-button-group type="text">
-                    <a-button :disabled="lock || imageSrc === ''">
+                    <a-button @click="preview.setting = true" :disabled="lock || imageSrc === ''">
                         <template #icon><icon-settings /></template>
                     </a-button>
                     <a-button @click="switchLock" :status="lock ? 'success' : 'normal'" :disabled="imageSrc === ''">
@@ -68,6 +68,13 @@
                 </a-input-group>
             </a-radio-group>
         </a-drawer>
+        <!-- 预览设置 -->
+        <a-drawer title="预览设置" :footer="false" v-model:visible="preview.setting" popup-container=".cropper">
+            <a-form :model="preview" layout="vertical">
+                <a-form-item label="宽度"> <a-input-number v-model="preview.width" :min="1" /> </a-form-item>
+                <a-form-item label="高度"> <a-input-number v-model="preview.height" :min="1" /> </a-form-item>
+            </a-form>
+        </a-drawer>
     </a-layout>
 </template>
 <script lang="ts">
@@ -108,6 +115,7 @@ export default defineComponent({
         preview: {
             dialog: false,
             src: '',
+            setting: false,
             width: 200,
             height: 200
         },
@@ -135,6 +143,14 @@ export default defineComponent({
                 this.instance.setAspectRatio(this.aspectRatio.x / this.aspectRatio.y);
             },
             deep: true
+        }
+    },
+    beforeUnmount() {
+        if (this.imageSrc !== '') {
+            window.URL.revokeObjectURL(this.imageSrc);
+        }
+        if (this.preview.src !== '') {
+            window.URL.revokeObjectURL(this.preview.src);
         }
     },
     methods: {

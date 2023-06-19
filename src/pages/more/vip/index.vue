@@ -7,7 +7,7 @@
             </template>
         </a-page-header>
         <div class="container">
-            <a-table :data="data" :columns="columns" :pagination="false" :scroll="scroll" :scrollbar="true"/>
+            <a-table :data="data" :columns="columns" :pagination="false" :scroll="scroll" :scrollbar="true" />
         </div>
         <a-modal v-model:visible="agreement" title="用户协议">
             <a-typography>
@@ -32,6 +32,7 @@ import { defineComponent } from "vue";
 import Constant from '@/global/Constant';
 import { data, columns } from './constant';
 import { useGlobalStore } from "@/store/GlobalStore";
+import MessageUtil from "@/utils/MessageUtil";
 
 export default defineComponent({
     name: 'more-vip',
@@ -55,6 +56,7 @@ export default defineComponent({
             }, () => {
                 // 支付成功，刷新状态
                 useVipStore().init();
+                MessageUtil.success("支付成功")
             })
         }
     }

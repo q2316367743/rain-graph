@@ -116,8 +116,8 @@ export default defineComponent({
             dialog: false,
             src: '',
             setting: false,
-            width: 200,
-            height: 200
+            width: 400,
+            height: 400
         },
         aspectRatio: {
             x: 1,
@@ -222,6 +222,8 @@ export default defineComponent({
             if (typeof aspectRatio === 'number') {
                 this.options.aspectRatio = aspectRatio;
                 this.instance.setAspectRatio(this.options.aspectRatio as number);
+            } else {
+                this.instance.setAspectRatio(this.aspectRatio.x / this.aspectRatio.y);
             }
         }
     }

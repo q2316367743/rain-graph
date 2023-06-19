@@ -11,7 +11,7 @@ export const useVipStore = defineStore('vip', {
     },
     actions: {
         async init() {
-            const payments = await utools.fetchUserPayments()
+            const payments = await utools.fetchUserPayments();
             for (let payment of payments) {
                 if (payment.goods_id === Constant.goodsId) {
                     this.isVip = true;

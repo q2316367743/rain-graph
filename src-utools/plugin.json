@@ -120,7 +120,7 @@
             ]
         },
         {
-            "code": "/apps/cropper",
+            "code": "/image/cropper",
             "explain": "听雨图编辑器",
             "icon": "public/logo.png",
             "platform": [

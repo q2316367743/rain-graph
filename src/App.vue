@@ -8,7 +8,7 @@
                             <template #icon><icon-list /></template>
                             列表
                         </a-menu-item>
-                        <a-sub-menu key="1">
+                        <a-sub-menu key="gragh">
                             <template #icon><icon-plus /></template>
                             <template #title>新建</template>
                             <a-menu-item :key="`/$gragh/${GraphTypeEnum.MIND}/0`" @click="jumpTo(GraphTypeEnum.MIND)"
@@ -30,7 +30,15 @@
                                 {{ Config.title[GraphTypeEnum.WHITE_BOARD].title }}
                             </a-menu-item>
                         </a-sub-menu>
-                        <a-sub-menu key="2">
+                        <a-sub-menu key="image">
+                            <template #icon><icon-image /></template>
+                            <template #title>图片编辑器</template>
+                            <a-menu-item :key="'/image/' + GraphTypeEnum.CROPPER"
+                                @click="jumpToFunc('/image/' + GraphTypeEnum.CROPPER)">
+                                图片裁剪
+                            </a-menu-item>
+                        </a-sub-menu>
+                        <a-sub-menu key="apps">
                             <template #icon><icon-apps /></template>
                             <template #title>小程序</template>
                             <a-menu-item :key="'/apps/' + GraphTypeEnum.DRAUU"
@@ -49,12 +57,8 @@
                                 @click="jumpToFunc('/apps/' + GraphTypeEnum.QR_CODE)">
                                 二维码
                             </a-menu-item>
-                            <a-menu-item :key="'/apps/' + GraphTypeEnum.CROPPER"
-                                @click="jumpToFunc('/apps/' + GraphTypeEnum.CROPPER)">
-                                图片裁剪
-                            </a-menu-item>
                         </a-sub-menu>
-                        <a-sub-menu key="3">
+                        <a-sub-menu key="setting">
                             <template #icon><icon-settings /></template>
                             <template #title>设置</template>
                             <a-menu-item key="/setting/base" @click="jumpToFunc('/setting/base')">
@@ -70,16 +74,24 @@
                                 流程图
                             </a-menu-item>
                         </a-sub-menu>
-                        <a-menu-item key="/recommend" @click="jumpToFunc('/recommend')">
-                            <template #icon><icon-thumb-up /></template>
-                            推荐
-                        </a-menu-item>
-                        <a-menu-item key="/about" @click="jumpToFunc('/about')">
-                            <template #icon>
-                                <icon-exclamation-circle />
-                            </template>
-                            关于
-                        </a-menu-item>
+                        <a-sub-menu key="4">
+                            <template #icon><icon-more /></template>
+                            <template #title>更多</template>
+                            <a-menu-item key="/more/recommend" @click="jumpToFunc('/more/recommend')">
+                                <template #icon><icon-thumb-up /></template>
+                                推荐
+                            </a-menu-item>
+                            <a-menu-item key="/more/vip" @click="jumpToFunc('/more/vip')">
+                                <template #icon><icon-star /></template>
+                                高级版
+                            </a-menu-item>
+                            <a-menu-item key="/more/about" @click="jumpToFunc('/more/about')">
+                                <template #icon>
+                                    <icon-exclamation-circle />
+                                </template>
+                                关于
+                            </a-menu-item>
+                        </a-sub-menu>
                     </a-menu>
                 </a-layout-sider>
                 <a-layout-content><router-view /></a-layout-content>
@@ -166,7 +178,12 @@ export default defineComponent({
                 useGlobalStore().setTitle('');
                 useGlobalStore().setType(action.code as GraphTypeEnum);
             }
-            this.$router.push(action.code);
+            this.$router.push({
+                path: action.code,
+                query: {
+                    payload: action.payload
+                }
+            });
         });
         // 快捷键注册
         window.addEventListener("keydown", function (e) {

@@ -10,12 +10,19 @@ const router = createRouter({
     }, {
         path: '/home',
         component: () => import('@/pages/home/index.vue')
+    },
+    // =================
+    // ------ 更多 ------
+    // =================
+    {
+        path: '/more/recommend',
+        component: () => import('@/pages/more/recommend/index.vue')
     }, {
-        path: '/recommend',
-        component: () => import('@/pages/recommend/index.vue')
+        path: '/more/vip',
+        component: () => import('@/pages/more/vip/index.vue')
     }, {
-        path: '/about',
-        component: () => import('@/pages/about/index.vue')
+        path: '/more/about',
+        component: () => import('@/pages/more/about/index.vue')
     },
     // ===================
     // ------ 小程序 ------
@@ -36,10 +43,14 @@ const router = createRouter({
         name: GraphTypeEnum.QR_CODE,
         path: '/apps/' + GraphTypeEnum.QR_CODE,
         component: () => import('@/pages/apps/qr-code/index.vue')
-    }, {
+    }, 
+    // ======================
+    // ------ 图片编辑器 ------
+    // ======================
+    {
         name: GraphTypeEnum.CROPPER,
-        path: '/apps/' + GraphTypeEnum.CROPPER,
-        component: () => import('@/pages/apps/cropper/index.vue')
+        path: '/image/' + GraphTypeEnum.CROPPER,
+        component: () => import('@/pages/image/cropper/index.vue')
     },
     // ===================
     // ------ 各种图 ------

@@ -3,8 +3,7 @@ import { defineStore } from "pinia";
 
 export const useVipStore = defineStore('vip', {
     state: () => ({
-        // TODO: 此处默认为false
-        isVip: true
+        isVip: false
     }),
     getters: {
         isNotVip: state => !state.isVip

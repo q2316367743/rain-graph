@@ -37,6 +37,10 @@
                                 @click="jumpToFunc('/image/' + GraphTypeEnum.CROPPER)">
                                 图片裁剪
                             </a-menu-item>
+                            <a-menu-item :key="'/image/' + GraphTypeEnum.COMPRESSOR"
+                                @click="jumpToFunc('/image/' + GraphTypeEnum.COMPRESSOR)">
+                                图片压缩
+                            </a-menu-item>
                         </a-sub-menu>
                         <a-sub-menu key="apps">
                             <template #icon><icon-apps /></template>

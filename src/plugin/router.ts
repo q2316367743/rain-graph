@@ -52,6 +52,11 @@ const router = createRouter({
         path: '/image/' + GraphTypeEnum.CROPPER,
         component: () => import('@/pages/image/cropper/index.vue')
     },
+    {
+        name: GraphTypeEnum.COMPRESSOR,
+        path: '/image/' + GraphTypeEnum.COMPRESSOR,
+        component: () => import('@/pages/image/compressor/index.vue')
+    },
     // ===================
     // ------ 各种图 ------
     // ===================

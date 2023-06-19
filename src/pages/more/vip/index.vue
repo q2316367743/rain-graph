@@ -58,7 +58,8 @@ export default defineComponent({
             }, () => {
                 // 支付成功，刷新状态
                 useVipStore().init();
-                MessageUtil.success("支付成功")
+                MessageUtil.success("支付成功");
+                this.agreement = false;
             })
         }
     }

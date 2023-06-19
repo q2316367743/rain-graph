@@ -104,51 +104,44 @@ export function svg2png(svg: SVGSVGElement): Promise<string> {
 }
 
 export function downloadByBase64(base64: string) {
-    var byteCharacters = atob(
+    let byteCharacters = atob(
         base64.replace(/^data:image\/(png|jpeg|jpg);base64,/, "")
     );
-    var byteNumbers = new Array(byteCharacters.length);
-    for (var i = 0; i < byteCharacters.length; i++) {
+    let byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
         byteNumbers[i] = byteCharacters.charCodeAt(i);
     }
-    var byteArray = new Uint8Array(byteNumbers);
-    var blob = new Blob([byteArray], {
+    let byteArray = new Uint8Array(byteNumbers);
+    let blob = new Blob([byteArray], {
         type: undefined,
     });
-    var aLink = document.createElement("a");
+    let aLink = document.createElement("a");
     aLink.download = "图片名称.png"; //这里写保存时的图片名称
     aLink.href = URL.createObjectURL(blob);
     aLink.click();
 }
 
-export async function openLocalFile() {
-    let fileHandle: any;
-    try {
-        // @ts-ignore
-        let [_fileHandle] = await window.showOpenFilePicker({
-            types: [
-                {
-                    description: '',
-                    accept: {
-                        'application/json': ['.smm']
-                    }
-                },
-            ],
-            excludeAcceptAllOption: true,
-            multiple: false
-        });
-        if (!_fileHandle) {
-            return
-        }
-        fileHandle = _fileHandle
-        if (fileHandle.kind === 'directory') {
-            MessageUtil.warning("请选择文件");
-            return
-        }
-    } catch (error: any) {
-        if (error.toString().includes('aborted')) {
-            return
-        }
-        MessageUtil.warning('你的浏览器可能不支持哦')
+/**
+ * 美化数据单位
+ *
+ * @param {number} value 需要美化的值
+ */
+export function prettyDataUnit(value: number) {
+    let gb = 1024 * 1024 * 1024.0;
+    if (value > gb) {
+        let temp = value / gb;
+        return temp.toFixed(2) + 'GB';
     }
+    let mb = 1024 * 1024.0;
+    if (value > mb) {
+        let temp = value / mb;
+        return temp.toFixed(2) + 'MB';
+    }
+    let b = 1024.0;
+    if (value > b) {
+        let temp = value / b;
+        return temp.toFixed(2) + 'KB';
+    }
+    return value + 'B';
+
 }

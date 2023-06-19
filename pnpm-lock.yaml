@@ -32,6 +32,9 @@ dependencies:
   codemirror:
     specifier: ^6.0.1
     version: 6.0.1(@lezer/common@1.0.2)
+  compressorjs:
+    specifier: ^1.2.1
+    version: registry.npmmirror.com/compressorjs@1.2.1
   cropperjs:
     specifier: ^1.5.13
     version: registry.npmmirror.com/cropperjs@1.5.13
@@ -4940,6 +4943,12 @@ packages:
       uri-js: registry.npmmirror.com/uri-js@4.4.1
     dev: false
 
+  registry.npmmirror.com/blueimp-canvas-to-blob@3.29.0:
+    resolution: {integrity: sha512-0pcSSGxC0QxT+yVkivxIqW0Y4VlO2XSDPofBAqoJ1qJxgH9eiUDLv50Rixij2cDuEfx4M6DpD9UGZpRhT5Q8qg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/blueimp-canvas-to-blob/-/blueimp-canvas-to-blob-3.29.0.tgz}
+    name: blueimp-canvas-to-blob
+    version: 3.29.0
+    dev: false
+
   registry.npmmirror.com/browserslist@4.21.5:
     resolution: {integrity: sha512-tUkiguQGW7S3IhB7N+c2MV/HZPSCPAAiYBZXLsBhFB/PCy6ZKKsZrmBayHV9fdGV/ARIfJ14NkxKzRDjvp7L6w==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/browserslist/-/browserslist-4.21.5.tgz}
     name: browserslist
@@ -4994,6 +5003,15 @@ packages:
     resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/commander/-/commander-2.20.3.tgz}
     name: commander
     version: 2.20.3
+    dev: false
+
+  registry.npmmirror.com/compressorjs@1.2.1:
+    resolution: {integrity: sha512-+geIjeRnPhQ+LLvvA7wxBQE5ddeLU7pJ3FsKFWirDw6veY3s9iLxAQEw7lXGHnhCJvBujEQWuNnGzZcvCvdkLQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/compressorjs/-/compressorjs-1.2.1.tgz}
+    name: compressorjs
+    version: 1.2.1
+    dependencies:
+      blueimp-canvas-to-blob: registry.npmmirror.com/blueimp-canvas-to-blob@3.29.0
+      is-blob: registry.npmmirror.com/is-blob@2.1.0
     dev: false
 
   registry.npmmirror.com/core-js@3.30.2:
@@ -5168,6 +5186,13 @@ packages:
     hasBin: true
     requiresBuild: true
     optional: true
+
+  registry.npmmirror.com/is-blob@2.1.0:
+    resolution: {integrity: sha512-SZ/fTft5eUhQM6oF/ZaASFDEdbFVe89Imltn9uZr03wdKMcWNVYSMjQPFtg05QuNkt5l5c135ElvXEQG0rk4tw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/is-blob/-/is-blob-2.1.0.tgz}
+    name: is-blob
+    version: 2.1.0
+    engines: {node: '>=6'}
+    dev: false
 
   registry.npmmirror.com/jest-worker@27.5.1:
     resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/jest-worker/-/jest-worker-27.5.1.tgz}

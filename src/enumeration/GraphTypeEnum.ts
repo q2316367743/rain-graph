@@ -43,7 +43,12 @@ enum GraphTypeEnum {
     /**
      * 图片剪切
      */
-    CROPPER = 'cropper'
+    CROPPER = 'cropper',
+
+    /**
+     * 图片压缩
+     */
+    COMPRESSOR = 'compressor'
 
 }
 

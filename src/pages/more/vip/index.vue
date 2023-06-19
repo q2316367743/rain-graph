@@ -33,6 +33,7 @@ import Constant from '@/global/Constant';
 import { data, columns } from './constant';
 import { useGlobalStore } from "@/store/GlobalStore";
 import MessageUtil from "@/utils/MessageUtil";
+import { statistics } from "@/global/BeanFactory";
 
 export default defineComponent({
     name: 'more-vip',
@@ -51,6 +52,7 @@ export default defineComponent({
     },
     methods: {
         payment() {
+            statistics.access("准备支付");
             utools.openPayment({
                 goodsId: Constant.goodsId
             }, () => {

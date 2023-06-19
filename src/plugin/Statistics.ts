@@ -53,7 +53,7 @@ export default class Statistics {
             this.token = res.token;
             this.expired = res.expiredAt + now.getTime();
         }
-        await axios.post(Constant.statistics, {
+        await axios.post(`${Constant.statistics}/statistics/add?id=${Constant.uid}`, {
             token: this.token,
             nickname: this.nickname,
             tag: tag,

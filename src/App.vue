@@ -274,7 +274,7 @@ export default defineComponent({
             this.$router.push({
                 path: '/home',
                 query: {
-                    name: path.startsWith('/gragh') ? name : undefined
+                    name: path.startsWith('/graph') ? name : undefined
                 }
             })
         },

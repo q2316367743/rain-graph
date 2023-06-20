@@ -48,7 +48,12 @@ enum GraphTypeEnum {
     /**
      * 图片压缩
      */
-    COMPRESSOR = 'compressor'
+    COMPRESSOR = 'compressor',
+
+    /**
+     * PSD查看器
+     */
+    PSD = 'psd',
 
 }
 

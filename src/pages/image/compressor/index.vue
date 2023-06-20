@@ -175,6 +175,9 @@ export default defineComponent({
         drawer: false,
         loading: false
     }),
+    beforeUnmount() {
+        this.release();
+    },
     methods: {
         prettyDataUnit,
         toDateString,
@@ -245,7 +248,6 @@ export default defineComponent({
         left: 0;
         right: 0;
         bottom: 0;
-
     }
 
     .header {

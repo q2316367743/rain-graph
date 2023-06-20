@@ -1,6 +1,7 @@
 import LocalNameEnum from '@/enumeration/LocalNameEnum';
 import Constant from '@/global/Constant';
 import axios from 'axios';
+import {utools} from "@/plugin/utools";
 
 
 export default class Statistics {
@@ -53,11 +54,22 @@ export default class Statistics {
             this.token = res.token;
             this.expired = res.expiredAt + now.getTime();
         }
+        let system: string;
+        if (utools.isWindows()) {
+            system = "Windows";
+        }else if (utools.isMacOS()) {
+            system = "MacOS"
+        }else if (utools.isLinux()){
+            system = "Linux"
+        }else {
+            system = navigator.userAgent;
+        }
         await axios.post(`${Constant.statistics}/statistics/add?id=${Constant.uid}`, {
             token: this.token,
             nickname: this.nickname,
             tag: tag,
-            platform: window.rain.env
+            platform: window.rain.env,
+            system
         });
 
     }

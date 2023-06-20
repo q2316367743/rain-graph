@@ -103,7 +103,7 @@ export function svg2png(svg: SVGSVGElement): Promise<string> {
     })
 }
 
-export function downloadByBase64(base64: string) {
+export function downloadByBase64(base64: string, fileName?: string) {
     let byteCharacters = atob(
         base64.replace(/^data:image\/(png|jpeg|jpg);base64,/, "")
     );
@@ -116,7 +116,7 @@ export function downloadByBase64(base64: string) {
         type: undefined,
     });
     let aLink = document.createElement("a");
-    aLink.download = "图片名称.png"; //这里写保存时的图片名称
+    aLink.download = fileName || "图片名称.png"; //这里写保存时的图片名称
     aLink.href = URL.createObjectURL(blob);
     aLink.click();
 }

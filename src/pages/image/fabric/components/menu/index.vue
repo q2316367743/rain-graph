@@ -1,0 +1,34 @@
+<template>
+    <div class="fabric-menu">
+        <a-button-group type="text">
+            <menu-file :instance="instance"/>
+            <menu-more :instance="instance"/>
+        </a-button-group>
+    </div>
+</template>
+<script lang="ts">
+import {defineComponent} from "vue";
+import FabricWrap from "@/pages/image/fabric/FabricWrap";
+
+import MenuFile from './menu-file.vue';
+import MenuMore from './menu-more/index.vue';
+
+export default defineComponent({
+    name: 'fabric-menu',
+    components: {MenuFile, MenuMore},
+    props: {
+        instance: {
+            type: FabricWrap,
+            required: false,
+            default: new FabricWrap()
+        },
+    },
+    data: () => ({})
+});
+</script>
+<style lang="less" scoped>
+.fabric-menu {
+    display: flex;
+    justify-content: space-between;
+}
+</style>

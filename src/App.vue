@@ -39,7 +39,11 @@
                             <template #icon>
                                 <icon-image/>
                             </template>
-                            <template #title>图片编辑器</template>
+                            <template #title>图片编辑</template>
+                            <a-menu-item :key="'/image/' + GraphTypeEnum.FABRIC"
+                                         @click="jumpToFunc('/image/' + GraphTypeEnum.FABRIC)">
+                                设计编辑器
+                            </a-menu-item>
                             <a-menu-item :key="'/image/' + GraphTypeEnum.CROPPER"
                                          @click="jumpToFunc('/image/' + GraphTypeEnum.CROPPER)">
                                 图片裁剪

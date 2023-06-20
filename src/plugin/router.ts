@@ -48,6 +48,10 @@ const router = createRouter({
         // ------ 图片编辑器 ------
         // ======================
         {
+            name: GraphTypeEnum.FABRIC,
+            path: '/image/' + GraphTypeEnum.FABRIC,
+            component: () => import('@/pages/image/fabric/index.vue')
+        }, {
             name: GraphTypeEnum.CROPPER,
             path: '/image/' + GraphTypeEnum.CROPPER,
             component: () => import('@/pages/image/cropper/index.vue')

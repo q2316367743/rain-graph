@@ -55,6 +55,11 @@ enum GraphTypeEnum {
      */
     PSD = 'psd',
 
+    /**
+     * 图片编辑器
+     */
+    FABRIC = 'fabric',
+
 }
 
 export default GraphTypeEnum;

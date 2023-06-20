@@ -1,13 +1,12 @@
 import {fabric} from "fabric";
 import {ICanvasOptions} from "fabric/fabric-impl";
-import {utools} from "@/plugin/utools";
 
 
 export default class FabricWrap {
 
     readonly canvas: fabric.Canvas;
 
-    constructor(element?: HTMLCanvasElement, config?: ICanvasOptions) {
+    constructor(isDark?: boolean, element?: HTMLCanvasElement, config?: ICanvasOptions) {
         if (!element) {
             this.canvas = {} as any;
             return
@@ -16,7 +15,7 @@ export default class FabricWrap {
             ...config,
             width: 420,
             height: 595,
-            backgroundColor: utools.isDarkColors() ? "#000000" : "#ffffff",
+            backgroundColor: isDark ? "#000000" : "#ffffff",
             fireRightClick: true,
             stopContextMenu: false
         });

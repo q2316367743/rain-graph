@@ -56,9 +56,14 @@ enum GraphTypeEnum {
     PSD = 'psd',
 
     /**
-     * 图片编辑器
+     * 设计编辑器
      */
     FABRIC = 'fabric',
+
+    /**
+     * 图片编辑器
+     */
+    TUI_IMAGE_EDITOR = 'tui-image-editor'
 
 }
 

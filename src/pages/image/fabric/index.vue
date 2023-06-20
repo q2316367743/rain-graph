@@ -36,13 +36,17 @@ export default defineComponent({
         collapsedWidth: 280
     }),
     computed: {
-        ...mapState(useGlobalStore, ['width', "height"]),
+        ...mapState(useGlobalStore, ['width', "height", "isDark"]),
         canvasWidth() {
             return this.width - (this.collapsed ? 0 : this.collapsedWidth) - 50
         }
     },
     mounted() {
-        this.instance = new FabricWrap(this.$refs["fabric-canvas"] as HTMLCanvasElement);
+        this.instance = new FabricWrap(
+            this.isDark,
+            this.$refs["fabric-canvas"] as HTMLCanvasElement,
+            this.option
+        );
         this.render = true;
     },
     beforeUnmount() {

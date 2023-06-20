@@ -1,6 +1,6 @@
 <template>
     <div class="fabric">
-        <fabric-menu class="header" v-if="render" :instance="instance"/>
+        <fabric-menu class="header" v-if="render" :instance="instance" v-model:collapsed="collapsed"/>
         <div class="container">
             <a-layout>
                 <a-layout-sider :collapsed="collapsed" :width="collapsedWidth" :collapsed-width="0">
@@ -74,7 +74,7 @@ export default defineComponent({
         .fabric-canvas-wrap {
             display: flex;
             justify-content: center;
-            background-color: #f2f2f2;
+            background-color: var(--color-neutral-3);
         }
     }
 }

@@ -1,5 +1,6 @@
 import {fabric} from "fabric";
 import {ICanvasOptions} from "fabric/fabric-impl";
+import {utools} from "@/plugin/utools";
 
 
 export default class FabricWrap {
@@ -15,7 +16,7 @@ export default class FabricWrap {
             ...config,
             width: 420,
             height: 595,
-            backgroundColor: "#ffffff",
+            backgroundColor: utools.isDarkColors() ? "#000000" : "#ffffff",
             fireRightClick: true,
             stopContextMenu: false
         });

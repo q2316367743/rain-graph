@@ -4,6 +4,13 @@
             <menu-file :instance="instance"/>
             <menu-more :instance="instance"/>
         </a-button-group>
+        <a-button-group type="text">
+            <a-button :status="side ? 'normal' : 'success'" @click="side =!side">
+                <template #icon>
+                    <icon-layout/>
+                </template>
+            </a-button>
+        </a-button-group>
     </div>
 </template>
 <script lang="ts">
@@ -15,6 +22,7 @@ import MenuMore from './menu-more/index.vue';
 
 export default defineComponent({
     name: 'fabric-menu',
+    emits: ['update:collapsed'],
     components: {MenuFile, MenuMore},
     props: {
         instance: {
@@ -22,8 +30,19 @@ export default defineComponent({
             required: false,
             default: new FabricWrap()
         },
+        collapsed: Boolean
     },
-    data: () => ({})
+    data: () => ({
+        side: false
+    }),
+    watch: {
+        collapsed(newValue) {
+            this.side = newValue;
+        },
+        side(newValue) {
+            this.$emit('update:collapsed', newValue);
+        }
+    }
 });
 </script>
 <style lang="less" scoped>

@@ -1,13 +1,12 @@
 <template>
     <div class="fabric-context-menu" v-show="visible" :style="style">
         <div class="item">复制</div>
-        <div class="item">删除</div>
+        <div class="item" style="color: rgb(var(--red-6));">删除</div>
     </div>
 </template>
 <script lang="ts">
 import {defineComponent} from "vue";
 import FabricWrap from "@/pages/image/fabric/FabricWrap";
-import {IEvent} from "fabric/fabric-impl";
 
 export default defineComponent({
     name: 'fabric-context-menu',
@@ -37,7 +36,7 @@ export default defineComponent({
         this.instance.canvas.on('mouse:down', this.handleMouseUp);
     },
     methods: {
-        handleMouseUp(event: IEvent<MouseEvent>) {
+        handleMouseUp(event: any) {
             try {
                 const canvas = this.instance.canvas;
                 const activeObject = canvas.getActiveObjects();

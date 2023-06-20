@@ -10,26 +10,26 @@
                             </template>
                             列表
                         </a-menu-item>
-                        <a-sub-menu key="gragh">
+                        <a-sub-menu key="graph">
                             <template #icon>
                                 <icon-plus/>
                             </template>
                             <template #title>新建</template>
-                            <a-menu-item :key="`/$gragh/${GraphTypeEnum.MIND}/0`" @click="jumpTo(GraphTypeEnum.MIND)"
+                            <a-menu-item :key="`/graph/${GraphTypeEnum.MIND}/0`" @click="jumpTo(GraphTypeEnum.MIND)"
                                          v-if="showViews.includes(GraphTypeEnum.MIND)">
                                 {{ Config.title[GraphTypeEnum.MIND].title }}
                             </a-menu-item>
-                            <a-menu-item :key="`/$gragh/${GraphTypeEnum.SIMPLE_MIND_MAP}/0`"
+                            <a-menu-item :key="`/graph/${GraphTypeEnum.SIMPLE_MIND_MAP}/0`"
                                          @click="jumpTo(GraphTypeEnum.SIMPLE_MIND_MAP)"
                                          v-if="showViews.includes(GraphTypeEnum.SIMPLE_MIND_MAP)">
                                 {{ Config.title[GraphTypeEnum.SIMPLE_MIND_MAP].title }}
                             </a-menu-item>
-                            <a-menu-item :key="`/$gragh/${GraphTypeEnum.DIAGRAM}/0`"
+                            <a-menu-item :key="`/graph/${GraphTypeEnum.DIAGRAM}/0`"
                                          @click="jumpTo(GraphTypeEnum.DIAGRAM)"
                                          v-if="showViews.includes(GraphTypeEnum.DIAGRAM)">
                                 {{ Config.title[GraphTypeEnum.DIAGRAM].title }}
                             </a-menu-item>
-                            <a-menu-item :key="`/$gragh/${GraphTypeEnum.WHITE_BOARD}/0`"
+                            <a-menu-item :key="`/graph/${GraphTypeEnum.WHITE_BOARD}/0`"
                                          @click="jumpTo(GraphTypeEnum.WHITE_BOARD)"
                                          v-if="showViews.includes(GraphTypeEnum.WHITE_BOARD)">
                                 {{ Config.title[GraphTypeEnum.WHITE_BOARD].title }}

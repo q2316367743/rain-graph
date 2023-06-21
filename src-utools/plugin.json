@@ -129,7 +129,28 @@
                 "linux"
             ],
             "cmds": [
-                "图片裁剪"
+                "图片裁剪",
+                {
+                    "type": "files",
+                    "label": "图片裁剪",
+                    "fileType": "file",
+                    "match": "\n/^.{1,}.(png|jpg|jpeg|webp|JPEG)/",
+                    "minLength": 1,
+                    "maxLength": 1
+                }
+            ]
+        },
+        {
+            "code": "/image/compressor",
+            "explain": "听雨图编辑器",
+            "icon": "public/logo.png",
+            "platform": [
+                "win32",
+                "darwin",
+                "linux"
+            ],
+            "cmds": [
+                "图片压缩"
             ]
         }
     ]

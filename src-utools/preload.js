@@ -1,5 +1,5 @@
-const { existsSync } = require('fs');
-const { readFile } = require('fs/promises');
+const {existsSync} = require('fs');
+const {readFile} = require('fs/promises');
 
 const BackupApi = require('./lib/BackupApi');
 

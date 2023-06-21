@@ -213,11 +213,15 @@ export default defineComponent({
                 useGlobalStore().setTitle('');
                 useGlobalStore().setType(action.code as GraphTypeEnum);
             }
+            let query = {} as Record<string, string>;
+            if (action.type === 'files') {
+                let file = action.payload[0];
+                query['path'] = file.path;
+                query['name'] = file.name;
+            }
             this.$router.push({
                 path: action.code,
-                query: {
-                    payload: action.payload
-                }
+                query
             });
         });
         // 快捷键注册

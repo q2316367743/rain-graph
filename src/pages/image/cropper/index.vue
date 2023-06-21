@@ -145,6 +145,29 @@ export default defineComponent({
             deep: true
         }
     },
+    mounted() {
+        let path = this.$route.query.path as string;
+        let name = this.$route.query.name as string;
+        window.preload.openFile(path)
+            .then(buffer => {
+                this.imageSrc = window.URL.createObjectURL(new Blob([buffer]));
+                this.$nextTick(() => {
+                    let instance = new Cropper(
+                        this.$refs['cropper-container'] as HTMLImageElement,
+                        {
+                            // 是否显示虚拟网格线
+                            guides: this.options.guides,
+                            // 不允许超出图片边界
+                            viewMode: this.options.viewMode,
+                            // 裁剪图片的宽高比例
+                            aspectRatio: typeof this.options.aspectRatio === 'number' ? this.options.aspectRatio : (this.aspectRatio.x / this.aspectRatio.y),
+                            dragMode: this.drag ? 'move' : 'crop',
+                        }
+                    );
+                    this.instance = markRaw(instance);
+                })
+            });
+    },
     beforeUnmount() {
         if (this.imageSrc !== '') {
             window.URL.revokeObjectURL(this.imageSrc);

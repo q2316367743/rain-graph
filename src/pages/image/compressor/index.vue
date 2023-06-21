@@ -19,6 +19,10 @@
                         </template>
                     </a-button>
                 </a-button-group>
+                <div style="width: 200px;margin-top: 10px">
+                    <a-slider v-model="config.quality" :min="0" :max="1" :step="0.1" :disabled="source.src === ''"
+                              @change="render()"/>
+                </div>
                 <a-button-group type="text">
                     <a-button @click="drawer = true">
                         <template #icon>
@@ -39,7 +43,7 @@
                     <a-image :height="180" :src="source.src"/>
                     <a-descriptions :column="1" align="align" v-if="source.src !== ''" class="info">
                         <a-descriptions-item label="最后修改日期">{{
-                                toDateString(source.lastModifiedDate)
+                                source.lastModifiedDate ? toDateString(source.lastModifiedDate) : ''
                             }}
                         </a-descriptions-item>
                         <a-descriptions-item label="文件名">{{ source.name }}</a-descriptions-item>
@@ -129,6 +133,7 @@ import Compressor from 'compressorjs';
 import {useFileSystemAccess} from "@vueuse/core";
 import {downloadByUrl, prettyDataUnit} from '@/utils/BrowserUtil';
 import {toDateString} from "xe-utils";
+import MessageUtil from "@/utils/MessageUtil";
 
 export default defineComponent({
     name: 'compressor',
@@ -160,7 +165,8 @@ export default defineComponent({
         }),
         source: {
             src: '',
-            lastModifiedDate: new Date(),
+            blob: new Blob(),
+            lastModifiedDate: new Date() as Date | null,
             name: '',
             type: 'image/jpeg',
             size: 0
@@ -175,6 +181,29 @@ export default defineComponent({
         drawer: false,
         loading: false
     }),
+    mounted() {
+        let path = this.$route.query.path as string;
+        let name = this.$route.query.name as string;
+        window.preload.openFile(path)
+            .then(buffer => {
+                try {
+                    let strings = name.split('.');
+                    let type = 'image/' + (strings.length > 0 ? strings[strings.length - 1] : 'png');
+                    let blob = new Blob([buffer.buffer], {type});
+                    this.source = {
+                        src: window.URL.createObjectURL(blob),
+                        blob: new File([blob], name, {type}),
+                        lastModifiedDate: new Date(),
+                        type,
+                        name,
+                        size: buffer.length
+                    };
+                    this.render();
+                } catch (e) {
+                    MessageUtil.error("压缩失败", e);
+                }
+            })
+    },
     beforeUnmount() {
         this.release();
     },
@@ -189,6 +218,7 @@ export default defineComponent({
                 // 原始图片
                 this.source = {
                     src: window.URL.createObjectURL(body),
+                    blob: body,
                     lastModifiedDate: new Date(this.fileSystem.fileLastModified),
                     type: this.fileSystem.fileMIME,
                     name: this.fileSystem.fileName,
@@ -201,9 +231,11 @@ export default defineComponent({
             if (this.source.src === '') {
                 return;
             }
-            let body = this.fileSystem.data as Blob;
+            if (this.loading) {
+                return;
+            }
             this.loading = true;
-            const instance = new Compressor(body, {
+            const instance = new Compressor(this.source.blob, {
                 ...this.config,
                 success: (file: File) => {
                     this.loading = false;

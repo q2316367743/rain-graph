@@ -4,7 +4,7 @@
             <a-list-item v-for="template in templates">
                 <a-list-item-meta>
                     <template #title>
-                        <a-link @click="render(template.id)">{{ template.name }}</a-link>
+                        <a-link @click="render(template.id, template.name)">{{ template.name }}</a-link>
                     </template>
                     <template #description>
                         {{ toDateString(template.createTime) }}
@@ -68,8 +68,8 @@ export default defineComponent({
                 })
                 .catch(e => MessageUtil.error("删除失败", e));
         },
-        render(id: string) {
-            this.$emit('render', id);
+        render(id: string, name: string) {
+            this.$emit('render', id, name);
             this.modal = false;
         }
     }

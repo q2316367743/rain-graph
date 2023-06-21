@@ -1,8 +1,6 @@
 import LocalNameEnum from '@/enumeration/LocalNameEnum';
 import Constant from '@/global/Constant';
 import axios from 'axios';
-import {utools} from "@/plugin/utools";
-
 
 export default class Statistics {
 

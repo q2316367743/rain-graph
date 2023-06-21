@@ -19,6 +19,11 @@ export interface StoreRecordCore {
     option?: any;
 
     /**
+     * 模板名字，更新时可能存在
+     */
+    name?: string;
+
+    /**
      * 额外自定义设置
      */
     [key: string]: any;
@@ -116,11 +121,16 @@ export async function getRecord(type: GraphTypeEnum, id: string, path: string = 
     }
 }
 
-export async function saveTemplate(type: GraphTypeEnum, record: StoreRecordCore) {
-    const name = await MessageBoxUtil.prompt("请输入模板名称", "保存模板", {});
+export async function saveTemplate(type: GraphTypeEnum, record: StoreRecordCore, id?: string): Promise<StoreRecord> {
+    let name = record.name;
+    if (!name) {
+        name = await MessageBoxUtil.prompt("请输入模板名称", "保存模板", {});
+    }
     // 插入记录
     const now = new Date();
-    const id = now.getTime() + '';
+    if (!id) {
+        id = now.getTime() + '';
+    }
     let recordId = `/${type}/${id}`
     const recordRes = await utools.db.promises.put({
         _id: recordId,
@@ -154,7 +164,63 @@ export async function saveTemplate(type: GraphTypeEnum, record: StoreRecordCore)
         await utools.db.promises.remove(recordId);
         return Promise.reject('保存索引，' + (res.message || "保存模板失败"));
     }
-    return Promise.resolve();
+    return Promise.resolve({
+        ...record,
+        id: recordId,
+        error: false,
+        message: ''
+    });
+}
+
+export async function saveOrUpdateTemplate(type: GraphTypeEnum, record: StoreRecordCore, id?: string): Promise<StoreRecord> {
+    // 获取模板列表
+    let templates = new Array<StoreRecordIndex>();
+    let _rev = undefined as string | undefined;
+    let key = '/template/' + type;
+    let templateWrap = await utools.db.promises.get(key);
+    if (templateWrap) {
+        _rev = templateWrap._rev;
+        templates = templateWrap.value;
+    }
+    if (id && templates.length > 0) {
+        // 可能是更新记录
+        for (let template of templates) {
+            if (template.id === id) {
+                // 更新模板名字
+                if (record.name && template.name !== record.name) {
+                    template.name = record.name;
+                    const res = await utools.db.promises.put({
+                        _id: '/template/' + type,
+                        _rev,
+                        value: templates
+                    });
+                    if (res.error) {
+                        // 删除记录
+                        return Promise.reject('保存索引，' + (res.message || "保存模板失败"));
+                    }
+                }
+                // 更新记录
+                let templateRecord = await utools.db.promises.get('/' + type + '/' + id);
+                let templateRev = templateRecord ? templateRecord._rev : undefined;
+                // 更新记录
+                await utools.db.promises.put({
+                    _id: '/' + type + '/' + id,
+                    _rev: templateRev,
+                    value: record
+                });
+                return Promise.resolve({
+                    ...record,
+                    id: id,
+                    error: false,
+                    message: ''
+                });
+            }
+        }
+        return saveTemplate(type, record, id);
+    } else {
+        // 新增记录
+        return saveTemplate(type, record, id);
+    }
 }
 
 export async function listTemplate(type: GraphTypeEnum): Promise<Array<StoreRecordIndex>> {

@@ -41,7 +41,7 @@
                         </a-button>
                     </template>
                     <a-image :height="180" :src="source.src"/>
-                    <a-descriptions :column="1" align="align" v-if="source.src !== ''" class="info">
+                    <a-descriptions :column="1" align="left" v-if="source.src !== ''" class="info">
                         <a-descriptions-item label="最后修改日期">{{
                                 source.lastModifiedDate ? toDateString(source.lastModifiedDate) : ''
                             }}
@@ -60,7 +60,7 @@
                         </a-button>
                     </template>
                     <a-image :height="180" :src="compressor.src"/>
-                    <a-descriptions :column="1" align="align" v-if="compressor.src !== ''" class="info">
+                    <a-descriptions :column="1" align="left" v-if="compressor.src !== ''" class="info">
                         <a-descriptions-item label="最后修改日期">{{
                                 toDateString(compressor.lastModifiedDate)
                             }}
@@ -151,9 +151,9 @@ export default defineComponent({
             resize: 'none' as 'contain' | 'cover' | 'none',
             quality: 0.8,
             mimeType: 'auto',
-            convertTypes: 'image/png',
+            convertTypes: 'image/png' as string,
             convertSize: 5000000,
-        } as Compressor.Options,
+        },
         fileSystem: useFileSystemAccess({
             dataType: 'Blob',
             types: [{
@@ -184,6 +184,9 @@ export default defineComponent({
     mounted() {
         let path = this.$route.query.path as string;
         let name = this.$route.query.name as string;
+        if (!path) {
+            return;
+        }
         window.preload.openFile(path)
             .then(buffer => {
                 try {
@@ -235,7 +238,7 @@ export default defineComponent({
                 return;
             }
             this.loading = true;
-            const instance = new Compressor(this.source.blob, {
+            new Compressor(this.source.blob, {
                 ...this.config,
                 success: (file: File) => {
                     this.loading = false;

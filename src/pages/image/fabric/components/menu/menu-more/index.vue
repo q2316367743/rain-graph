@@ -18,7 +18,7 @@ export default defineComponent({
     components: {MoreBackground},
     props: {
         instance: {
-            type: FabricWrap,
+            type: Object,
             required: false,
             default: new FabricWrap()
         },

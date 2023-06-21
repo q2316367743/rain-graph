@@ -36,7 +36,7 @@ export default defineComponent({
     emits: ['update:visible'],
     props: {
         instance: {
-            type: FabricWrap,
+            type: Object,
             required: false,
             default: new FabricWrap()
         },

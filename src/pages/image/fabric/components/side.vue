@@ -24,7 +24,7 @@ export default defineComponent({
     name: 'fabric-side',
     props: {
         instance: {
-            type: FabricWrap,
+            type: Object,
             required: false,
             default: new FabricWrap()
         },

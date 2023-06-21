@@ -26,7 +26,7 @@ export default defineComponent({
     components: {MenuFile, MenuMore},
     props: {
         instance: {
-            type: FabricWrap,
+            type: Object,
             required: false,
             default: new FabricWrap()
         },

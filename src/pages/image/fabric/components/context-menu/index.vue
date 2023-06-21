@@ -12,7 +12,7 @@ export default defineComponent({
     name: 'fabric-context-menu',
     props: {
         instance: {
-            type: FabricWrap,
+            type: Object,
             required: false,
             default: new FabricWrap()
         },

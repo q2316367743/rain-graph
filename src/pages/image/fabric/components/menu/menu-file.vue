@@ -8,7 +8,7 @@
     </a-dropdown>
 </template>
 <script lang="ts">
-import {defineComponent} from "vue";
+import {defineComponent, PropType} from "vue";
 import FabricWrap from "@/pages/image/fabric/FabricWrap";
 import MoreBackground from "@/pages/image/fabric/components/menu/menu-more/more-background.vue";
 import {download} from "@/utils/BrowserUtil";
@@ -22,7 +22,7 @@ export default defineComponent({
     components: {MoreBackground},
     props: {
         instance: {
-            type: FabricWrap,
+            type: Object,
             required: false,
             default: new FabricWrap()
         },

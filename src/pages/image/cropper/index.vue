@@ -148,6 +148,9 @@ export default defineComponent({
     mounted() {
         let path = this.$route.query.path as string;
         let name = this.$route.query.name as string;
+        if (!path) {
+            return;
+        }
         window.preload.openFile(path)
             .then(buffer => {
                 this.imageSrc = window.URL.createObjectURL(new Blob([buffer]));

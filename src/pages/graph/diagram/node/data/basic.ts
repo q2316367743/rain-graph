@@ -2,7 +2,8 @@
 
 import DiagramNode from "./DiagramNode";
 
-export const BasicNodes = [{
+// 基础节点
+export const basicNodes = [{
     name: 'pro-circle',
     icon: 'icon-circle'
 }, {
@@ -24,15 +25,27 @@ export const BasicNodes = [{
     name: 'cylinde',
     icon: 'icon-cylinde'
 }, {
-    name: 'actor',
-    icon: 'icon-actor'
-}, {
     name: 'parallelogram',
     icon: 'icon-parallelogram'
 }, {
-    name: 'pro-text',
-    icon: 'icon-text'
+    name: 'pentagon',
+    icon: 'icon-pentagon'
 }, {
+    name: 'hexagon',
+    icon: 'icon-hexagon'
+}, {
+    name: 'septagon',
+    icon: 'icon-septagon'
+}, {
+    name: 'heptagon',
+    icon: 'icon-heptagon'
+}, {
+    name: 'trapezoid',
+    icon: 'icon-trapezoid'
+}] as DiagramNode[];
+
+// 个性化图形
+export const arrowNodes = [{
     name: 'left-arrow',
     icon: 'icon-left-arrow'
 }, {
@@ -50,21 +63,14 @@ export const BasicNodes = [{
 }, {
     name: 'vertical-arrow',
     icon: 'icon-vertical-arrow'
+}];
+
+export const specialNodes = [{
+    name: 'pro-text',
+    icon: 'icon-text'
 }, {
-    name: 'pentagon',
-    icon: 'icon-pentagon'
-}, {
-    name: 'hexagon',
-    icon: 'icon-hexagon'
-}, {
-    name: 'septagon',
-    icon: 'icon-septagon'
-}, {
-    name: 'heptagon',
-    icon: 'icon-heptagon'
-}, {
-    name: 'trapezoid',
-    icon: 'icon-trapezoid'
+    name: 'actor',
+    icon: 'icon-actor'
 }, {
     name: 'cross',
     icon: 'icon-cross'
@@ -77,4 +83,4 @@ export const BasicNodes = [{
 }, {
     name: 'divide',
     icon: 'icon-divide'
-}] as DiagramNode[];
+}];

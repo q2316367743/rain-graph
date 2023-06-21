@@ -1,12 +1,22 @@
 <template>
     <div class="diagram-sidebar">
-        <a-collapse :bordered="false" :default-active-key="['1', '2', '3']">
+        <a-collapse :bordered="false" :default-active-key="['1', '2']">
             <a-collapse-item header="基础图形" key="1">
-                <div v-for="node in BasicNodes" class="node-item" @mousedown="dragInNode(node.name)">
-                    <component :is="node.icon" class="svg-node" />
+                <div v-for="node in basicNodes" class="node-item" @mousedown="dragInNode(node.name)">
+                    <component :is="node.icon" class="svg-node"/>
                 </div>
             </a-collapse-item>
-            <a-collapse-item header="图片" key="2">
+            <a-collapse-item header="特殊节点" key="2">
+                <div v-for="node in specialNodes" class="node-item" @mousedown="dragInNode(node.name)">
+                    <component :is="node.icon" class="svg-node"/>
+                </div>
+            </a-collapse-item>
+            <a-collapse-item header="方向节点" key="3">
+                <div v-for="node in arrowNodes" class="node-item" @mousedown="dragInNode(node.name)">
+                    <component :is="node.icon" class="svg-node"/>
+                </div>
+            </a-collapse-item>
+            <a-collapse-item header="图片" key="4">
                 <div class="image-node image-setting" @mousedown="dragInNode('image-setting')">
                 </div>
                 <div class="image-node image-user" @mousedown="dragInNode('image-user')">
@@ -14,14 +24,14 @@
                 <div class="image-node image-cloud" @mousedown="dragInNode('image-cloud')">
                 </div>
             </a-collapse-item>
-            <a-collapse-item header="ICON" key="3">
+            <a-collapse-item header="ICON" key="5">
                 <div class="icon-node icon-message" @mousedown="dragInNode('icon-message')"></div>
             </a-collapse-item>
         </a-collapse>
     </div>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
+import {defineComponent} from 'vue'
 
 import IconCircle from '../icon/Circle.vue'
 import IconRect from '../icon/Rect.vue'
@@ -49,13 +59,13 @@ import IconMinus from '../icon/Minus.vue'
 import IconTimes from '../icon/Times.vue'
 import IconDivide from '../icon/Divide.vue'
 
-import { BasicNodes } from '../node';
+import {arrowNodes, basicNodes, specialNodes} from '../node';
 
 export default defineComponent({
     name: 'DiagramSidebar',
     emits: ['dragInNode'],
     data: () => ({
-        BasicNodes
+        basicNodes, specialNodes, arrowNodes
     }),
     methods: {
         dragInNode(type: any) {

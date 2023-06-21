@@ -12,21 +12,11 @@
         <div class="setting-block">
             <div class="setting-item">
                 <span>背景色</span>
-                <a-trigger trigger="click" position="bottom" auto-fit-position :unmount-on-close="false">
-                    <div class="border-color" :style='{ "backgroundColor": style.backgroundColor }' slot="reference"></div>
-                    <template #content>
-                        <input type="color" v-model="style.backgroundColor" @input="sync" />
-                    </template>
-                </a-trigger>
+                <color-picker v-model:color="style.backgroundColor" @change="sync" />
             </div>
             <div class="setting-item">
                 <span>线条颜色</span>
-                <a-trigger trigger="click" position="bottom" auto-fit-position :unmount-on-close="false" @hide="sync">
-                    <div class="border-color" :style='{ "backgroundColor": style.borderColor }' slot="reference"></div>
-                    <template #content>
-                        <input type="color" v-model="style.borderColor" @input="sync" />
-                    </template>
-                </a-trigger>
+                <color-picker v-model:color="style.borderColor" @change="sync" />
             </div>
             <div class="setting-item">
                 <span>线条样式</span>
@@ -51,13 +41,7 @@
             </div>
             <div class="setting-item">
                 <span>文本颜色</span>
-                <a-trigger trigger="click" position="bottom" auto-fit-position :unmount-on-close="false">
-                    <div class="border-color" :style='{ "backgroundColor": style.fontColor }' slot="reference"></div>
-                    <template #content>
-                        <input type="color" v-model="style.fontColor" @change="sync" />
-                    </template>
-                </a-trigger>
-
+                <color-picker v-model:color="style.fontColor" @change="sync" />
             </div>
             <div class="setting-item">
                 <span>文本大小</span>
@@ -103,8 +87,11 @@
 <script lang="ts">
 import { shortStyles, borderStyles, fontFamilies } from '../constants'
 import { defineComponent } from 'vue';
+import ColorPicker from "@/components/color-picker/index.vue";
 
 export default defineComponent({
+    name: 'diagram-panel',
+    components: {ColorPicker},
     props: {
         elementsStyle: Object,
         onlyEdge: Boolean // 是否是只设置边的属性，当只设置边的属性时，隐藏快捷样式和背景色设置

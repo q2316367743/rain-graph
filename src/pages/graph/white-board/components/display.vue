@@ -28,18 +28,17 @@
         </a-trigger>
         <a-input :model-value="backgroundColor" style="width: 250px;margin-left: 7px;">
             <template #prepend>背景颜色</template>
-            <template #append>
-                <input type="color" :value="backgroundColor" @input="changeCustomerColor" />
-            </template>
         </a-input>
     </div>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
+import ColorPicker from "@/components/color-picker/index.vue";
 
 
 export default defineComponent({
     name: 'white-board-display',
+    components: {ColorPicker},
     props: {
         app: Object,
         backgroundColor: String,

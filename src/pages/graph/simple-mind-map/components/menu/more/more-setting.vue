@@ -32,13 +32,13 @@
             </a-form-item>
             <a-divider>水印</a-divider>
             <a-form-item label="是否显示水印">
-                <a-switch v-model="waterShow" @change="waterShowSwitch" />
+                <a-switch v-model="waterShow" @change="waterShowSwitch()" />
             </a-form-item>
             <a-form-item label="水印文字" v-if="waterShow">
                 <a-input v-model="instance.watermarkConfig.text" />
             </a-form-item>
             <a-form-item label="文字颜色" v-if="waterShow">
-                <input type="color" v-model="instance.watermarkConfig.textStyle.color" />
+                <color-picker v-model:color="instance.watermarkConfig.textStyle.color" />
             </a-form-item>
             <a-form-item label="文字透明度" v-if="waterShow">
                 <a-slider v-model="instance.watermarkConfig.textStyle.opacity" :min="0.1" :step="0.1" :max="1" />
@@ -131,9 +131,11 @@ import { defineComponent } from "vue";
 import { getDefaultConfig } from "../../../data/config";
 import SimpleMindMapWrap from "../../../SimpleMindMapWrap";
 import { toRaw } from "vue";
+import ColorPicker from "@/components/color-picker/index.vue";
 
 export default defineComponent({
     name: 'smm-menu-more-setting',
+    components: {ColorPicker},
     emits: ["update:visible"],
     props: {
         simpleMindMapWrap: {
@@ -165,8 +167,8 @@ export default defineComponent({
         save() {
             this.simpleMindMapWrap.setConfig(toRaw(this.instance));
         },
-        waterShowSwitch(newValue: any) {
-            if (newValue) {
+        waterShowSwitch() {
+            if (this.waterShow) {
                 // 显示
                 this.instance.watermarkConfig = {
                     text: '水印文字',

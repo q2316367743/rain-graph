@@ -29,20 +29,10 @@
             </a-form-item>
             <div class="row">
                 <div class="btnGroup">
-                    <a-trigger placement="bottom" trigger="hover" :disabled="checkDisabled('color')">
-                        <a-tooltip content="颜色" placement="bottom">
-                            <div class="styleBtn" :class="{ disabled: checkDisabled('color') }">
-                                A
-                                <span class="colorShow" :style="{ backgroundColor: style.color || '#eee' }"></span>
-                            </div>
-                        </a-tooltip>
-                        <template #content>
-                            <simple-mind-map-base-color v-model:color="style.color" @change="update('color')" />
-                        </template>
-                    </a-trigger>
+                    <color-picker v-model:color="style.color" @change="update('color')" />
                     <a-tooltip content="加粗" placement="bottom">
                         <div class="styleBtn" :class="{
-                            actived: style.fontWeight === 'bold',
+                            active: style.fontWeight === 'bold',
                             disabled: checkDisabled('fontWeight')
                         }" @click="toggleFontWeight">
                             B
@@ -50,7 +40,7 @@
                     </a-tooltip>
                     <a-tooltip content="斜体" placement="bottom">
                         <div class="styleBtn i" :class="{
-                            actived: style.fontStyle === 'italic',
+                            active: style.fontStyle === 'italic',
                             disabled: checkDisabled('fontStyle')
                         }" @click="toggleFontStyle">
                             I
@@ -81,13 +71,7 @@
             </div>
             <a-divider>边框</a-divider>
             <a-form-item label="颜色">
-                <a-trigger placement="bottom" trigger="hover" :disabled="checkDisabled('borderColor')">
-                    <span class="block" :style="{ backgroundColor: style.borderColor }"
-                        :class="{ disabled: checkDisabled('borderColor') }"></span>
-                    <template #content>
-                        <simple-mind-map-base-color v-model:color="style.borderColor" @change="update('borderColor')" />
-                    </template>
-                </a-trigger>
+                <color-picker v-model:color="style.borderColor" @change="update('borderColor')" />
             </a-form-item>
             <a-form-item label="样式">
                 <a-select size="mini" style="width: 80px" v-model="style.borderDasharray"
@@ -115,13 +99,7 @@
             </a-form-item>
             <a-divider>背景</a-divider>
             <a-form-item label="颜色">
-                <a-trigger placement="bottom" trigger="hover" :disabled="checkDisabled('fillColor')">
-                    <span class="block" :style="{ backgroundColor: style.fillColor }"
-                        :class="{ disabled: checkDisabled('fillColor') }"></span>
-                    <template #content>
-                        <simple-mind-map-base-color v-model:color="style.fillColor" @change="update('fillColor')" />
-                    </template>
-                </a-trigger>
+                <color-picker v-model:color="style.fillColor" @change="update('fillColor')" />
             </a-form-item>
             <a-divider>形状</a-divider>
             <div>
@@ -134,13 +112,7 @@
             </div>
             <a-divider>线条</a-divider>
             <a-form-item label="颜色">
-                <a-trigger placement="bottom" trigger="hover" :disabled="checkDisabled('lineColor')">
-                    <span class="block" :style="{ backgroundColor: style.lineColor }"
-                        :class="{ disabled: checkDisabled('lineColor') }"></span>
-                    <template #content>
-                        <simple-mind-map-base-color v-model:color="style.lineColor" @change="update('lineColor')" />
-                    </template>
-                </a-trigger>
+                <color-picker v-model:color="style.lineColor" @change="update('lineColor')" />
             </a-form-item>
             <a-form-item label="样式">
                 <a-select size="mini" style="width: 80px" v-model="style.lineDasharray"
@@ -182,13 +154,13 @@ import {
     shapeList
 } from '@/global/theme'
 import SimpleMindMapWrap from '../SimpleMindMapWrap';
+import ColorPicker from "@/components/color-picker/index.vue";
 
-import SimpleMindMapBaseColor from './base/color.vue';
 
 // 节点样式设置
 export default defineComponent({
     name: 'simple-mind-map-style',
-    components: { SimpleMindMapBaseColor },
+    components: {ColorPicker},
     props: {
         simpleMindMapWrap: {
             type: Object as PropType<SimpleMindMapWrap>,
@@ -388,7 +360,7 @@ export default defineComponent({
             border-radius: 4px;
             color: var(--color-text-1);
 
-            &.actived {
+            &.active {
                 background-color: var(--color-neutral-2);
             }
 

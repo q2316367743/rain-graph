@@ -7,8 +7,8 @@
                 ">
                 <div class="styleBlockTitle">描边</div>
                 <div class="styleBlockContent">
-                    <input type="color" :value="activeElement.style.strokeStyle" v-if="activeElement"
-                        @input="updateStyle('strokeStyle', $event)" />
+                    <color-picker v-model:color="activeElement.style.strokeStyle"
+                                  @change="updateStyle('strokeStyle', $event)"/>
                 </div>
             </div>
             <!-- 填充 -->
@@ -18,8 +18,8 @@
                 ">
                 <div class="styleBlockTitle">填充</div>
                 <div class="styleBlockContent">
-                    <input type="color" :value="activeElement.style.fillStyle" v-if="activeElement"
-                        @input="updateStyle('fillStyle', $event)" />
+                    <color-picker v-model:color="activeElement.style.fillStyle"
+                                  @change="updateStyle('fillStyle', $event)"/>
                 </div>
             </div>
             <!-- 字体 -->
@@ -28,7 +28,8 @@
                 <div class="styleBlockContent">
                     <a-select v-model="fontFamily" placeholder="字体" @change="updateBaseStyle('fontFamily', $event)">
                         <a-option v-for="item in fontFamilyList" :key="item.value" :value="item.value"
-                            :style="{ fontFamily: item.value }">{{ item.name }}</a-option>
+                                  :style="{ fontFamily: item.value }">{{ item.name }}
+                        </a-option>
                     </a-select>
                 </div>
             </div>
@@ -36,9 +37,10 @@
             <div class="styleBlock" v-if="['text'].includes(activeElement?.type) || hasSelectedElements">
                 <div class="styleBlockTitle">字号</div>
                 <div class="styleBlockContent">
-                    <a-select size="mini" v-model="fontSize" placeholder="字号" @change="updateBaseStyle('fontSize', $event)">
+                    <a-select size="mini" v-model="fontSize" placeholder="字号"
+                              @change="updateBaseStyle('fontSize', $event)">
                         <a-option v-for="item in fontSizeList" :key="item.value" :value="item.value"
-                            :style="{ fontSize: item.value }">{{ item.name }}
+                                  :style="{ fontSize: item.value }">{{ item.name }}
                         </a-option>
                     </a-select>
                 </div>
@@ -92,45 +94,48 @@
                 <div class="styleBlockTitle">透明度</div>
                 <div class="styleBlockContent">
                     <a-slider v-model="globalAlpha" :min="0" :max="1" :step="0.1"
-                        @change="updateBaseStyle('globalAlpha', $event)" />
+                              @change="updateBaseStyle('globalAlpha', $event)"/>
                 </div>
             </div>
             <!-- 角度 -->
             <div class="styleBlock" v-if="!hasSelectedElements">
                 <div class="styleBlockTitle">角度</div>
                 <div class="styleBlockContent">
-                    <a-slider v-model="rotate" :min="0" :max="360" :step="1" @change="onRotateChange" />
+                    <a-slider v-model="rotate" :min="0" :max="360" :step="1" @change="onRotateChange"/>
                     <a-input-number style="width: 100px; margin-left: 20px" :controls="false" v-model="rotate" :min="0"
-                        :max="360" @change="onRotateChange" />
+                                    :max="360" @change="onRotateChange"/>
                 </div>
             </div>
         </div>
         <!-- 显示面板 -->
-        <a-button-group type="primary" class="white-board-panel-action" :disabled="!(activeElement || hasSelectedElements)">
+        <a-button-group type="primary" class="white-board-panel-action"
+                        :disabled="!(activeElement || hasSelectedElements)">
             <a-button @click="show = !show">
                 <template #icon>
-                    <icon-bg-colors />
+                    <icon-bg-colors/>
                 </template>
             </a-button>
             <a-button @click="copyElement" style="margin-left: 7px;">
                 <template #icon>
-                    <icon-copy />
+                    <icon-copy/>
                 </template>
             </a-button>
             <a-button status="danger" @click="deleteElement" style="margin-left: 7px;">
                 <template #icon>
-                    <icon-delete />
+                    <icon-delete/>
                 </template>
             </a-button>
         </a-button-group>
     </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
-import { fontFamilyList, fontSizeList } from '../constants'
+import {defineComponent} from "vue";
+import {fontFamilyList, fontSizeList} from '../constants'
+import ColorPicker from "@/components/color-picker/index.vue";
 
 export default defineComponent({
     name: 'white-board-panel',
+    components: {ColorPicker},
     props: {
         app: Object,
         activeElement: Object,
@@ -177,7 +182,7 @@ export default defineComponent({
         updateStyle(key: string, e: any) {
             if (this.app) {
                 this.app.setCurrentElementsStyle({
-                    [key]: e.target.value
+                    [key]: e
                 });
             }
         },

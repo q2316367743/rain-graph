@@ -1,4 +1,4 @@
-import { LAYOUT, MOUSE_WHEEL_ACTION } from "../data/constants";
+import { MOUSE_WHEEL_ACTION } from "../data/constants";
 
 export interface SimpleMindMapConfig {
     // 是否只读
@@ -54,7 +54,7 @@ export interface SimpleMindMapConfig {
     enableShortcutOnlyWhenMouseInSvg:      boolean;
     // 是否开启节点动画过渡
     enableNodeTransitionMove:              boolean;
-    // 如果开启节点动画过渡，可以通过该属性设置过渡的时间，单位ms
+    // 如果开启节点动画过渡，可以通过该属性设置 过渡 的时间，单位ms
     nodeTransitionMoveDuration:            number;
     // 初始根节点的位置
     initRootNodePosition:                  string[];

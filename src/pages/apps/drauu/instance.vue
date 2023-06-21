@@ -71,7 +71,6 @@ import {useGlobalStore} from "@/store/GlobalStore";
 import {downloadByBase64, svg2png} from "@/utils/BrowserUtil";
 import MessageUtil from "@/utils/MessageUtil";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
-import {useSaveEvent} from "@/global/BeanFactory";
 
 
 export default defineComponent({

@@ -80,7 +80,7 @@ export function getDefaultConfig(): SimpleMindMapConfig {
         enableShortcutOnlyWhenMouseInSvg: true,
         // 是否开启节点动画过渡
         enableNodeTransitionMove: true,
-        // 如果开启节点动画过渡，可以通过该属性设置过渡的时间，单位ms
+        // 如果开启节点动画过渡，可以通过该属性设置 过渡 的时间，单位ms
         nodeTransitionMoveDuration: 300,
         // 初始根节点的位置
         initRootNodePosition: ["center", "center"],

@@ -10,7 +10,7 @@ export function exportForJson(option: any) {
 }
 
 export function exportForPng(myChart: EChartsType) {
-    var img = new Image();
+    const img = new Image();
     img.src = myChart.getDataURL({
         type: "png",
         pixelRatio: 1, //放大2倍
@@ -27,7 +27,7 @@ export function exportForPng(myChart: EChartsType) {
             return;
         }
         ctx.drawImage(img, 0, 0);
-        var dataURL = canvas.toDataURL('image/png');
+        const dataURL = canvas.toDataURL('image/png');
 
         let a = document.createElement('a');
         // 创建一个单击事件

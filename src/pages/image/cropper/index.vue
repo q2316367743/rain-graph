@@ -37,7 +37,7 @@
         <!-- 内容 -->
         <a-layout style="height: 400px;">
             <div class="cropper-container-wrap" ref="cropper-container-wrap">
-                <img class="cropper-container" ref="cropper-container" :src="imageSrc" />
+                <img class="cropper-container" ref="cropper-container" :src="imageSrc" alt="示例图片" />
             </div>
         </a-layout>
         <!-- 裁剪预览 -->
@@ -109,7 +109,7 @@ export default defineComponent({
             // 不允许超出图片边界
             viewMode: 1 as 0 | 1 | 2 | 3,
             // 裁剪图片的宽高比例
-            aspectRatio: 1 / 1 as number | string,
+            aspectRatio: 1 as number | string,
         },
         lock: false,
         preview: {
@@ -147,7 +147,7 @@ export default defineComponent({
     },
     mounted() {
         let path = this.$route.query.path as string;
-        let name = this.$route.query.name as string;
+        // let name = this.$route.query.name as string;
         if (!path) {
             return;
         }
@@ -257,7 +257,7 @@ export default defineComponent({
 </script>
 <style lang="less">
 .cropper {
-    position: relation;
+    position: relative;
     height: 100%;
     width: 100%;
 

@@ -41,7 +41,6 @@ import { HotTable } from '@handsontable/vue3';
 import 'handsontable/dist/handsontable.full.css';
 import { registerAllModules } from 'handsontable/registry';
 import 'handsontable/languages/zh-CN';
-import { cloneDeep } from 'lodash-es';
 import { read, utils } from 'xlsx'
 
 registerAllModules();

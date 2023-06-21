@@ -131,6 +131,12 @@ export default defineComponent({
             this.imageEditor.redo();
             this.change();
         },
+        download() {
+            if (!this.imageEditor) {
+                return;
+            }
+            downloadByUrl(this.imageEditor.toDataURL(), this.fileSystem.fileName);
+        },
         // ====================================================================
         // ------------------------------ 裁剪相关 ------------------------------
         // ====================================================================
@@ -161,12 +167,6 @@ export default defineComponent({
                 this.imageEditor.stopDrawingMode();
                 this.change();
             });
-        },
-        download() {
-            if (!this.imageEditor) {
-                return;
-            }
-            downloadByUrl(this.imageEditor.toDataURL(), this.fileSystem.fileName);
         }
     }
 });

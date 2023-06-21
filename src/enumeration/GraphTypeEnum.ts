@@ -60,11 +60,6 @@ enum GraphTypeEnum {
      */
     FABRIC = 'fabric',
 
-    /**
-     * 图片编辑器
-     */
-    TUI_IMAGE_EDITOR = 'tui-image-editor'
-
 }
 
 export default GraphTypeEnum;

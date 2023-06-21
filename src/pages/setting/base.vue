@@ -16,6 +16,9 @@
                 <a-checkbox :value="GraphTypeEnum.WHITE_BOARD">白板</a-checkbox>
             </a-checkbox-group>
         </a-form-item>
+        <a-form-item label="画板模板是否可以作为流程图节点">
+            <a-switch v-model="setting.drauuAppendToDiagram" />
+        </a-form-item>
         <a-form-item>
             <a-button type="primary" @click="save">保存</a-button>
             <template #help>记得保存哦</template>

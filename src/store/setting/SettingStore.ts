@@ -1,13 +1,14 @@
 import Setting from "@/entity/setting";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import LocalNameEnum from "@/enumeration/LocalNameEnum";
-import { defineStore } from "pinia";
-import { toRaw } from "vue";
+import {defineStore} from "pinia";
+import {toRaw} from "vue";
 
 export function getDefaultSetting(): Setting {
     return {
         defaultView: GraphTypeEnum.MIND,
-        showViews: [GraphTypeEnum.MIND, GraphTypeEnum.SIMPLE_MIND_MAP, GraphTypeEnum.DIAGRAM, GraphTypeEnum.WHITE_BOARD]
+        showViews: [GraphTypeEnum.MIND, GraphTypeEnum.SIMPLE_MIND_MAP, GraphTypeEnum.DIAGRAM, GraphTypeEnum.WHITE_BOARD],
+        drauuAppendToDiagram: true
     }
 }
 
@@ -18,7 +19,8 @@ export const useSettingStore = defineStore('setting', {
     }),
     getters: {
         defaultView: state => state.base.defaultView || GraphTypeEnum.MIND,
-        showViews: state => state.base.showViews
+        showViews: state => state.base.showViews,
+        drauuAppendToDiagram: state => state.base.drauuAppendToDiagram,
     },
     actions: {
         init() {

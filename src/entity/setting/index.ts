@@ -12,4 +12,9 @@ export default interface Setting {
      */
     showViews: GraphTypeEnum[];
 
+    /**
+     * drauu是否可以附加到diagram
+     */
+    drauuAppendToDiagram: boolean;
+
 }

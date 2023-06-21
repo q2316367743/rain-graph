@@ -40,12 +40,8 @@
                                 <icon-image/>
                             </template>
                             <template #title>图片编辑</template>
-                            <a-menu-item :key="'/image/' + GraphTypeEnum.TUI_IMAGE_EDITOR"
-                                         @click="jumpToFunc('/image/' + GraphTypeEnum.TUI_IMAGE_EDITOR)" disabled>
-                                图片编辑器
-                            </a-menu-item>
                             <a-menu-item :key="'/image/' + GraphTypeEnum.FABRIC"
-                                         @click="jumpToFunc('/image/' + GraphTypeEnum.FABRIC)" disabled>
+                                         @click="jumpToFunc('/image/' + GraphTypeEnum.FABRIC)">
                                 设计编辑器
                             </a-menu-item>
                             <a-menu-item :key="'/image/' + GraphTypeEnum.CROPPER"

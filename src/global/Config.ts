@@ -67,6 +67,10 @@ export default {
                 return '使用可视化图表'
             case '/image/cropper':
                 return '使用图片剪切'
+            case '/image/compressor':
+                return '使用图片压缩'
+            case '/image/psd':
+                return '使用PSD打开'
         }
         if (path.startsWith("/graph/")) {
             path = path.substring(7);

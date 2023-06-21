@@ -52,10 +52,6 @@ const router = createRouter({
             path: '/image/' + GraphTypeEnum.FABRIC,
             component: () => import('@/pages/image/fabric/index.vue')
         }, {
-            name: GraphTypeEnum.TUI_IMAGE_EDITOR,
-            path: '/image/' + GraphTypeEnum.TUI_IMAGE_EDITOR,
-            component: () => import('@/pages/image/tui-image-editor/index.vue')
-        }, {
             name: GraphTypeEnum.CROPPER,
             path: '/image/' + GraphTypeEnum.CROPPER,
             component: () => import('@/pages/image/cropper/index.vue')

@@ -73,6 +73,7 @@ class DownArrowView extends ResizableRectView {
 
 export default {
     type: 'down-arrow',
+    tip: '下箭头',
     view: DownArrowView,
     model: DownArrowModel
 }

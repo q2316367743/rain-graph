@@ -53,6 +53,7 @@ class MinusView extends ResizableRectView {
 
 export default {
     type: 'minus',
+    tip: '减号',
     view: MinusView,
     model: MinusModel
 }

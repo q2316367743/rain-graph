@@ -29,6 +29,7 @@ class CircleNewModel extends CircleNodeModel {
 
 export default {
   type: 'pro-circle',
+  tip: '圆形',
   view: CircleNode,
   model: CircleNewModel
 }

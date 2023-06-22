@@ -2,6 +2,7 @@ import { ResizableDiamondModel, ResizableDiamondView } from '../root/DiamondNode
 
 export default {
     type: 'pro-diamond',
+    tip: '菱形',
     view: ResizableDiamondView,
     model: ResizableDiamondModel
 }

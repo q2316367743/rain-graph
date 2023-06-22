@@ -36,6 +36,7 @@ class TextNewModel extends TextNodeModel {
 
 export default {
     type: 'pro-text',
+    tip: '文本',
     view: TextNewNode,
     model: TextNewModel
 }

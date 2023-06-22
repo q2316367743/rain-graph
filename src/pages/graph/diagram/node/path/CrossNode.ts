@@ -61,6 +61,7 @@ class CrossView extends ResizableRectView {
 
 export default {
     type: 'cross',
+    tip: '加号',
     view: CrossView,
     model: CrossModel
 }

@@ -74,6 +74,7 @@ class RightArrowView extends ResizableRectView {
 
 export default {
     type: 'right-arrow',
+    tip: '右箭头',
     view: RightArrowView,
     model: RightArrowModel
 }

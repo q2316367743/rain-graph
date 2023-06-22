@@ -54,6 +54,7 @@ class PentagonView extends ResizableRectView {
 
 export default {
     type: 'pentagon',
+    tip: '五边形',
     view: PentagonView,
     model: PentagonModel
 }

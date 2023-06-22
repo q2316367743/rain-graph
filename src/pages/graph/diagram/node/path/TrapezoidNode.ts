@@ -53,6 +53,7 @@ class TrapezoidView extends ResizableRectView {
 
 export default {
     type: 'trapezoid',
+    tip: '五边形',
     view: TrapezoidView,
     model: TrapezoidModel
 }

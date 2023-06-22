@@ -55,6 +55,7 @@ class HexagonView extends ResizableRectView {
 
 export default {
     type: 'hexagon',
+    tip: '六边形',
     view: HexagonView,
     model: HexagonModel
 }

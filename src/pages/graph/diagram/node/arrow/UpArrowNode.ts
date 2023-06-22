@@ -74,6 +74,7 @@ class UpArrowView extends ResizableRectView {
 
 export default {
     type: 'up-arrow',
+    tip: '上箭头',
     view: UpArrowView,
     model: UpArrowModel
 }

@@ -80,6 +80,7 @@ class HorizontalArrowView extends ResizableRectView {
 
 export default {
     type: 'horizontal-arrow',
+    tip: '水平双箭头',
     view: HorizontalArrowView,
     model: HorizontalArrowModel
 }

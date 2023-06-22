@@ -1,6 +1,7 @@
 import { h } from '@logicflow/core'
 import { ResizableRectModel, ResizableRectView } from '../root/RectNodeSource';
-import { getShapeStyleFunction, getTextStyleFunction } from '../getShapeStyleUtil'
+import { getShapeStyleFunction, getTextStyleFunction } from '../getShapeStyleUtil';
+
 // 人物
 class ActorModel extends ResizableRectModel {
     initNodeData(data: any) {
@@ -90,6 +91,7 @@ class ActorView extends ResizableRectView {
 
 export default {
     type: 'actor',
+    tip: '人物',
     view: ActorView,
     model: ActorModel
 }

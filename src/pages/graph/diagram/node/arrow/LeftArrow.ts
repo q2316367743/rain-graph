@@ -73,6 +73,7 @@ class LeftArrowView extends ResizableRectView {
 
 export default {
     type: 'left-arrow',
+    tip: '左箭头',
     view: LeftArrowView,
     model: LeftArrowModel
 }

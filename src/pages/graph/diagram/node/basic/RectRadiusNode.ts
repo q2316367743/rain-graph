@@ -24,6 +24,7 @@ class ResizableRectView extends RectResize.view { }
 
 export default {
   type: 'rect-radius',
+  tip: '带圆角的矩形',
   view: ResizableRectView,
   model: RectRadiusModel
 }

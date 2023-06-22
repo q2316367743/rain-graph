@@ -5,10 +5,6 @@ import baseNodes from './basic';
 import pathNodes from './path';
 // 多边形绘制的箭头
 import arrowNodes from './arrow';
-// image绘制图片节点
-import imageNodes from './image';
-// image绘制左上角icon节点
-import iconNodes from './icon';
 // 注册边
 import edges from './edge'
 // 流程图注册
@@ -29,9 +25,9 @@ export async function registerCustomElement(lf: LogicFlow): Promise<DiagramGroup
     // 注册多边形绘制的箭头
     diagramGroups.push(registerNodes(lf, arrowNodes, "polygon-node", "箭头"));
     // 注册image绘制图片节点
-    diagramGroups.push(registerNodes(lf, imageNodes, "image-node", "图片节点"));
+    // diagramGroups.push(registerNodes(lf, imageNodes, "image-node", "图片节点"));
     // 注册image绘制左上角icon节点
-    diagramGroups.push(registerNodes(lf, iconNodes, "icon-node", "图标节点"));
+    // diagramGroups.push(registerNodes(lf, iconNodes, "icon-node", "图标节点"));
     // 注册边
     edges.forEach(edge => lf.register(edge));
     // TODO: 判断是否需要将drauu注入
@@ -44,7 +40,8 @@ function registerNodes(lf: LogicFlow, nodes: Array<any>, key: string, name: stri
         lf.register(node);
         diagramNodes.push({
             name: node.type,
-            icon: 'icon-' + node.type
+            icon: 'icon-' + node.type,
+            tip: node.tip
         })
     });
     return {

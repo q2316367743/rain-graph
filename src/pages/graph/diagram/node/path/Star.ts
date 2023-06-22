@@ -35,6 +35,7 @@ class StarView extends ResizableRectView {
 
 export default {
     type: 'star',
+    tip: '五角星',
     view: StarView,
     model: StarModel
 }

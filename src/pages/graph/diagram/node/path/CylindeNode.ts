@@ -87,6 +87,7 @@ class CylindeView extends ResizableRectView {
 
 export default {
     type: 'cylinde',
+    tip: '圆柱体',
     model: CylindeModel,
     view: CylindeView
 }

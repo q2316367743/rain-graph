@@ -61,6 +61,7 @@ class TimesView extends ResizableRectView {
 
 export default {
     type: 'times',
+    tip: '乘号',
     view: TimesView,
     model: TimesModel
 }

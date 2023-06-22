@@ -79,6 +79,7 @@ class DivideView extends ResizableRectView {
 
 export default {
     type: 'divide',
+    tip: '除号',
     view: DivideView,
     model: DivideModel
 }

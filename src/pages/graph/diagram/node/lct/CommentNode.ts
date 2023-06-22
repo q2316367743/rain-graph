@@ -16,7 +16,7 @@ class LctCommentView extends ResizableRectView {
 
     getResizeShape() {
         const {model} = this.props;
-        const {x, y, width, height, radius} = model;
+        const {x, y, width, height} = model;
         const style = model.getNodeStyle();
         return h("svg", {
             x: x - 1 / 2 * width,
@@ -36,6 +36,7 @@ class LctCommentView extends ResizableRectView {
 
 export default {
     type: "lct-comment",
+    tip: '注释',
     view: LctCommentView,
     model: LctCommentModel,
 };

@@ -1,6 +1,6 @@
-import { h } from '@logicflow/core'
-import { ResizableRectModel, ResizableRectView } from '../root/RectNodeSource';
-import { getShapeStyleFunction, getTextStyleFunction } from '../getShapeStyleUtil'
+import {h} from '@logicflow/core'
+import {ResizableRectModel, ResizableRectView} from '../root/RectNodeSource';
+import {getShapeStyleFunction, getTextStyleFunction} from '../getShapeStyleUtil'
 
 // 三角形
 class TriangleModel extends ResizableRectModel {
@@ -15,9 +15,10 @@ class TriangleModel extends ResizableRectModel {
         const properties = this.getProperties()
         return getTextStyleFunction(style, properties)
     }
+
     // 定义节点只有左右两个锚点. 锚点位置通过中心点和宽度算出来。
     getDefaultAnchor() {
-        const { width, x, y, id } = this;
+        const {width, x, y, id} = this;
         return [
             {
                 x: x - width / 2,
@@ -37,7 +38,7 @@ class TriangleModel extends ResizableRectModel {
 
 class TriangleView extends ResizableRectView {
     getResizeShape() {
-        const { x, y, width, height } = this.props.model
+        const {x, y, width, height} = this.props.model
         const style = this.props.model.getNodeStyle()
         const attrs = {
             ...style,
@@ -52,14 +53,15 @@ class TriangleView extends ResizableRectView {
             ]
         }
         return h('g', {}, [
-            h('polygon', { ...attrs })
-        ]
+                h('polygon', {...attrs})
+            ]
         )
     }
 }
 
 export default {
     type: 'triangle',
+    tip: '三角形',
     view: TriangleView,
     model: TriangleModel
 }

@@ -1,9 +1,11 @@
 <template>
     <div class="diagram-sidebar">
-        <a-collapse :bordered="false" :default-active-key="['basic-node', 'graph-node', 'lct']">
+        <a-collapse :bordered="false" :default-active-key="['basic-node', 'lct']">
             <a-collapse-item v-for="group in diagramGroups" :header="group.name" :key="group.key">
                 <div v-for="node in group.nodes" class="node-item" @mousedown="dragInNode(node.name)">
-                    <component :is="node.icon" class="svg-node"/>
+                    <a-tooltip :content="node.tip">
+                        <component :is="node.icon" class="svg-node"/>
+                    </a-tooltip>
                 </div>
             </a-collapse-item>
         </a-collapse>
@@ -71,27 +73,5 @@ export default defineComponent({
         cursor: pointer;
     }
 
-    .image-setting {
-        background: url('/image/setting.png');
-        background-size: cover;
-    }
-
-    .image-user {
-        width: 40px;
-        background: url('/image/user.png');
-        background-size: cover;
-    }
-
-    .image-cloud {
-        width: 40px;
-        background: url('/image/cloud.png');
-        background-size: cover;
-    }
-
-    .icon-message {
-        height: 20px;
-        background: url('/image/message.png');
-        background-size: cover;
-    }
 }
 </style>

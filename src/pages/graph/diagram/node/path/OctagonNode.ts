@@ -57,6 +57,7 @@ class OctagonView extends ResizableRectView {
 
 export default {
     type: 'octagon',
+    tip: '八边形',
     view: OctagonView,
     model: OctagonModel
 }

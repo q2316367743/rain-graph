@@ -80,6 +80,7 @@ class VerticalArrowView extends ResizableRectView {
 
 export default {
     type: 'vertical-arrow',
+    tip: '竖直箭头',
     view: VerticalArrowView,
     model: VerticalArrowModel
 }

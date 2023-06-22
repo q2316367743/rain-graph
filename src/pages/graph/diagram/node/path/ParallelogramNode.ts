@@ -52,6 +52,7 @@ class ParallelogramView extends ResizableRectView {
 
 export default {
     type: 'parallelogram',
+    tip: '平行四边形',
     view: ParallelogramView,
     model: ParallelogramModel
 }

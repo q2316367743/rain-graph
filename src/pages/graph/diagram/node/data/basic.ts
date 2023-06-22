@@ -63,7 +63,7 @@ export const arrowNodes = [{
 }, {
     name: 'vertical-arrow',
     icon: 'icon-vertical-arrow'
-}];
+}] as DiagramNode[];
 
 export const specialNodes = [{
     name: 'pro-text',
@@ -83,4 +83,9 @@ export const specialNodes = [{
 }, {
     name: 'divide',
     icon: 'icon-divide'
-}];
+}] as DiagramNode[];
+
+export const lctNodes = [{
+    name: 'lct-comment',
+    icon: 'icon-lct-comment'
+}] as DiagramNode[];

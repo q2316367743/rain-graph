@@ -2,8 +2,8 @@ import { h } from '@logicflow/core'
 import { ResizableRectModel, ResizableRectView } from '../root/RectNodeSource';
 import { getShapeStyleFunction, getTextStyleFunction } from '../getShapeStyleUtil'
 
-// 五边形
-class PentagonModel extends ResizableRectModel {
+// 八边形
+class OctagonModel extends ResizableRectModel {
     initNodeData(data: any) {
         super.initNodeData(data)
         this.width = 80
@@ -22,16 +22,19 @@ class PentagonModel extends ResizableRectModel {
     }
 }
 
-class PentagonView extends ResizableRectView {
+class OctagonView extends ResizableRectView {
     getResizeShape() {
         const { x, y, width, height } = this.props.model
         const style = this.props.model.getNodeStyle()
         const pointList = [
-            [x - 0.5 * width, y],
-            [x, y - 0.5 * height],
-            [x + 0.5 * width, y],
-            [x + 0.3 * width, y + 0.5 * height],
-            [x - 0.3 * width, y + 0.5 * height]
+            [x - 0.205 * width, y - 0.5 * height],
+            [x + 0.205 * width, y - 0.5 * height],
+            [x + 0.5 * width, y - 0.205 * height],
+            [x + 0.5 * width, y + 0.205 * height],
+            [x + 0.205 * width, y + 0.5 * height],
+            [x - 0.205 * width, y + 0.5 * height],
+            [x - 0.5 * width, y + 0.205 * height],
+            [x - 0.5 * width, y - 0.205 * height]
         ]
         const points = pointList.map(item => {
             return `${item[0]},${item[1]}`
@@ -53,7 +56,7 @@ class PentagonView extends ResizableRectView {
 }
 
 export default {
-    type: 'pentagon',
-    view: PentagonView,
-    model: PentagonModel
+    type: 'octagon',
+    view: OctagonView,
+    model: OctagonModel
 }

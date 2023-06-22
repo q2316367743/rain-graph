@@ -14,26 +14,43 @@ import edges from './edge'
 // 流程图注册
 import lctNodes from './lct';
 
-import DiagramNode from "@/pages/graph/diagram/node/data/DiagramNode";
+import {DiagramGroup, DiagramNode} from "./data/DiagramNode";
 
 export * from './data/basic';
 
-export async function registerCustomElement(lf: LogicFlow): Promise<DiagramNode[]> {
+export async function registerCustomElement(lf: LogicFlow): Promise<DiagramGroup[]> {
+    const diagramGroups: DiagramGroup[] = [];
     // 注册基础节点
-    baseNodes.forEach(node => lf.register(node));
+    diagramGroups.push(registerNodes(lf, baseNodes, "basic-node", "基础节点"));
     // 注册path绘制的个性化图形
-    pathNodes.forEach(node => lf.register(node));
+    diagramGroups.push(registerNodes(lf, pathNodes, "graph-node", "基础图形"));
+    // 注册流程图
+    diagramGroups.push(registerNodes(lf, lctNodes, "lct", "流程图"));
     // 注册多边形绘制的箭头
-    arrowNodes.forEach(node => lf.register(node));
+    diagramGroups.push(registerNodes(lf, arrowNodes, "polygon-node", "箭头"));
     // 注册image绘制图片节点
-    imageNodes.forEach(node => lf.register(node));
+    diagramGroups.push(registerNodes(lf, imageNodes, "image-node", "图片节点"));
     // 注册image绘制左上角icon节点
-    iconNodes.forEach(node => lf.register(node));
+    diagramGroups.push(registerNodes(lf, iconNodes, "icon-node", "图标节点"));
     // 注册边
     edges.forEach(edge => lf.register(edge));
-    // 注册流程图
-    lctNodes.forEach(node => lf.register(node));
     // TODO: 判断是否需要将drauu注入
-    return Promise.resolve([]);
+    return Promise.resolve(diagramGroups);
+}
+
+function registerNodes(lf: LogicFlow, nodes: Array<any>, key: string, name: string): DiagramGroup {
+    const diagramNodes = new Array<DiagramNode>()
+    nodes.forEach(node => {
+        lf.register(node);
+        diagramNodes.push({
+            name: node.type,
+            icon: 'icon-' + node.type
+        })
+    });
+    return {
+        key,
+        name,
+        nodes: diagramNodes
+    }
 }
 

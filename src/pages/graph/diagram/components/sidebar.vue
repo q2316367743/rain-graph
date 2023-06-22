@@ -1,50 +1,30 @@
 <template>
     <div class="diagram-sidebar">
-        <a-collapse :bordered="false" :default-active-key="['basic-node', 'special-node', 'lct-node']">
-            <a-collapse-item header="基础图形" key="basic-node">
-                <div v-for="node in basicNodes" class="node-item" @mousedown="dragInNode(node.name)">
+        <a-collapse :bordered="false" :default-active-key="['basic-node', 'graph-node', 'lct']">
+            <a-collapse-item v-for="group in diagramGroups" :header="group.name" :key="group.key">
+                <div v-for="node in group.nodes" class="node-item" @mousedown="dragInNode(node.name)">
                     <component :is="node.icon" class="svg-node"/>
                 </div>
-            </a-collapse-item>
-            <a-collapse-item header="特殊节点" key="special-node">
-                <div v-for="node in specialNodes" class="node-item" @mousedown="dragInNode(node.name)">
-                    <component :is="node.icon" class="svg-node"/>
-                </div>
-            </a-collapse-item>
-            <a-collapse-item header="流程图节点" key="lct-node">
-                <div v-for="node in lctNodes" class="node-item" @mousedown="dragInNode(node.name)">
-                    <component :is="node.icon" class="svg-node"/>
-                </div>
-            </a-collapse-item>
-            <a-collapse-item header="方向节点" key="arrow-node">
-                <div v-for="node in arrowNodes" class="node-item" @mousedown="dragInNode(node.name)">
-                    <component :is="node.icon" class="svg-node"/>
-                </div>
-            </a-collapse-item>
-            <a-collapse-item header="图片" key="image-node">
-                <div class="image-node image-setting" @mousedown="dragInNode('image-setting')">
-                </div>
-                <div class="image-node image-user" @mousedown="dragInNode('image-user')">
-                </div>
-                <div class="image-node image-cloud" @mousedown="dragInNode('image-cloud')">
-                </div>
-            </a-collapse-item>
-            <a-collapse-item header="ICON" key="icon-node">
-                <div class="icon-node icon-message" @mousedown="dragInNode('icon-message')"></div>
             </a-collapse-item>
         </a-collapse>
     </div>
 </template>
 <script lang="ts">
-import {defineComponent} from 'vue'
+import {defineComponent, PropType} from 'vue'
 import icons from '../icon';
-import {arrowNodes, basicNodes, specialNodes, lctNodes} from '../node';
+import {DiagramGroup} from "../node/data/DiagramNode";
 
 export default defineComponent({
     name: 'DiagramSidebar',
     emits: ['drag-in-node'],
+    props: {
+        diagramGroups: {
+            type: Object as PropType<Array<DiagramGroup>>,
+            required: false,
+            default: new Array<DiagramGroup>()
+        },
+    },
     data: () => ({
-        basicNodes, specialNodes, arrowNodes, lctNodes
     }),
     methods: {
         dragInNode(type: any) {

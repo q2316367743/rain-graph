@@ -2,7 +2,7 @@ import { h } from '@logicflow/core'
 import { ResizableRectModel, ResizableRectView } from '../root/RectNodeSource';
 import { getShapeStyleFunction, getTextStyleFunction } from '../getShapeStyleUtil'
 
-// 五边形
+// 七边形
 class HeptagonModel extends ResizableRectModel {
     initNodeData(data: any) {
         super.initNodeData(data)
@@ -27,14 +27,13 @@ class HeptagonView extends ResizableRectView {
         const { x, y, width, height } = this.props.model
         const style = this.props.model.getNodeStyle()
         const pointList = [
-            [x - 0.205 * width, y - 0.5 * height],
-            [x + 0.205 * width, y - 0.5 * height],
-            [x + 0.5 * width, y - 0.205 * height],
-            [x + 0.5 * width, y + 0.205 * height],
-            [x + 0.205 * width, y + 0.5 * height],
-            [x - 0.205 * width, y + 0.5 * height],
-            [x - 0.5 * width, y + 0.205 * height],
-            [x - 0.5 * width, y - 0.205 * height]
+            [x, y - 0.5 * height],
+            [x + 0.395 * width, y - 0.3 * height],
+            [x + 0.5 * width, y + 0.145 * height],
+            [x + 0.225 * width, y + 0.5 * height],
+            [x - 0.225 * width, y + 0.5 * height],
+            [x - 0.5 * width, y + 0.145 * height],
+            [x - 0.395 * width, y - 0.3 * height]
         ]
         const points = pointList.map(item => {
             return `${item[0]},${item[1]}`

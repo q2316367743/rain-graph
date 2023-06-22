@@ -8,7 +8,7 @@
                 <!-- 侧边工具栏 -->
                 <a-layout-sider hide-trigger collapsible :collapsed="collapsed || readonly" :collapsed-width="0"
                     :width="200">
-                    <diagram-sidebar v-if="render" @drag-in-node="dragInNode" />
+                    <diagram-sidebar v-if="render" @drag-in-node="dragInNode" :diagram-groups="diagramNodes"/>
                 </a-layout-sider>
                 <a-layout>
                     <!-- 内容 -->
@@ -68,6 +68,7 @@ import { silentConfig, originalConfig } from './constants';
 // 主题
 import { DefaultTheme } from "./theme";
 import { useDiagramSettingStore } from "@/store/setting/DiagramSettingStore";
+import {DiagramGroup} from "@/pages/graph/diagram/node/data/DiagramNode";
 
 export default defineComponent({
     name: 'diagram',
@@ -96,7 +97,8 @@ export default defineComponent({
         activeEdges: [] as any[],
         properties: {},
         panelShow: true,
-        readonly: false
+        readonly: false,
+        diagramNodes: new Array<DiagramGroup>()
     }),
     computed: {
         ...mapState(useGlobalStore, ['size', 'title']),
@@ -177,7 +179,8 @@ export default defineComponent({
                 height: this.height,
                 ...editConfig
             });
-            registerCustomElement(lf);
+            registerCustomElement(lf)
+                .then(diagramNodes => this.diagramNodes = diagramNodes);
             lf.setDefaultEdgeType('pro-polyline');
             lf.renderRawData(data);
             lf.setTheme(DefaultTheme);

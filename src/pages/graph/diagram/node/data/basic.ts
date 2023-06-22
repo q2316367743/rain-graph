@@ -1,14 +1,14 @@
 // 基础图形
 
-import DiagramNode from "./DiagramNode";
+import {DiagramNode} from "./DiagramNode";
 
 // 基础节点
 export const basicNodes = [{
     name: 'pro-circle',
-    icon: 'icon-circle'
+    icon: 'icon-pro-circle'
 }, {
     name: 'pro-rect',
-    icon: 'icon-rect'
+    icon: 'icon-pro-rect'
 }, {
     name: 'rect-radius',
     icon: 'icon-rect-radius'
@@ -17,10 +17,10 @@ export const basicNodes = [{
     icon: 'icon-triangle'
 }, {
     name: 'pro-ellipse',
-    icon: 'icon-ellipse'
+    icon: 'icon-pro-ellipse'
 }, {
     name: 'pro-diamond',
-    icon: 'icon-diamond'
+    icon: 'icon-pro-diamond'
 }, {
     name: 'cylinde',
     icon: 'icon-cylinde'

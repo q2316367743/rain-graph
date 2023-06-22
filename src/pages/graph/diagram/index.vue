@@ -2,50 +2,46 @@
     <div class="diagram">
         <!-- 顶部菜单栏 -->
         <diagram-menu class="header" v-if="render" v-model:panel-show="panelShow" :lf="lf" :collapsed="collapsed"
-            :readonly="readonly" @save="save" @update-readonly="setReadonly" />
+                      :readonly="readonly" :option="option" @save="save" @update-readonly="setReadonly"
+                      @update-option="updateOption"/>
         <div class="container">
             <a-layout>
                 <!-- 侧边工具栏 -->
                 <a-layout-sider hide-trigger collapsible :collapsed="collapsed || readonly" :collapsed-width="0"
-                    :width="200">
-                    <diagram-sidebar v-if="render" @drag-in-node="dragInNode" :diagram-groups="diagramNodes"/>
+                                :width="200">
+                    <diagram-sidebar v-if="render" :diagram-groups="diagramNodes" v-model:node-keys="option.nodeKeys"
+                                     @drag-in-node="dragInNode"/>
                 </a-layout-sider>
                 <a-layout>
                     <!-- 内容 -->
                     <div class="content" id="diagram-view"></div>
                     <!-- 左上角工具栏、属性栏 -->
                     <div class="toolbar">
-                        <diagram-toolbar v-if="render" :lf="lf" :active-edges="activeEdges" :readonly="readonly" />
+                        <diagram-toolbar v-if="render" :lf="lf" :active-edges="activeEdges" :readonly="readonly"/>
                     </div>
                     <div class="collapsed">
                         <!-- 折叠按钮 -->
                         <a-button @click="collapsed = !collapsed" type="primary" v-if="!readonly">
                             <template #icon>
-                                <icon-menu-unfold v-if="collapsed" />
-                                <icon-menu-fold v-else />
+                                <icon-menu-unfold v-if="collapsed"/>
+                                <icon-menu-fold v-else/>
                             </template>
                         </a-button>
                     </div>
                     <!-- 右侧属性面板 -->
                     <diagram-panel class="panel" v-if="activeNodes.length > 0 || activeEdges.length > 0"
-                        v-show="panelShow && !readonly" :onlyEdge="activeNodes.length === 0" :elementsStyle="properties"
-                        @set-style="setStyle" @@set-level="setZIndex" />
+                                   v-show="panelShow && !readonly" :onlyEdge="activeNodes.length === 0"
+                                   :elementsStyle="properties"
+                                   @set-style="setStyle" @@set-level="setZIndex"/>
                 </a-layout>
             </a-layout>
         </div>
     </div>
 </template>
 <script lang="ts">
-import { defineComponent, toRaw } from "vue";
-import { mapState } from "pinia";
-import {
-    BpmnElement,
-    BpmnXmlAdapter,
-    Snapshot,
-    Menu,
-    SelectionSelect,
-    MiniMap,
-} from '@logicflow/extension';
+import {defineComponent, toRaw} from "vue";
+import {mapState} from "pinia";
+import {BpmnElement, BpmnXmlAdapter, Menu, MiniMap, SelectionSelect, Snapshot,} from '@logicflow/extension';
 import LogicFlow from "@logicflow/core";
 
 import "@logicflow/extension/lib/style/index.css";
@@ -55,24 +51,24 @@ import DiagramToolbar from './components/toolbar.vue';
 import DiagramSidebar from './components/sidebar.vue';
 import DiagramPanel from './components/panel.vue';
 import DiagramMenu from './components/menu/index.vue';
-import { registerCustomElement } from './node';
+import {registerCustomElement} from './node';
 
-import { useGlobalStore } from "@/store/GlobalStore";
-import { useDiagramStore } from "@/store/graph/DiagramStore";
+import {useGlobalStore} from "@/store/GlobalStore";
+import {useDiagramStore} from "@/store/graph/DiagramStore";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import MessageUtil from "@/utils/MessageUtil";
-import { useSaveEvent, useSideEvent, useUndoEvent } from "@/global/BeanFactory";
-import { getRecord } from "@/utils/utools/DbUtil";
-import { silentConfig, originalConfig } from './constants';
+import {useSaveEvent, useSideEvent, useUndoEvent} from "@/global/BeanFactory";
+import {getRecord} from "@/utils/utools/DbUtil";
+import {originalConfig, silentConfig} from './constants';
 
 // 主题
-import { DefaultTheme } from "./theme";
-import { useDiagramSettingStore } from "@/store/setting/DiagramSettingStore";
+import {DefaultTheme} from "./theme";
+import {useDiagramSettingStore} from "@/store/setting/DiagramSettingStore";
 import {DiagramGroup} from "@/pages/graph/diagram/node/data/DiagramNode";
 
 export default defineComponent({
     name: 'diagram',
-    components: { DiagramToolbar, DiagramSidebar, DiagramPanel, DiagramMenu },
+    components: {DiagramToolbar, DiagramSidebar, DiagramPanel, DiagramMenu},
     data: () => ({
         id: '0',
         _rev: undefined as string | undefined,
@@ -98,7 +94,10 @@ export default defineComponent({
         properties: {},
         panelShow: true,
         readonly: false,
-        diagramNodes: new Array<DiagramGroup>()
+        diagramNodes: new Array<DiagramGroup>(),
+        option: {
+            nodeKeys: ['basic-node', 'graph-node', 'polygon-node', 'lct']
+        }
     }),
     computed: {
         ...mapState(useGlobalStore, ['size', 'title']),
@@ -163,14 +162,14 @@ export default defineComponent({
             this.id = data.id;
             this._rev = data._rev;
             this.config = Object.assign(this.config, data.config);
-            this.init(data['editConfig'] || {}, data.record);
+            this.init(data['editConfig'] || {}, data['option'] || {}, data.record);
         }).catch(e => {
             MessageUtil.error("初始化失败", e);
-            this.init({});
+            this.init({}, {});
         })
     },
     methods: {
-        init(editConfig: any, data?: any) {
+        init(editConfig: any, option: any, data?: any) {
             let lf = new LogicFlow({
                 ...this.config,
                 container: document.querySelector('#diagram-view') as HTMLElement,
@@ -188,12 +187,13 @@ export default defineComponent({
             this.lf = lf;
             this.lf.on('selection:selected,node:click,blank:click,edge:click', () => {
                 this.$nextTick(() => {
-                    const { nodes, edges } = this.lf.getSelectElements()
+                    const {nodes, edges} = this.lf.getSelectElements()
                     this.activeNodes = nodes
                     this.activeEdges = edges
                     this.getProperty();
                 })
-            })
+            });
+            this.option = option;
         },
         save() {
             useDiagramStore().add(this.id)
@@ -206,7 +206,8 @@ export default defineComponent({
                         value: {
                             config: toRaw(this.config),
                             record: this.lf.getGraphRawData(),
-                            editConfig: this.lf.getEditConfig()
+                            editConfig: this.lf.getEditConfig(),
+                            option: toRaw(this.option)
                         }
                     }).then(res => {
                         if (res.error) {
@@ -226,29 +227,29 @@ export default defineComponent({
         getProperty() {
             this.properties = {};
             let properties = {}
-            const { nodes, edges } = this.lf.getSelectElements()
+            const {nodes, edges} = this.lf.getSelectElements()
             nodes.forEach(node => {
-                properties = { ...properties, ...node.properties }
+                properties = {...properties, ...node.properties}
             })
             edges.forEach(edge => {
-                properties = { ...properties, ...edge.properties }
+                properties = {...properties, ...edge.properties}
             })
             this.properties = properties
         },
         setStyle(item: any) {
-            this.activeNodes.forEach(({ id }) => {
+            this.activeNodes.forEach(({id}) => {
                 this.lf.setProperties(id, item)
             })
-            this.activeEdges.forEach(({ id }) => {
+            this.activeEdges.forEach(({id}) => {
                 this.lf.setProperties(id, item)
             })
             this.getProperty()
         },
         setZIndex(type: any) {
-            this.activeNodes.forEach(({ id }) => {
+            this.activeNodes.forEach(({id}) => {
                 this.lf.setElementZIndex(id, type)
             })
-            this.activeEdges.forEach(({ id }) => {
+            this.activeEdges.forEach(({id}) => {
                 this.lf.setElementZIndex(id, type)
             })
         },
@@ -259,6 +260,10 @@ export default defineComponent({
             } else {
                 this.lf.updateEditConfig(originalConfig);
             }
+        },
+        updateOption(option: any) {
+            this.option = option;
+            this.save()
         }
     }
 });

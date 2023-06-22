@@ -87,6 +87,7 @@ export async function getRecord(type: GraphTypeEnum, id: string, path: string = 
             return Promise.resolve({
                 record: value.record,
                 config: value.config,
+                option: value.option,
                 id: "-1",
                 error: false,
                 message: ""
@@ -113,6 +114,7 @@ export async function getRecord(type: GraphTypeEnum, id: string, path: string = 
         return Promise.resolve({
             record: value.record,
             config: value.config,
+            option: value.option,
             id: id,
             _rev: res._rev,
             error: false,

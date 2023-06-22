@@ -70,6 +70,7 @@ export const silentConfig = {
     nodeTextDraggable: false,
     edgeTextDraggable: false,
 };
+
 // 正常模式
 export const originalConfig = {
     stopZoomGraph: true,

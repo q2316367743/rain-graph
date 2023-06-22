@@ -19,7 +19,7 @@
           width="29.4"
           height="12.74"
           fill="none"
-          stroke="none"
+          stroke="var(--color-text-1)"
           pointer-events="all"
         ></rect>
       </g>
@@ -33,7 +33,7 @@
           clip-path="url(https://app.diagrams.net/#mx-clip-2-9-28-15-0)"
           font-size="5.88px"
         >
-          <text x="3.92" y="16.66">Text Node</text>
+          <text x="3.92" y="16.66" stroke="var(--color-text-1)">Text Node</text>
         </g>
       </g>
     </g>

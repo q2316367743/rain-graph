@@ -31,6 +31,7 @@ import IconVerticalArrow from './arrow/VerticalArrow.vue'
 // 流程图节点
 import IconLctComment from './lct/comment.vue';
 import IconLctComment2 from './lct/comment2.vue';
+import IconLctCard from './lct/card.vue';
 
 export default {
     IconProCircle,
@@ -56,8 +57,9 @@ export default {
     IconMinus,
     IconTimes,
     IconDivide,
-    IconLctComment,
     IconHeptagon,
     IconOctagon,
-    IconLctComment2
+    IconLctComment,
+    IconLctComment2,
+    IconLctCard
 }

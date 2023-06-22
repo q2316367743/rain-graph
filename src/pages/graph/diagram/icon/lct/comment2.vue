@@ -4,7 +4,7 @@
             <path
                     d="M 15 0 L 7 0 L 7 28 L 15 28"
                     fill="transparent"
-                    stroke="#000000"
+                    stroke="var(--color-text-1)"
                     stroke-width="1.3"
                     stroke-miterlimit="10"
                     pointer-events="all"
@@ -12,7 +12,7 @@
             <path
                     d="M 7 15 L 0 15"
                     fill="transparent"
-                    stroke="#000000"
+                    stroke="var(--color-text-1)"
                     stroke-width="1.3"
                     stroke-miterlimit="10"
                     pointer-events="all"

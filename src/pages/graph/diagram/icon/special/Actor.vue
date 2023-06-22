@@ -6,15 +6,15 @@
         cy="4.73"
         rx="3.375"
         ry="3.375"
-        fill="#ffffff"
-        stroke="#000000"
+        fill="#var(--color-bg-1)"
+        stroke="var(--color-text-1)"
         stroke-width="1.3"
         pointer-events="all"
       ></ellipse>
       <path
         d="M 15.75 8.1 L 15.75 19.35 M 15.75 10.35 L 9 10.35 M 15.75 10.35 L 22.5 10.35 M 15.75 19.35 L 9 28.35 M 15.75 19.35 L 22.5 28.35"
         fill="none"
-        stroke="white"
+        stroke="var(--color-text-1)"
         stroke-width="9.3"
         stroke-miterlimit="10"
         pointer-events="stroke"
@@ -23,7 +23,7 @@
       <path
         d="M 15.75 8.1 L 15.75 19.35 M 15.75 10.35 L 9 10.35 M 15.75 10.35 L 22.5 10.35 M 15.75 19.35 L 9 28.35 M 15.75 19.35 L 22.5 28.35"
         fill="none"
-        stroke="#000000"
+        stroke="var(--color-text-1)"
         stroke-width="1.3"
         stroke-miterlimit="10"
         pointer-events="all"

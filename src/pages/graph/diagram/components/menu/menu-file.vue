@@ -21,7 +21,7 @@ import MessageUtil from "@/utils/MessageUtil";
 
 export default defineComponent({
     name: 'menu-file',
-    emits: ['save'],
+    emits: ['save', 'update-option'],
     props: {
         lf: {
             type: Object,
@@ -29,6 +29,11 @@ export default defineComponent({
             default: {}
         },
         config: {
+            type: Object,
+            required: false,
+            default: {}
+        },
+        option: {
             type: Object,
             required: false,
             default: {}
@@ -62,7 +67,8 @@ export default defineComponent({
             download(JSON.stringify({
                 config: toRaw(this.config),
                 record: this.lf.getGraphRawData(),
-                editConfig: this.lf.getEditConfig()
+                editConfig: this.lf.getEditConfig(),
+                option: this.option
             }), this.title + '.json', 'text/json');
         },
         open() {
@@ -79,6 +85,7 @@ export default defineComponent({
                         ...editConfig
                     });
                     this.lf.renderRawData(data);
+                    this.$emit('update-option', json['option']);
                 } catch (e) {
                     MessageUtil.error("文件解析失败", e);
                 }

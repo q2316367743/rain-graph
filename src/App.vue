@@ -66,6 +66,10 @@
                                          @click="jumpToFunc('/apps/' + GraphTypeEnum.DRAUU)">
                                 画板
                             </a-menu-item>
+                            <a-menu-item :key="'/apps/' + GraphTypeEnum.SVG_EDITOR"
+                                         @click="jumpToFunc('/apps/' + GraphTypeEnum.SVG_EDITOR)">
+                                SVG编辑器
+                            </a-menu-item>
                             <a-menu-item :key="'/apps/' + GraphTypeEnum.ECHARTS"
                                          @click="jumpToFunc('/apps/' + GraphTypeEnum.ECHARTS)">
                                 可视化图表

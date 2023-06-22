@@ -60,6 +60,11 @@ enum GraphTypeEnum {
      */
     FABRIC = 'fabric',
 
+    /**
+     * SVG编辑器
+     */
+    SVG_EDITOR = 'svg-editor'
+
 }
 
 export default GraphTypeEnum;

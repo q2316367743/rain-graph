@@ -32,6 +32,10 @@ const router = createRouter({
             path: '/apps/' + GraphTypeEnum.DRAUU,
             component: () => import('@/pages/apps/drauu/index.vue')
         }, {
+            name: GraphTypeEnum.SVG_EDITOR,
+            path: '/apps/' + GraphTypeEnum.SVG_EDITOR,
+            component: () => import('@/pages/apps/svg-editor/index.vue')
+        }, {
             name: GraphTypeEnum.ECHARTS,
             path: '/apps/' + GraphTypeEnum.ECHARTS,
             component: () => import('@/pages/apps/echarts/index.vue')

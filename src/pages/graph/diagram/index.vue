@@ -8,7 +8,7 @@
             <a-layout>
                 <!-- 侧边工具栏 -->
                 <a-layout-sider hide-trigger collapsible :collapsed="collapsed || readonly" :collapsed-width="0"
-                                :width="200">
+                                :width="206">
                     <diagram-sidebar v-if="render" :diagram-groups="diagramNodes" v-model:node-keys="option.nodeKeys"
                                      @drag-in-node="dragInNode"/>
                 </a-layout-sider>

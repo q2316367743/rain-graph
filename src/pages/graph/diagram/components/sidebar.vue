@@ -84,6 +84,7 @@ export default defineComponent({
     user-select: none;
     position: absolute;
     width: 205px;
+    border-right: 1px solid var(--color-neutral-3);
 
     .sidebar-container {
         position: absolute;

@@ -34,9 +34,11 @@
         "qr-code-styling": "1.6.0-rc.1",
         "simple-mind-map": "^0.5.11",
         "tiny-whiteboard": "^0.1.12",
+        "tippy.js": "^6.3.7",
         "vue": "^3.2.47",
         "vue-codemirror": "^6.1.1",
         "vue-router": "^4.0.13",
+        "vue3-calendar-heatmap": "^2.0.5",
         "wordcloud": "^1.2.2",
         "xe-utils": "^3.5.7",
         "xlsx": "^0.18.5"

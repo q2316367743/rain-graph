@@ -19,6 +19,7 @@
                     </a-dropdown>
                 </a-button-group>
             </div>
+            <a-divider direction="vertical" style="height: 32px"/>
             <div class="color-group">
                 <div class="color-item" :class="color === '#f2f2f2' ? 'active' : ''" @click="color = '#f2f2f2'">⚪</div>
                 <div class="color-item" :class="color === '#000000' ? 'active' : ''" @click="color = '#000000'">⚫️</div>
@@ -30,7 +31,8 @@
                 <div class="color-item" :class="color === '#c24aed' ? 'active' : ''" @click="color = '#c24aed'">🟣</div>
                 <div class="color-item" :class="color === '#bf6b26' ? 'active' : ''" @click="color = '#bf6b26'">🟤</div>
             </div>
-            <div class="thickness" style="text-align: center;">
+            <a-divider direction="vertical" style="height: 32px"/>
+            <div class="thickness">
                 <a-slider v-model="size" :min="1" :max="10" :step="0.5"
                           show-tooltip/>
             </div>

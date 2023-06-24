@@ -2,7 +2,7 @@
     <div class="app">
         <a-spin :loading="loading" :tip="loadingText" class="rain-loading">
             <a-layout>
-                <a-layout-sider collapsed>
+                <a-layout-sider collapsed style="z-index: 50">
                     <a-menu style="width: 200px;height: 100%;" breakpoint="xl" v-model:selected-keys="selectedKeys">
                         <a-menu-item key="/dashboard" @click="toDashboard">
                             <template #icon>

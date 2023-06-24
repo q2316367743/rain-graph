@@ -4,7 +4,7 @@
     </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import {defineComponent} from "vue";
 
 export default defineComponent({
     name: 'graph',
@@ -21,5 +21,6 @@ export default defineComponent({
     right: 0;
     bottom: 0;
     background-color: var(--color-bg-1);
+    z-index: 51;
 }
 </style>

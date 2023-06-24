@@ -12,7 +12,7 @@
                 <a-tab-pane v-for="instance in instances" :key="instance.id" :title="instance.name"/>
             </a-tabs>
         </div>
-        <div class="toggle" :style="{ bottom: show ? '44px' : '4px' }" @click="show = !show">
+        <div class="toggle" :style="{ bottom: show ? '40px' : '0' }" @click="show = !show">
             <a-button type="text">
                 <template #icon>
                     <icon-tags/>
@@ -96,37 +96,42 @@ export default defineComponent({
             this.templateShow = true;
         },
         async saveTemplate(record: { id: number, data: string }) {
-            for (let instance of this.instances) {
-                if (instance.id === record.id) {
-                    let name = instance.name;
-                    if (name === "画板" && !instance.templateId) {
-                        name = await MessageBoxUtil.prompt("请输入画板名称", "保存画板", {
-                            inputValue: name
-                        });
+            try {
+                for (let instance of this.instances) {
+                    if (instance.id === record.id) {
+                        let name = instance.name;
+                        if (name === "画板" && !instance.templateId) {
+                            name = await MessageBoxUtil.prompt("请输入画板名称", "保存画板", {
+                                inputValue: name
+                            });
+                        }
+                        let template = await saveOrUpdateTemplate(GraphTypeEnum.DRAUU, {
+                            record: record.data,
+                            name,
+                            config: {}
+                        }, record.id + '')
+                        MessageUtil.success("保存成功");
+                        instance.templateId = template.id;
+                        instance.name = name;
+                        return;
                     }
-                    let template = await saveOrUpdateTemplate(GraphTypeEnum.DRAUU, {
-                        record: record.data,
-                        name,
-                        config: {}
-                    }, record.id + '')
-                    MessageUtil.success("保存成功");
-                    instance.templateId = template.id;
-                    instance.name = name;
-                    return;
                 }
+                MessageUtil.warning("未找到此条记录，无法保存");
+            } catch (ignore) {
             }
-            MessageUtil.warning("未找到此条记录，无法保存");
         },
         async updateTemplate(record: { id: number, data: string }) {
-            console.log(record)
-            for (let instance of this.instances) {
-                if (instance.id === record.id) {
-                    let name = await MessageBoxUtil.prompt("请输入新名称", "修改画板名称", {
-                        inputValue: instance.name,
-                    })
-                    MessageUtil.success("更新名称成功");
-                    instance.name = name;
+            try {
+                for (let instance of this.instances) {
+                    if (instance.id === record.id) {
+                        let name = await MessageBoxUtil.prompt("请输入新名称", "修改画板名称", {
+                            inputValue: instance.name,
+                        })
+                        MessageUtil.success("更新名称成功");
+                        instance.name = name;
+                    }
                 }
+            } catch (ignore) {
             }
         },
         render(id: string, name: string) {
@@ -169,8 +174,8 @@ export default defineComponent({
 
     .tabs {
         position: absolute;
-        left: 7px;
-        right: 7px;
+        left: 0;
+        right: 0;
         bottom: 0;
         height: 39px;
         border-top: 1px solid var(--color-neutral-3);
@@ -180,7 +185,7 @@ export default defineComponent({
 
     .toggle {
         position: absolute;
-        left: 11px;
+        left: 4px;
         transition: 0.2s;
         margin-bottom: 7px;
     }

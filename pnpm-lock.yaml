@@ -95,9 +95,6 @@ dependencies:
   vue3-calendar-heatmap:
     specifier: ^2.0.5
     version: registry.npmmirror.com/vue3-calendar-heatmap@2.0.5(tippy.js@6.3.7)(vue@3.2.47)
-  wordcloud:
-    specifier: ^1.2.2
-    version: 1.2.2
   xe-utils:
     specifier: ^3.5.7
     version: 3.5.7
@@ -4689,10 +4686,6 @@ packages:
   /word@0.3.0:
     resolution: {integrity: sha512-OELeY0Q61OXpdUfTp+oweA/vtLVg5VDOXh+3he3PNzLGG/y0oylSOC1xRVj0+l4vQ3tj/bB1HVHv1ocXkQceFA==}
     engines: {node: '>=0.8'}
-    dev: false
-
-  /wordcloud@1.2.2:
-    resolution: {integrity: sha512-fUnDsGrHXou+49j1OeKaC7nOeZPx+sWjIet0L/j6eAcm0nXy+a+AuUs/iDAX4PLBg1Zc6wgXWXhoXdQsXRWAEw==}
     dev: false
 
   /wrap-ansi@7.0.0:

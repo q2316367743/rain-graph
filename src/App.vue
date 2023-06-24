@@ -72,17 +72,9 @@
                                          @click="jumpToFunc('/apps/' + GraphTypeEnum.DRAUU)">
                                 画板
                             </a-menu-item>
-                            <a-menu-item :key="'/apps/' + GraphTypeEnum.SVG_EDITOR"
-                                         @click="jumpToFunc('/apps/' + GraphTypeEnum.SVG_EDITOR)">
-                                SVG编辑器
-                            </a-menu-item>
                             <a-menu-item :key="'/apps/' + GraphTypeEnum.ECHARTS"
                                          @click="jumpToFunc('/apps/' + GraphTypeEnum.ECHARTS)">
                                 可视化图表
-                            </a-menu-item>
-                            <a-menu-item disabled :key="'/apps/' + GraphTypeEnum.WORD_CLOUD"
-                                         @click="jumpToFunc('/apps/' + GraphTypeEnum.WORD_CLOUD)">
-                                词云生成器
                             </a-menu-item>
                             <a-menu-item :key="'/apps/' + GraphTypeEnum.QR_CODE"
                                          @click="jumpToFunc('/apps/' + GraphTypeEnum.QR_CODE)">

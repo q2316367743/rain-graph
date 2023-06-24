@@ -35,17 +35,9 @@ const router = createRouter({
             path: '/apps/' + GraphTypeEnum.DRAUU,
             component: () => import('@/pages/apps/drauu/index.vue')
         }, {
-            name: GraphTypeEnum.SVG_EDITOR,
-            path: '/apps/' + GraphTypeEnum.SVG_EDITOR,
-            component: () => import('@/pages/apps/svg-editor/index.vue')
-        }, {
             name: GraphTypeEnum.ECHARTS,
             path: '/apps/' + GraphTypeEnum.ECHARTS,
             component: () => import('@/pages/apps/echarts/index.vue')
-        }, {
-            name: GraphTypeEnum.WORD_CLOUD,
-            path: '/apps/' + GraphTypeEnum.WORD_CLOUD,
-            component: () => import('@/pages/apps/word-cloud/index.vue')
         }, {
             name: GraphTypeEnum.QR_CODE,
             path: '/apps/' + GraphTypeEnum.QR_CODE,

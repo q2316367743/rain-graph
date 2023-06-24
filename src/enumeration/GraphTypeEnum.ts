@@ -31,11 +31,6 @@ enum GraphTypeEnum {
     DRAUU = 'drauu',
 
     /**
-     * 词云
-     */
-    WORD_CLOUD = 'word-cloud',
-
-    /**
      * 二维码
      */
     QR_CODE = 'qr-code',
@@ -59,11 +54,6 @@ enum GraphTypeEnum {
      * 设计编辑器
      */
     FABRIC = 'fabric',
-
-    /**
-     * SVG编辑器
-     */
-    SVG_EDITOR = 'svg-editor'
 
 }
 

@@ -1,11 +1,20 @@
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 
-function renderGraph(path: string, target: string, name: string): string {
+function renderGraph(path: string, target: string, name: string): {
+    operate: string;
+    additional: string
+} {
     if (path === target + '/0') {
-        return '新建' + name;
+        return {
+            operate: name,
+            additional: '新建'
+        };
     } else {
-        return '编辑' + name;
+        return {
+            operate: name,
+            additional: '编辑'
+        };
     }
 }
 
@@ -48,30 +57,10 @@ export default {
         title: string;
         color: string;
     }>,
-    routeToTag(path: string): string {
-        if (path.startsWith("/setting/")) {
-            return '设置'
-        }
-        switch (path) {
-            case '/home':
-                return '首页';
-            case '/more/recommend':
-                return '推荐';
-            case '/more/vip':
-                return '高级版';
-            case '/more/about':
-                return '关于';
-            case '/apps/drauu':
-                return '使用画板';
-            case '/apps/echarts':
-                return '使用可视化图表'
-            case '/image/cropper':
-                return '使用图片剪切'
-            case '/image/compressor':
-                return '使用图片压缩'
-            case '/image/psd':
-                return '使用PSD打开'
-        }
+    routeToTag(path: string): {
+        operate: string;
+        additional: string
+    } {
         if (path.startsWith("/graph/")) {
             path = path.substring(7);
             if (path.startsWith("mind")) {
@@ -84,6 +73,9 @@ export default {
                 return renderGraph(path, 'white-board', '白板');
             }
         }
-        return '未知';
+        return {
+            operate: path,
+            additional: ''
+        };
     }
 }

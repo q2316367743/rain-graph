@@ -1,6 +1,7 @@
 import LocalNameEnum from '@/enumeration/LocalNameEnum';
 import Constant from '@/global/Constant';
 import axios from 'axios';
+import Config from "@/global/Config";
 
 export default class Statistics {
 
@@ -22,17 +23,18 @@ export default class Statistics {
      * 插件打开
      */
     async open() {
-        await this.access("第一次进入");
+        await this.access("/");
     }
 
     /**
      * 访问某个标签
-     * @param tag 标签
+     * @param path 路径
      */
-    async access(tag: string) {
+    async access(path: string) {
         if(utools.isDev()) {
             return;
         }
+        let {operate, additional} = Config.routeToTag(path);
         let privacy = await utools.db.promises.get(LocalNameEnum.PRIVACY);
         if (privacy) {
             if (!privacy.value) {
@@ -40,7 +42,6 @@ export default class Statistics {
             }
         }
         let now = new Date();
-        console.debug("访问：" + tag);
         if (this.token === '') {
             const res = await utools.fetchUserServerTemporaryToken();
             this.token = res.token;
@@ -55,17 +56,18 @@ export default class Statistics {
         let system: string;
         if (utools.isWindows()) {
             system = "Windows";
-        }else if (utools.isMacOS()) {
+        } else if (utools.isMacOS()) {
             system = "MacOS"
-        }else if (utools.isLinux()){
+        } else if (utools.isLinux()) {
             system = "Linux"
-        }else {
+        } else {
             system = navigator.userAgent;
         }
-        await axios.post(`${Constant.statistics}/statistics/add?id=${Constant.uid}`, {
+        await axios.post(`${Constant.statistics}/open/statistics?id=${Constant.uid}`, {
             token: this.token,
             nickname: this.nickname,
-            tag: tag,
+            operate,
+            additional,
             platform: window.rain.env,
             system
         });

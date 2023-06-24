@@ -190,7 +190,7 @@ export default defineComponent({
         '$route.path': {
             handler(newValue) {
                 this.selectedKeys = [newValue];
-                statistics.access(Config.routeToTag(newValue));
+                statistics.access(newValue);
             }
         }
     },

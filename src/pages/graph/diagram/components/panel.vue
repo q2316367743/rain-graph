@@ -85,8 +85,8 @@
     </div>
 </template>
 <script lang="ts">
-import { shortStyles, borderStyles, fontFamilies } from '../constants'
-import { defineComponent } from 'vue';
+import {borderStyles, fontFamilies, shortStyles} from '../constants'
+import {defineComponent} from 'vue';
 import ColorPicker from "@/components/color-picker/index.vue";
 
 export default defineComponent({
@@ -127,12 +127,12 @@ export default defineComponent({
     watch: {
         elementsStyle: {
             handler(newValue) {
-                this.fontStyle = new Array<string>()
+                this.fontStyle = new Array<string>();
                 this.style = Object.assign({
                     backgroundColor: '#ffffff', // 填充色
                     borderType: 0, // 线条类型
                     borderColor: '', // 填充颜色
-                    borderWidth: 1, // 线条宽度
+                    borderWidth: 2, // 线条宽度
                     borderStyle: 'solid', // 线条类型
                     fontSize: 12, // 文本大小
                     fontColor: '#000000', // 文本颜色

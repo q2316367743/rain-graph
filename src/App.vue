@@ -41,6 +41,24 @@
                                 {{ Config.title[GraphTypeEnum.WHITE_BOARD].title }}
                             </a-menu-item>
                         </a-sub-menu>
+                        <a-sub-menu key="apps">
+                            <template #icon>
+                                <icon-apps/>
+                            </template>
+                            <template #title>小程序</template>
+                            <a-menu-item :key="'/apps/' + GraphTypeEnum.DRAUU"
+                                         @click="jumpToFunc('/apps/' + GraphTypeEnum.DRAUU)">
+                                画板
+                            </a-menu-item>
+                            <a-menu-item :key="'/apps/' + GraphTypeEnum.ECHARTS"
+                                         @click="jumpToFunc('/apps/' + GraphTypeEnum.ECHARTS)">
+                                可视化图表
+                            </a-menu-item>
+                            <a-menu-item :key="'/apps/' + GraphTypeEnum.QR_CODE"
+                                         @click="jumpToFunc('/apps/' + GraphTypeEnum.QR_CODE)">
+                                二维码
+                            </a-menu-item>
+                        </a-sub-menu>
                         <a-sub-menu key="image">
                             <template #icon>
                                 <icon-image/>
@@ -61,24 +79,6 @@
                             <a-menu-item :key="'/image/' + GraphTypeEnum.PSD"
                                          @click="jumpToFunc('/image/' + GraphTypeEnum.PSD)">
                                 PSD查看器
-                            </a-menu-item>
-                        </a-sub-menu>
-                        <a-sub-menu key="apps">
-                            <template #icon>
-                                <icon-apps/>
-                            </template>
-                            <template #title>小程序</template>
-                            <a-menu-item :key="'/apps/' + GraphTypeEnum.DRAUU"
-                                         @click="jumpToFunc('/apps/' + GraphTypeEnum.DRAUU)">
-                                画板
-                            </a-menu-item>
-                            <a-menu-item :key="'/apps/' + GraphTypeEnum.ECHARTS"
-                                         @click="jumpToFunc('/apps/' + GraphTypeEnum.ECHARTS)">
-                                可视化图表
-                            </a-menu-item>
-                            <a-menu-item :key="'/apps/' + GraphTypeEnum.QR_CODE"
-                                         @click="jumpToFunc('/apps/' + GraphTypeEnum.QR_CODE)">
-                                二维码
                             </a-menu-item>
                         </a-sub-menu>
                         <a-sub-menu key="setting">

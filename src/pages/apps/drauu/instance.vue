@@ -5,7 +5,7 @@
             <div class="option">
                 <a-button-group type="text">
                     <a-button title="保存" @click="save" style="width: 32px;">📋</a-button>
-                    <a-button title="编辑" @click="update" style="width: 32px;">📝</a-button>
+                    <a-button title="编辑名称" @click="update" style="width: 32px;">📝</a-button>
                     <a-button title="管理" @click="$emit('open-template')" style="width: 32px;">📁</a-button>
                     <a-button title="后退" @click="undo" style="width: 32px;">↩️</a-button>
                     <a-button title="前进" @click="redo" style="width: 32px;">↪️</a-button>

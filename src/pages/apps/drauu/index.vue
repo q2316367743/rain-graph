@@ -121,7 +121,7 @@ export default defineComponent({
             console.log(record)
             for (let instance of this.instances) {
                 if (instance.id === record.id) {
-                    let name = await MessageBoxUtil.prompt("请输入新名称", "修改画板", {
+                    let name = await MessageBoxUtil.prompt("请输入新名称", "修改画板名称", {
                         inputValue: instance.name,
                     })
                     MessageUtil.success("更新名称成功");

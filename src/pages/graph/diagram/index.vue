@@ -10,6 +10,7 @@
                 <a-layout-sider hide-trigger collapsible :collapsed="collapsed || readonly" :collapsed-width="0"
                                 :width="206">
                     <diagram-sidebar v-if="render" :diagram-groups="diagramNodes" v-model:node-keys="option.nodeKeys"
+                                     v-model:active-node-keys="option.activeNodeKeys"
                                      @drag-in-node="dragInNode"/>
                 </a-layout-sider>
                 <a-layout>
@@ -96,7 +97,8 @@ export default defineComponent({
         readonly: false,
         diagramNodes: new Array<DiagramGroup>(),
         option: {
-            nodeKeys: ['basic-node', 'graph-node', 'polygon-node', 'lct']
+            nodeKeys: ['basic-node', 'graph-node', 'polygon-node', 'lct'],
+            activeNodeKeys: ['basic-node', 'lct']
         }
     }),
     computed: {
@@ -262,7 +264,7 @@ export default defineComponent({
             }
         },
         updateOption(option: any) {
-            this.option = option;
+            this.option = Object.assign(this.option, option);
             this.save()
         }
     }

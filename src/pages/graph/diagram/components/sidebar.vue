@@ -1,7 +1,7 @@
 <template>
     <div class="diagram-sidebar" :style="{height: height - 33 + 'px'}">
         <div class="sidebar-container">
-            <a-collapse :bordered="false" :default-active-key="['basic-node', 'lct']">
+            <a-collapse :bordered="false" v-model:active-key="activeKeys">
                 <a-collapse-item v-for="group in showDiagramGroups" :header="group.name" :key="group.key">
                     <div v-for="node in group.nodes" class="node-item" @mousedown="dragInNode(node.name)">
                         <a-tooltip :content="node.tip">
@@ -35,7 +35,7 @@ import {contains} from "@/utils/ArrayUtil";
 
 export default defineComponent({
     name: 'DiagramSidebar',
-    emits: ['drag-in-node', 'update:node-keys'],
+    emits: ['drag-in-node', 'update:node-keys', 'update:active-node-keys'],
     props: {
         diagramGroups: {
             type: Object as PropType<Array<DiagramGroup>>,
@@ -46,11 +46,17 @@ export default defineComponent({
             type: Object as PropType<Array<string>>,
             required: false,
             default: ['basic-node', 'graph-node', 'polygon-node', 'lct']
-        }
+        },
+        activeNodeKeys: {
+            type: Object as PropType<Array<string>>,
+            required: false,
+            default: ['basic-node', 'lct']
+        },
     },
     data: () => ({
         nodeKeysWrap: ['basic-node', 'graph-node', 'polygon-node', 'lct'],
-        moreDropdown: false
+        moreDropdown: false,
+        activeKeys: ['basic-node', 'lct']
     }),
     computed: {
         ...mapState(useGlobalStore, ['height']),
@@ -64,6 +70,12 @@ export default defineComponent({
         },
         nodeKeys(newValue) {
             this.nodeKeysWrap = newValue;
+        },
+        activeKeys(newValue) {
+            this.$emit('update:active-node-keys', newValue)
+        },
+        activeNodeKeys(newValue) {
+            this.activeKeys = newValue;
         }
     },
     methods: {
@@ -74,7 +86,8 @@ export default defineComponent({
     },
     components: icons,
     created() {
-        this.nodeKeysWrap = this.nodeKeys || [];
+        this.nodeKeysWrap = Object.assign(this.nodeKeysWrap, this.nodeKeys);
+        this.activeKeys = Object.assign(this.activeKeys, this.activeNodeKeys)
     },
 })
 </script>

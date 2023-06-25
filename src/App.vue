@@ -130,11 +130,12 @@
                 </a-layout-content>
             </a-layout>
         </a-spin>
+        <sub-input v-model:visible="subInputVisible" v-model:keyword="subInputKeyword"/>
     </div>
 </template>
 <script lang="ts">
 import {mapState} from "pinia";
-import {defineComponent} from "vue";
+import {defineAsyncComponent, defineComponent} from "vue";
 
 import {statistics, useMapEvent, useSaveEvent, useSideEvent, useUndoEvent} from "@/global/BeanFactory";
 import Config from '@/global/Config'
@@ -158,12 +159,17 @@ import {useBackupSettingStore} from "./store/setting/BackupSettingStore";
 
 
 export default defineComponent({
-    name: '',
+    name: 'app',
+    components: {
+        SubInput: defineAsyncComponent(() => import("@/components/sub-input/index.vue"))
+    },
     data: () => ({
         ExportTypeEnum,
         GraphTypeEnum,
         Config,
-        selectedKeys: ['/home']
+        selectedKeys: ['/home'],
+        subInputVisible: false,
+        subInputKeyword: ''
     }),
     computed: {
         ...mapState(useGlobalStore, ['isDark', 'title', 'type', 'typeWrap', 'env', 'loading', 'loadingText']),
@@ -222,6 +228,16 @@ export default defineComponent({
                 query
             });
         });
+        // 子输入框时间
+        utools.setSubInput(action => {
+            // @ts-ignore
+            let text = action.text;
+            if (this.subInputVisible) {
+            } else if (text !== '') {
+                this.subInputVisible = true;
+            }
+            this.subInputKeyword = text;
+        }, '请输入名称', false);
         // 快捷键注册
         window.addEventListener("keydown", function (e) {
             //可以判断是不是mac，如果是mac,ctrl变为花键
@@ -241,7 +257,7 @@ export default defineComponent({
 
         }, false);
         // 版本检查
-        this.launch()
+        this.launch();
     },
     methods: {
         jumpTo(type: GraphTypeEnum) {

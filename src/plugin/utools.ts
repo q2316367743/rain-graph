@@ -133,6 +133,12 @@ export const utools = {
         MessageUtil.warning("web环境不支持打开文件操作，请使用utools版本");
         return [];
     },
+    setSubInput() {
+        console.warn("web环境不支持子输入框事件");
+    },
+    setSubInputValue() {
+        console.warn("web环境不支持子输入框事件");
+    },
     fetchUserPayments(): Promise<any[]> {
         return Promise.resolve([]);
     },

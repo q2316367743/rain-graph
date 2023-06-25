@@ -64,7 +64,7 @@
                                 <icon-image/>
                             </template>
                             <template #title>图片编辑</template>
-                            <a-menu-item :key="'/image/' + GraphTypeEnum.FABRIC"
+                            <a-menu-item :key="'/image/' + GraphTypeEnum.FABRIC" disabled
                                          @click="jumpToFunc('/image/' + GraphTypeEnum.FABRIC)">
                                 设计编辑器
                             </a-menu-item>
@@ -228,16 +228,22 @@ export default defineComponent({
                 query
             });
         });
-        // 子输入框时间
-        utools.setSubInput(action => {
-            // @ts-ignore
-            let text = action.text;
-            if (this.subInputVisible) {
-            } else if (text !== '') {
-                this.subInputVisible = true;
+        // 子输入框
+        let subInput = false;
+        let interval = setInterval(() => {
+            subInput = utools.setSubInput(action => {
+                // @ts-ignore
+                let text = action.text;
+                if (this.subInputVisible) {
+                } else if (text !== '') {
+                    this.subInputVisible = true;
+                }
+                this.subInputKeyword = text;
+            }, '请输入名称', false);
+            if (subInput) {
+                clearInterval(interval);
             }
-            this.subInputKeyword = text;
-        }, '请输入名称', false);
+        }, 100);
         // 快捷键注册
         window.addEventListener("keydown", function (e) {
             //可以判断是不是mac，如果是mac,ctrl变为花键

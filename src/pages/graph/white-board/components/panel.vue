@@ -2,28 +2,28 @@
     <div class="white-board-panel">
         <div class="elementStyle" v-if="(activeElement || hasSelectedElements) && show">
             <!-- 描边 -->
-            <div class="styleBlock" v-if="!['text', 'image'].includes(activeElement?.type) ||
+            <div class="styleBlock" v-if="!['text', 'image'].includes(activeElement!.type || '') ||
                 hasSelectedElements
                 ">
                 <div class="styleBlockTitle">描边</div>
                 <div class="styleBlockContent">
-                    <color-picker v-model:color="activeElement.style.strokeStyle"
+                    <color-picker :color="activeElement.style.strokeStyle"
                                   @change="updateStyle('strokeStyle', $event)"/>
                 </div>
             </div>
             <!-- 填充 -->
             <div class="styleBlock" v-if="!['image', 'line', 'arrow', 'freedraw'].includes(
-                activeElement?.type
+                activeElement!.type || ''
             ) || hasSelectedElements
                 ">
                 <div class="styleBlockTitle">填充</div>
                 <div class="styleBlockContent">
-                    <color-picker v-model:color="activeElement.style.fillStyle"
+                    <color-picker :color="activeElement.style.fillStyle"
                                   @change="updateStyle('fillStyle', $event)"/>
                 </div>
             </div>
             <!-- 字体 -->
-            <div class="styleBlock" v-if="['text'].includes(activeElement?.type) || hasSelectedElements">
+            <div class="styleBlock" v-if="['text'].includes(activeElement!.type || '') || hasSelectedElements">
                 <div class="styleBlockTitle">字体</div>
                 <div class="styleBlockContent">
                     <a-select v-model="fontFamily" placeholder="字体" @change="updateBaseStyle('fontFamily', $event)">
@@ -34,7 +34,7 @@
                 </div>
             </div>
             <!-- 字号 -->
-            <div class="styleBlock" v-if="['text'].includes(activeElement?.type) || hasSelectedElements">
+            <div class="styleBlock" v-if="['text'].includes(activeElement!.type || '') || hasSelectedElements">
                 <div class="styleBlockTitle">字号</div>
                 <div class="styleBlockContent">
                     <a-select size="mini" v-model="fontSize" placeholder="字号"
@@ -46,7 +46,7 @@
                 </div>
             </div>
             <!-- 描边宽度 -->
-            <div class="styleBlock" v-if="!['image', 'text'].includes(activeElement?.type) ||
+            <div class="styleBlock" v-if="!['image', 'text'].includes(activeElement!.type || '') ||
                 hasSelectedElements
                 ">
                 <div class="styleBlockTitle">描边宽度</div>
@@ -71,7 +71,7 @@
                 </div>
             </div>
             <!-- 边框样式 -->
-            <div class="styleBlock" v-if="!['freedraw', 'image', 'text'].includes(activeElement?.type) ||
+            <div class="styleBlock" v-if="!['freedraw', 'image', 'text'].includes(activeElement!.type || '') ||
                 hasSelectedElements
                 ">
                 <div class="styleBlockTitle">边框样式</div>
@@ -129,7 +129,7 @@
     </div>
 </template>
 <script lang="ts">
-import {defineComponent} from "vue";
+import {defineComponent, PropType} from "vue";
 import {fontFamilyList, fontSizeList} from '../constants'
 import ColorPicker from "@/components/color-picker/index.vue";
 
@@ -138,7 +138,7 @@ export default defineComponent({
     components: {ColorPicker},
     props: {
         app: Object,
-        activeElement: Object,
+        activeElement: Object as PropType<any>,
         hasSelectedElements: Boolean,
         panel: Object
     },

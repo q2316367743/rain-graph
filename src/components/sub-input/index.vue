@@ -105,8 +105,11 @@ export default defineComponent({
         jumpTo(item: GraphRecordWrap) {
             useGlobalStore().setTitle(item.name);
             useGlobalStore().setType(item.type);
-            this.$router.push(`/graph/${item.type}/${item.id}`);
-            this.show = false;
+            this.$router.push("/dashboard")
+                .then(() => {
+                    this.$router.push(`/graph/${item.type}/${item.id}`);
+                    this.show = false;
+                })
         },
         nameCovert(type: GraphTypeEnum) {
             if (type === GraphTypeEnum.SIMPLE_MIND_MAP) {

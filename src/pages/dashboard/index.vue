@@ -25,7 +25,8 @@
         <a-row :gutter="7" style="margin: 7px">
             <a-col :span="24">
                 <a-card title="活跃图">
-                    <calendar-heatmap :values="values" :dark-mode="isDark" :end-date="endDate" no-data-text="没有记录" />
+                    <template #extra>{{ endDate}}</template>
+                    <calendar-heatmap :values="values" :dark-mode="isDark" :end-date="endDate" />
                 </a-card>
             </a-col>
         </a-row>
@@ -82,7 +83,7 @@ export default defineComponent({
                 date: key,
                 count: value
             });
-        })
+        });
     }
 });
 </script>

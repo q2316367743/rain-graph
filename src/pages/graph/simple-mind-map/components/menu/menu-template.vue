@@ -2,20 +2,21 @@
     <a-dropdown>
         <a-button :disabled="isNotVip">模板</a-button>
         <template #content>
-            <a-doption @click="saveToTemplate">保存为模板</a-doption>
+            <a-doption @click="saveToTemplate()">保存为模板</a-doption>
             <a-doption @click="visible = true">模板管理</a-doption>
         </template>
-        <template-manage v-model:visible="visible" :type="GraphTypeEnum.SIMPLE_MIND_MAP" @render="render" />
+        <template-manage v-model:visible="visible" :graph-type="GraphTypeEnum.MIND_MAP" :type="MindMapSubType.SIMPLE_MIND_MAP" @render="render" />
     </a-dropdown>
 </template>
 <script lang="ts">
-import { PropType, defineComponent } from "vue";
+import {defineComponent, PropType} from "vue";
 import SimpleMindMapWrap from "../../SimpleMindMapWrap";
 import MessageUtil from "@/utils/MessageUtil";
 import TemplateManage from '@/components/template-manage/index.vue'
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
-import { mapState } from "pinia";
-import { useVipStore } from "@/store/VipStore";
+import {mapState} from "pinia";
+import {useVipStore} from "@/store/VipStore";
+import {MindMapSubType} from "@/enumeration/GraphSubTypeEnum";
 
 export default defineComponent({
     name: 'menu-file',
@@ -29,7 +30,8 @@ export default defineComponent({
     },
     data: () => ({
         visible: false,
-        GraphTypeEnum
+        GraphTypeEnum,
+        MindMapSubType
     }),
     computed: {
         ...mapState(useVipStore, ['isNotVip'])
@@ -39,7 +41,7 @@ export default defineComponent({
             this.simpleMindMapWrap.saveToTemplate();
         },
         render(id: string) {
-            utools.db.promises.get(`/${GraphTypeEnum.SIMPLE_MIND_MAP}/${id}`)
+            utools.db.promises.get(`/${GraphTypeEnum.MIND_MAP}/${id}`)
                 .then(valueWrap => {
                     if (!valueWrap) {
                         MessageUtil.error("模板不存在，请刷新后重试");

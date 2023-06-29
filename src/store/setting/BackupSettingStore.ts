@@ -1,7 +1,7 @@
 import BackupSetting from "@/entity/setting/BackupSetting";
 import LocalNameEnum from "@/enumeration/LocalNameEnum";
-import { defineStore } from "pinia";
-import { toRaw } from "vue";
+import {defineStore} from "pinia";
+import {toRaw} from "vue";
 
 export function getDefaultBackupSetting(): BackupSetting {
     return {
@@ -20,14 +20,12 @@ export const useBackupSettingStore = defineStore('backup-setting', {
         rev: undefined as string | undefined
     }),
     actions: {
-        init() {
-            utools.db.promises.get(LocalNameEnum.SETTING_BACKUP)
-            .then(res => {
-                if (res) {
-                    this.instance = Object.assign(this.instance, res.value);
-                    this.rev = res._rev;
-                }
-            })
+        async init() {
+            const res = await utools.db.promises.get(LocalNameEnum.SETTING_BACKUP)
+            if (res) {
+                this.instance = Object.assign(this.instance, res.value);
+                this.rev = res._rev;
+            }
         },
         async save(setting: BackupSetting) {
             this.instance = setting;

@@ -1,8 +1,7 @@
 import DiagramSetting from "@/entity/setting/DiagramSetting";
 import LocalNameEnum from "@/enumeration/LocalNameEnum";
-import MessageUtil from "@/utils/MessageUtil";
-import { defineStore } from "pinia";
-import { toRaw } from "vue";
+import {defineStore} from "pinia";
+import {toRaw} from "vue";
 
 
 export function getDefaultDiagramSetting(): DiagramSetting {
@@ -34,16 +33,13 @@ export const useDiagramSettingStore = defineStore('setting-diagram', {
         lock: false
     }),
     actions: {
-        init() {
-            utools.db.promises.get(LocalNameEnum.SETTING_DIAGRAM)
-                .then(settingWrap => {
-                    if (!settingWrap) {
-                        return;
-                    }
-                    this._rev = settingWrap._rev;
-                    this.diagramSetting = Object.assign(this.diagramSetting, settingWrap.value);
-                })
-                .catch(e => MessageUtil.error("初始化流程图设置失败"));
+        async init() {
+            const settingWrap = await utools.db.promises.get(LocalNameEnum.SETTING_DIAGRAM)
+            if (!settingWrap) {
+                return;
+            }
+            this._rev = settingWrap._rev;
+            this.diagramSetting = Object.assign(this.diagramSetting, settingWrap.value);
         },
         async save(setting: DiagramSetting) {
             if (this.lock) {

@@ -1,4 +1,5 @@
 import GraphTypeEnum from '@/enumeration/GraphTypeEnum';
+import {MindMapSubType} from "@/enumeration/GraphSubTypeEnum";
 
 export default interface Setting {
 
@@ -16,5 +17,10 @@ export default interface Setting {
      * drauu是否可以附加到diagram
      */
     drauuAppendToDiagram: boolean;
+
+    /**
+     * 思维导图默认引擎
+     */
+    mindMapType: MindMapSubType;
 
 }

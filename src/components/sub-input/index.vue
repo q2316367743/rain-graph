@@ -5,7 +5,7 @@
         </template>
         <a-list>
             <a-list-item v-for="item in showItems">
-                <a-link @click="jumpTo(item.item)">{{item.item.name}}</a-link>
+                <a-link @click="jumpTo(item.item)">{{ item.item.name }}</a-link>
                 <template #actions>
                     <a-tag>{{ nameCovert(item.item.type) }}</a-tag>
                 </template>
@@ -16,18 +16,17 @@
 <script lang="ts">
 import {defineComponent} from "vue";
 import {mapState} from "pinia";
-import {useSimpleMindMapStore} from "@/store/graph/SimpleMindMapStore";
-import {useMindStore} from "@/store/graph/MindStore";
 import {useDiagramStore} from "@/store/graph/DiagramStore";
 import {useWhiteBoardStore} from "@/store/graph/WhiteBoardStore";
 import GraphRecord from "@/entity/GraphRecord";
 import Fuse from 'fuse.js';
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import {useGlobalStore} from "@/store/GlobalStore";
+import {useMindMapStore} from "@/store/graph/MindMapStore";
 
 interface GraphRecordWrap extends GraphRecord {
 
-    type: GraphTypeEnum;
+    graphType: GraphTypeEnum;
 
 }
 
@@ -45,23 +44,19 @@ export default defineComponent({
         showItems: new Array<Fuse.FuseResult<GraphRecordWrap>>()
     }),
     computed: {
-        ...mapState(useSimpleMindMapStore, ['simpleMindMaps']),
-        ...mapState(useMindStore, ['minds']),
+        ...mapState(useMindMapStore, ['mindMaps']),
         ...mapState(useDiagramStore, ['diagrams']),
         ...mapState(useWhiteBoardStore, ['whiteBoards']),
         items(): Array<GraphRecordWrap> {
-            return [...this.simpleMindMaps.map(e => ({
+            return [...this.mindMaps.map(e => ({
                 ...e,
-                type: GraphTypeEnum.SIMPLE_MIND_MAP
-            })), ...this.minds.map(e => ({
-                ...e,
-                type: GraphTypeEnum.MIND
+                graphType: GraphTypeEnum.MIND_MAP
             })), ...this.diagrams.map(e => ({
                 ...e,
-                type: GraphTypeEnum.DIAGRAM
+                graphType: GraphTypeEnum.DIAGRAM
             })), ...this.whiteBoards.map(e => ({
                 ...e,
-                type: GraphTypeEnum.WHITE_BOARD
+                graphType: GraphTypeEnum.WHITE_BOARD
             }))]
         },
     },
@@ -104,7 +99,7 @@ export default defineComponent({
     methods: {
         jumpTo(item: GraphRecordWrap) {
             useGlobalStore().setTitle(item.name);
-            useGlobalStore().setType(item.type);
+            useGlobalStore().setType(item.graphType);
             this.$router.push("/dashboard")
                 .then(() => {
                     this.$router.push(`/graph/${item.type}/${item.id}`);
@@ -112,14 +107,12 @@ export default defineComponent({
                 })
         },
         nameCovert(type: GraphTypeEnum) {
-            if (type === GraphTypeEnum.SIMPLE_MIND_MAP) {
-                return "完整思维导图";
-            }else if (type === GraphTypeEnum.WHITE_BOARD) {
+            if (type === GraphTypeEnum.MIND_MAP) {
+                return "思维导图";
+            } else if (type === GraphTypeEnum.WHITE_BOARD) {
                 return "白板";
-            }else if (type === GraphTypeEnum.DIAGRAM) {
+            } else if (type === GraphTypeEnum.DIAGRAM) {
                 return "流程图";
-            }else if (type === GraphTypeEnum.MIND) {
-                return "简易思维导图";
             }
         }
     }

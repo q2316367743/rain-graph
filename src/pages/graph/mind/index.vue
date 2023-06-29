@@ -5,16 +5,16 @@
                 <a-dropdown>
                     <a-button>文件</a-button>
                     <template #content>
-                        <a-doption @click="toHome">返回列表</a-doption>
+                        <a-doption @click="toHome()">返回列表</a-doption>
                         <a-doption @click="save(true)">保存</a-doption>
-                        <a-doption @click="open" :disabled="isNotVip">打开</a-doption>
-                        <a-doption @click="saveAs" :disabled="isNotVip">另存为</a-doption>
+                        <a-doption @click="open()" :disabled="isNotVip">打开</a-doption>
+                        <a-doption @click="saveAs()" :disabled="isNotVip">另存为</a-doption>
                     </template>
                 </a-dropdown>
                 <a-dropdown trigger="click">
                     <a-button>编辑</a-button>
                     <template #content>
-                        <a-doption @click="toUndo" :disabled="!option.allowUndo">后退</a-doption>
+                        <a-doption @click="toUndo()" :disabled="!option.allowUndo">后退</a-doption>
                         <a-doption @click="settingVisible = !settingVisible">设置</a-doption>
                     </template>
                 </a-dropdown>
@@ -30,42 +30,50 @@
                 <a-dropdown>
                     <a-button :disabled="isNotVip">模板</a-button>
                     <template #content>
-                        <a-doption @click="saveToTemplate">保存为模板</a-doption>
+                        <a-doption @click="saveToTemplate()">保存为模板</a-doption>
                         <a-doption @click="templateDrawer = true">模板管理</a-doption>
                     </template>
                 </a-dropdown>
             </a-button-group>
             <a-button-group type="text">
-                <a-button @click="switchReadonly" :status="readonly ? 'warning' : 'normal'">
-                    <template #icon><icon-lock /></template>
+                <a-button @click="switchReadonly()" :status="readonly ? 'warning' : 'normal'">
+                    <template #icon>
+                        <icon-lock/>
+                    </template>
                 </a-button>
             </a-button-group>
         </div>
         <div class="container">
             <div id="mind-elixir-view" :style="{ height: viewHeight + 'px' }"></div>
         </div>
-        <mind-elixir-setting v-model:visible="settingVisible" :option="option" @save="saveOption" />
-        <template-manage v-model:visible="templateDrawer" :type="GraphTypeEnum.MIND" @render="renderTo" />
+        <mind-elixir-setting v-model:visible="settingVisible" :option="option" @save="saveOption"/>
+        <template-manage v-model:visible="templateDrawer" :graph-type="GraphTypeEnum.MIND_MAP" :type="MindMapSubType.MIND_ELIXIR" @render="renderTo"/>
     </div>
 </template>
 <script lang="ts" setup>
-import { computed, onMounted, ref, toRaw } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { useFileSystemAccess, useWindowSize } from "@vueuse/core";
+import {computed, onMounted, ref, toRaw} from "vue";
+import {useRoute, useRouter} from "vue-router";
+import {useFileSystemAccess, useWindowSize} from "@vueuse/core";
 import MindElixir from "mind-elixir";
-import { data2Html } from '@mind-elixir/export-html'
-import { useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
-import { useMindStore } from "@/store/graph/MindStore";
-import MessageUtil from "@/utils/MessageUtil";
+import {data2Html} from '@mind-elixir/export-html'
+
+import {useSaveEvent, useUndoEvent} from "@/global/BeanFactory";
+// 枚举
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
-import { useGlobalStore } from "@/store/GlobalStore";
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
-import { download } from "@/utils/BrowserUtil";
-import { getRecord, saveTemplate } from "@/utils/utools/DbUtil";
-import { MindOption, getDefaultOption } from "./domain/MindOption";
+import {MindMapSubType} from '@/enumeration/GraphSubTypeEnum'
+// 工具类
+import MessageUtil from "@/utils/MessageUtil";
+import {download} from "@/utils/BrowserUtil";
+import {getRecord, saveTemplate} from "@/utils/utools/DbUtil";
+import {getDefaultOption, MindOption} from "./domain/MindOption";
+// 组件
 import MindElixirSetting from './components/setting.vue';
 import TemplateManage from '@/components/template-manage/index.vue';
-import { useVipStore } from "@/store/VipStore";
+// 状态
+import {useGlobalStore} from "@/store/GlobalStore";
+import {useVipStore} from "@/store/VipStore";
+import {useMindMapStore} from "@/store/graph/MindMapStore";
 
 const size = useWindowSize();
 const viewHeight = computed(() => size.height.value - 33);
@@ -102,7 +110,7 @@ const fileSystem = useFileSystemAccess({
 async function initData() {
     let id = useRoute().params.id as string;
     let path = useRoute().query.path as string;
-    let record = await getRecord(GraphTypeEnum.MIND, id, path)
+    let record = await getRecord(GraphTypeEnum.MIND_MAP, id, path)
     id = record.id;
     _rev = record._rev;
     option.value = Object.assign(option.value, record.option);
@@ -125,10 +133,10 @@ onMounted(() => {
 });
 
 function save(show: boolean = true) {
-    useMindStore().addMind(id).then(_id => {
+    useMindMapStore().add(id, MindMapSubType.MIND_ELIXIR).then(_id => {
         id = _id;
         utools.db.promises.put({
-            _id: `/${GraphTypeEnum.MIND}/${id}`,
+            _id: `/${GraphTypeEnum.MIND_MAP}/${id}`,
             _rev,
             value: {
                 record: mind.getData(),
@@ -176,7 +184,7 @@ function open() {
 }
 
 async function renderTo(id: string) {
-    const recordId = `/${GraphTypeEnum.MIND}/${id}`;
+    const recordId = `/${GraphTypeEnum.MIND_MAP}/${id}`;
     // 获取数据
     const valueWrap = await utools.db.promises.get(recordId);
     if (!valueWrap) {
@@ -219,7 +227,7 @@ function toHome() {
     router.push({
         path: '/home',
         query: {
-            name: GraphTypeEnum.MIND
+            name: GraphTypeEnum.MIND_MAP
         }
     })
 }
@@ -265,11 +273,11 @@ function saveOption(value: MindOption) {
  * 保存到模板
  */
 function saveToTemplate() {
-    saveTemplate(GraphTypeEnum.MIND, {
+    saveTemplate(GraphTypeEnum.MIND_MAP, {
         record: toRaw(mind.getData()),
         config: {},
         option: toRaw(option.value)
-    })
+    }, MindMapSubType.MIND_ELIXIR)
         .then(() => MessageUtil.success("保存成功"))
         .catch(e => {
             if (e === 'cancel') {
@@ -285,50 +293,50 @@ useUndoEvent.on(() => toUndo());
 </script>
 <style lang="less">
 .mind-elixir {
-    position: relative;
-    height: 100%;
-    width: 100%;
+  position: relative;
+  height: 100%;
+  width: 100%;
 
-    .header {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        border-bottom: 1px solid var(--color-neutral-3);
-        display: flex;
-        justify-content: space-between;
-    }
+  .header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    border-bottom: 1px solid var(--color-neutral-3);
+    display: flex;
+    justify-content: space-between;
+  }
 
-    .container {
-        position: absolute;
-        top: 33px;
-        left: 0;
-        right: 0;
-        bottom: 0;
-    }
+  .container {
+    position: absolute;
+    top: 33px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
 }
 
 #mind-elixir-view {
-    position: relative;
-    height: 100%;
-    width: 100%;
+  position: relative;
+  height: 100%;
+  width: 100%;
 
-    .mind-elixir-toolbar {
-        svg {
-            color: #000;
-        }
+  .mind-elixir-toolbar {
+    svg {
+      color: #000;
     }
+  }
 
 }
 
 #mind-view {
-    width: 100%;
+  width: 100%;
 }
 
 
 .map-container {
-    .map-canvas {
-        background-color: var(--color-bg-1);
-    }
+  .map-canvas {
+    background-color: var(--color-bg-1);
+  }
 }
 </style>

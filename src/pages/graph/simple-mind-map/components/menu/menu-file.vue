@@ -2,22 +2,22 @@
     <a-dropdown>
         <a-button>文件</a-button>
         <template #content>
-            <a-doption @click="toHome">返回列表</a-doption>
-            <a-doption @click="open" :disabled="!fileSystem.isSupported">打开</a-doption>
-            <a-doption @click="save">保存</a-doption>
-            <a-doption @click="saveAs">另存为</a-doption>
+            <a-doption @click="toHome()">返回列表</a-doption>
+            <a-doption @click="open()" :disabled="!fileSystem.isSupported">打开</a-doption>
+            <a-doption @click="save()">保存</a-doption>
+            <a-doption @click="saveAs()">另存为</a-doption>
         </template>
     </a-dropdown>
 </template>
 <script lang="ts">
-import { mapState } from "pinia";
-import { PropType, defineComponent } from "vue";
-import { useFileSystemAccess } from '@vueuse/core'
+import {mapState} from "pinia";
+import {defineComponent, PropType} from "vue";
+import {useFileSystemAccess} from '@vueuse/core'
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import SimpleMindMapWrap from "../../SimpleMindMapWrap";
 import MessageUtil from "@/utils/MessageUtil";
-import { useGlobalStore } from "@/store/GlobalStore";
-import { useSaveEvent } from "@/global/BeanFactory";
+import {useSaveEvent} from "@/global/BeanFactory";
+import {useGlobalStore} from "@/store/GlobalStore";
 
 export default defineComponent({
     name: 'menu-file',
@@ -50,7 +50,7 @@ export default defineComponent({
             this.$router.push({
                 path: '/home',
                 query: {
-                    name: GraphTypeEnum.SIMPLE_MIND_MAP
+                    name: GraphTypeEnum.MIND_MAP
                 }
             })
         },

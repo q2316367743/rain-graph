@@ -1,22 +1,17 @@
 <template>
     <div class="dashboard">
         <a-row :gutter="7" style="margin: 7px">
-            <a-col :span="6">
+            <a-col :span="8">
                 <a-card>
-                    <a-statistic title="简易思维导图" :value="minds.length" show-group-separator/>
+                    <a-statistic title="思维导图" :value="mindMaps.length" show-group-separator/>
                 </a-card>
             </a-col>
-            <a-col :span="6">
-                <a-card>
-                    <a-statistic title="完整思维导图" :value="simpleMindMaps.length" show-group-separator/>
-                </a-card>
-            </a-col>
-            <a-col :span="6">
+            <a-col :span="8">
                 <a-card>
                     <a-statistic title="流程图" :value="diagrams.length" show-group-separator/>
                 </a-card>
             </a-col>
-            <a-col :span="6">
+            <a-col :span="8">
                 <a-card>
                     <a-statistic title="白板" :value="whiteBoards.length" show-group-separator/>
                 </a-card>
@@ -37,11 +32,10 @@ import {defineComponent} from "vue";
 import {CalendarHeatmap} from 'vue3-calendar-heatmap';
 import 'vue3-calendar-heatmap/dist/style.css'
 import {mapState} from "pinia";
-import {useSimpleMindMapStore} from "@/store/graph/SimpleMindMapStore";
-import {useMindStore} from "@/store/graph/MindStore";
 import {useDiagramStore} from "@/store/graph/DiagramStore";
 import {useWhiteBoardStore} from "@/store/graph/WhiteBoardStore";
 import {useGlobalStore} from "@/store/GlobalStore";
+import {useMindMapStore} from "@/store/graph/MindMapStore";
 
 interface CalenderNode {
     date: string | Date,
@@ -53,8 +47,7 @@ export default defineComponent({
     components: {CalendarHeatmap},
     computed: {
         ...mapState(useGlobalStore, ['isDark']),
-        ...mapState(useSimpleMindMapStore, ['simpleMindMaps']),
-        ...mapState(useMindStore, ['minds']),
+        ...mapState(useMindMapStore, ['mindMaps']),
         ...mapState(useDiagramStore, ['diagrams']),
         ...mapState(useWhiteBoardStore, ['whiteBoards']),
     },
@@ -68,7 +61,7 @@ export default defineComponent({
     },
     created() {
         const nodeMap = new Map<string, number>();
-        for (const item of [...this.simpleMindMaps, ...this.minds, ...this.diagrams, ...this.whiteBoards]) {
+        for (const item of [...this.mindMaps, ...this.diagrams, ...this.whiteBoards]) {
             if (typeof item.createTime === 'string') {
                 let date = item.createTime.substring(0, 10);
                 if (nodeMap.has(date)) {

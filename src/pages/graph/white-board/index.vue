@@ -5,20 +5,20 @@
                 <a-dropdown>
                     <a-button>文件</a-button>
                     <template #content>
-                        <a-doption @click="toHome">返回列表</a-doption>
-                        <a-doption @click="open">打开</a-doption>
+                        <a-doption @click="toHome()">返回列表</a-doption>
+                        <a-doption @click="open()">打开</a-doption>
                         <a-doption @click="save(true)">保存</a-doption>
-                        <a-doption @click="saveAs">另存为</a-doption>
+                        <a-doption @click="saveAs()">另存为</a-doption>
                     </template>
                 </a-dropdown>
                 <a-dropdown trigger="click">
                     <a-button>编辑</a-button>
                     <template #content>
                         <a-doption>背景颜色</a-doption>
-                        <a-doption @click="undo">后退</a-doption>
-                        <a-doption @click="redo">前进</a-doption>
-                        <a-doption @click="empty">清空</a-doption>
-                        <a-doption @click="selectAll">全选</a-doption>
+                        <a-doption @click="undo()">后退</a-doption>
+                        <a-doption @click="redo()">前进</a-doption>
+                        <a-doption @click="empty()">清空</a-doption>
+                        <a-doption @click="selectAll()">全选</a-doption>
                     </template>
                 </a-dropdown>
                 <a-dropdown trigger="click">
@@ -32,28 +32,30 @@
                 <a-dropdown trigger="click">
                     <a-button>更多</a-button>
                     <template #content>
-                        <a-doption @click="changeGrid">网格</a-doption>
-                        <a-doption @click="changeReadonly">编辑/只读</a-doption>
+                        <a-doption @click="changeGrid()">网格</a-doption>
+                        <a-doption @click="changeReadonly()">编辑/只读</a-doption>
                         <a-doption @click="helpDrawer = true">帮助</a-doption>
                     </template>
                 </a-dropdown>
                 <a-dropdown>
                     <a-button>模板</a-button>
                     <template #content>
-                        <a-doption @click="saveToTemplate">保存为模板</a-doption>
+                        <a-doption @click="saveToTemplate()">保存为模板</a-doption>
                         <a-doption @click="templateDrawer = true">模板管理</a-doption>
                     </template>
                 </a-dropdown>
             </a-button-group>
             <div>
                 <a-button type="text" @click="config.readonly = !config.readonly"
-                    :status="config.readonly ? 'warning' : 'normal'">
-                    <template #icon><icon-lock /></template>
+                          :status="config.readonly ? 'warning' : 'normal'">
+                    <template #icon>
+                        <icon-lock/>
+                    </template>
                 </a-button>
                 <a-button type="text" @click="fullscreen.toggle()">
                     <template #icon>
-                        <icon-fullscreen-exit v-if="fullscreen.isFullscreen" />
-                        <icon-fullscreen v-else />
+                        <icon-fullscreen-exit v-if="fullscreen.isFullscreen"/>
+                        <icon-fullscreen v-else/>
                     </template>
                 </a-button>
             </div>
@@ -64,54 +66,78 @@
             <div class="white-board-draw-type" :style="{ left: drawTypeLeft }" v-show="!config.readonly">
                 <a-radio-group type="button" v-model="activeKey" class="draw-type">
                     <a-tooltip content="选择">
-                        <a-radio value="selection"><icon-choose style="margin-top: 6px;" /></a-radio>
+                        <a-radio value="selection">
+                            <icon-choose style="margin-top: 6px;"/>
+                        </a-radio>
                     </a-tooltip>
                     <a-tooltip content="橡皮擦">
-                        <a-radio value="eraser"><icon-eraser /></a-radio>
+                        <a-radio value="eraser">
+                            <icon-eraser/>
+                        </a-radio>
                     </a-tooltip>
-                    <a-radio value="rectangle"><icon-rect style="margin-top: 6px;" /></a-radio>
-                    <a-radio value="diamond"><icon-diamond style="margin-top: 6px;" /></a-radio>
-                    <a-radio value="triangle"><icon-triangle style="margin-top: 6px;" /></a-radio>
-                    <a-radio value="circle"><icon-circle style="margin-top: 6px;" /></a-radio>
-                    <a-radio value="line"><icon-line style="margin-top: 6px;" /></a-radio>
-                    <a-radio value="arrow"><icon-arrow-right /></a-radio>
+                    <a-radio value="rectangle">
+                        <icon-rect style="margin-top: 6px;"/>
+                    </a-radio>
+                    <a-radio value="diamond">
+                        <icon-diamond style="margin-top: 6px;"/>
+                    </a-radio>
+                    <a-radio value="triangle">
+                        <icon-triangle style="margin-top: 6px;"/>
+                    </a-radio>
+                    <a-radio value="circle">
+                        <icon-circle style="margin-top: 6px;"/>
+                    </a-radio>
+                    <a-radio value="line">
+                        <icon-line style="margin-top: 6px;"/>
+                    </a-radio>
+                    <a-radio value="arrow">
+                        <icon-arrow-right/>
+                    </a-radio>
                     <a-tooltip content="画笔">
-                        <a-radio value="freedraw"><icon-pen /></a-radio>
+                        <a-radio value="freedraw">
+                            <icon-pen/>
+                        </a-radio>
                     </a-tooltip>
                     <a-tooltip content="文字">
-                        <a-radio value="text"><icon-edit /></a-radio>
+                        <a-radio value="text">
+                            <icon-edit/>
+                        </a-radio>
                     </a-tooltip>
                     <a-tooltip content="图片">
-                        <a-radio value="image"><icon-image /></a-radio>
+                        <a-radio value="image">
+                            <icon-image/>
+                        </a-radio>
                     </a-tooltip>
                 </a-radio-group>
             </div>
             <!-- 面板 -->
             <white-board-panel class="white-board-panel" v-if="render" v-show="!config.readonly" :app="app"
-                :active-element="activeElement" :has-selected-elements="hasSelectedElements" :panel="panel" />
+                               :active-element="activeElement" :has-selected-elements="hasSelectedElements"
+                               :panel="panel"/>
         </a-layout>
         <!-- 菜单 -->
-        <white-board-context-menu :app="app" v-if="render" v-show="!config.readonly" />
+        <white-board-context-menu :app="app" v-if="render" v-show="!config.readonly"/>
         <!-- 图片导出 -->
-        <white-board-export-png v-model:show="exportPngDialog" :app="app" />
+        <white-board-export-png v-model:show="exportPngDialog" :app="app"/>
         <!-- 显示设置 -->
         <white-board-display v-show="!config.readonly" :background-color="config.backgroundColor" :scale="config.scale"
-            :scroll-x="config.scrollX" :scroll-y="config.scrollY" @change-color="changeBackgroundColor"
-            @scale-plus="scalePlus" @scale-minus="scaleMinus" @scale-reset="scaleReset"
-            @scroll-to-center="scrollToCenter" />
+                             :scroll-x="config.scrollX" :scroll-y="config.scrollY" @change-color="changeBackgroundColor"
+                             @scale-plus="scalePlus" @scale-minus="scaleMinus" @scale-reset="scaleReset"
+                             @scroll-to-center="scrollToCenter"/>
         <!-- 帮助 -->
         <a-drawer v-model:visible="helpDrawer" title="帮助" width="300px" :footer="false">
-            <white-board-help />
+            <white-board-help/>
         </a-drawer>
         <!-- 模板管理 -->
-        <template-manage v-model:visible="templateDrawer" :type="GraphTypeEnum.WHITE_BOARD" @render="renderTo" />
+        <template-manage v-model:visible="templateDrawer" :graph-type="GraphTypeEnum.WHITE_BOARD"
+                         :type="WhiteBoardSubType.TINY_WHITEBOARD" @render="renderTo"/>
     </div>
 </template>
 <script lang="ts">
-import { defineComponent, toRaw, markRaw } from "vue";
+import {defineComponent, markRaw, toRaw} from "vue";
 import TinyWhiteboard from "tiny-whiteboard";
-import { mapState } from "pinia";
-import { useFileSystemAccess, useFullscreen } from "@vueuse/core";
+import {mapState} from "pinia";
+import {useFileSystemAccess, useFullscreen} from "@vueuse/core";
 
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
@@ -131,12 +157,13 @@ import WhiteBoardPanel from './components/panel.vue';
 
 import TemplateManage from '@/components/template-manage/index.vue';
 
-import { useGlobalStore } from "@/store/GlobalStore";
-import { useWhiteBoardStore } from "@/store/graph/WhiteBoardStore";
-import { useSaveEvent, useUndoEvent } from "@/global/BeanFactory";
+import {useGlobalStore} from "@/store/GlobalStore";
+import {useWhiteBoardStore} from "@/store/graph/WhiteBoardStore";
+import {useSaveEvent, useUndoEvent} from "@/global/BeanFactory";
 import MessageUtil from "@/utils/MessageUtil";
-import { getRecord, saveTemplate } from '@/utils/utools/DbUtil';
-import { download } from "@/utils/BrowserUtil";
+import {getRecord, saveTemplate} from '@/utils/utools/DbUtil';
+import {download} from "@/utils/BrowserUtil";
+import {WhiteBoardSubType} from "@/enumeration/GraphSubTypeEnum";
 
 let first = true;
 
@@ -150,6 +177,7 @@ export default defineComponent({
     data: () => ({
         ExportTypeEnum,
         GraphTypeEnum,
+        WhiteBoardSubType,
         // 数据
         id: '0',
         _rev: undefined as string | undefined,
@@ -267,9 +295,9 @@ export default defineComponent({
                 }
                 first = false;
             }).catch(e => {
-                MessageUtil.error("初始化数据错误", e);
-                this.init();
-            })
+            MessageUtil.error("初始化数据错误", e);
+            this.init();
+        })
     },
     beforeUnmount() {
         this.save();
@@ -310,7 +338,7 @@ export default defineComponent({
                 }
                 this.activeElement = element
                 if (element) {
-                    let { style, rotate: elementRotate } = element
+                    let {style, rotate: elementRotate} = element
                     this.panel = {
                         lineWidth: style.lineWidth,
                         fontFamily: style.fontFamily,
@@ -338,10 +366,18 @@ export default defineComponent({
                 }
             })
         },
-        undo() { this.app.undo() },
-        redo() { this.app.redo() },
-        empty() { this.app.empty() },
-        selectAll() { this.app.selectAll() },
+        undo() {
+            this.app.undo()
+        },
+        redo() {
+            this.app.redo()
+        },
+        empty() {
+            this.app.empty()
+        },
+        selectAll() {
+            this.app.selectAll()
+        },
         changeGrid() {
             this.config.showGrid = !this.config.showGrid;
             if (this.config.showGrid) {
@@ -455,7 +491,7 @@ export default defineComponent({
             saveTemplate(GraphTypeEnum.WHITE_BOARD, {
                 config: toRaw(this.config),
                 record: this.app.getData()
-            })
+            }, WhiteBoardSubType.TINY_WHITEBOARD)
                 .then(() => MessageUtil.success("保存模板成功"))
                 .catch(e => {
                     if (e === 'cancel') {
@@ -484,53 +520,53 @@ export default defineComponent({
 </script>
 <style lang="less" scoped>
 .white-board {
-    position: relative;
-    height: 100%;
-    width: 100%;
+  position: relative;
+  height: 100%;
+  width: 100%;
 
-    .header {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 32px;
-        border-bottom: 1px solid var(--color-neutral-3);
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .container {
-        position: absolute;
-        top: 33px;
-        left: 0;
-        right: 0;
-        bottom: 0;
-
-        .white-board-draw-type {
-            position: absolute;
-            top: 7px;
-            background-color: var(--color-bg-1);
-            border-radius: 2px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            transition: 0.2ms all;
-            border: 1px solid var(--color-neutral-3);
-        }
-
-    }
-
-    .draw-type {
-        svg {
-            fill: var(--color-text-1);
-        }
-    }
-
-}
-
-#white-board-view {
+  .header {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
+    height: 32px;
+    border-bottom: 1px solid var(--color-neutral-3);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .container {
+    position: absolute;
+    top: 33px;
+    left: 0;
+    right: 0;
     bottom: 0;
+
+    .white-board-draw-type {
+      position: absolute;
+      top: 7px;
+      background-color: var(--color-bg-1);
+      border-radius: 2px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      transition: 0.2ms all;
+      border: 1px solid var(--color-neutral-3);
+    }
+
+  }
+
+  .draw-type {
+    svg {
+      fill: var(--color-text-1);
+    }
+  }
+
+}
+
+#white-board-view {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 </style>

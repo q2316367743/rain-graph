@@ -8,4 +8,9 @@ export default interface GraphRecord {
 
     updateTime: Date | string;
 
+    /**
+     * 类型
+     */
+    type: string;
+
 }

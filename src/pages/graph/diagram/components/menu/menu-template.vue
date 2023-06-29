@@ -2,19 +2,20 @@
     <a-dropdown>
         <a-button>模板</a-button>
         <template #content>
-            <a-doption @click="saveToTemplate">保存为模板</a-doption>
+            <a-doption @click="saveToTemplate()">保存为模板</a-doption>
             <a-doption @click="visible = true;">管理模板</a-doption>
         </template>
-        <template-manage v-model:visible="visible" :type="GraphTypeEnum.DIAGRAM" @render="render" />
+        <template-manage v-model:visible="visible" :graph-type="GraphTypeEnum.DIAGRAM" :type="DiagramSubType.LOGIC_FLOW" @render="render" />
     </a-dropdown>
 </template>
 <script lang="ts">
-import { defineComponent, toRaw } from "vue";
+import {defineComponent, toRaw} from "vue";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import MessageUtil from "@/utils/MessageUtil";
 
 import TemplateManage from '@/components/template-manage/index.vue';
-import { saveTemplate } from "@/utils/utools/DbUtil";
+import {saveTemplate} from "@/utils/utools/DbUtil";
+import {DiagramSubType} from "@/enumeration/GraphSubTypeEnum";
 
 export default defineComponent({
     name: 'menu-template',
@@ -33,6 +34,7 @@ export default defineComponent({
     },
     data: () => ({
         GraphTypeEnum,
+        DiagramSubType,
         visible: false,
     }),
     methods: {
@@ -41,7 +43,7 @@ export default defineComponent({
                 config: toRaw(this.config),
                 record: this.lf.getGraphRawData(),
                 editConfig: this.lf.getEditConfig()
-            })
+            }, DiagramSubType.LOGIC_FLOW)
                 .then(() => MessageUtil.success("保存模板成功"))
                 .catch(e => {
                     if (e === 'cancel') {

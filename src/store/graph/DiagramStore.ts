@@ -1,9 +1,9 @@
 import GraphRecord from "@/entity/GraphRecord";
-import { defineStore } from "pinia";
-import { getInitList, add, update } from "@/utils/LocalStoreUtil";
+import {defineStore} from "pinia";
+import {add, getInitList, update} from "@/utils/LocalStoreUtil";
 import LocalNameEnum from "@/enumeration/LocalNameEnum";
 import MessageUtil from "@/utils/MessageUtil";
-import { toRaw } from "vue";
+import {toRaw} from "vue";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 
 export const useDiagramStore = defineStore(LocalNameEnum.DIAGRAM, {
@@ -12,11 +12,10 @@ export const useDiagramStore = defineStore(LocalNameEnum.DIAGRAM, {
         diagramRev: undefined as string | undefined
     }),
     actions: {
-        init() {
-            getInitList(LocalNameEnum.DIAGRAM).then(diagramsWrap => {
-                this.diagrams = diagramsWrap.items;
-                this.diagramRev = diagramsWrap._rev;
-            });
+        async init() {
+            const diagramsWrap = await getInitList(LocalNameEnum.DIAGRAM)
+            this.diagrams = diagramsWrap.items;
+            this.diagramRev = diagramsWrap._rev;
         },
         async add(id: string): Promise<string> {
             id = await add(id, this.diagrams);

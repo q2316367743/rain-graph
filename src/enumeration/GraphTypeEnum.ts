@@ -1,12 +1,19 @@
 enum GraphTypeEnum {
 
     /**
+     * 思维导图
+     */
+    MIND_MAP = "mind-map",
+
+    /**
      * 简易流程图
+     * @deprecated 1.2.0
      */
     MIND = 'mind',
 
     /**
      * 完整流程图
+     * @deprecated 1.2.0
      */
     SIMPLE_MIND_MAP = 'simple-mind-map',
 

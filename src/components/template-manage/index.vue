@@ -22,18 +22,21 @@
 <script lang="ts">
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import MessageUtil from "@/utils/MessageUtil";
-import { StoreRecordIndex, listTemplate, removeTemplate } from "@/utils/utools/DbUtil";
-import { PropType } from "vue";
-import { defineComponent } from "vue";
-import { toDateString } from "xe-utils";
+import {listTemplate, removeTemplate, StoreRecordIndex} from "@/utils/utools/DbUtil";
+import {defineComponent, PropType} from "vue";
+import {toDateString} from "xe-utils";
 
 export default defineComponent({
     name: 'template-manage',
     emits: ['update:visible', 'render'],
     props: {
         visible: Boolean,
-        type: {
+        graphType: {
             type: String as PropType<GraphTypeEnum>,
+            required: true
+        },
+        type: {
+            type: String,
             required: true
         }
     },
@@ -46,7 +49,7 @@ export default defineComponent({
             this.modal = newValue;
             if (newValue) {
                 this.templates = new Array<StoreRecordIndex>()
-                listTemplate(this.type).then(templates => {
+                listTemplate(this.graphType, this.type).then(templates => {
                     this.templates = templates;
                 });
             }
@@ -58,10 +61,10 @@ export default defineComponent({
     methods: {
         toDateString,
         removeTemplate(id: string) {
-            removeTemplate(this.type, id)
+            removeTemplate(this.graphType, id)
                 .then(() => {
                     this.templates = new Array<StoreRecordIndex>()
-                    listTemplate(this.type).then(templates => {
+                    listTemplate(this.graphType, this.type).then(templates => {
                         this.templates = templates;
                     });
                     MessageUtil.success("删除成功");

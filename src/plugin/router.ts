@@ -70,11 +70,11 @@ const router = createRouter({
             path: '/graph',
             component: () => import('@/pages/graph/index.vue'),
             children: [{
-                name: GraphTypeEnum.MIND,
+                name: "简易思维导图",
                 path: '/graph/mind/:id',
                 component: () => import('@/pages/graph/mind/index.vue')
             }, {
-                name: GraphTypeEnum.SIMPLE_MIND_MAP,
+                name: "完整思维导图",
                 path: '/graph/simple-mind-map/:id',
                 component: () => import('@/pages/graph/simple-mind-map/index.vue')
             }, {

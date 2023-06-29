@@ -1,14 +1,17 @@
-import { SimpleMindMapConfig } from "./domain/SimpleMindMapConfig";
+import {SimpleMindMapConfig} from "./domain/SimpleMindMapConfig";
 import MindMap from "simple-mind-map";
-import { download } from "@/utils/BrowserUtil";
-import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
-import { useSimpleMindMapStore } from "@/store/graph/SimpleMindMapStore";
-
-import { getDefaultConfig, getDefaultData } from "./data/config";
-import { extraImages } from "./data/icon";
-import { MindMapNode } from "./domain/MindMapNode";
-import { saveTemplate } from "@/utils/utools/DbUtil";
+// 工具类
+import {download} from "@/utils/BrowserUtil";
+import {saveTemplate} from "@/utils/utools/DbUtil";
 import MessageUtil from "@/utils/MessageUtil";
+// 枚举
+import {MindMapSubType} from "@/enumeration/GraphSubTypeEnum";
+import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
+
+import {getDefaultConfig, getDefaultData} from "./data/config";
+import {extraImages} from "./data/icon";
+import {MindMapNode} from "./domain/MindMapNode";
+import {useMindMapStore} from "@/store/graph/MindMapStore";
 
 type commandType = 'INSERT_CHILD_NODE' | 'INSERT_NODE' | 'REMOVE_NODE' | 'BACK' | 'FORWARD' | 'ADD_GENERALIZATION';
 
@@ -165,10 +168,10 @@ export default class SimpleMindMapWrap {
             return;
         }
         this.lock = true;
-        let id = await useSimpleMindMapStore().addMind(this.id);
+        let id = await useMindMapStore().add(this.id, MindMapSubType.SIMPLE_MIND_MAP);
         this.id = id;
         let res = await utools.db.promises.put({
-            _id: `/${GraphTypeEnum.SIMPLE_MIND_MAP}/${id}`,
+            _id: `/${GraphTypeEnum.MIND_MAP}/${id}`,
             _rev: this._rev,
             value: {
                 config: this.config,
@@ -195,10 +198,10 @@ export default class SimpleMindMapWrap {
     }
 
     saveToTemplate() {
-        saveTemplate(GraphTypeEnum.SIMPLE_MIND_MAP, {
+        saveTemplate(GraphTypeEnum.MIND_MAP, {
             config: this.config,
             record: this.mindMap.getData(false)
-        })
+        }, MindMapSubType.SIMPLE_MIND_MAP)
             .then(() => MessageUtil.success("保存模板成功"))
             .catch(e => {
                 if (e === 'cancel') {

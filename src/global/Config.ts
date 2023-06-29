@@ -1,5 +1,6 @@
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
+import {DiagramSubType, MindMapSubType, WhiteBoardSubType} from "@/enumeration/GraphSubTypeEnum";
 
 function renderGraph(path: string, target: string, name: string): {
     operate: string;
@@ -33,12 +34,8 @@ export default {
     } as Record<GraphTypeEnum, Array<boolean>>,
     // 标题配置
     title: {
-        mind: {
-            title: '简易思维导图',
-            color: '#c88077'
-        },
-        "simple-mind-map": {
-            title: '完整思维导图',
+        "mind-map": {
+            title: '思维导图',
             color: '#c88077'
         },
         diagram: {
@@ -77,5 +74,22 @@ export default {
             operate: path,
             additional: ''
         };
+    },
+    subTitle(graphType: GraphTypeEnum, type: MindMapSubType | DiagramSubType | WhiteBoardSubType) {
+        if (graphType === GraphTypeEnum.MIND_MAP) {
+            if (type === MindMapSubType.MIND_ELIXIR) {
+                return "简易思维导图";
+            }else if (type === MindMapSubType.SIMPLE_MIND_MAP) {
+                return "完整思维导图"
+            }
+        }else if (graphType === GraphTypeEnum.DIAGRAM) {
+            if (type === DiagramSubType.LOGIC_FLOW) {
+                return "流程图"
+            }
+        } else if (graphType === GraphTypeEnum.WHITE_BOARD) {
+            if (type === WhiteBoardSubType.TINY_WHITEBOARD) {
+                return "白板"
+            }
+        }
     }
 }

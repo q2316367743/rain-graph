@@ -1,9 +1,9 @@
 import GraphRecord from "@/entity/GraphRecord";
-import { defineStore } from "pinia";
-import { getInitList, add, update } from "@/utils/LocalStoreUtil";
+import {defineStore} from "pinia";
+import {add, getInitList, update} from "@/utils/LocalStoreUtil";
 import LocalNameEnum from "@/enumeration/LocalNameEnum";
 import MessageUtil from "@/utils/MessageUtil";
-import { toRaw } from "vue";
+import {toRaw} from "vue";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 
 export const useWhiteBoardStore = defineStore(LocalNameEnum.WHITE_BOARD, {
@@ -12,11 +12,10 @@ export const useWhiteBoardStore = defineStore(LocalNameEnum.WHITE_BOARD, {
         whiteBoardRev: undefined as string | undefined
     }),
     actions: {
-        init() {
-            getInitList(LocalNameEnum.WHITE_BOARD).then(whiteBoardsWrap => {
-                this.whiteBoards = whiteBoardsWrap.items;
-                this.whiteBoardRev = whiteBoardsWrap._rev;
-            });
+        async init() {
+            const whiteBoardsWrap = await getInitList(LocalNameEnum.WHITE_BOARD)
+            this.whiteBoards = whiteBoardsWrap.items;
+            this.whiteBoardRev = whiteBoardsWrap._rev;
         },
         async add(id: string): Promise<string> {
             id = await add(id, this.whiteBoards);

@@ -2,7 +2,7 @@ export default {
     uid: 'znzdzrrx',
     id: 'rain-graph',
     name: '听雨图编辑器',
-    version: '1.1.1',
+    version: '1.2.0',
     author: '落雨不悔',
     website: 'https://blog.esion.xyz',
     homepage: 'https://www.yuque.com/baozhiyige-tewwf/khg2sx/tbrfl0e57la92gm2',

@@ -80,11 +80,11 @@
     </div>
 </template>
 <script lang="ts">
-import { mapState } from "pinia";
-import { defineComponent, markRaw } from "vue";
-import { useFullscreen } from "@vueuse/core";
+import {mapState} from "pinia";
+import {defineComponent, markRaw} from "vue";
+import {useFullscreen} from "@vueuse/core";
 import SimpleMindMapWrap from "./SimpleMindMapWrap";
-import { useGlobalStore } from "@/store/GlobalStore";
+import {useGlobalStore} from "@/store/GlobalStore";
 
 // 组件
 import SimpleMindMapMenuTemplate from './components/menu/menu-template.vue';
@@ -100,12 +100,11 @@ import SimpleMindMapMiniMap from './components/mini-map.vue';
 import SimpleMindMapToc from './components/toc.vue';
 import SimpleMindMapStyle from './components/style.vue';
 
+// 工具类
 import MessageUtil from "@/utils/MessageUtil";
-import { getRecord } from "@/utils/utools/DbUtil";
+import {getRecord} from "@/utils/utools/DbUtil";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
-import { useSimpleMindMapStore } from "@/store/graph/SimpleMindMapStore";
-import { useSimpleMindMapSettingStore } from "@/store/setting/SimpleMindMapSetting";
-
+import {useSimpleMindMapSettingStore} from "@/store/setting/SimpleMindMapSetting";
 
 
 export default defineComponent({
@@ -119,7 +118,6 @@ export default defineComponent({
         index: 0,
         len: 0,
         hasNode: false,
-        name: '',
         // 本身数据,
         collapsed: true,
         render: false,
@@ -150,15 +148,12 @@ export default defineComponent({
         }
     },
     created() {
-        let id = this.$route.params.id as string;
-        let record = useSimpleMindMapStore().info(id);
-        this.name = record.name;
         this.display = this.displaySource;
     },
     mounted() {
         let id = this.$route.params.id as string;
         let path = this.$route.query.path as string;
-        getRecord(GraphTypeEnum.SIMPLE_MIND_MAP, id, path).then(value => {
+        getRecord(GraphTypeEnum.MIND_MAP, id, path).then(value => {
             this.simpleMindMapWrap = markRaw(new SimpleMindMapWrap(
                 "#simple-mind-map",
                 value.config,

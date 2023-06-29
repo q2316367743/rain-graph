@@ -3,12 +3,14 @@ import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import LocalNameEnum from "@/enumeration/LocalNameEnum";
 import {defineStore} from "pinia";
 import {toRaw} from "vue";
+import {MindMapSubType} from "@/enumeration/GraphSubTypeEnum";
 
 export function getDefaultSetting(): Setting {
     return {
-        defaultView: GraphTypeEnum.MIND,
-        showViews: [GraphTypeEnum.MIND, GraphTypeEnum.SIMPLE_MIND_MAP, GraphTypeEnum.DIAGRAM, GraphTypeEnum.WHITE_BOARD],
-        drauuAppendToDiagram: true
+        defaultView: GraphTypeEnum.MIND_MAP,
+        showViews: [GraphTypeEnum.MIND_MAP, GraphTypeEnum.DIAGRAM, GraphTypeEnum.WHITE_BOARD],
+        drauuAppendToDiagram: true,
+        mindMapType: MindMapSubType.SIMPLE_MIND_MAP
     }
 }
 
@@ -18,19 +20,18 @@ export const useSettingStore = defineStore('setting', {
         base_rev: undefined as string | undefined
     }),
     getters: {
-        defaultView: state => state.base.defaultView || GraphTypeEnum.MIND,
+        defaultView: state => state.base.defaultView || GraphTypeEnum.MIND_MAP,
         showViews: state => state.base.showViews,
         drauuAppendToDiagram: state => state.base.drauuAppendToDiagram,
+        mindMapType: state => state.base.mindMapType
     },
     actions: {
-        init() {
-            utools.db.promises.get(LocalNameEnum.SETTING_BASE)
-                .then(res => {
-                    if (res) {
-                        this.base = Object.assign(this.base, res.value);
-                        this.base_rev = res._rev;
-                    }
-                })
+        async init() {
+            const res = await utools.db.promises.get(LocalNameEnum.SETTING_BASE)
+            if (res) {
+                this.base = Object.assign(this.base, res.value);
+                this.base_rev = res._rev;
+            }
         },
         async saveBase(setting: Setting): Promise<void> {
             this.base = Object.assign(this.base, setting);

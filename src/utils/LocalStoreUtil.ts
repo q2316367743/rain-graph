@@ -1,7 +1,7 @@
 import GraphRecord from "@/entity/GraphRecord";
 import LocalNameEnum from "@/enumeration/LocalNameEnum";
 import MessageBoxUtil from "./MessageBoxUtil";
-import { useGlobalStore } from "@/store/GlobalStore";
+import {useGlobalStore} from "@/store/GlobalStore";
 import MessageUtil from "./MessageUtil";
 
 export async function getInitList(name: LocalNameEnum): Promise<{
@@ -16,10 +16,10 @@ export async function getInitList(name: LocalNameEnum): Promise<{
             _rev: mindsWrap._rev
         })
     }
-    return Promise.resolve({ items: [] });
+    return Promise.resolve({items: []});
 }
 
-export async function add(id: string, items: Array<GraphRecord>): Promise<string> {
+export async function add(id: string, items: Array<GraphRecord>, type: string = ""): Promise<string> {
     let now = new Date();
     if (id === '0' || id === '-1') {
         // 新的ID
@@ -33,7 +33,8 @@ export async function add(id: string, items: Array<GraphRecord>): Promise<string
             id,
             name,
             createTime: now,
-            updateTime: now
+            updateTime: now,
+            type
         })
     } else {
         for (let mind of items) {

@@ -4,8 +4,16 @@ enum LocalNameEnum {
     // ------------------------------------- 本地存储 -------------------------------------
     // ==================================================================================
 
+    MIND_MAP = '/local/mind-map',
+
+    /**
+     * @deprecated 1.2.0
+     */
     MIND = '/local/mind',
 
+    /**
+     * @deprecated 1.2.0
+     */
     SIMPLE_MIND_MAP = '/local/simple-mind-map',
 
     DIAGRAM = '/local/diagram',
@@ -16,12 +24,20 @@ enum LocalNameEnum {
     // ------------------------------------- 模板管理 -------------------------------------
     // ==================================================================================
 
+    TEMPLATE_MIND_MAP = '/template/mind-map',
+
+    /**
+     * @deprecated 1.2.0
+     */
     TEMPLATE_MIND = '/template/mind',
-    
+
+    /**
+     * @deprecated 1.2.0
+     */
     TEMPLATE_SIMPLE_MIND_MAP = '/template/simple-mind-map',
-    
+
     TEMPLATE_DIAGRAM = '/template/diagram',
-    
+
     TEMPLATE_WHITE_BOARD = '/template/white-board',
 
     TEMPLATE_MATERIAL = '/template/material',

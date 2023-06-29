@@ -38,6 +38,8 @@ export interface StoreRecordIndex {
 
     createTime: Date | string;
 
+    type: string;
+
 }
 
 export interface StoreRecord extends StoreRecordCore {
@@ -123,7 +125,7 @@ export async function getRecord(type: GraphTypeEnum, id: string, path: string = 
     }
 }
 
-export async function saveTemplate(type: GraphTypeEnum, record: StoreRecordCore, id?: string): Promise<StoreRecord> {
+export async function saveTemplate(graphType: GraphTypeEnum, record: StoreRecordCore, type: string, id?: string): Promise<StoreRecord> {
     let name = record.name;
     if (!name) {
         name = await MessageBoxUtil.prompt("请输入模板名称", "保存模板", {});
@@ -133,7 +135,7 @@ export async function saveTemplate(type: GraphTypeEnum, record: StoreRecordCore,
     if (!id) {
         id = now.getTime() + '';
     }
-    let recordId = `/${type}/${id}`
+    let recordId = `/${graphType}/${id}`
     const recordRes = await utools.db.promises.put({
         _id: recordId,
         value: record
@@ -144,7 +146,7 @@ export async function saveTemplate(type: GraphTypeEnum, record: StoreRecordCore,
     // 更新模板索引
     let templates = new Array<StoreRecordIndex>();
     let _rev = undefined as string | undefined;
-    let key = '/template/' + type;
+    let key = '/template/' + graphType;
     let templateWrap = await utools.db.promises.get(key);
     if (templateWrap) {
         _rev = templateWrap._rev;
@@ -153,11 +155,12 @@ export async function saveTemplate(type: GraphTypeEnum, record: StoreRecordCore,
     templates.push({
         id,
         name,
-        createTime: now
+        createTime: now,
+        type
     });
     // 保存模板索引
     const res = await utools.db.promises.put({
-        _id: '/template/' + type,
+        _id: '/template/' + graphType,
         _rev,
         value: templates
     });
@@ -174,11 +177,11 @@ export async function saveTemplate(type: GraphTypeEnum, record: StoreRecordCore,
     });
 }
 
-export async function saveOrUpdateTemplate(type: GraphTypeEnum, record: StoreRecordCore, id?: string): Promise<StoreRecord> {
+export async function saveOrUpdateTemplate(graphType: GraphTypeEnum, record: StoreRecordCore, type: string, id?: string): Promise<StoreRecord> {
     // 获取模板列表
     let templates = new Array<StoreRecordIndex>();
     let _rev = undefined as string | undefined;
-    let key = '/template/' + type;
+    let key = '/template/' + graphType;
     let templateWrap = await utools.db.promises.get(key);
     if (templateWrap) {
         _rev = templateWrap._rev;
@@ -192,7 +195,7 @@ export async function saveOrUpdateTemplate(type: GraphTypeEnum, record: StoreRec
                 if (record.name && template.name !== record.name) {
                     template.name = record.name;
                     const res = await utools.db.promises.put({
-                        _id: '/template/' + type,
+                        _id: '/template/' + graphType,
                         _rev,
                         value: templates
                     });
@@ -202,11 +205,11 @@ export async function saveOrUpdateTemplate(type: GraphTypeEnum, record: StoreRec
                     }
                 }
                 // 更新记录
-                let templateRecord = await utools.db.promises.get('/' + type + '/' + id);
+                let templateRecord = await utools.db.promises.get('/' + graphType + '/' + id);
                 let templateRev = templateRecord ? templateRecord._rev : undefined;
                 // 更新记录
                 await utools.db.promises.put({
-                    _id: '/' + type + '/' + id,
+                    _id: '/' + graphType + '/' + id,
                     _rev: templateRev,
                     value: record
                 });
@@ -218,16 +221,16 @@ export async function saveOrUpdateTemplate(type: GraphTypeEnum, record: StoreRec
                 });
             }
         }
-        return saveTemplate(type, record, id);
+        return saveTemplate(graphType, record, type, id);
     } else {
         // 新增记录
-        return saveTemplate(type, record, id);
+        return saveTemplate(graphType, record, type, id);
     }
 }
 
-export async function listTemplate(type: GraphTypeEnum): Promise<Array<StoreRecordIndex>> {
+export async function listTemplate(graphType: GraphTypeEnum, type: string): Promise<Array<StoreRecordIndex>> {
     let templates = new Array<StoreRecordIndex>();
-    let key = '/template/' + type;
+    let key = '/template/' + graphType;
     let templateWrap = await utools.db.promises.get(key);
     if (templateWrap) {
         templates = templateWrap.value;
@@ -235,6 +238,8 @@ export async function listTemplate(type: GraphTypeEnum): Promise<Array<StoreReco
     for (let template of templates) {
         template.createTime = new Date(template.createTime);
     }
+    // 过滤
+    templates = templates.filter(t => t.type === type);
     // 排序
     templates.sort((a, b) => (b.createTime as Date).getTime() - (a.createTime as Date).getTime())
     return Promise.resolve(templates);

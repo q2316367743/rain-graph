@@ -21,14 +21,10 @@
                                 <icon-plus/>
                             </template>
                             <template #title>新建</template>
-                            <a-menu-item :key="`/graph/${GraphTypeEnum.MIND}/0`" @click="jumpTo(GraphTypeEnum.MIND)"
-                                         v-if="showViews.includes(GraphTypeEnum.MIND)">
-                                {{ Config.title[GraphTypeEnum.MIND].title }}
-                            </a-menu-item>
-                            <a-menu-item :key="`/graph/${GraphTypeEnum.SIMPLE_MIND_MAP}/0`"
-                                         @click="jumpTo(GraphTypeEnum.SIMPLE_MIND_MAP)"
-                                         v-if="showViews.includes(GraphTypeEnum.SIMPLE_MIND_MAP)">
-                                {{ Config.title[GraphTypeEnum.SIMPLE_MIND_MAP].title }}
+                            <a-menu-item :key="`/graph/${GraphTypeEnum.MIND_MAP}/0`"
+                                         @click="jumpTo(GraphTypeEnum.MIND_MAP)"
+                                         v-if="showViews.includes(GraphTypeEnum.MIND_MAP)">
+                                {{ Config.title[GraphTypeEnum.MIND_MAP].title }}
                             </a-menu-item>
                             <a-menu-item :key="`/graph/${GraphTypeEnum.DIAGRAM}/0`"
                                          @click="jumpTo(GraphTypeEnum.DIAGRAM)"
@@ -142,20 +138,17 @@ import Config from '@/global/Config'
 
 import {useVipStore} from "./store/VipStore";
 import {useGlobalStore} from "@/store/GlobalStore";
-import {useMindStore} from "@/store/graph/MindStore";
 import {useDiagramStore} from "@/store/graph/DiagramStore";
 import {useSettingStore} from "@/store/setting/SettingStore";
 import {useWhiteBoardStore} from "@/store/graph/WhiteBoardStore";
-import {useSimpleMindMapStore} from "@/store/graph/SimpleMindMapStore";
 import {useDiagramSettingStore} from "./store/setting/DiagramSettingStore";
 import {useSimpleMindMapSettingStore} from "./store/setting/SimpleMindMapSetting";
 
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import GraphTypeEnum from '@/enumeration/GraphTypeEnum';
-import LocalNameEnum from '@/enumeration/LocalNameEnum';
-import Constant from "./global/Constant";
-import NotificationUtil from "./utils/NotificationUtil";
 import {useBackupSettingStore} from "./store/setting/BackupSettingStore";
+import versionManage from "@/components/version-manage";
+import {useMindMapStore} from "./store/graph/MindMapStore";
 
 
 export default defineComponent({
@@ -173,16 +166,7 @@ export default defineComponent({
     }),
     computed: {
         ...mapState(useGlobalStore, ['isDark', 'title', 'type', 'typeWrap', 'env', 'loading', 'loadingText']),
-        ...mapState(useSettingStore, ['showViews']),
-        editDisabled() {
-            return !this.$route.path.startsWith('/graph')
-        },
-        exportItems(): ExportTypeEnum[] {
-            return this.typeWrap ? (Config.export[this.typeWrap] || []) : [];
-        },
-        editItems(): Array<boolean> {
-            return this.typeWrap ? (Config.edit[this.typeWrap] || [false, false]) : [false, false];
-        }
+        ...mapState(useSettingStore, ['showViews', 'mindMapType']),
     },
     watch: {
         '$route.path': {
@@ -200,17 +184,19 @@ export default defineComponent({
             // 恢复亮色主题
             document.body.removeAttribute('arco-theme');
         }
-        useVipStore().init();
-        // 初始化图信息
-        useMindStore().init();
-        useDiagramStore().init();
-        useWhiteBoardStore().init();
-        useSimpleMindMapStore().init();
-        // 初始化设置
-        useSettingStore().init();
-        useBackupSettingStore().init();
-        useDiagramSettingStore().init();
-        useSimpleMindMapSettingStore().init();
+        // 初始化后进行版本检查
+        Promise.all([
+            useVipStore().init(),
+            // 初始化图信息
+            useMindMapStore().init(),
+            useDiagramStore().init(),
+            useWhiteBoardStore().init(),
+            // 初始化设置
+            useSettingStore().init(),
+            useBackupSettingStore().init(),
+            useDiagramSettingStore().init(),
+            useSimpleMindMapSettingStore().init(),
+        ]).then(() => versionManage());
         // 插件进入事件
         utools.onPluginEnter(action => {
             if (action.code.startsWith('/graph')) {
@@ -262,13 +248,15 @@ export default defineComponent({
             }
 
         }, false);
-        // 版本检查
-        this.launch();
     },
     methods: {
         jumpTo(type: GraphTypeEnum) {
             useGlobalStore().setTitle('');
             useGlobalStore().setType(type);
+            if (type === GraphTypeEnum.MIND_MAP) {
+                this.$router.push(`/graph/${this.mindMapType}/0`);
+                return;
+            }
             this.$router.push(`/graph/${type}/0`);
         },
         async openTo(type: GraphTypeEnum) {
@@ -314,31 +302,6 @@ export default defineComponent({
             useGlobalStore().setType(undefined);
             this.$router.push(path);
         },
-        // ------ 功能组件 ------
-        switchDark() {
-            useGlobalStore().switchDarkColors();
-        },
-        launch() {
-            utools.db.promises.get(LocalNameEnum.VERSION)
-                .then(versionWrap => {
-                    if (versionWrap) {
-                        if (Constant.version !== versionWrap.value) {
-                            NotificationUtil.success("版本更新到：" + Constant.version + "，请前往插件详情页查看更新日志", "版本更新");
-                            utools.db.promises.put({
-                                _id: LocalNameEnum.VERSION,
-                                _rev: versionWrap._rev,
-                                value: Constant.version
-                            });
-                        }
-                    } else {
-                        NotificationUtil.success("欢迎使用听雨图编辑器", "欢迎");
-                        utools.db.promises.put({
-                            _id: LocalNameEnum.VERSION,
-                            value: Constant.version
-                        });
-                    }
-                });
-        }
     }
 });
 </script>

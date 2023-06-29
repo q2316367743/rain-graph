@@ -109,7 +109,7 @@ export default defineComponent({
                             record: record.data,
                             name,
                             config: {}
-                        }, record.id + '')
+                        }, "", record.id + '')
                         MessageUtil.success("保存成功");
                         instance.templateId = template.id;
                         instance.name = name;

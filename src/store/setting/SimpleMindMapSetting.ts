@@ -1,7 +1,7 @@
 import SimpleMindMapSetting from "@/entity/setting/SimpleMindMapSetting";
 import LocalNameEnum from "@/enumeration/LocalNameEnum";
-import { defineStore } from "pinia";
-import { toRaw } from "vue";
+import {defineStore} from "pinia";
+import {toRaw} from "vue";
 
 export function getDefaultSimpleMindMapSetting(): SimpleMindMapSetting {
     return {
@@ -18,14 +18,12 @@ export const useSimpleMindMapSettingStore = defineStore('simple-mind-map-setting
         display: state => state.simpleMindMapSetting.display || 'mind'
     },
     actions: {
-        init() {
-            utools.db.promises.get(LocalNameEnum.SETTING_SIMPLE_MIND_MAP)
-                .then(res => {
-                    if (res) {
-                        this.simpleMindMapSetting = Object.assign(this.simpleMindMapSetting, res.value);
-                        this._rev = res._rev;
-                    }
-                })
+        async init() {
+            const res = await utools.db.promises.get(LocalNameEnum.SETTING_SIMPLE_MIND_MAP)
+            if (res) {
+                this.simpleMindMapSetting = Object.assign(this.simpleMindMapSetting, res.value);
+                this._rev = res._rev;
+            }
         },
         async saveBase(setting: SimpleMindMapSetting): Promise<void> {
             this.simpleMindMapSetting = Object.assign(this.simpleMindMapSetting, setting);

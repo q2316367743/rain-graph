@@ -19,7 +19,7 @@
                 </template>
             </a-button>
         </div>
-        <template-manage :type="GraphTypeEnum.DRAUU" v-model:visible="templateShow" @render="render"/>
+        <template-manage :graph-type="GraphTypeEnum.DRAUU" type="drauu" v-model:visible="templateShow" @render="render"/>
     </div>
 </template>
 <script lang="ts">
@@ -109,7 +109,7 @@ export default defineComponent({
                             record: record.data,
                             name,
                             config: {}
-                        }, "", record.id + '')
+                        }, "drauu", record.id + '')
                         MessageUtil.success("保存成功");
                         instance.templateId = template.id;
                         instance.name = name;

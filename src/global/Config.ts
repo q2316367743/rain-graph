@@ -75,7 +75,7 @@ export default {
             additional: ''
         };
     },
-    subTitle(graphType: GraphTypeEnum, type: MindMapSubType | DiagramSubType | WhiteBoardSubType) {
+    subTitle(graphType: any, type: any) {
         if (graphType === GraphTypeEnum.MIND_MAP) {
             if (type === MindMapSubType.MIND_ELIXIR) {
                 return "简易思维导图";

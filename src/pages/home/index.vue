@@ -32,7 +32,7 @@
                                 <a-link @click="jumpTo(item)">{{ item.name }}</a-link>
                             </template>
                             <template #description>
-                                <a-tag color="arcoblue">{{ Config.subTitle(this.activeKey, item.type) }}</a-tag>
+                                <a-tag color="arcoblue">{{ Config.subTitle(activeKey, item.type) }}</a-tag>
                             </template>
                         </a-list-item-meta>
                         <template #actions>

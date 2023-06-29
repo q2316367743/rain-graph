@@ -7,6 +7,7 @@ import MessageUtil from "@/utils/MessageUtil";
 import {useSettingStore} from "@/store/setting/SettingStore";
 import {useDiagramStore} from "@/store/graph/DiagramStore";
 import {useWhiteBoardStore} from "@/store/graph/WhiteBoardStore";
+import {useMindMapStore} from "@/store/graph/MindMapStore";
 
 export default async function updateTo1_2_0() {
     useGlobalStore().startLoading("（0/10）准备升级到1.2.0，正在数据迁移，请勿退出，以免数据丢失");
@@ -51,11 +52,16 @@ export default async function updateTo1_2_0() {
     await updateType("local", GraphTypeEnum.DIAGRAM, DiagramSubType.LOGIC_FLOW);
     // 白板
     await updateType("local", GraphTypeEnum.WHITE_BOARD, WhiteBoardSubType.TINY_WHITEBOARD);
+    // 流程图
+    await updateType("template", GraphTypeEnum.DIAGRAM, DiagramSubType.LOGIC_FLOW);
+    // 白板
+    await updateType("template", GraphTypeEnum.WHITE_BOARD, WhiteBoardSubType.TINY_WHITEBOARD);
     // 设置
     useGlobalStore().startLoading("（9/10）正在迁移设置，请勿退出，以免数据丢失");
     await updateSetting();
     // 其他图
     useGlobalStore().startLoading("（10/10）迁移完成，正在初始化，请勿退出，以免数据丢失");
+    await useMindMapStore().init();
     await useDiagramStore().init();
     await useWhiteBoardStore().init();
     // 完成
@@ -80,7 +86,7 @@ async function migrate(prefix: string, graphType: GraphTypeEnum, type: string, r
             const record = await utools.db.promises.get(recordId);
             if (record) {
                 await utools.db.promises.put({
-                    _id: '/' + graphType + '/' + item.id,
+                    _id: '/' + GraphTypeEnum.MIND_MAP + '/' + item.id,
                     value: record.value
                 })
             }

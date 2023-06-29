@@ -7,7 +7,7 @@
             <a-list-item v-for="item in showItems">
                 <a-link @click="jumpTo(item.item)">{{ item.item.name }}</a-link>
                 <template #actions>
-                    <a-tag>{{ nameCovert(item.item.type) }}</a-tag>
+                    <a-tag>{{ nameCovert(item.item) }}</a-tag>
                 </template>
             </a-list-item>
         </a-list>
@@ -23,6 +23,7 @@ import Fuse from 'fuse.js';
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import {useGlobalStore} from "@/store/GlobalStore";
 import {useMindMapStore} from "@/store/graph/MindMapStore";
+import {MindMapSubType} from "@/enumeration/GraphSubTypeEnum";
 
 interface GraphRecordWrap extends GraphRecord {
 
@@ -106,12 +107,18 @@ export default defineComponent({
                     this.show = false;
                 })
         },
-        nameCovert(type: GraphTypeEnum) {
-            if (type === GraphTypeEnum.MIND_MAP) {
-                return "思维导图";
-            } else if (type === GraphTypeEnum.WHITE_BOARD) {
+        nameCovert(item: GraphRecordWrap) {
+            if (item.graphType === GraphTypeEnum.MIND_MAP) {
+                if (item.type === MindMapSubType.MIND_ELIXIR) {
+                    return "简易思维导图";
+                } else if (item.type === MindMapSubType.SIMPLE_MIND_MAP) {
+                    return "完整思维导图";
+                } else {
+                    return "思维导图";
+                }
+            } else if (item.graphType === GraphTypeEnum.WHITE_BOARD) {
                 return "白板";
-            } else if (type === GraphTypeEnum.DIAGRAM) {
+            } else if (item.graphType === GraphTypeEnum.DIAGRAM) {
                 return "流程图";
             }
         }

@@ -100,16 +100,20 @@ const router = createRouter({
             path: "/setting",
             component: () => import('@/pages/setting/index.vue'),
             children: [{
-                path: "基础设置",
+                name: "基础设置",
+                path: "/setting/base",
                 component: () => import('@/pages/setting/base.vue')
             }, {
-                path: "备份设置",
+                name: "备份设置",
+                path: "/setting/backup",
                 component: () => import('@/pages/setting/backup/index.vue')
             }, {
-                path: "完整思维导图设置",
+                name: "完整思维导图设置",
+                path: "/setting/simple-mind-map",
                 component: () => import('@/pages/setting/simple-mind-map.vue')
             }, {
-                path: "流程图设置",
+                name: "流程图设置",
+                path: "/setting/diagram",
                 component: () => import('@/pages/setting/diagram.vue')
             }]
         }]

@@ -8,6 +8,8 @@ import {useSettingStore} from "@/store/setting/SettingStore";
 import {useDiagramStore} from "@/store/graph/DiagramStore";
 import {useWhiteBoardStore} from "@/store/graph/WhiteBoardStore";
 import {useMindMapStore} from "@/store/graph/MindMapStore";
+import MessageBoxUtil from "@/utils/MessageBoxUtil";
+import {h} from "vue";
 
 export default async function updateTo1_2_0() {
     useGlobalStore().startLoading("（0/10）准备升级到1.2.0，正在数据迁移，请勿退出，以免数据丢失");
@@ -67,6 +69,7 @@ export default async function updateTo1_2_0() {
     // 完成
     useGlobalStore().closeLoading();
     MessageUtil.success("数据迁移完毕，欢迎使用新版本");
+    printLog();
 }
 
 async function migrate(prefix: string, graphType: GraphTypeEnum, type: string, removeIds: Array<string>): Promise<Array<GraphRecord>> {
@@ -121,4 +124,18 @@ async function updateSetting() {
         base.showViews.push(GraphTypeEnum.MIND_MAP);
     }
     await useSettingStore().saveBase(base);
+}
+
+function printLog() {
+    const lines = [
+        "本次更新，主要更新了：",
+        "将简易思维导图和完整思维导图合并，在一个列表中展示，可以在设置=>基础设置中，修改默认思维导图引擎。",
+        "白板增加了一个引擎，使用Fabric.js开发，使用起来更加流畅，舒适。"
+    ]
+    MessageBoxUtil.alert(h("div", {}, [
+        lines.map(line => h('p', {}, line))
+    ]), "欢迎您更新到1.2.0", {
+        confirmButtonText: "关闭",
+        cancelButtonText: "取消"
+    }).then(() => console.log("用户看完了更新提示"))
 }

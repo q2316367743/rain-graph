@@ -5,12 +5,15 @@ import {createRouter, createWebHashHistory} from 'vue-router';
 const router = createRouter({
     history: createWebHashHistory(),
     routes: [{
+        name: "首页",
         path: '/',
         redirect: '/home'
     }, {
+        name: "仪表盘",
         path: '/dashboard',
         component: () => import('@/pages/dashboard/index.vue')
     }, {
+        name: "首页",
         path: '/home',
         component: () => import('@/pages/home/index.vue')
     },
@@ -18,12 +21,15 @@ const router = createRouter({
         // ------ 更多 ------
         // =================
         {
+            name: "推荐",
             path: '/more/recommend',
             component: () => import('@/pages/more/recommend/index.vue')
         }, {
+            name: "高级版",
             path: '/more/vip',
             component: () => import('@/pages/more/vip/index.vue')
         }, {
+            name: "关于",
             path: '/more/about',
             component: () => import('@/pages/more/about/index.vue')
         },
@@ -31,15 +37,15 @@ const router = createRouter({
         // ------ 小程序 ------
         // ===================
         {
-            name: GraphTypeEnum.DRAUU,
+            name: "画板",
             path: '/apps/' + GraphTypeEnum.DRAUU,
             component: () => import('@/pages/apps/drauu/index.vue')
         }, {
-            name: GraphTypeEnum.ECHARTS,
+            name: "可视化图表",
             path: '/apps/' + GraphTypeEnum.ECHARTS,
             component: () => import('@/pages/apps/echarts/index.vue')
         }, {
-            name: GraphTypeEnum.QR_CODE,
+            name: "二维码",
             path: '/apps/' + GraphTypeEnum.QR_CODE,
             component: () => import('@/pages/apps/qr-code/index.vue')
         },
@@ -47,19 +53,19 @@ const router = createRouter({
         // ------ 图片编辑器 ------
         // ======================
         {
-            name: GraphTypeEnum.FABRIC,
+            name: "设计编辑器",
             path: '/image/' + GraphTypeEnum.FABRIC,
             component: () => import('@/pages/image/fabric/index.vue')
         }, {
-            name: GraphTypeEnum.CROPPER,
+            name: "图片裁剪",
             path: '/image/' + GraphTypeEnum.CROPPER,
             component: () => import('@/pages/image/cropper/index.vue')
         }, {
-            name: GraphTypeEnum.COMPRESSOR,
+            name: "图片压缩",
             path: '/image/' + GraphTypeEnum.COMPRESSOR,
             component: () => import('@/pages/image/compressor/index.vue')
         }, {
-            name: GraphTypeEnum.PSD,
+            name: "PSD查看器",
             path: '/image/' + GraphTypeEnum.PSD,
             component: () => import('@/pages/image/PSD/index.vue')
         },
@@ -94,16 +100,16 @@ const router = createRouter({
             path: "/setting",
             component: () => import('@/pages/setting/index.vue'),
             children: [{
-                path: '/setting/base',
+                path: "基础设置",
                 component: () => import('@/pages/setting/base.vue')
             }, {
-                path: '/setting/backup',
+                path: "备份设置",
                 component: () => import('@/pages/setting/backup/index.vue')
             }, {
-                path: '/setting/simple-mind-map',
+                path: "完整思维导图设置",
                 component: () => import('@/pages/setting/simple-mind-map.vue')
             }, {
-                path: '/setting/diagram',
+                path: "流程图设置",
                 component: () => import('@/pages/setting/diagram.vue')
             }]
         }]

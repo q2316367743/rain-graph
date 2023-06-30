@@ -1,5 +1,5 @@
 import GraphTypeEnum from '@/enumeration/GraphTypeEnum';
-import {MindMapSubType} from "@/enumeration/GraphSubTypeEnum";
+import {MindMapSubType, WhiteBoardSubType} from "@/enumeration/GraphSubTypeEnum";
 
 export default interface Setting {
 
@@ -22,5 +22,10 @@ export default interface Setting {
      * 思维导图默认引擎
      */
     mindMapType: MindMapSubType;
+
+    /**
+     * 白板默认引擎
+     */
+    whiteBoardType: WhiteBoardSubType;
 
 }

@@ -20,6 +20,8 @@ export enum DiagramSubType {
 
 export enum WhiteBoardSubType {
 
-    TINY_WHITEBOARD = "tiny-whiteboard"
+    TINY_WHITEBOARD = "tiny-whiteboard",
+
+    FABRIC = "fabric"
 
 }

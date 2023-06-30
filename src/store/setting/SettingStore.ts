@@ -3,14 +3,15 @@ import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import LocalNameEnum from "@/enumeration/LocalNameEnum";
 import {defineStore} from "pinia";
 import {toRaw} from "vue";
-import {MindMapSubType} from "@/enumeration/GraphSubTypeEnum";
+import {MindMapSubType, WhiteBoardSubType} from "@/enumeration/GraphSubTypeEnum";
 
 export function getDefaultSetting(): Setting {
     return {
         defaultView: GraphTypeEnum.MIND_MAP,
         showViews: [GraphTypeEnum.MIND_MAP, GraphTypeEnum.DIAGRAM, GraphTypeEnum.WHITE_BOARD],
         drauuAppendToDiagram: true,
-        mindMapType: MindMapSubType.SIMPLE_MIND_MAP
+        mindMapType: MindMapSubType.SIMPLE_MIND_MAP,
+        whiteBoardType: WhiteBoardSubType.TINY_WHITEBOARD
     }
 }
 
@@ -23,7 +24,8 @@ export const useSettingStore = defineStore('setting', {
         defaultView: state => state.base.defaultView || GraphTypeEnum.MIND_MAP,
         showViews: state => state.base.showViews,
         drauuAppendToDiagram: state => state.base.drauuAppendToDiagram,
-        mindMapType: state => state.base.mindMapType
+        mindMapType: state => state.base.mindMapType,
+        whiteBoardType: state => state.base.whiteBoardType
     },
     actions: {
         async init() {

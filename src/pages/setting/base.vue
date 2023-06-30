@@ -23,6 +23,12 @@
                 <a-radio :value="MindMapSubType.SIMPLE_MIND_MAP">simple-mind-map(完整)</a-radio>
             </a-radio-group>
         </a-form-item>
+        <a-form-item label="默认白板引擎">
+            <a-radio-group v-model="setting.mindMapType">
+                <a-radio :value="MindMapSubType.MIND_ELIXIR">mind-elixir(简易)</a-radio>
+                <a-radio :value="MindMapSubType.SIMPLE_MIND_MAP">simple-mind-map(完整)</a-radio>
+            </a-radio-group>
+        </a-form-item>
         <a-form-item>
             <a-button type="primary" @click="save()">保存</a-button>
             <template #help>记得保存哦</template>

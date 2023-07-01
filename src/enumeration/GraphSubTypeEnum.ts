@@ -22,6 +22,6 @@ export enum WhiteBoardSubType {
 
     TINY_WHITEBOARD = "tiny-whiteboard",
 
-    FABRIC = "fabric"
+    FABRIC = "fabric-wb"
 
 }

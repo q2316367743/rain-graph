@@ -166,7 +166,7 @@ export default defineComponent({
     }),
     computed: {
         ...mapState(useGlobalStore, ['isDark', 'title', 'type', 'typeWrap', 'env', 'loading', 'loadingText']),
-        ...mapState(useSettingStore, ['showViews', 'mindMapType']),
+        ...mapState(useSettingStore, ['showViews', 'mindMapType', 'whiteBoardType']),
     },
     watch: {
         '$route.path': {
@@ -255,6 +255,9 @@ export default defineComponent({
             useGlobalStore().setType(type);
             if (type === GraphTypeEnum.MIND_MAP) {
                 this.$router.push(`/graph/${this.mindMapType}/0`);
+                return;
+            }else if (type === GraphTypeEnum.WHITE_BOARD) {
+                this.$router.push(`/graph/${this.whiteBoardType}/0`);
                 return;
             }
             this.$router.push(`/graph/${type}/0`);

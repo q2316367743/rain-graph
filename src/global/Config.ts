@@ -88,7 +88,9 @@ export default {
             }
         } else if (graphType === GraphTypeEnum.WHITE_BOARD) {
             if (type === WhiteBoardSubType.TINY_WHITEBOARD) {
-                return "白板"
+                return "tiny-whiteboard"
+            }else  if (type === WhiteBoardSubType.FABRIC) {
+                return "fabric.js"
             }
         }
     }

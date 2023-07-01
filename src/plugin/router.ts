@@ -84,13 +84,17 @@ const router = createRouter({
                 path: '/graph/simple-mind-map/:id',
                 component: () => import('@/pages/graph/simple-mind-map/index.vue')
             }, {
-                name: GraphTypeEnum.DIAGRAM,
-                path: '/graph/diagram/:id',
+                name: "流程图",
+                path: '/graph/logic-flow/:id',
                 component: () => import('@/pages/graph/diagram/index.vue')
             }, {
-                name: GraphTypeEnum.WHITE_BOARD,
-                path: '/graph/white-board/:id',
+                name: "白板（tiny-whiteboard）",
+                path: '/graph/tiny-whiteboard/:id',
                 component: () => import('@/pages/graph/white-board/index.vue')
+            }, {
+                name: "白板（fabric）",
+                path: '/graph/fabric-wb/:id',
+                component: () => import('@/pages/graph/fabric-wb/index.vue')
             }]
         },
         // =================

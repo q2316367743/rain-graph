@@ -136,11 +136,7 @@ export default defineComponent({
         jumpTo(item: GraphRecord) {
             useGlobalStore().setTitle(item.name);
             useGlobalStore().setType(this.activeKey);
-            if (this.activeKey === GraphTypeEnum.MIND_MAP) {
-                this.$router.push(`/graph/${item.type}/${item.id}`);
-                return
-            }
-            this.$router.push(`/graph/${this.activeKey}/${item.id}`);
+            this.$router.push(`/graph/${item.type}/${item.id}`);
         },
         updateBy(item: GraphRecord) {
             if (this.activeKey === GraphTypeEnum.MIND_MAP) {
@@ -167,26 +163,26 @@ export default defineComponent({
 </script>
 <style lang="less">
 .home {
-  position: relative;
-  height: 100%;
-  width: 100%;
+    position: relative;
+    height: 100%;
+    width: 100%;
 
-  .header {
-    position: absolute;
-    top: 7px;
-    left: 7px;
-    right: 7px;
-    height: 32px;
-    display: flex;
-    justify-content: space-between;
-    overflow: hidden;
-  }
+    .header {
+        position: absolute;
+        top: 7px;
+        left: 7px;
+        right: 7px;
+        height: 32px;
+        display: flex;
+        justify-content: space-between;
+        overflow: hidden;
+    }
 
-  .content {
-    position: absolute;
-    top: 46px;
-    left: 7px;
-    right: 7px;
-    bottom: 7px;
-  }
+    .content {
+        position: absolute;
+        top: 46px;
+        left: 7px;
+        right: 7px;
+        bottom: 7px;
+    }
 }</style>

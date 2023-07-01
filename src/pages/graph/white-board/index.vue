@@ -142,12 +142,12 @@ import {useFileSystemAccess, useFullscreen} from "@vueuse/core";
 import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 
-import IconChoose from './icon/IconChoose.vue';
-import IconCircle from './icon/IconCircle.vue';
-import IconDiamond from './icon/IconDiamond.vue';
-import IconLine from './icon/IconLine.vue';
-import IconRect from './icon/IconRect.vue';
-import IconTriangle from './icon/IconTriangle.vue';
+import IconChoose from '@/icon/white-board/IconChoose.vue';
+import IconCircle from '@/icon/white-board/IconCircle.vue';
+import IconDiamond from '@/icon/white-board/IconDiamond.vue';
+import IconLine from '@/icon/white-board/IconLine.vue';
+import IconRect from '@/icon/white-board/IconRect.vue';
+import IconTriangle from '@/icon/white-board/IconTriangle.vue';
 
 import WhiteBoardHelp from './components/help.vue';
 import WhiteBoardContextMenu from './components/contextmenu.vue';

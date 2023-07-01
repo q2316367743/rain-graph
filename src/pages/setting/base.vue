@@ -56,7 +56,6 @@ export default defineComponent({
     },
     created() {
         this.setting = Object.assign({}, this.base);
-        console.log(this.base)
     },
     methods: {
         save() {

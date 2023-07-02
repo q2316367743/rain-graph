@@ -67,6 +67,8 @@ export default class FabricWbWrap {
                     this.canvas.remove(this.currentShape);
                     this.currentShape = null;
                 }
+            }else {
+                this.currentShape = null;
             }
         }
         // 如果当前有活动的元素则不进行后续绘制

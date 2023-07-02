@@ -61,7 +61,7 @@
                     </div>
                 </template>
             </a-radio>
-            <a-radio value="freedraw">
+            <a-radio value="free-draw">
                 <template #radio="{ checked }">
                     <a-tooltip content="画笔">
                         <div class="item" :class="checked ? 'active' : ''">
@@ -89,6 +89,13 @@
                 </template>
             </a-radio>
         </a-radio-group>
+        <a-button-group type="text">
+            <a-button status="danger" @click="$emit('clear')">
+                <template #icon>
+                    <icon-delete/>
+                </template>
+            </a-button>
+        </a-button-group>
     </div>
 </template>
 <script lang="ts">
@@ -107,7 +114,7 @@ import IconText from '@/icon/white-board/IconText.vue';
 export default defineComponent({
     name: 'fabric-wb-operate',
     components: {IconChoose, IconCircle, IconDiamond, IconRect, IconLine, IconTriangle, IconText},
-    emits: ['update:modelValue'],
+    emits: ['update:modelValue', 'clear'],
     props: {
         modelValue: String
     },
@@ -160,12 +167,10 @@ export default defineComponent({
 
         &.active {
             background-color: #9c9bae;
+        }
 
-            svg {
-                * {
-                    fill: #3e3c8f;
-                }
-            }
+        svg {
+            fill: var(--color-text-1);
         }
     }
 }

@@ -1,8 +1,8 @@
 <template>
     <div class="fabric-wb">
         <canvas ref="fabric-wb-container" class="container"/>
-        <fabric-wb-operate v-model="activeKey"/>
-        <fabric-wb-menu-file />
+        <fabric-wb-operate v-model="activeKey" @clear="clear()"/>
+        <fabric-wb-menu-file/>
     </div>
 </template>
 <script lang="ts">
@@ -35,11 +35,26 @@ export default defineComponent({
             if (this.instance) {
                 this.instance.setHeight(newValue);
             }
+        },
+        activeKey(newValue) {
+            if (!this.instance) {
+                return;
+            }
+            this.instance.setMode(newValue);
         }
     },
     mounted() {
         const container = this.$refs['fabric-wb-container'] as HTMLCanvasElement;
         this.instance = markRaw(new FabricWbWrap(container, this.width, this.height));
+        this.instance.setSelection();
+    },
+    methods: {
+        clear() {
+            if (!this.instance) {
+                return
+            }
+            this.instance.clear();
+        }
     }
 });
 </script>

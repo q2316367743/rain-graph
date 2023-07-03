@@ -88,10 +88,10 @@
                             <a-menu-item key="/setting/backup" @click="jumpToFunc('/setting/backup')" disabled>
                                 备份设置
                             </a-menu-item>
-                            <a-menu-item key="/setting/simple-mind-map" @click="jumpToFunc('/setting/simple-mind-map')">
+                            <a-menu-item key="/setting/simple-mind-map" @click="jumpToFunc('/setting/simple-mind-elixir-map')">
                                 完整流程图
                             </a-menu-item>
-                            <a-menu-item key="/setting/diagram" @click="jumpToFunc('/setting/diagram')">
+                            <a-menu-item key="/setting/diagram" @click="jumpToFunc('/setting/logic-flow')">
                                 流程图
                             </a-menu-item>
                         </a-sub-menu>
@@ -149,6 +149,7 @@ import GraphTypeEnum from '@/enumeration/GraphTypeEnum';
 import {useBackupSettingStore} from "./store/setting/BackupSettingStore";
 import versionManage from "@/components/version-manage";
 import {useMindMapStore} from "./store/graph/MindMapStore";
+import {DiagramSubType} from "@/enumeration/GraphSubTypeEnum";
 
 
 export default defineComponent({
@@ -169,10 +170,19 @@ export default defineComponent({
         ...mapState(useSettingStore, ['showViews', 'mindMapType', 'whiteBoardType']),
     },
     watch: {
-        '$route.path': {
+        '$route': {
             handler(newValue) {
-                this.selectedKeys = [newValue];
-                statistics.access(newValue);
+                const path = newValue.path as string;
+                const name = newValue.name as string;
+                this.selectedKeys = [path];
+                let operate = name;
+                let additional = undefined;
+                if (path.startsWith("/graph")) {
+                    const items = name.split("|");
+                    operate = items[0];
+                    additional = items[1];
+                }
+                statistics.access(operate, additional);
             }
         }
     },
@@ -258,6 +268,9 @@ export default defineComponent({
                 return;
             }else if (type === GraphTypeEnum.WHITE_BOARD) {
                 this.$router.push(`/graph/${this.whiteBoardType}/0`);
+                return;
+            }else if (type === GraphTypeEnum.DIAGRAM) {
+                this.$router.push(`/graph/${DiagramSubType.LOGIC_FLOW}/0`);
                 return;
             }
             this.$router.push(`/graph/${type}/0`);

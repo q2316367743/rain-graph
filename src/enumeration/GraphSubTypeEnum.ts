@@ -3,7 +3,7 @@ export enum MindMapSubType {
     /**
      * 简易思维导图
      */
-    MIND_ELIXIR = "mind",
+    MIND_ELIXIR = "mind-elixir",
 
     /**
      * 完整思维导图

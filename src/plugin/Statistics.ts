@@ -1,7 +1,6 @@
 import LocalNameEnum from '@/enumeration/LocalNameEnum';
 import Constant from '@/global/Constant';
 import axios from 'axios';
-import Config from "@/global/Config";
 
 export default class Statistics {
 
@@ -28,13 +27,14 @@ export default class Statistics {
 
     /**
      * 访问某个标签
-     * @param path 路径
+     * @param operate 操作
+     * @param additional 附加
      */
-    async access(path: string) {
+    async access(operate: string, additional?: string) {
+        console.log(operate, additional)
         if(utools.isDev()) {
             return;
         }
-        let {operate, additional} = Config.routeToTag(path);
         let privacy = await utools.db.promises.get(LocalNameEnum.PRIVACY);
         if (privacy) {
             if (!privacy.value) {

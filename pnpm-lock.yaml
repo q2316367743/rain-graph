@@ -22,7 +22,7 @@ dependencies:
     version: 1.2.7
   '@mind-elixir/export-html':
     specifier: ^2.0.0
-    version: 2.0.0(mind-elixir@2.0.2)
+    version: 2.0.0(mind-elixir-elixir@2.0.2)
   '@vueuse/core':
     specifier: ^9.13.0
     version: 9.13.0(vue@3.2.47)

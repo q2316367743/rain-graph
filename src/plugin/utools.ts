@@ -133,8 +133,9 @@ export const utools = {
         MessageUtil.warning("web环境不支持打开文件操作，请使用utools版本");
         return [];
     },
-    setSubInput() {
+    setSubInput(): boolean {
         console.warn("web环境不支持子输入框事件");
+        return true
     },
     setSubInputValue() {
         console.warn("web环境不支持子输入框事件");

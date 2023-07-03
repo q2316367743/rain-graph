@@ -15,7 +15,7 @@
                 </a-layout-sider>
                 <a-layout>
                     <!-- 内容 -->
-                    <div class="content" id="diagram-view"></div>
+                    <div class="content" id="logic-flow-view"></div>
                     <!-- 左上角工具栏、属性栏 -->
                     <div class="toolbar">
                         <diagram-toolbar v-if="render" :lf="lf" :active-edges="activeEdges" :readonly="readonly"/>
@@ -65,7 +65,7 @@ import {originalConfig, silentConfig} from './constants';
 // 主题
 import {DefaultTheme} from "./theme";
 import {useDiagramSettingStore} from "@/store/setting/DiagramSettingStore";
-import {DiagramGroup} from "@/pages/graph/diagram/node/data/DiagramNode";
+import {DiagramGroup} from "@/pages/graph/logic-flow/node/data/DiagramNode";
 
 export default defineComponent({
     name: 'diagram',
@@ -174,7 +174,7 @@ export default defineComponent({
         init(editConfig: any, option: any, data?: any) {
             let lf = new LogicFlow({
                 ...this.config,
-                container: document.querySelector('#diagram-view') as HTMLElement,
+                container: document.querySelector('#logic-flow-view') as HTMLElement,
                 plugins: [BpmnElement, BpmnXmlAdapter, Snapshot, SelectionSelect, MiniMap, Menu],
                 width: this.width,
                 height: this.height,

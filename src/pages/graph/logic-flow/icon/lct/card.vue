@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import Polyline from "@/pages/graph/diagram/node/edge/Polyline";
+import Polyline from "@/pages/graph/logic-flow/node/edge/Polyline";
 
 export default defineComponent({
     name: 'icon-lct-card',

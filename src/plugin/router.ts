@@ -76,23 +76,23 @@ const router = createRouter({
             path: '/graph',
             component: () => import('@/pages/graph/index.vue'),
             children: [{
-                name: "简易思维导图",
-                path: '/graph/mind/:id',
-                component: () => import('@/pages/graph/mind/index.vue')
+                name: "思维导图|mind-elixir",
+                path: '/graph/mind-elixir/:id',
+                component: () => import('@/pages/graph/mind-elixir/index.vue')
             }, {
-                name: "完整思维导图",
+                name: "完整思维导图|simple-mind-map",
                 path: '/graph/simple-mind-map/:id',
                 component: () => import('@/pages/graph/simple-mind-map/index.vue')
             }, {
-                name: "流程图",
+                name: "流程图|flow-graph",
                 path: '/graph/logic-flow/:id',
-                component: () => import('@/pages/graph/diagram/index.vue')
+                component: () => import('@/pages/graph/logic-flow/index.vue')
             }, {
-                name: "白板（tiny-whiteboard）",
+                name: "白板|tiny-whiteboard",
                 path: '/graph/tiny-whiteboard/:id',
-                component: () => import('@/pages/graph/white-board/index.vue')
+                component: () => import('@/pages/graph/tiny-whiteboard/index.vue')
             }, {
-                name: "白板（fabric）",
+                name: "白板|fabric.js",
                 path: '/graph/fabric-wb/:id',
                 component: () => import('@/pages/graph/fabric-wb/index.vue')
             }]
@@ -113,11 +113,11 @@ const router = createRouter({
                 component: () => import('@/pages/setting/backup/index.vue')
             }, {
                 name: "完整思维导图设置",
-                path: "/setting/simple-mind-map",
+                path: "/setting/simple-mind-elixir-map",
                 component: () => import('@/pages/setting/simple-mind-map.vue')
             }, {
                 name: "流程图设置",
-                path: "/setting/diagram",
+                path: "/setting/logic-flow",
                 component: () => import('@/pages/setting/diagram.vue')
             }]
         }]

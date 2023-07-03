@@ -12,7 +12,7 @@ import '@/less/customer.less';
 import '@/less/index.less';
 import '@arco-design/web-vue/dist/arco.css';
 
-// simple-mind-map
+// simple-mind-elixir-map
 import MindMap from 'simple-mind-map'
 import MiniMap from 'simple-mind-map/src/MiniMap.js'
 import Drag from 'simple-mind-map/src/Drag.js'

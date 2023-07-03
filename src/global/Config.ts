@@ -2,22 +2,6 @@ import ExportTypeEnum from "@/enumeration/ExportTypeEnum";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import {DiagramSubType, MindMapSubType, WhiteBoardSubType} from "@/enumeration/GraphSubTypeEnum";
 
-function renderGraph(path: string, target: string, name: string): {
-    operate: string;
-    additional: string
-} {
-    if (path === target + '/0') {
-        return {
-            operate: name,
-            additional: '新建'
-        };
-    } else {
-        return {
-            operate: name,
-            additional: '编辑'
-        };
-    }
-}
 
 export default {
     // 导出
@@ -54,27 +38,6 @@ export default {
         title: string;
         color: string;
     }>,
-    routeToTag(path: string): {
-        operate: string;
-        additional: string
-    } {
-        if (path.startsWith("/graph/")) {
-            path = path.substring(7);
-            if (path.startsWith("mind")) {
-                return renderGraph(path, 'mind', '简易思维导图');
-            } else if (path.startsWith("simple-mind-map")) {
-                return renderGraph(path, 'simple-mind-map', '完整思维导图');
-            } else if (path.startsWith("diagram")) {
-                return renderGraph(path, 'diagram', '流程图');
-            } else if (path.startsWith("white-board")) {
-                return renderGraph(path, 'white-board', '白板');
-            }
-        }
-        return {
-            operate: path,
-            additional: ''
-        };
-    },
     subTitle(graphType: any, type: any) {
         if (graphType === GraphTypeEnum.MIND_MAP) {
             if (type === MindMapSubType.MIND_ELIXIR) {

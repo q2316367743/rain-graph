@@ -9,7 +9,7 @@ export function getDefaultSimpleMindMapSetting(): SimpleMindMapSetting {
     }
 }
 
-export const useSimpleMindMapSettingStore = defineStore('simple-mind-map-setting', {
+export const useSimpleMindMapSettingStore = defineStore('simple-mind-elixir-map-setting', {
     state: () => ({
         simpleMindMapSetting: getDefaultSimpleMindMapSetting(),
         _rev: undefined as string | undefined

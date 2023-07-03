@@ -162,7 +162,10 @@ export default class SimpleMindMapWrap {
         this.config.layout = layout;
     }
 
-    async save() {
+    async save(force: boolean = false) {
+        if (!force && this.id === "0") {
+            return Promise.resolve();
+        }
         if (this.lock) {
             this.todo = true;
             return;

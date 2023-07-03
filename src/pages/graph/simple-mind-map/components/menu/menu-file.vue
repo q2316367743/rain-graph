@@ -55,7 +55,7 @@ export default defineComponent({
             })
         },
         save() {
-            this.simpleMindMapWrap.save()
+            this.simpleMindMapWrap.save(true)
                 .then(() => MessageUtil.success("保存成功"))
                 .catch(e => MessageUtil.error("保存失败", e));
         },

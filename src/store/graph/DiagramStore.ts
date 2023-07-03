@@ -5,6 +5,7 @@ import LocalNameEnum from "@/enumeration/LocalNameEnum";
 import MessageUtil from "@/utils/MessageUtil";
 import {toRaw} from "vue";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
+import {DiagramSubType} from "@/enumeration/GraphSubTypeEnum";
 
 export const useDiagramStore = defineStore(LocalNameEnum.DIAGRAM, {
     state: () => ({
@@ -18,7 +19,7 @@ export const useDiagramStore = defineStore(LocalNameEnum.DIAGRAM, {
             this.diagramRev = diagramsWrap._rev;
         },
         async add(id: string): Promise<string> {
-            id = await add(id, this.diagrams);
+            id = await add(id, this.diagrams, DiagramSubType.LOGIC_FLOW);
             this.sync();
             return Promise.resolve(id);
         },

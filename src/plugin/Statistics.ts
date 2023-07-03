@@ -31,7 +31,6 @@ export default class Statistics {
      * @param additional 附加
      */
     async access(operate: string, additional?: string) {
-        console.log(operate, additional)
         if(utools.isDev()) {
             return;
         }

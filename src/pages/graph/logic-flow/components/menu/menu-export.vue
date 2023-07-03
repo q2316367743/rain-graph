@@ -45,7 +45,7 @@ export default defineComponent({
                     record: this.lf.getGraphRawData()
                 }), this.title + '.json', 'text/json');
             } else if (type === ExportTypeEnum.PNG) {
-                this.lf.extension.snapshot.lf.getSnapshot(this.title + '.png');
+                this.lf.extension.snapshot.lf.getSnapshot(this.title + '.png', "#ffffff");
             } else if (type === ExportTypeEnum.XML) {
                 const data = this.lf.getGraphData() as string;
                 download(data, this.title + '.xml', 'text/xml');

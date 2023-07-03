@@ -45,7 +45,16 @@ export default defineComponent({
                     record: this.lf.getGraphRawData()
                 }), this.title + '.json', 'text/json');
             } else if (type === ExportTypeEnum.PNG) {
-                this.lf.extension.snapshot.lf.getSnapshot(this.title + '.png', "#ffffff");
+                const isDark = useGlobalStore().isDark;
+                this.lf.extension.snapshot.lf.getSnapshotBlob(isDark ? "#000000" : "#ffffff")
+                        .then((content: {
+                            data: Blob,
+                            width: number,
+                            height: number
+                        }) => {
+                            console.log(content.data)
+                            download(content.data, this.title + '.png', "image/png");
+                        });
             } else if (type === ExportTypeEnum.XML) {
                 const data = this.lf.getGraphData() as string;
                 download(data, this.title + '.xml', 'text/xml');

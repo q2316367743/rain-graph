@@ -23,7 +23,7 @@ export default defineComponent({
         activeKey: 'selection'
     }),
     computed: {
-        ...mapState(useGlobalStore, ['height', 'width'])
+        ...mapState(useGlobalStore, ['height', 'width', "isDark"])
     },
     watch: {
         width(newValue) {
@@ -45,7 +45,9 @@ export default defineComponent({
     },
     mounted() {
         const container = this.$refs['fabric-wb-container'] as HTMLCanvasElement;
-        this.instance = markRaw(new FabricWbWrap(container, this.width, this.height));
+        this.instance = markRaw(new FabricWbWrap(container, this.width, this.height, {
+            stroke: this.isDark ? '#ffffff': '#000000'
+        }));
         this.instance.setSelection();
     },
     methods: {

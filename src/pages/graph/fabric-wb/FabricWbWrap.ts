@@ -1,14 +1,21 @@
 import {fabric} from "fabric";
-import {IEvent, IObjectOptions, IRectOptions, ITextOptions, Object} from "fabric/fabric-impl";
-import MessageUtil from "@/utils/MessageUtil";
-import ArrowNode from "./node/ArrowNode";
+import {
+    ICircleOptions, IEllipseOptions,
+    IEvent, ILineOptions,
+    IObjectOptions, IPoint, IPolylineOptions,
+    IRectOptions,
+    ITextOptions,
+    ITriangleOptions,
+    Object
+} from "fabric/fabric-impl";
 import {FabricWbMode} from "./node/constants";
 import {useGlobalStore} from "@/store/GlobalStore";
+import Arrow from "./node/ArrowNode";
 
 export default class FabricWbWrap {
 
     private readonly canvas: fabric.Canvas;
-    private readonly options: IObjectOptions;
+    private options: IObjectOptions;
     private currentShape: Object | null;
     private mode: FabricWbMode = "selection";
 
@@ -19,7 +26,7 @@ export default class FabricWbWrap {
     // 鼠标起点多表y
     private startY = 0;
 
-    constructor(element: HTMLCanvasElement | null, width: number, height: number) {
+    constructor(element: HTMLCanvasElement | null, width: number, height: number, options: IObjectOptions = {}) {
         // 初始化画布，默认可绘制
         this.canvas = new fabric.Canvas(element, {
             width,
@@ -28,11 +35,14 @@ export default class FabricWbWrap {
         this.currentShape = null;
         this.options = {
             width: 100,
-            height: 100
+            height: 100,
+            fill: "transparent",
+            stroke: "#000000",
+            ...options
         };
         this.canvas.on('mouse:down', e => this.onMouseDown(e));
         this.canvas.on('mouse:move', e => this.onMouseMove(e));
-        this.canvas.on('mouse:up', e => this.onMouseUp());
+        this.canvas.on('mouse:up', () => this.onMouseUp());
     }
 
     setWidth(width: number) {
@@ -41,6 +51,10 @@ export default class FabricWbWrap {
 
     setHeight(height: number) {
         this.canvas.setHeight(height);
+    }
+
+    setOptions(options: IObjectOptions) {
+        this.options = options;
     }
 
     setMode(mode: FabricWbMode) {
@@ -59,18 +73,11 @@ export default class FabricWbWrap {
         }
     }
 
+    public clear() {
+        this.canvas.clear();
+    }
+
     private onMouseDown(e: IEvent<MouseEvent>) {
-        if (this.currentShape) {
-            if (typeof this.currentShape.text !== 'undefined') {
-                // 文本
-                if (this.currentShape.text.trim() === "") {
-                    this.canvas.remove(this.currentShape);
-                    this.currentShape = null;
-                }
-            }else {
-                this.currentShape = null;
-            }
-        }
         // 如果当前有活动的元素则不进行后续绘制
         const activeObject = this.canvas.getActiveObject();
         if (!e.pointer || activeObject) return;
@@ -80,20 +87,49 @@ export default class FabricWbWrap {
         const {x, y} = e.pointer;
         this.startX = x;
         this.startY = y;
-        // 在当前坐标绘制一个矩形
-        if (this.mode== "rectangle") {
-            this.currentShape = this.drawRect({
+        if (this.mode == "rectangle") {
+            this.drawRect({
                 left: x,
                 top: y,
                 width: 0,
                 height: 0,
             });
-        }else if (this.mode === "text") {
-            this.currentShape = this.drawText("", {
+        } else if (this.mode === "text") {
+            this.drawText("", {
                 left: x,
                 top: y,
                 height: 100
             })
+        } else if (this.mode === 'circle') {
+            this.drawEllipse({
+                left: x,
+                top: y,
+                width: 0,
+                height: 0,
+            });
+        } else if (this.mode === "triangle") {
+            this.drawTriangle({
+                left: x,
+                top: y,
+                width: 0,
+                height: 0,
+            })
+        } else if (this.mode === "line") {
+            this.drawLine({
+                x1: x,
+                y1: y,
+                x2: x,
+                y2: y
+            })
+        } else if (this.mode === "arrow") {
+            this.drawArrow({
+                x1: x,
+                y1: y,
+                x2: x,
+                y2: y
+            })
+        } else if (this.mode === 'diamond') {
+            this.drawDiamond(x, y, {});
         }
     }
 
@@ -105,11 +141,22 @@ export default class FabricWbWrap {
         const width = x - this.startX;
         const height = y - this.startY;
 
-        // 设置宽高
-        this.currentShape.set({
+        const options = {
             width,
             height,
-        });
+        } as Record<string, any>;
+        if (this.mode === "circle") {
+            options['rx'] = options['width'] / 2;
+            options['ry'] = options['height'] / 2;
+        } else if (this.mode === 'line' || this.mode === 'arrow') {
+            options['x2'] = x;
+            options['y2'] = y;
+        } else if (this.mode === 'diamond') {
+            options['points'] = this.renderDiamond(this.startX, this.startY, width, height);
+        }
+
+        // 设置宽高
+        this.currentShape.set(options);
 
         // 更新画布
         this.canvas.renderAll();
@@ -117,6 +164,7 @@ export default class FabricWbWrap {
 
     private onMouseUp() {
         this.isDrawing = false;
+        this.currentShape = null;
     }
 
 
@@ -141,13 +189,17 @@ export default class FabricWbWrap {
         this.canvas.isDrawingMode = true;
     }
 
+    // ===================================================================================
+    // --------------------------------------- 绘制 ---------------------------------------
+    // ===================================================================================
+
     /**
-     * 文字模式
+     * 绘制文字
      * @param text 字符串
      * @param options 选项
      */
-    public drawText(text: string, options?: ITextOptions): Object {
-        let color =  '#000000';
+    private drawText(text: string, options?: ITextOptions) {
+        let color = '#000000';
         if (useGlobalStore().isDark) {
             color = "#ffffff"
         }
@@ -167,32 +219,113 @@ export default class FabricWbWrap {
             textObj.hiddenTextarea.focus();
         }
         this.canvas.setActiveObject(textObj);
-        return textObj;
-    }
-
-    public setEraser(options?: any): void {
-        MessageUtil.warning("橡皮擦功能咱不可用");
     }
 
     /**
-     * 设置矩形
+     * 绘制矩形
      * @param options 参数
      */
-    public drawRect(options: IRectOptions): Object {
+    private drawRect(options: IRectOptions) {
         const rect = new fabric.Rect({...this.options, ...options});
         this.canvas.add(rect);
         this.currentShape = rect;
-        return rect;
     }
 
-    public setArrow() {
-        const arrow = new ArrowNode(this.options);
+    /**
+     * 绘制圆形
+     * @param options 参数
+     */
+    private drawCircle(options: ICircleOptions) {
+        const circle = new fabric.Circle({
+            radius: Math.min(options.height || 0, options.width || 0) / 2, // 圆的半径 50
+            ...this.options,
+            ...options
+        });
+        this.canvas.add(circle);
+        this.currentShape = circle;
+    }
+
+    /**
+     * 绘制椭圆
+     * @param options 参数
+     */
+    private drawEllipse(options: IEllipseOptions) {
+        const ellipse = new fabric.Ellipse({
+            ...this.options,
+            ...options
+        });
+        this.canvas.add(ellipse);
+        this.currentShape = ellipse;
+    }
+
+    /**
+     * 绘制三角形
+     * @param options 参数
+     */
+    private drawTriangle(options: ITriangleOptions) {
+        const triangle = new fabric.Triangle({
+            ...this.options,
+            ...options
+        });
+        this.canvas.add(triangle);
+        this.currentShape = triangle;
+    }
+
+    /**
+     * 绘制菱形
+     * @param x 起始x
+     * @param y 起始y
+     * @param options 参数
+     */
+    private drawDiamond(x: number, y: number, options: IPolylineOptions) {
+        const polygon = new fabric.Polygon(
+            this.renderDiamond(x, y, options.width || 0, options.height || 0), {
+                ...this.options,
+                ...options
+            })
+        this.canvas.add(polygon);
+        this.currentShape = polygon;
+    }
+
+    private renderDiamond(x: number, y: number, width: number, height: number): IPoint[] {
+        return [{
+            x,
+            y: y - height / 2
+        }, {
+            x: x + width / 2,
+            y
+        }, {
+            x,
+            y: y + height / 2
+        }, {
+            x: x - width / 2,
+            y
+        }]
+    }
+
+    private drawLine(option: ILineOptions) {
+        const line = new fabric.Line([
+            option.x1 || 0, option.y1 || 0,
+            option.x2 || 0, option.y2 || 0
+        ], {
+            ...this.options,
+            ...option
+        });
+        this.canvas.add(line);
+        this.currentShape = line;
+    }
+
+    private drawArrow(option: ILineOptions) {
+        const arrow = new Arrow([
+            option.x1 || 0, option.y1 || 0,
+            option.x2 || 0, option.y2 || 0
+        ], {
+            ...this.options,
+            ...option
+        });
         this.canvas.add(arrow);
+        this.currentShape = arrow;
     }
 
-    public clear() {
-        this.canvas.clear();
-
-    }
 
 }

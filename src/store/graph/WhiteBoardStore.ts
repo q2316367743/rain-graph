@@ -5,6 +5,7 @@ import LocalNameEnum from "@/enumeration/LocalNameEnum";
 import MessageUtil from "@/utils/MessageUtil";
 import {toRaw} from "vue";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
+import {WhiteBoardSubType} from "@/enumeration/GraphSubTypeEnum";
 
 export const useWhiteBoardStore = defineStore(LocalNameEnum.WHITE_BOARD, {
     state: () => ({
@@ -17,8 +18,8 @@ export const useWhiteBoardStore = defineStore(LocalNameEnum.WHITE_BOARD, {
             this.whiteBoards = whiteBoardsWrap.items;
             this.whiteBoardRev = whiteBoardsWrap._rev;
         },
-        async add(id: string): Promise<string> {
-            id = await add(id, this.whiteBoards);
+        async add(id: string, type: WhiteBoardSubType): Promise<string> {
+            id = await add(id, this.whiteBoards, type);
             this.sync();
             return Promise.resolve(id);
         },

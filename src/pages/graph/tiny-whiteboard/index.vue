@@ -437,7 +437,7 @@ export default defineComponent({
                 }
             }
             this.lock = true;
-            useWhiteBoardStore().add(this.id)
+            useWhiteBoardStore().add(this.id, WhiteBoardSubType.TINY_WHITEBOARD)
                 .then(id => {
                     this.id = id;
                     // 保存记录

@@ -19,7 +19,7 @@ export default class FabricWbWrap {
     private options: IObjectOptions;
     private currentShape: Object | null;
     private mode: FabricWbMode = "selection";
-    private ctrl = useMagicKeys().ctrl
+    private space = useMagicKeys().space
 
     // 基础属性
     private width: number = 0;
@@ -31,8 +31,19 @@ export default class FabricWbWrap {
     private startX = 0;
     // 鼠标起点多表y
     private startY = 0;
+    // 是否处于拖动状态
+    private isDragging = false;
+    // 最后的坐标x
+    private lastPosX = 0;
+    // 最后的坐标y
+    private lastPosY = 0;
+
     // 缩放
     private zoom = 1;
+    // 偏移X
+    private offsetX = 0;
+    // 偏移Y
+    private offsetY = 0;
 
     constructor(element: HTMLCanvasElement | null, width: number, height: number, options: IObjectOptions = {}) {
         this.width = width;
@@ -92,13 +103,22 @@ export default class FabricWbWrap {
     // ======================================================================================
 
     private onMouseDown(e: IEvent<MouseEvent>) {
+        if (this.space.value) {
+            let evt = e.e
+            this.isDragging = true
+            this.lastPosX = evt.clientX;
+            this.lastPosY = evt.clientY;
+            return;
+        }
         // 如果当前有活动的元素则不进行后续绘制
         const activeObject = this.canvas.getActiveObject();
         if (!e.pointer || activeObject) return;
         // 切换成绘制状态
         this.isDrawing = true;
         // 记录当前坐标点
-        const {x, y} = e.pointer;
+        const pointer = e.pointer;
+        const x = pointer.x - this.offsetX;
+        const y = pointer.y - this.offsetY;
         this.startX = x;
         this.startY = y;
         if (this.mode == "rectangle") {
@@ -149,12 +169,27 @@ export default class FabricWbWrap {
     }
 
     private onMouseMove(event: IEvent<MouseEvent>) {
+        if (this.isDragging) {
+            // 处于拖拽模式
+            let evt = event.e
+            let vpt = this.canvas.viewportTransform!; // 聚焦视图的转换
+            vpt[4] += evt.clientX - this.lastPosX;
+            vpt[5] += evt.clientY - this.lastPosY;
+            this.offsetX = vpt[4];
+            this.offsetY = vpt[5];
+            this.canvas.requestRenderAll(); // 重新渲染
+            this.lastPosX = evt.clientX;
+            this.lastPosY = evt.clientY;
+            return;
+        }
+
+
         if (!this.isDrawing || !event.pointer || !this.currentShape) return;
 
         // 计算宽高
         const {x, y} = event.pointer;
-        const width = x - this.startX;
-        const height = y - this.startY;
+        const width = x - this.startX - this.offsetX;
+        const height = y - this.startY - this.offsetY;
 
         const options = {
             width,
@@ -178,12 +213,16 @@ export default class FabricWbWrap {
     }
 
     private onMouseUp() {
+        if (this.isDragging) {
+            this.canvas.setViewportTransform(this.canvas.viewportTransform || []);
+        }
+        this.isDragging = false // 关闭移动状态
         this.isDrawing = false;
         this.currentShape = null;
     }
 
     private onMouseWheel(e: IEvent<WheelEvent>) {
-        if (!this.ctrl.value) {
+        if (!e.e.ctrlKey) {
             // 如果没有按住ctrl，不处理
             return;
         }

@@ -39,7 +39,7 @@ export default class FabricWbEvent {
         // 事件
         this.canvas.on('mouse:down', e => this.onMouseDown(e));
         this.canvas.on('mouse:move', e => this.onMouseMove(e));
-        this.canvas.on('mouse:up', e => this.onMouseUp(e));
+        this.canvas.on('mouse:up', () => this.onMouseUp());
         // 监听鼠标滚轮事件
         // this.canvas.on('mouse:wheel', e => this.onMouseWheel(e));
     }
@@ -174,7 +174,7 @@ export default class FabricWbEvent {
         this.canvas.renderAll();
     }
 
-    private onMouseUp(e: IEvent<MouseEvent>) {
+    private onMouseUp() {
         if (this.isDragging) {
             this.canvas.setViewportTransform(this.canvas.viewportTransform || []);
         }
@@ -211,29 +211,4 @@ export default class FabricWbEvent {
         )
     }
 
-    private animate(e: IEvent<MouseEvent>, dir: number) {
-        if (e.target) {
-            fabric.util.animate({
-                startValue: e.target.get('angle'),
-                endValue: (e.target.get('angle') || 0) + (dir ? 0.1 : -0.1),
-                duration: 100
-            })
-            fabric.util.animate({
-                startValue: e.target.get('scaleX'),
-                endValue: (e.target.get('scaleX') || 0) + (dir ? 0.1 : -0.1),
-                duration: 100,
-                onChange: (value) => {
-                    if (e.target) {
-                        e.target.scale(value);
-                    }
-                    this.canvas.renderAll()
-                },
-                onComplete: () => {
-                    if (e.target) {
-                        e.target.setCoords();
-                    }
-                }
-            })
-        }
-    }
 }

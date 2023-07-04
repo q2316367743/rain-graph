@@ -195,10 +195,29 @@ export default class FabricWbWrap {
         const width = x - this.startX - this.offsetX;
         const height = y - this.startY - this.offsetY;
 
+        const tx = x - this.offsetX;
+        const ty = y - this.offsetY;
+        const isRight = width > 0;
+        const isBottom = height > 0;
+
         const options = {
             width: Math.abs(width),
             height: Math.abs(height),
         } as Record<string, any>;
+
+        // 位置
+        if (!isRight) {
+            options['left'] = tx
+            options['top'] = ty - options['height'];
+            if (!isBottom) {
+                options['top'] = ty;
+            }
+        }else {
+            if (!isBottom) {
+                options['top'] = ty;
+            }
+        }
+
         if (this.mode === "circle") {
             options['rx'] = options['width'] / 2;
             options['ry'] = options['height'] / 2;
@@ -209,7 +228,6 @@ export default class FabricWbWrap {
         } else if (this.mode === 'diamond') {
             options['points'] = this.renderDiamond(this.startX, this.startY, width, height);
         }
-
         // 设置宽高
         this.currentShape.set(options);
 
@@ -260,7 +278,7 @@ export default class FabricWbWrap {
         if (e.target) {
             fabric.util.animate({
                 startValue: e.target.get('angle'),
-                endValue: (e.target.get('angle') || 0) + (dir ? 5 : -5),
+                endValue: (e.target.get('angle') || 0) + (dir ? 2 : -2),
                 duration: 100
             })
             fabric.util.animate({

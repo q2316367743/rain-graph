@@ -9,13 +9,13 @@
 import {mapState} from "pinia";
 import {defineComponent, markRaw} from "vue";
 import {useFileSystemAccess} from "@vueuse/core";
-import FabricWbWrap from "@/pages/graph/fabric-wb/FabricWbWrap";
+import FabricWbWrap from "@/pages/graph/fabric-wb/core/FabricWbWrap";
 
 import {useGlobalStore} from "@/store/GlobalStore";
 
 import FabricWbOperate from './components/operate.vue';
 import FabricWbMenu from './components/menu/index.vue'
-import {getDefaultOption} from "@/pages/graph/fabric-wb/node/constants";
+import {getDefaultOption} from "@/pages/graph/fabric-wb/core/constants";
 
 
 export default defineComponent({
@@ -86,7 +86,7 @@ export default defineComponent({
                     return;
                 }
                 const body = this.fileSystem.file as Blob;
-                this.instance.appendImage(window.URL.createObjectURL(body));
+                this.instance.getNode().appendImage(window.URL.createObjectURL(body));
             })
         }
     }

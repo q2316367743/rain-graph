@@ -1,15 +1,26 @@
 <template>
     <div class="fabric-wb-menu-file">
-        <a-dropdown position="bl">
-            <a-button type="text">
-                <template #icon>
-                    <icon-menu />
+        <a-button-group type="text">
+            <a-tooltip content="返回文件列表">
+                <a-button @click="toHome()">
+                    <template #icon>
+                        <icon-left />
+                    </template>
+                </a-button>
+            </a-tooltip>
+            <a-dropdown position="bl">
+                <a-button>
+                    <template #icon>
+                        <icon-menu/>
+                    </template>
+                </a-button>
+                <template #content>
+                    <a-doption>保存</a-doption>
+                    <a-doption>打开</a-doption>
+                    <a-doption>另存为</a-doption>
                 </template>
-            </a-button>
-            <template #content>
-                <a-doption @click="toHome()">返回列表</a-doption>
-            </template>
-        </a-dropdown>
+            </a-dropdown>
+        </a-button-group>
     </div>
 </template>
 <script lang="ts">
@@ -18,9 +29,7 @@ import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 
 export default defineComponent({
     name: 'fabric-wb-menu',
-    data: () => ({
-
-    }),
+    data: () => ({}),
     methods: {
         toHome() {
             this.$router.push({

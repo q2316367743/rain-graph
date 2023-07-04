@@ -69,15 +69,17 @@ export default class FabricWbWrap {
         } else {
             this.canvas.defaultCursor = 'text';
         }
-        if (mode !== 'free-draw') {
-            this.canvas.isDrawingMode = false;
-        }
+        // 默认关闭绘画模式
+        this.canvas.isDrawingMode = false;
         switch (mode) {
             case "free-draw":
                 this.setFreeDraw();
                 return;
             case "selection":
                 this.setSelection();
+                return;
+            case "spray-brush":
+                this.setSprayBrush();
                 return;
         }
     }
@@ -135,6 +137,19 @@ export default class FabricWbWrap {
         //     affectStroke: true,
         //     color: '#30e3ca',
         // })
+    }
+
+    private setSprayBrush() {
+        let color = '#000000';
+        if (useGlobalStore().isDark) {
+            color = "#ffffff"
+        }
+        this.canvas.isDrawingMode = true;
+        // @ts-ignore
+        let sprayBrush = new fabric.SprayBrush(this.canvas);
+        sprayBrush.color = color;
+        sprayBrush.width = 5
+        this.canvas.freeDrawingBrush = sprayBrush;
     }
 
 }

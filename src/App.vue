@@ -178,9 +178,13 @@ export default defineComponent({
                 let operate = name;
                 let additional = undefined;
                 if (path.startsWith("/graph")) {
-                    const items = name.split("|");
-                    operate = items[0];
-                    additional = items[1];
+                    if (name) {
+                        const items = name.split("|");
+                        if (items.length >1) {
+                            operate = items[0];
+                            additional = items[1];
+                        }
+                    }
                 }
                 statistics.access(operate, additional);
             }

@@ -129,8 +129,9 @@ async function updateSetting() {
 function printLog() {
     const lines = [
         "本次更新，主要更新了：",
-        "将简易思维导图和完整思维导图合并，在一个列表中展示，可以在设置=>基础设置中，修改默认思维导图引擎。",
-        "白板增加了一个引擎，使用Fabric.js开发，使用起来更加流畅，舒适。"
+        "将简易思维导图和完整思维导图合并，在一个列表中展示。",
+        "白板增加了一个引擎，使用Fabric.js开发，使用起来更加流畅，舒适。",
+        "可以在设置=>基础设置中，修改默认思维导图引擎、默认白板引擎"
     ]
     MessageBoxUtil.alert(h("div", {}, [
         lines.map(line => h('p', {}, line))

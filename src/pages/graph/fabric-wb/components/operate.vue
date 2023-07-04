@@ -70,6 +70,15 @@
                     </a-tooltip>
                 </template>
             </a-radio>
+            <a-radio value="spray-brush">
+                <template #radio="{ checked }">
+                    <a-tooltip content="喷雾">
+                        <div class="item" :class="checked ? 'active' : ''">
+                            <icon-bg-colors/>
+                        </div>
+                    </a-tooltip>
+                </template>
+            </a-radio>
             <a-radio value="text">
                 <template #radio="{ checked }">
                     <a-tooltip content="文字">
@@ -85,6 +94,13 @@
                 <a-button @click="$emit('append-image')">
                     <template #icon>
                         <icon-image/>
+                    </template>
+                </a-button>
+            </a-tooltip>
+            <a-tooltip content="iconfont">
+                <a-button>
+                    <template #icon>
+                        <icon-face-smile-fill />
                     </template>
                 </a-button>
             </a-tooltip>

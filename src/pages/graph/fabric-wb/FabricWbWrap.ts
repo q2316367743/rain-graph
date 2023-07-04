@@ -55,9 +55,11 @@ export default class FabricWbWrap {
         });
         this.currentShape = null;
         this.options = options;
+        this.canvas.selectionBorderColor = "#6965db";
+        // 事件
         this.canvas.on('mouse:down', e => this.onMouseDown(e));
         this.canvas.on('mouse:move', e => this.onMouseMove(e));
-        this.canvas.on('mouse:up', () => this.onMouseUp());
+        this.canvas.on('mouse:up', e => this.onMouseUp(e));
         // 监听鼠标滚轮事件
         // this.canvas.on('mouse:wheel', e => this.onMouseWheel(e));
     }
@@ -110,6 +112,8 @@ export default class FabricWbWrap {
             this.lastPosY = evt.clientY;
             return;
         }
+        // 动画
+        this.animate(e, 1);
         // 如果当前有活动的元素则不进行后续绘制
         const activeObject = this.canvas.getActiveObject();
         if (!e.pointer || activeObject) return;
@@ -136,7 +140,7 @@ export default class FabricWbWrap {
                 fontFamily: "JetBrainsMono,微软雅黑"
             })
         } else if (this.mode === 'circle') {
-            this.drawEllipse({
+            this.drawCircle({
                 left: x,
                 top: y,
                 width: 0,
@@ -192,12 +196,13 @@ export default class FabricWbWrap {
         const height = y - this.startY - this.offsetY;
 
         const options = {
-            width,
-            height,
+            width: Math.abs(width),
+            height: Math.abs(height),
         } as Record<string, any>;
         if (this.mode === "circle") {
             options['rx'] = options['width'] / 2;
             options['ry'] = options['height'] / 2;
+            options['radius'] = Math.min(options['width'], options['height']) / 2;
         } else if (this.mode === 'line' || this.mode === 'arrow') {
             options['x2'] = x;
             options['y2'] = y;
@@ -212,10 +217,12 @@ export default class FabricWbWrap {
         this.canvas.renderAll();
     }
 
-    private onMouseUp() {
+    private onMouseUp(e: IEvent<MouseEvent>) {
         if (this.isDragging) {
             this.canvas.setViewportTransform(this.canvas.viewportTransform || []);
         }
+        // 动画
+        this.animate(e, 0);
         this.isDragging = false // 关闭移动状态
         this.isDrawing = false;
         this.currentShape = null;
@@ -247,6 +254,32 @@ export default class FabricWbWrap {
             },
             zoom // 最后要缩放的值
         )
+    }
+
+    private animate(e: IEvent<MouseEvent>, dir: number) {
+        if (e.target) {
+            fabric.util.animate({
+                startValue: e.target.get('angle'),
+                endValue: (e.target.get('angle') || 0) + (dir ? 5 : -5),
+                duration: 100
+            })
+            fabric.util.animate({
+                startValue: e.target.get('scaleX'),
+                endValue: (e.target.get('scaleX') || 0) + (dir ? 0.1 : -0.1),
+                duration: 100,
+                onChange: (value) => {
+                    if (e.target) {
+                        e.target.scale(value);
+                    }
+                    this.canvas.renderAll()
+                },
+                onComplete: () => {
+                    if (e.target) {
+                        e.target.setCoords();
+                    }
+                }
+            })
+        }
     }
 
     // ======================================================================================

@@ -17,7 +17,7 @@ import {defineComponent} from "vue";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 
 export default defineComponent({
-    name: 'fabric-wb-menu-file',
+    name: 'fabric-wb-menu',
     data: () => ({
 
     }),

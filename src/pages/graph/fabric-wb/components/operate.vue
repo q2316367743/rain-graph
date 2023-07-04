@@ -79,17 +79,15 @@
                     </a-tooltip>
                 </template>
             </a-radio>
-            <a-radio value="image">
-                <template #radio="{ checked }">
-                    <a-tooltip content="图片">
-                        <div class="item" :class="checked ? 'active' : ''">
-                            <icon-image/>
-                        </div>
-                    </a-tooltip>
-                </template>
-            </a-radio>
         </a-radio-group>
         <a-button-group type="text">
+            <a-tooltip content="图片">
+                <a-button @click="$emit('append-image')">
+                    <template #icon>
+                        <icon-image/>
+                    </template>
+                </a-button>
+            </a-tooltip>
             <a-button status="danger" @click="$emit('clear')">
                 <template #icon>
                     <icon-delete/>
@@ -114,7 +112,7 @@ import IconText from '@/icon/white-board/IconText.vue';
 export default defineComponent({
     name: 'fabric-wb-operate',
     components: {IconChoose, IconCircle, IconDiamond, IconRect, IconLine, IconTriangle, IconText},
-    emits: ['update:modelValue', 'clear'],
+    emits: ['update:modelValue', 'clear', 'append-image'],
     props: {
         modelValue: String
     },

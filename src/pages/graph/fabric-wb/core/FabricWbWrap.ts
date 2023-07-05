@@ -4,6 +4,7 @@ import {FabricWbMode} from "./constants";
 import {useGlobalStore} from "@/store/GlobalStore";
 import FabricWbEvent from "@/pages/graph/fabric-wb/core/FabricWbEvent";
 import FabricWbNode from "@/pages/graph/fabric-wb/core/FabricWbNode";
+import {initAligningGuidelines} from "@/pages/graph/fabric-wb/core/event/initAligningGuidelines";
 
 fabric.Object.prototype.transparentCorners = false;
 fabric.Object.prototype.cornerColor = '#b4b2ed';
@@ -38,10 +39,12 @@ export default class FabricWbWrap {
         this.options = options;
         this.canvas.selectionBorderColor = "#6965db";
 
-        // 事件
+        // 节点
         this.node = new FabricWbNode(this.canvas, this);
+        // 事件
         this.event = new FabricWbEvent(this.canvas, this, this.node);
-        // 监听鼠标滚轮事件
+        // 处理辅助线
+        initAligningGuidelines(this.canvas);
     }
 
     setWidth(width: number) {

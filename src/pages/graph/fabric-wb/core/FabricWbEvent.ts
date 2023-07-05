@@ -181,8 +181,8 @@ export default class FabricWbEvent {
             options['ry'] = options['height'] / 2;
             options['radius'] = Math.min(options['width'], options['height']) / 2;
         } else if (this.instance.getMode() === 'line' || this.instance.getMode() === 'arrow') {
-            options['x2'] = x;
-            options['y2'] = y;
+            options['x2'] = tx;
+            options['y2'] = ty;
         } else if (this.instance.getMode() === 'diamond') {
             options['points'] = this.node.renderDiamond(this.startX, this.startY, width, height);
         }

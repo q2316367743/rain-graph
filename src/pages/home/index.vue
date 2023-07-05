@@ -13,9 +13,8 @@
                         {{ Config.title[GraphTypeEnum.WHITE_BOARD].title }}
                     </a-radio>
                 </a-radio-group>
-                <a-input-search style="width: 150px;margin-left: 14px;" placeholder="请输入项目名" allow-clear
-                                v-model="keyword"
-                                @search="search()"></a-input-search>
+                <a-input style="width: 150px;margin-left: 14px;" placeholder="请输入项目名" allow-clear
+                         v-model="keyword"></a-input>
             </div>
             <a-switch :default-checked="!isDark" type="round" style="margin: 4px;width: 58px;"
                       @change="switchDarkColors()">
@@ -24,47 +23,32 @@
             </a-switch>
         </div>
         <div class="content">
-            <a-list :virtual-list-props="virtualListProps" :data="showItems">
+            <a-list :virtual-list-props="virtualListProps" :data="mindMapResults"
+                    v-show="activeKey === GraphTypeEnum.MIND_MAP">
                 <template #item="{ item, index }">
-                    <a-list-item :key="index">
-                        <a-list-item-meta>
-                            <template #title>
-                                <a-link @click="jumpTo(item)">{{ item.name }}</a-link>
-                            </template>
-                            <template #description>
-                                <a-tag color="arcoblue">{{ Config.subTitle(activeKey, item.type) }}</a-tag>
-                            </template>
-                        </a-list-item-meta>
-                        <template #actions>
-                            <a-button-group type="text">
-                                <a-button @click="updateBy(item)">
-                                    <template #icon>
-                                        <icon-edit/>
-                                    </template>
-                                </a-button>
-                                <a-popconfirm content="确定删除此图？删除后无法恢复" ok-text="删除"
-                                              :ok-button-props="{ status: 'danger' }"
-                                              @ok="remove(item)">
-                                    <a-button status="danger">
-                                        <template #icon>
-                                            <icon-delete/>
-                                        </template>
-                                    </a-button>
-                                </a-popconfirm>
-                            </a-button-group>
-                        </template>
-                    </a-list-item>
+                    <home-item :active-key="activeKey" :item="item.item" :index="index" @jump-to="jumpTo"
+                               @update-by="updateBy" @remove="remove"/>
+                </template>
+            </a-list>
+            <a-list :virtual-list-props="virtualListProps" :data="diagramResults"
+                    v-show="activeKey === GraphTypeEnum.DIAGRAM">
+                <template #item="{ item, index }">
+                    <home-item :active-key="activeKey" :item="item.item" :index="index" @jump-to="jumpTo"
+                               @update-by="updateBy" @remove="remove"/>
+                </template>
+            </a-list>
+            <a-list :virtual-list-props="virtualListProps" :data="whiteBoardResults"
+                    v-show="activeKey === GraphTypeEnum.WHITE_BOARD">
+                <template #item="{ item, index }">
+                    <home-item :active-key="activeKey" :item="item.item" :index="index" @jump-to="jumpTo"
+                               @update-by="updateBy" @remove="remove"/>
                 </template>
             </a-list>
         </div>
     </div>
 </template>
-<script lang="ts">
-import {mapState} from "pinia";
-import {defineComponent} from "vue";
-import {useWindowSize} from "@vueuse/core";
+<script lang="ts" setup>
 import Config from "@/global/Config";
-import {useMapEvent, useSaveEvent, useSideEvent, useUndoEvent} from "@/global/BeanFactory";
 import GraphRecord from "@/entity/GraphRecord";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import {useGlobalStore} from "@/store/GlobalStore";
@@ -72,94 +56,86 @@ import {useSettingStore} from "@/store/setting/SettingStore";
 import {useDiagramStore} from "@/store/graph/DiagramStore";
 import {useWhiteBoardStore} from "@/store/graph/WhiteBoardStore";
 import {useMindMapStore} from "@/store/graph/MindMapStore";
+import HomeItem from "@/pages/home/item.vue";
+import {computed, ref} from "vue";
+import {useRouter} from "vue-router";
+import {useFuse} from "@vueuse/integrations/useFuse";
 
-export default defineComponent({
-    name: 'home',
-    data: () => ({
-        GraphTypeEnum,
-        Config,
-        activeKey: GraphTypeEnum.MIND_MAP as GraphTypeEnum,
-        size: useWindowSize(),
-        showItems: new Array<GraphRecord>(),
-        keyword: ''
-    }),
-    computed: {
-        ...mapState(useGlobalStore, ['isDark']),
-        ...mapState(useSettingStore, ['defaultView', 'showViews']),
-        ...mapState(useMindMapStore, ['mindMaps']),
-        ...mapState(useDiagramStore, ['diagrams']),
-        ...mapState(useWhiteBoardStore, ['whiteBoards']),
-        virtualListProps() {
-            return {
-                height: this.size.height - 33 - 14 - 7
-            }
-        },
-        items() {
-            if (this.activeKey === GraphTypeEnum.MIND_MAP) {
-                return this.mindMaps;
-            } else if (this.activeKey === GraphTypeEnum.DIAGRAM) {
-                return this.diagrams;
-            } else if (this.activeKey === GraphTypeEnum.WHITE_BOARD) {
-                return this.whiteBoards;
-            }
-            return [];
-        }
-    },
-    watch: {
-        items() {
-            this.search();
-        }
-    },
-    created() {
-        useGlobalStore().setTitle(' ');
-        useGlobalStore().setType(undefined);
-        let name = this.$route.query.name as GraphTypeEnum;
-        if (name) {
-            this.activeKey = name;
-        } else {
-            this.activeKey = this.defaultView;
-        }
-        // 清空事件
-        useSaveEvent.reset();
-        useUndoEvent.reset();
-        useSideEvent.reset();
-        useMapEvent.reset();
-        this.search();
-    },
-    methods: {
-        switchDarkColors() {
-            useGlobalStore().switchDarkColors();
-        },
-        search() {
-            this.showItems = this.items.filter(e => e.name.indexOf(this.keyword) > -1)
-        },
-        jumpTo(item: GraphRecord) {
-            useGlobalStore().setTitle(item.name);
-            useGlobalStore().setType(this.activeKey);
-            this.$router.push(`/graph/${item.type}/${item.id}`);
-        },
-        updateBy(item: GraphRecord) {
-            if (this.activeKey === GraphTypeEnum.MIND_MAP) {
-                useMindMapStore().update(item);
-            } else if (this.activeKey === GraphTypeEnum.DIAGRAM) {
-                useDiagramStore().update(item);
-            } else if (this.activeKey === GraphTypeEnum.WHITE_BOARD) {
-                useWhiteBoardStore().update(item);
-            }
-            this.search();
-        },
-        remove(item: GraphRecord) {
-            if (this.activeKey === GraphTypeEnum.MIND_MAP) {
-                useMindMapStore().remove(item);
-            } else if (this.activeKey === GraphTypeEnum.DIAGRAM) {
-                useDiagramStore().remove(item);
-            } else if (this.activeKey === GraphTypeEnum.WHITE_BOARD) {
-                useWhiteBoardStore().remove(item);
-            }
-            this.search();
-        }
+const activeKey = ref<GraphTypeEnum>(GraphTypeEnum.MIND_MAP);
+const keyword = ref<string>('');
+// 对象属性
+const showViews = useSettingStore().showViews;
+const isDark = useGlobalStore().isDark;
+const size = ref(useGlobalStore().size);
+const router = useRouter();
+// 列表
+const mindMaps = ref(useMindMapStore().mindMaps);
+const diagrams = ref(useDiagramStore().diagrams);
+const whiteBoards = ref(useWhiteBoardStore().whiteBoards);
+// 计算属性
+const virtualListProps = computed(() => {
+    return {
+        height: size.value.height - 33 - 14 - 7
     }
 });
+const {results: mindMapResults} = useFuse(keyword, mindMaps, {
+    matchAllWhenSearchEmpty: true,
+    fuseOptions: {
+        keys: [{
+            name: 'name',
+            weight: 1
+        }]
+    }
+});
+const {results: diagramResults} = useFuse(keyword, diagrams, {
+    matchAllWhenSearchEmpty: true,
+    fuseOptions: {
+        keys: [{
+            name: 'name',
+            weight: 1
+        }]
+    }
+});
+const {results: whiteBoardResults} = useFuse(keyword, whiteBoards, {
+    matchAllWhenSearchEmpty: true,
+    fuseOptions: {
+        keys: [{
+            name: 'name',
+            weight: 1
+        }]
+    }
+});
+
+
+function jumpTo(item: GraphRecord) {
+    useGlobalStore().setTitle(item.name);
+    useGlobalStore().setType(activeKey.value);
+    router.push(`/graph/${item.type}/${item.id}`);
+}
+
+function updateBy(item: GraphRecord) {
+    if (activeKey.value === GraphTypeEnum.MIND_MAP) {
+        useMindMapStore().update(item);
+    } else if (activeKey.value === GraphTypeEnum.DIAGRAM) {
+        useDiagramStore().update(item);
+    } else if (activeKey.value === GraphTypeEnum.WHITE_BOARD) {
+        useWhiteBoardStore().update(item);
+    }
+}
+
+function remove(item: GraphRecord) {
+    if (activeKey.value === GraphTypeEnum.MIND_MAP) {
+        useMindMapStore().remove(item);
+    } else if (activeKey.value === GraphTypeEnum.DIAGRAM) {
+        useDiagramStore().remove(item);
+    } else if (activeKey.value === GraphTypeEnum.WHITE_BOARD) {
+        useWhiteBoardStore().remove(item);
+    }
+}
+
+function switchDarkColors() {
+    useGlobalStore().switchDarkColors();
+}
 </script>
 <style lang="less">
 .home {

@@ -187,6 +187,13 @@ export default defineComponent({
                     }
                 }
                 statistics.access(operate, additional);
+                // 返货首页，清空事件
+                if (path === '/home') {
+                    useSaveEvent.reset();
+                    useUndoEvent.reset();
+                    useSideEvent.reset();
+                    useMapEvent.reset();
+                }
             }
         }
     },

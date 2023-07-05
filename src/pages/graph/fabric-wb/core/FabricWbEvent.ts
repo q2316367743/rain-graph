@@ -31,11 +31,13 @@ export default class FabricWbEvent {
     // 偏移Y
     private offsetY = 0;
 
+    private onContextMenu: ((e: IEvent<MouseEvent>) => void) | null;
 
     constructor(canvas: fabric.Canvas, instance: FabricWbWrap, node: FabricWbNode) {
         this.canvas = canvas;
         this.instance = instance;
         this.node = node;
+        this.onContextMenu = null;
         // 事件
         this.canvas.on('mouse:down', e => this.onMouseDown(e));
         this.canvas.on('mouse:move', e => this.onMouseMove(e));
@@ -44,7 +46,24 @@ export default class FabricWbEvent {
         // this.canvas.on('mouse:wheel', e => this.onMouseWheel(e));
     }
 
+    /**
+     * 设置右键菜单
+     * @param onContextMenu 右键菜单事件
+     */
+    setContextMenu(onContextMenu: (e: IEvent<MouseEvent>) => void) {
+        this.onContextMenu = onContextMenu;
+    }
+
     private onMouseDown(e: IEvent<MouseEvent>) {
+
+        // 右键事件
+        if (this.onContextMenu) {
+            this.onContextMenu(e);
+        }
+
+        if (e.button != 1) {
+            return;
+        }
         if (this.space.value) {
             let evt = e.e
             this.isDragging = true

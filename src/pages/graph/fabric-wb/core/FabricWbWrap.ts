@@ -30,7 +30,9 @@ export default class FabricWbWrap {
         // 初始化画布，默认可绘制
         this.canvas = new fabric.Canvas(element, {
             width,
-            height
+            height,
+            fireRightClick: true, // 启用右键
+            stopContextMenu: true, // 禁止默认右键菜单
         });
         this.currentShape = null;
         this.options = options;
@@ -94,6 +96,14 @@ export default class FabricWbWrap {
 
     setCurrentShape(currentShape: Object | null) {
         this.currentShape = currentShape;
+    }
+
+    getEvent(): FabricWbEvent {
+        return this.event;
+    }
+
+    getCanvas(): fabric.Canvas {
+        return this.canvas;
     }
 
     public clear() {

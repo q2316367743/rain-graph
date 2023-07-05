@@ -97,13 +97,16 @@
                     </template>
                 </a-button>
             </a-tooltip>
-            <a-tooltip content="iconfont">
+            <a-trigger trigger="click" position="bottom" auto-fit-position :unmount-on-close="false" :popup-translate="[0, 10]">
                 <a-button>
                     <template #icon>
                         <icon-face-smile-fill />
                     </template>
                 </a-button>
-            </a-tooltip>
+                <template #content>
+                    <fabric-wb-operate-iconfont />
+                </template>
+            </a-trigger>
             <a-button status="danger" @click="$emit('clear')">
                 <template #icon>
                     <icon-delete/>
@@ -124,10 +127,14 @@ import IconDiamond from "@/icon/white-board/IconDiamond.vue";
 import IconCircle from "@/icon/white-board/IconCircle.vue";
 import IconChoose from "@/icon/white-board/IconChoose.vue";
 import IconText from '@/icon/white-board/IconText.vue';
+// 组件
+import FabricWbOperateIconfont from "@/pages/graph/fabric-wb/components/operate/iconfont.vue";
 
 export default defineComponent({
     name: 'fabric-wb-operate',
-    components: {IconChoose, IconCircle, IconDiamond, IconRect, IconLine, IconTriangle, IconText},
+    components: {
+        FabricWbOperateIconfont,
+        IconChoose, IconCircle, IconDiamond, IconRect, IconLine, IconTriangle, IconText},
     emits: ['update:modelValue', 'clear', 'append-image'],
     props: {
         modelValue: String

@@ -3,6 +3,7 @@
         <canvas ref="fabric-wb-container" class="container"/>
         <fabric-wb-operate v-model="activeKey" @clear="clear()" @append-image="appendImage()"/>
         <fabric-wb-menu/>
+        <fabric-wb-context-menu :instance="instance" v-if="instance"/>
     </div>
 </template>
 <script lang="ts">
@@ -13,14 +14,15 @@ import FabricWbWrap from "@/pages/graph/fabric-wb/core/FabricWbWrap";
 
 import {useGlobalStore} from "@/store/GlobalStore";
 
-import FabricWbOperate from './components/operate.vue';
+import FabricWbOperate from './components/operate/index.vue';
 import FabricWbMenu from './components/menu/index.vue'
 import {getDefaultOption} from "@/pages/graph/fabric-wb/core/constants";
+import FabricWbContextMenu from "@/pages/graph/fabric-wb/components/context-menu/index.vue";
 
 
 export default defineComponent({
     name: 'fabric-wb',
-    components: {FabricWbMenu, FabricWbOperate},
+    components: {FabricWbContextMenu, FabricWbMenu, FabricWbOperate},
     data: () => ({
         instance: null as FabricWbWrap | null,
         activeKey: 'selection',

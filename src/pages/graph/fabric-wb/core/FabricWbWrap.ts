@@ -5,6 +5,7 @@ import {useGlobalStore} from "@/store/GlobalStore";
 import FabricWbEvent from "@/pages/graph/fabric-wb/core/FabricWbEvent";
 import FabricWbNode from "@/pages/graph/fabric-wb/core/FabricWbNode";
 import {initAligningGuidelines} from "@/pages/graph/fabric-wb/core/event/initAligningGuidelines";
+import initControls from "@/pages/graph/fabric-wb/core/event/initControls";
 
 fabric.Object.prototype.transparentCorners = false;
 fabric.Object.prototype.cornerColor = '#b4b2ed';
@@ -45,6 +46,8 @@ export default class FabricWbWrap {
         this.event = new FabricWbEvent(this.canvas, this, this.node);
         // 处理辅助线
         initAligningGuidelines(this.canvas);
+        // 控制器
+        initControls(this.canvas);
     }
 
     setWidth(width: number) {

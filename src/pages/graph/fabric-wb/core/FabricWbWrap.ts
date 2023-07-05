@@ -6,6 +6,12 @@ import FabricWbEvent from "@/pages/graph/fabric-wb/core/FabricWbEvent";
 import FabricWbNode from "@/pages/graph/fabric-wb/core/FabricWbNode";
 import {initAligningGuidelines} from "@/pages/graph/fabric-wb/core/event/initAligningGuidelines";
 import initControls from "@/pages/graph/fabric-wb/core/event/initControls";
+import {useWhiteBoardStore} from "@/store/graph/WhiteBoardStore";
+import {WhiteBoardSubType} from "@/enumeration/GraphSubTypeEnum";
+import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
+import MessageUtil from "@/utils/MessageUtil";
+import {StoreRecordCore} from "@/utils/utools/DbUtil";
+import {download} from "@/utils/BrowserUtil";
 
 fabric.Object.prototype.transparentCorners = false;
 fabric.Object.prototype.cornerColor = '#b4b2ed';
@@ -24,6 +30,12 @@ export default class FabricWbWrap {
     // 基础属性
     private width: number = 0;
     private height: number = 0;
+
+    // 序列化
+    private id: string = '0';
+    private _rev: undefined | string;
+    private lock: boolean = false;
+    private title: string = "未命名白板";
 
 
     constructor(element: HTMLCanvasElement | null, width: number, height: number, options: IObjectOptions = {}) {
@@ -166,6 +178,50 @@ export default class FabricWbWrap {
         sprayBrush.color = color;
         sprayBrush.width = 5
         this.canvas.freeDrawingBrush = sprayBrush;
+    }
+
+    // =================================================================================
+    // ------------------------------------- 序列化 -------------------------------------
+    // =================================================================================
+
+    async save(focus: boolean = false) {
+        if (this.lock) {
+            return;
+        }
+        if (this.id === '0' && !focus) {
+            return;
+        }
+        this.id = await useWhiteBoardStore().add(this.id, WhiteBoardSubType.FABRIC);
+        const res = await utools.db.promises.put({
+            _id: '/' + GraphTypeEnum.WHITE_BOARD + '/' + this.id,
+            _rev: this._rev,
+            value: {
+                record: this.canvas.toJSON(),
+                config: this.options
+            }
+        })
+        if (res.error) {
+            MessageUtil.error(res.message || "保存失败");
+        }
+        this._rev = res.rev;
+        return Promise.resolve();
+    }
+
+    open(record: StoreRecordCore, callback: Function) {
+        if (!record.record) {
+            return;
+        }
+        // 覆盖操作
+        this.options = record.config;
+        // 加载json
+        this.canvas.loadFromJSON(record.record, callback);
+    }
+
+    saveAs() {
+        download(JSON.stringify({
+            record: this.canvas.toJSON(),
+            config: this.options
+        }), this.title + '.json', "application/json");
     }
 
 }

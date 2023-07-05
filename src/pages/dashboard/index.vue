@@ -20,8 +20,8 @@
         <a-row :gutter="7" style="margin: 7px">
             <a-col :span="24">
                 <a-card title="活跃图">
-                    <template #extra>{{ endDate}}</template>
-                    <calendar-heatmap :values="values" :dark-mode="isDark" :end-date="endDate" />
+                    <template #extra>{{ endDate }}</template>
+                    <calendar-heatmap :values="values" :dark-mode="isDark" :end-date="endDate"/>
                 </a-card>
             </a-col>
         </a-row>
@@ -54,9 +54,11 @@ export default defineComponent({
     data: () => {
         let date = new Date();
         date.setDate(date.getDate() + 1);
+        let month = date.getMonth() < 9 ? ('0' + (date.getMonth() + 1)) : (date.getMonth() + 1)
+        let day = date.getDate() < 10 ? ('0' + date.getDate()) : date.getDate();
         return {
             values: new Array<CalenderNode>(),
-            endDate: date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() as any
+            endDate: date.getFullYear() + '-' + month + '-' + day as any
         }
     },
     created() {
@@ -85,6 +87,7 @@ export default defineComponent({
     position: relative;
     height: 100%;
     width: 100%;
+
     .vch__legend {
         margin-top: 7px;
     }

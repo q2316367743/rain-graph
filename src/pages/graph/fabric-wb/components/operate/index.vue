@@ -104,7 +104,7 @@
                     </template>
                 </a-button>
                 <template #content>
-                    <fabric-wb-operate-iconfont />
+                    <fabric-wb-operate-iconfont :instance="instance" />
                 </template>
             </a-trigger>
             <a-button status="danger" @click="$emit('clear')">
@@ -116,7 +116,7 @@
     </div>
 </template>
 <script lang="ts">
-import {defineComponent} from "vue";
+import {defineComponent, PropType} from "vue";
 import {mapState} from "pinia";
 import {useGlobalStore} from "@/store/GlobalStore";
 // 图标
@@ -129,6 +129,7 @@ import IconChoose from "@/icon/white-board/IconChoose.vue";
 import IconText from '@/icon/white-board/IconText.vue';
 // 组件
 import FabricWbOperateIconfont from "@/pages/graph/fabric-wb/components/operate/iconfont.vue";
+import FabricWbWrap from "@/pages/graph/fabric-wb/core/FabricWbWrap";
 
 export default defineComponent({
     name: 'fabric-wb-operate',
@@ -137,7 +138,11 @@ export default defineComponent({
         IconChoose, IconCircle, IconDiamond, IconRect, IconLine, IconTriangle, IconText},
     emits: ['update:modelValue', 'clear', 'append-image'],
     props: {
-        modelValue: String
+        modelValue: String,
+        instance: {
+            type: Object as PropType<FabricWbWrap>,
+            required: true,
+        },
     },
     data: () => ({
         key: 'selection'

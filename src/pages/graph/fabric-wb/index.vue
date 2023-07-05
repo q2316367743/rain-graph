@@ -1,7 +1,8 @@
 <template>
     <div class="fabric-wb">
         <canvas ref="fabric-wb-container" class="container"/>
-        <fabric-wb-operate v-model="activeKey" @clear="clear()" @append-image="appendImage()"/>
+        <fabric-wb-operate v-model="activeKey" @clear="clear()" @append-image="appendImage()" :instance="instance"
+                           v-if="instance"/>
         <fabric-wb-menu/>
         <fabric-wb-context-menu :instance="instance" v-if="instance"/>
     </div>

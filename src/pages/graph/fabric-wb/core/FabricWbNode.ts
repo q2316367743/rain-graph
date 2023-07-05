@@ -6,7 +6,7 @@ import {
     IPolylineOptions,
     IRectOptions,
     ITextOptions,
-    ITriangleOptions, Transform, Object, Canvas
+    ITriangleOptions, Transform, Object, Canvas, IObjectOptions
 } from "fabric/fabric-impl";
 import {useGlobalStore} from "@/store/GlobalStore";
 import Arrow from "@/pages/graph/fabric-wb/core/node/ArrowNode";
@@ -240,6 +240,21 @@ export default class FabricWbNode {
             image.scale(0.5)
             this.canvas.add(image);
             this.instance.setCurrentShape(image);
+        })
+    }
+
+    appendSvg(svgStr: string, options?: IObjectOptions) {
+        fabric.loadSVGFromString(svgStr, (results: Object[], opt) => {
+            const option = {
+                ...options,
+                ...opt,
+            };
+            option['top'] = (option['top'] || 0) - this.instance.getEvent().offsetY
+            option['left'] = (option['left'] || 0) - this.instance.getEvent().offsetX
+            const group =  new fabric.Group(results, option);
+
+            this.canvas.add(group);
+            this.instance.setCurrentShape(group);
         })
     }
 

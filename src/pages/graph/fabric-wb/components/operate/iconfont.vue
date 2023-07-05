@@ -7,7 +7,7 @@
             <a-scrollbar style="height: 356px;overflow: auto">
                 <a-divider v-if="arrowResultIcons.length > 0">方向指示类图标</a-divider>
                 <div class="icon-items">
-                    <div v-for="icon in arrowResultIcons" class="icon-item">
+                    <div v-for="icon in arrowResultIcons" class="icon-item" @click.stop="appendSvg">
                         <a-tooltip :content="icon.item">
                             <component :is="icon.item"/>
                         </a-tooltip>
@@ -15,7 +15,7 @@
                 </div>
                 <a-divider v-if="messageResultIcons.length > 0">提示建议类图标</a-divider>
                 <div class="icon-items">
-                    <div v-for="icon in messageResultIcons" class="icon-item">
+                    <div v-for="icon in messageResultIcons" class="icon-item" @click.stop="appendSvg">
                         <a-tooltip :content="icon.item">
                             <component :is="icon.item"/>
                         </a-tooltip>
@@ -25,7 +25,7 @@
                 <div class="icon-items">
                     <div v-for="icon in interactiveResultIcons" class="icon-item">
                         <a-tooltip :content="icon.item">
-                            <component :is="icon.item"/>
+                            <component :is="icon.item" @click="appendSvg"/>
                         </a-tooltip>
                     </div>
                 </div>
@@ -33,7 +33,7 @@
                 <div class="icon-items">
                     <div v-for="icon in mediaResultIcons" class="icon-item">
                         <a-tooltip :content="icon.item">
-                            <component :is="icon.item"/>
+                            <component :is="icon.item" @click="appendSvg"/>
                         </a-tooltip>
                     </div>
                 </div>
@@ -41,7 +41,7 @@
                 <div class="icon-items">
                     <div v-for="icon in brandResultIcons" class="icon-item">
                         <a-tooltip :content="icon.item">
-                            <component :is="icon.item"/>
+                            <component :is="icon.item" @click="appendSvg"/>
                         </a-tooltip>
                     </div>
                 </div>
@@ -49,7 +49,7 @@
                 <div class="icon-items">
                     <div v-for="icon in commonResultIcons" class="icon-item">
                         <a-tooltip :content="icon.item">
-                            <component :is="icon.item"/>
+                            <component :is="icon.item" @click="appendSvg"/>
                         </a-tooltip>
                     </div>
                 </div>
@@ -58,31 +58,68 @@
     </div>
 </template>
 <script lang="ts" setup>
-import {ref} from "vue";
+import {PropType, ref} from "vue";
 import {useFuse} from "@vueuse/integrations/useFuse";
 
 import {arrowIcons, messageIcons, interactiveIcons, mediaIcons, brandIcons, commonIcons} from './constants';
+import FabricWbWrap from "@/pages/graph/fabric-wb/core/FabricWbWrap";
+import {useGlobalStore} from "@/store/GlobalStore";
 
 const keyword = ref('');
 
 const {results: arrowResultIcons} = useFuse(keyword, arrowIcons, {
     matchAllWhenSearchEmpty: true
-})
+});
 const {results: messageResultIcons} = useFuse(keyword, messageIcons, {
     matchAllWhenSearchEmpty: true
-})
+});
 const {results: interactiveResultIcons} = useFuse(keyword, interactiveIcons, {
     matchAllWhenSearchEmpty: true
-})
+});
 const {results: mediaResultIcons} = useFuse(keyword, mediaIcons, {
     matchAllWhenSearchEmpty: true
-})
+});
 const {results: brandResultIcons} = useFuse(keyword, brandIcons, {
     matchAllWhenSearchEmpty: true
-})
+});
 const {results: commonResultIcons} = useFuse(keyword, commonIcons, {
     matchAllWhenSearchEmpty: true
-})
+});
+
+const {instance} = defineProps({
+    instance: {
+        type: Object as PropType<FabricWbWrap>,
+        required: true,
+    },
+});
+
+function appendSvg(e: PointerEvent) {
+    if (!instance) {
+        return;
+    }
+    // @ts-ignore
+    const elements = e.path as SVGElement[];
+    let el = null as SVGElement | null;
+    for (let element of elements) {
+        if (element.tagName === 'svg') {
+            el = element;
+            break
+        }
+    }
+    if (el === null) {
+        const div = e.target as HTMLDivElement;
+        el = div.querySelector("svg");
+    }
+    if (el) {
+        const size = useGlobalStore().size;
+        instance.getNode().appendSvg(el.outerHTML, {
+            top: size.height / 2,
+            left: size.width / 3,
+            width: 36,
+            height: 36
+        });
+    }
+}
 
 </script>
 <style scoped lang="less">

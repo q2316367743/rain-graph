@@ -27,9 +27,9 @@ export default class FabricWbEvent {
     // 缩放
     private zoom = 1;
     // 偏移X
-    private offsetX = 0;
+    private _offsetX = 0;
     // 偏移Y
-    private offsetY = 0;
+    private _offsetY = 0;
 
     private onContextMenu: ((e: IEvent<MouseEvent>) => void) | null;
 
@@ -79,8 +79,8 @@ export default class FabricWbEvent {
         this.isDrawing = true;
         // 记录当前坐标点
         const pointer = e.pointer;
-        const x = pointer.x - this.offsetX;
-        const y = pointer.y - this.offsetY;
+        const x = pointer.x - this._offsetX;
+        const y = pointer.y - this._offsetY;
         this.startX = x;
         this.startY = y;
         if (this.instance.getMode() == "rectangle") {
@@ -137,8 +137,8 @@ export default class FabricWbEvent {
             let vpt = this.canvas.viewportTransform!; // 聚焦视图的转换
             vpt[4] += evt.clientX - this.lastPosX;
             vpt[5] += evt.clientY - this.lastPosY;
-            this.offsetX = vpt[4];
-            this.offsetY = vpt[5];
+            this._offsetX = vpt[4];
+            this._offsetY = vpt[5];
             this.canvas.requestRenderAll(); // 重新渲染
             this.lastPosX = evt.clientX;
             this.lastPosY = evt.clientY;
@@ -150,11 +150,11 @@ export default class FabricWbEvent {
 
         // 计算宽高
         const {x, y} = event.pointer;
-        const width = x - this.startX - this.offsetX;
-        const height = y - this.startY - this.offsetY;
+        const width = x - this.startX - this._offsetX;
+        const height = y - this.startY - this._offsetY;
 
-        const tx = x - this.offsetX;
-        const ty = y - this.offsetY;
+        const tx = x - this._offsetX;
+        const ty = y - this._offsetY;
         const isRight = width > 0;
         const isBottom = height > 0;
 
@@ -230,4 +230,12 @@ export default class FabricWbEvent {
         )
     }
 
+
+    get offsetX(): number {
+        return this._offsetX;
+    }
+
+    get offsetY(): number {
+        return this._offsetY;
+    }
 }

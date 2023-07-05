@@ -237,7 +237,12 @@ export default class FabricWbNode {
     appendImage(url: string) {
         // 加载图片
         fabric.Image.fromURL(url, image => {
-            image.scale(0.5)
+            const size = useGlobalStore().size;
+            const heightScale = (image.height || 0) > size.height ? (size.height / 2 / (image.height || 0)) : 1;
+            const widthScale = (image.width || 0) > size.width ? (size.width / 2 / (image.width || 0)) : 1;
+            image.scale(Math.min(heightScale, widthScale));
+            image.top = size.height / 4 - this.instance.getEvent().offsetY;
+            image.left = size.width / 4 - this.instance.getEvent().offsetX;
             this.canvas.add(image);
             this.instance.setCurrentShape(image);
         })
@@ -251,8 +256,7 @@ export default class FabricWbNode {
             };
             option['top'] = (option['top'] || 0) - this.instance.getEvent().offsetY
             option['left'] = (option['left'] || 0) - this.instance.getEvent().offsetX
-            const group =  new fabric.Group(results, option);
-
+            const group = new fabric.Group(results, option);
             this.canvas.add(group);
             this.instance.setCurrentShape(group);
         })

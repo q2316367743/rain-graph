@@ -45,11 +45,7 @@ export default async function updateTo1_2_0() {
         _id: LocalNameEnum.TEMPLATE_MIND_MAP,
         value: mindMapTemplates
     });
-    useGlobalStore().startLoading("（7/10）正在删除旧的数据，请勿退出，以免数据丢失");
-    for(let id of removeIds) {
-        await utools.db.promises.remove(id);
-    }
-    useGlobalStore().startLoading("（8/10）正在迁移其他数据，请勿退出，以免数据丢失");
+    useGlobalStore().startLoading("（7/10）正在迁移其他数据，请勿退出，以免数据丢失");
     // 流程图
     await updateType("local", GraphTypeEnum.DIAGRAM, DiagramSubType.LOGIC_FLOW);
     // 白板
@@ -59,13 +55,17 @@ export default async function updateTo1_2_0() {
     // 白板
     await updateType("template", GraphTypeEnum.WHITE_BOARD, WhiteBoardSubType.TINY_WHITEBOARD);
     // 设置
-    useGlobalStore().startLoading("（9/10）正在迁移设置，请勿退出，以免数据丢失");
+    useGlobalStore().startLoading("（8/10）正在迁移设置，请勿退出，以免数据丢失");
     await updateSetting();
     // 其他图
-    useGlobalStore().startLoading("（10/10）迁移完成，正在初始化，请勿退出，以免数据丢失");
+    useGlobalStore().startLoading("（9/10）迁移完成，正在初始化，请勿退出，以免数据丢失");
     await useMindMapStore().init();
     await useDiagramStore().init();
     await useWhiteBoardStore().init();
+    useGlobalStore().startLoading("（10/10）正在删除旧的数据，请勿退出，以免数据丢失");
+    for(let id of removeIds) {
+        await utools.db.promises.remove(id);
+    }
     // 完成
     useGlobalStore().closeLoading();
     MessageUtil.success("数据迁移完毕，欢迎使用新版本");

@@ -26,7 +26,7 @@
         <a-form-item label="默认白板引擎">
             <a-radio-group v-model="setting.whiteBoardType">
                 <a-radio :value="WhiteBoardSubType.TINY_WHITEBOARD">tiny-whiteboard</a-radio>
-                <a-radio :value="WhiteBoardSubType.FABRIC">fabric（推荐）</a-radio>
+                <a-radio :value="WhiteBoardSubType.FABRIC">fabric（实验性的）</a-radio>
             </a-radio-group>
         </a-form-item>
         <a-form-item>

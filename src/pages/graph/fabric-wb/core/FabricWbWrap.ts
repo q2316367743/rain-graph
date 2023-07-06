@@ -10,12 +10,11 @@ import {useWhiteBoardStore} from "@/store/graph/WhiteBoardStore";
 import {WhiteBoardSubType} from "@/enumeration/GraphSubTypeEnum";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
 import MessageUtil from "@/utils/MessageUtil";
-import {StoreRecordCore} from "@/utils/utools/DbUtil";
+import {getRecord, StoreRecordCore} from "@/utils/utools/DbUtil";
 import {download} from "@/utils/BrowserUtil";
+import {toRaw} from "vue";
 
 fabric.Object.prototype.transparentCorners = false;
-fabric.Object.prototype.cornerColor = '#b4b2ed';
-fabric.Object.prototype.cornerStyle = 'circle';
 
 
 export default class FabricWbWrap {
@@ -23,7 +22,7 @@ export default class FabricWbWrap {
     private readonly canvas: fabric.Canvas;
     private readonly event: FabricWbEvent;
     private readonly node: FabricWbNode;
-    private options: IObjectOptions;
+    private options: IObjectOptions = {};
     private currentShape: Object | null;
     private mode: FabricWbMode = "selection";
 
@@ -49,8 +48,7 @@ export default class FabricWbWrap {
             stopContextMenu: true, // 禁止默认右键菜单
         });
         this.currentShape = null;
-        this.options = options;
-        this.canvas.selectionBorderColor = "#6965db";
+        this.setOptions(options);
 
         // 节点
         this.node = new FabricWbNode(this.canvas, this);
@@ -71,7 +69,7 @@ export default class FabricWbWrap {
     }
 
     setOptions(options: IObjectOptions) {
-        this.options = options;
+        this.options = toRaw(options);
     }
 
     getOptions(): IObjectOptions {
@@ -184,6 +182,28 @@ export default class FabricWbWrap {
     // ------------------------------------- 序列化 -------------------------------------
     // =================================================================================
 
+    async load(id: string) {
+        this.id = id;
+        const res = await getRecord(GraphTypeEnum.WHITE_BOARD, id);
+        if (res.error) {
+            MessageUtil.error(res.message);
+            return;
+        }
+        this._rev = res._rev;
+        if (res.record) {
+            this.options = {
+                ...this.options,
+                ...res.config
+            };
+            return new Promise(resolve => {
+                this.canvas.loadFromJSON(res.record, resolve);
+            });
+        }
+        console.debug("没有记录")
+        return Promise.resolve();
+
+    }
+
     async save(focus: boolean = false) {
         if (this.lock) {
             return;
@@ -201,7 +221,7 @@ export default class FabricWbWrap {
             }
         })
         if (res.error) {
-            MessageUtil.error(res.message || "保存失败");
+            return Promise.reject(res.message || "保存失败");
         }
         this._rev = res.rev;
         return Promise.resolve();

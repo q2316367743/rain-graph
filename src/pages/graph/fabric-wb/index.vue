@@ -3,13 +3,13 @@
         <canvas ref="fabric-wb-container" class="container"/>
         <fabric-wb-operate v-model="activeKey" @clear="clear()" @append-image="appendImage()" :instance="instance"
                            v-if="instance"/>
-        <fabric-wb-menu/>
+        <fabric-wb-menu :instance="instance" v-if="instance"/>
         <fabric-wb-context-menu :instance="instance" v-if="instance"/>
     </div>
 </template>
 <script lang="ts">
 import {mapState} from "pinia";
-import {defineComponent, markRaw} from "vue";
+import {defineComponent, markRaw, toRaw} from "vue";
 import {useFileSystemAccess} from "@vueuse/core";
 import FabricWbWrap from "@/pages/graph/fabric-wb/core/FabricWbWrap";
 
@@ -19,6 +19,8 @@ import FabricWbOperate from './components/operate/index.vue';
 import FabricWbMenu from './components/menu/index.vue'
 import {getDefaultOption} from "@/pages/graph/fabric-wb/core/constants";
 import FabricWbContextMenu from "@/pages/graph/fabric-wb/components/context-menu/index.vue";
+import {useSaveEvent} from "@/global/BeanFactory";
+import MessageUtil from "@/utils/MessageUtil";
 
 
 export default defineComponent({
@@ -67,10 +69,20 @@ export default defineComponent({
         }
     },
     mounted() {
+        const id = this.$route.params.id as string;
         const container = this.$refs['fabric-wb-container'] as HTMLCanvasElement;
         this.option.stroke = this.isDark ? '#ffffff' : '#000000';
         this.instance = markRaw(new FabricWbWrap(container, this.width, this.height, this.option));
+        this.instance.load(id);
         this.instance.setMode("selection");
+        // 相关事件
+        useSaveEvent.on(() => {
+            if (this.instance) {
+                this.instance.save(true)
+                        .then(() => MessageUtil.success("保存成功"))
+                        .catch(e => MessageUtil.error("保存失败"));
+            }
+        });
     },
     methods: {
         clear() {

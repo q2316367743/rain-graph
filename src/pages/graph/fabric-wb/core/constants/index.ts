@@ -11,10 +11,6 @@ export function getDefaultOption(): IObjectOptions {
         height: 100,
         fill: "transparent",
         stroke: "#000000",
-        borderColor: "#b4b2ed",
-        borderScaleFactor: 1,
-        cornerColor: "#b4b2ed",
-        cornerStyle: 'circle',
         padding: 4,
     }
 }

@@ -5,7 +5,7 @@ import edgeImg from '@/assets/fabric/edgecontrol.svg';
 import rotateImg from '@/assets/fabric/rotateicon.svg';
 
 /**
- * 实际场景: 在进行某个对象缩放的时候，由于fabricjs默认精度使用的是toFixed(2)。
+ * 实际场景: 在进行某个对象缩放的时候，由于fabric。js默认精度使用的是toFixed(2)。
  * 此处为了缩放的精度更准确一些，因此将NUM_FRACTION_DIGITS默认值改为4，即toFixed(4).
  */
 fabric.Object.NUM_FRACTION_DIGITS = 4;

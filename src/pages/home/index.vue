@@ -78,6 +78,13 @@ const virtualListProps = computed(() => {
         height: size.value.height - 33 - 14 - 7
     }
 });
+
+// 参数
+const name = router.currentRoute.value.query.name as GraphTypeEnum;
+if (name) {
+    activeKey.value = name;
+}
+
 const {results: mindMapResults} = useFuse(keyword, mindMaps, {
     matchAllWhenSearchEmpty: true,
     fuseOptions: {

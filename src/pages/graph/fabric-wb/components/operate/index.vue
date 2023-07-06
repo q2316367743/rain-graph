@@ -129,7 +129,6 @@ import IconChoose from "@/icon/white-board/IconChoose.vue";
 import IconText from '@/icon/white-board/IconText.vue';
 // 组件
 import FabricWbOperateIconfont from "@/pages/graph/fabric-wb/components/operate/iconfont.vue";
-import FabricWbWrap from "@/pages/graph/fabric-wb/core/FabricWbWrap";
 
 export default defineComponent({
     name: 'fabric-wb-operate',
@@ -140,7 +139,7 @@ export default defineComponent({
     props: {
         modelValue: String,
         instance: {
-            type: Object as PropType<FabricWbWrap>,
+            type: Object as PropType<any>,
             required: true,
         },
     },

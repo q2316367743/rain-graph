@@ -26,7 +26,6 @@
 <script lang="ts">
 import {defineComponent, PropType} from "vue";
 import GraphTypeEnum from "@/enumeration/GraphTypeEnum";
-import FabricWbWrap from "@/pages/graph/fabric-wb/core/FabricWbWrap";
 import {useFileSystemAccess} from "@vueuse/core";
 import MessageUtil from "@/utils/MessageUtil";
 import {mapState} from "pinia";
@@ -36,7 +35,7 @@ export default defineComponent({
     name: 'fabric-wb-menu',
     props: {
         instance: {
-            type: Object as PropType<FabricWbWrap>,
+            type: Object as PropType<any>,
             required: true,
         },
     },
@@ -73,7 +72,7 @@ export default defineComponent({
         save() {
             this.instance.save(true)
                     .then(() => MessageUtil.success("保存成功"))
-                    .catch(e => MessageUtil.error("保存失败"));
+                    .catch((e: any) => MessageUtil.error("保存失败"));
         }
     }
 });

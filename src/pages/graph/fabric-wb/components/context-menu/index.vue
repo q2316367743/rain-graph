@@ -6,14 +6,13 @@
 </template>
 <script lang="ts">
 import {defineComponent, PropType} from "vue";
-import FabricWbWrap from "@/pages/graph/fabric-wb/core/FabricWbWrap";
 import {Object as Obj} from "fabric/fabric-impl";
 
 export default defineComponent({
     name: 'fabric-wb-context-menu',
     props: {
         instance: {
-            type: Object as PropType<FabricWbWrap>,
+            type: Object as PropType<any>,
             required: true,
         },
     },
@@ -84,7 +83,7 @@ export default defineComponent({
             this.activeObjects = new Array<Obj>();
         },
         remove() {
-            this.instance.getCanvas().getActiveObjects().forEach(obj => {
+            this.instance.getCanvas().getActiveObjects().forEach((obj: any) => {
                 this.instance.getCanvas().remove(obj)
             });
             this.instance.getCanvas().requestRenderAll();
@@ -92,7 +91,7 @@ export default defineComponent({
             this.hideMenu();
         },
         clone() {
-            this.instance.getCanvas().getActiveObjects().forEach(obj => {
+            this.instance.getCanvas().getActiveObjects().forEach((obj: any) => {
                 obj.clone((cloned: Obj) => {
                     cloned.left = (cloned.left || 0) + 10;
                     cloned.top = (cloned.top || 0) + 10;

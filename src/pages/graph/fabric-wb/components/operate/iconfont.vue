@@ -62,7 +62,6 @@ import {PropType, ref} from "vue";
 import {useFuse} from "@vueuse/integrations/useFuse";
 
 import {arrowIcons, messageIcons, interactiveIcons, mediaIcons, brandIcons, commonIcons} from './constants';
-import FabricWbWrap from "@/pages/graph/fabric-wb/core/FabricWbWrap";
 import {useGlobalStore} from "@/store/GlobalStore";
 
 const keyword = ref('');
@@ -88,12 +87,12 @@ const {results: commonResultIcons} = useFuse(keyword, commonIcons, {
 
 const {instance} = defineProps({
     instance: {
-        type: Object as PropType<FabricWbWrap>,
+        type: Object as PropType<any>,
         required: true,
     },
 });
 
-function appendSvg(e: PointerEvent) {
+function appendSvg(e: MouseEvent) {
     if (!instance) {
         return;
     }
